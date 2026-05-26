@@ -502,6 +502,7 @@
   <div class="nav-item" onclick="showPage('stats', this)"><span class="icon">&#9660;</span> Statistik</div>
   <div class="emailjs-section">
     <h4>📧 EmailJS Config</h4>
+    <div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:8px;">Utama: env Vercel. Form ini hanya fallback per browser.</div>
     <input class="emailjs-input" id="emailjs-service-id" placeholder="Service ID (emailjs.com)">
     <input class="emailjs-input" id="emailjs-template-id" placeholder="Template ID">
     <input class="emailjs-input" id="emailjs-public-key" placeholder="Public Key">
@@ -1369,13 +1370,30 @@
 
   // ── KIRIM EMAIL VIA EMAILJS ───────────────────────────────────
   async function kirimEmailJS(toEmail, order) {
-    const cfg = getEmailJSConfig();
-    if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
-      return { ok: false, msg: 'Config EmailJS belum diset!' };
-    }
     if (!toEmail) {
       return { ok: false, msg: 'Email customer tidak ada di data order.' };
     }
+
+    let backendError = '';
+    try {
+      const data = await sbFetch('/api/send-order-email', {
+        method: 'POST',
+        body: JSON.stringify({ toEmail, order })
+      });
+      return { ok: true, msg: data.message || ('Email terkirim ke ' + toEmail) };
+    } catch(e) {
+      backendError = e.message || '';
+      console.warn('[EmailJS backend] gagal, coba fallback browser:', e);
+    }
+
+    const cfg = getEmailJSConfig();
+    if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
+      const msg = backendError.includes('EMAILJS_CONFIG_MISSING')
+        ? 'Config EmailJS belum diset di Vercel. Isi EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, dan EMAILJS_PUBLIC_KEY.'
+        : (backendError || 'Config EmailJS belum diset.');
+      return { ok: false, msg };
+    }
+
     try {
       // Load EmailJS SDK jika belum ada
       if (!window.emailjs) {
@@ -1430,12 +1448,6 @@
       showToast((supaOk ? '✅' : '✅⚠️') + ' Robux ' + robuxStr + ' R$ berhasil dikirim ke ' + o.username + (supaOk ? '' : ' (Supabase gagal update)') + '!', 'success');
 
       // Kirim Email via EmailJS
-      const cfg = getEmailJSConfig();
-      if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
-        showToast('⚠️ Config EmailJS belum diset — email tidak dikirim.', 'error');
-        return;
-      }
-
       const toEmail = o.email || o.whatsapp || '';
       showToast('📧 Mengirim email ke customer...', 'success');
 
