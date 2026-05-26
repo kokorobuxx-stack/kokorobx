@@ -1376,7 +1376,7 @@
 
     let backendError = '';
     try {
-      const data = await sbFetch('/api/send-order-email', {
+      const data = await sbFetch('/api/admin-orders?action=send-email', {
         method: 'POST',
         body: JSON.stringify({ toEmail, order })
       });
