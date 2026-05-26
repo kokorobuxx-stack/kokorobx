@@ -1,0 +1,8 @@
+{
+  "name": "rbx-store-backend",
+  "version": "1.0.0",
+  "description": "Backend API untuk RBX Store — Midtrans payment gateway",
+  "dependencies": {
+    "midtrans-client": "^1.4.2"
+  }
+}

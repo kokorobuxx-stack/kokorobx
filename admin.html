@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — RBX Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #7c6aff;
+    --accent2: #ff6a9b;
+    --green: #00e5a0;
+    --yellow: #ffd166;
+    --red: #ff4d6d;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+    --sidebar-w: 200px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; display: flex; }
+
+  /* LOGIN */
+  #login-screen {
+    position: fixed; inset: 0; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 999; flex-direction: column;
+  }
+  #login-screen.hidden { display: none; }
+  .login-box { width: min(340px, 90vw); background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 32px; }
+  .login-box h1 { font-family: var(--mono); font-size: 17px; color: var(--accent); margin-bottom: 5px; }
+  .login-box p { color: var(--muted); font-size: 12px; margin-bottom: 22px; }
+  .login-box input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 10px 12px; color: var(--text); font-family: var(--mono); font-size: 13px; margin-bottom: 10px; outline: none; transition: border-color .2s; }
+  .login-box input:focus { border-color: var(--accent); }
+  .login-box button { width: 100%; background: var(--accent); border: none; border-radius: 7px; padding: 11px; color: #fff; font-family: var(--sans); font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity .2s; }
+  .login-box button:hover { opacity: .85; }
+  .login-err { color: var(--red); font-size: 12px; margin-top: 8px; text-align: center; display: none; }
+
+  /* MOBILE TOPBAR */
+  .mobile-topbar {
+    display: none;
+    position: fixed; top: 0; left: 0; right: 0; height: 52px;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    align-items: center; justify-content: space-between;
+    padding: 0 16px; z-index: 200;
+  }
+  .mobile-topbar .logo { font-family: var(--mono); font-size: 13px; color: var(--accent); }
+  .hamburger { background: none; border: none; color: var(--text); cursor: pointer; padding: 6px; font-size: 20px; line-height: 1; }
+  .mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 299; }
+  .mobile-overlay.show { display: block; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; padding: 20px 0;
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 300;
+    transition: transform .25s ease;
+  }
+  .sidebar-logo { padding: 0 16px 18px; border-bottom: 1px solid var(--border); margin-bottom: 12px; }
+  .sidebar-logo span { font-family: var(--mono); font-size: 13px; color: var(--accent); display: block; }
+  .sidebar-logo small { color: var(--muted); font-size: 10px; }
+  .nav-item { display: flex; align-items: center; gap: 8px; padding: 9px 16px; color: var(--muted); font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; border-left: 3px solid transparent; margin: 1px 0; }
+  .nav-item:hover { color: var(--text); background: var(--surface2); }
+  .nav-item.active { color: var(--accent); background: rgba(124,106,255,.08); border-left-color: var(--accent); }
+  .nav-item .icon { font-size: 14px; width: 18px; text-align: center; }
+  .sidebar-bottom { margin-top: auto; padding: 14px 16px 0; border-top: 1px solid var(--border); }
+  .logout-btn { width: 100%; background: transparent; border: 1px solid var(--border); border-radius: 7px; padding: 8px; color: var(--muted); font-size: 12px; cursor: pointer; transition: all .2s; }
+  .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar-w); flex: 1; padding: 24px; min-height: 100vh; }
+  .page { display: none; }
+  .page.active { display: block; }
+  .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+  .page-header h2 { font-family: var(--mono); font-size: 17px; color: var(--text); }
+  .page-header span { color: var(--muted); font-size: 12px; margin-top: 2px; display: block; }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; position: relative; overflow: hidden; }
+  .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+  .stat-card.purple::before { background: var(--accent); }
+  .stat-card.pink::before { background: var(--accent2); }
+  .stat-card.green::before { background: var(--green); }
+  .stat-card.yellow::before { background: var(--yellow); }
+  .stat-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 8px; }
+  .stat-value { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--text); }
+  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 5px; }
+  .stat-icon { position: absolute; top: 12px; right: 12px; font-size: 18px; opacity: .25; }
+
+  /* TABLE */
+  .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .table-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
+  .table-header h3 { font-size: 13px; font-weight: 600; }
+  .table-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+  .filter-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; padding: 5px 10px; color: var(--muted); font-size: 11px; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  th { background: var(--surface2); padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; white-space: nowrap; }
+  td { padding: 11px 12px; font-size: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.02); }
+  .order-id { font-family: var(--mono); font-size: 11px; color: var(--accent); }
+  .username { font-weight: 500; }
+  .robux-badge { background: rgba(124,106,255,.15); color: var(--accent); border-radius: 4px; padding: 2px 7px; font-size: 11px; font-family: var(--mono); display: inline-block; }
+  .price { font-family: var(--mono); font-size: 12px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+  .status-badge::before { content: ''; width: 4px; height: 4px; border-radius: 50%; }
+  .status-badge.pending { background: rgba(255,209,102,.12); color: var(--yellow); }
+  .status-badge.pending::before { background: var(--yellow); }
+  .status-badge.success { background: rgba(0,229,160,.12); color: var(--green); }
+  .status-badge.success::before { background: var(--green); }
+  .status-badge.failed { background: rgba(255,77,109,.12); color: var(--red); }
+  .status-badge.failed::before { background: var(--red); }
+  .status-badge.process { background: rgba(124,106,255,.12); color: var(--accent); }
+  .status-badge.process::before { background: var(--accent); animation: pulse 1s infinite; }
+  .status-badge.reviewed { background: rgba(0,229,160,.12); color: #60efca; }
+  .status-badge.reviewed::before { background: #60efca; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.3} }
+  @keyframes notifPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.4);background:var(--accent)} }
+  @keyframes slideInRight { from{transform:translateX(20px);opacity:0} to{transform:translateX(0);opacity:1} }
+  .new-order-flash { animation: slideInRight .35s ease; }
+  .live-dot { display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:5px;animation:pulse 1.5s infinite; }
+  .live-badge { display:inline-flex;align-items:center;gap:4px;background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:600;color:var(--green); }
+  .action-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+  .btn-confirm { background: rgba(0,229,160,.15); border: 1px solid rgba(0,229,160,.3); color: var(--green); border-radius: 5px; padding: 4px 8px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .btn-confirm:hover { background: rgba(0,229,160,.25); }
+  .btn-reject { background: rgba(255,77,109,.15); border: 1px solid rgba(255,77,109,.3); color: var(--red); border-radius: 5px; padding: 4px 8px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .btn-reject:hover { background: rgba(255,77,109,.25); }
+  .btn-process { background: rgba(124,106,255,.15); border: 1px solid rgba(124,106,255,.3); color: var(--accent); border-radius: 5px; padding: 4px 8px; font-size: 10px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .btn-proof { background: rgba(255,209,102,.15); border: 1px solid rgba(255,209,102,.3); color: var(--yellow); border-radius: 5px; padding: 4px 8px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .btn-proof:hover { background: rgba(255,209,102,.25); }
+  .proof-indicator { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--yellow); background: rgba(255,209,102,.1); border: 1px solid rgba(255,209,102,.2); border-radius: 4px; padding: 2px 6px; }
+  .no-proof { font-size: 10px; color: var(--muted); }
+  .btn-delete { background: rgba(255,77,109,.12); border: 1px solid rgba(255,77,109,.25); color: var(--red); border-radius: 5px; padding: 4px 8px; font-size: 10px; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .btn-delete:hover { background: rgba(255,77,109,.28); }
+  .btn-refresh { display: inline-flex; align-items: center; gap: 6px; background: rgba(124,106,255,.12); border: 1px solid rgba(124,106,255,.3); border-radius: 7px; padding: 7px 13px; color: var(--accent); font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .btn-refresh:hover { background: rgba(124,106,255,.22); }
+  .btn-refresh .spin { display: inline-block; transition: transform .4s; }
+  .btn-refresh.spinning .spin { transform: rotate(360deg); }
+  .btn-modal-delete { background: rgba(255,77,109,.15); border: 1px solid rgba(255,77,109,.35) !important; color: var(--red); }
+  .btn-modal-delete:hover { background: rgba(255,77,109,.28) !important; }
+
+  /* CHART */
+  .chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .chart-card h3 { font-size: 12px; font-weight: 600; margin-bottom: 3px; }
+  .chart-card p { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 100px; }
+  .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; height: 100%; justify-content: flex-end; }
+  .bar { width: 100%; border-radius: 3px 3px 0 0; }
+  .bar.purple { background: linear-gradient(180deg, var(--accent), rgba(124,106,255,.3)); }
+  .bar.green { background: linear-gradient(180deg, var(--green), rgba(0,229,160,.3)); }
+  .bar-label { font-size: 9px; color: var(--muted); font-family: var(--mono); }
+  .donut-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
+  .donut-legend { width: 100%; display: flex; flex-direction: column; gap: 6px; }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 11px; }
+  .legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .legend-item span:last-child { margin-left: auto; font-family: var(--mono); color: var(--muted); }
+  canvas { max-width: 100px; max-height: 100px; }
+
+  /* EMPTY */
+  .empty { text-align: center; padding: 36px; color: var(--muted); }
+  .empty .icon { font-size: 28px; margin-bottom: 10px; }
+  .empty p { font-size: 13px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 20px; right: 16px; left: 16px; max-width: 360px; margin: 0 auto; background: var(--surface); border: 1px solid var(--border); border-radius: 9px; padding: 12px 16px; font-size: 12px; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(10px); transition: all .3s; z-index: 1000; pointer-events: none; }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { border-color: var(--green); }
+  .toast.error { border-color: var(--red); }
+
+  /* DETAIL MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: flex; align-items: center; justify-content: center; z-index: 500; opacity: 0; pointer-events: none; transition: opacity .2s; padding: 16px; }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px; width: 100%; max-width: 460px; max-height: 90vh; overflow-y: auto; transform: scale(.95); transition: transform .2s; }
+  .modal-overlay.show .modal-box { transform: scale(1); }
+  .modal-box h3 { font-family: var(--mono); font-size: 14px; margin-bottom: 16px; color: var(--accent); }
+  .detail-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; align-items: center; gap: 10px; }
+  .detail-row:last-of-type { border-bottom: none; }
+  .detail-row .key { color: var(--muted); flex-shrink: 0; }
+  .detail-row .val { font-family: var(--mono); font-size: 11px; text-align: right; word-break: break-all; }
+  .modal-actions { display: flex; gap: 7px; margin-top: 16px; flex-wrap: wrap; }
+  .modal-actions button { flex: 1; min-width: 80px; padding: 9px 8px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; border: none; transition: opacity .2s; }
+  .modal-actions button:hover { opacity: .8; }
+  .btn-modal-done { background: var(--green); color: #000; }
+  .btn-modal-reject { background: var(--red); color: #fff; }
+  .btn-modal-close { background: var(--surface2); color: var(--muted); border: 1px solid var(--border) !important; }
+
+  /* PROOF IMAGE */
+  .proof-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .proof-section h4 { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 9px; }
+  .proof-img-wrap { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); background: var(--surface2); }
+  .proof-img-wrap img { width: 100%; display: block; max-height: 300px; object-fit: contain; cursor: zoom-in; transition: transform .2s; }
+  .proof-img-wrap img:hover { transform: scale(1.01); }
+  .no-proof-box { padding: 28px; text-align: center; color: var(--muted); font-size: 12px; }
+  .no-proof-box .icon { font-size: 24px; margin-bottom: 7px; }
+  .proof-viewed-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(0,229,160,.1); color: var(--green); border: 1px solid rgba(0,229,160,.2); border-radius: 5px; padding: 3px 8px; font-size: 10px; font-weight: 600; margin-top: 7px; }
+
+  /* PROOF LIGHTBOX */
+  #lightbox { position: fixed; inset: 0; background: rgba(0,0,0,.92); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  #lightbox.show { opacity: 1; pointer-events: all; }
+  #lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 8px; object-fit: contain; }
+  #lightbox-close { position: absolute; top: 16px; right: 18px; font-size: 26px; color: #fff; cursor: pointer; opacity: .7; }
+  #lightbox-close:hover { opacity: 1; }
+
+  .search-input { background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; padding: 6px 11px; color: var(--text); font-size: 12px; outline: none; width: 190px; transition: border-color .2s; }
+  .search-input:focus { border-color: var(--accent); }
+  .time { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+
+  /* KONFIRMASI KIRIM ROBUX */
+  .send-confirm-box { background: rgba(0,229,160,.06); border: 1px solid rgba(0,229,160,.25); border-radius: 10px; padding: 14px; margin-top: 14px; }
+  .send-confirm-box p { font-size: 12px; color: var(--green); margin-bottom: 10px; line-height: 1.6; }
+  .robux-amount-big { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--green); display: block; margin-bottom: 4px; }
+  .send-confirm-box small { color: var(--muted); font-size: 10px; }
+
+  /* EMAILJS SETTINGS */
+  .emailjs-section { padding: 16px; border-top: 1px solid var(--border); margin-top: 8px; }
+  .emailjs-section h4 { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
+  .emailjs-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; color: var(--text); font-family: var(--mono); font-size: 11px; outline: none; transition: border-color .2s; margin-bottom: 7px; }
+  .emailjs-input:focus { border-color: var(--accent); }
+  .emailjs-input::placeholder { color: rgba(107,107,138,.5); }
+  .emailjs-save-btn { width: 100%; background: rgba(124,106,255,.15); border: 1px solid rgba(124,106,255,.3); border-radius: 6px; padding: 7px; color: var(--accent); font-size: 11px; font-weight: 600; cursor: pointer; transition: all .2s; }
+  .emailjs-save-btn:hover { background: rgba(124,106,255,.28); }
+  .emailjs-status { font-size: 10px; margin-top: 6px; text-align: center; display: none; }
+  .emailjs-status.ok { color: var(--green); display: block; }
+  .emailjs-status.err { color: var(--red); display: block; }
+  .email-sending-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(0,229,160,.1); border: 1px solid rgba(0,229,160,.25); border-radius: 5px; padding: 4px 9px; font-size: 10px; color: var(--green); font-weight: 600; margin-top: 8px; }
+  .email-failed-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(255,77,109,.1); border: 1px solid rgba(255,77,109,.25); border-radius: 5px; padding: 4px 9px; font-size: 10px; color: var(--red); font-weight: 600; margin-top: 8px; }
+
+  /* ===================== MOBILE RESPONSIVE ===================== */
+  @media (max-width: 768px) {
+    /* Topbar */
+    .mobile-topbar {
+      display: flex;
+      height: 56px;
+      padding: 0 16px;
+      box-shadow: 0 1px 0 var(--border), 0 2px 12px rgba(0,0,0,.35);
+    }
+    .mobile-topbar .logo {
+      font-size: 14px;
+      letter-spacing: .04em;
+    }
+    .hamburger {
+      width: 38px; height: 38px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      font-size: 16px;
+      transition: background .15s;
+    }
+    .hamburger:hover { background: var(--border); }
+
+    /* Sidebar slide-in */
+    .sidebar {
+      transform: translateX(-100%);
+      top: 0;
+      width: min(280px, 82vw);
+      box-shadow: 4px 0 24px rgba(0,0,0,.45);
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    /* Main content */
+    .main { margin-left: 0; padding: 68px 14px 80px; }
+
+    /* Page header */
+    .page-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    .page-header h2 { font-size: 16px; }
+    .page-header > div:last-child { width: 100%; }
+    .page-header > div:last-child .btn-refresh { flex: 1; justify-content: center; }
+
+    /* Search full width */
+    .search-input { width: 100%; }
+    .page-header > div[style*="flex"] { flex-direction: column; width: 100%; }
+
+    /* Stats grid */
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .stat-card { padding: 13px 12px; }
+    .stat-value { font-size: 17px; }
+    .stat-icon { font-size: 16px; opacity: .2; }
+    .stat-label { font-size: 9px; }
+    .stat-sub { font-size: 10px; }
+
+    /* Chart grid */
+    .chart-grid { grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
+
+    /* Table → hide and replace with card view */
+    .table-scroll { display: none !important; }
+    .table-wrap { border-radius: 10px; overflow: visible; background: transparent; border: none; }
+    .table-header {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .table-filters { width: 100%; overflow-x: auto; padding-bottom: 2px; flex-wrap: nowrap; }
+    .table-filters::-webkit-scrollbar { height: 3px; }
+    .table-filters::-webkit-scrollbar-track { background: transparent; }
+    .table-filters::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* Mobile order cards */
+    .m-card-list { display: flex; flex-direction: column; gap: 8px; }
+    .m-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .m-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 3px;
+    }
+    .m-card.pending::before { background: var(--yellow); }
+    .m-card.success::before { background: var(--green); }
+    .m-card.failed::before { background: var(--red); }
+    .m-card.process::before { background: var(--accent); }
+    .m-card.reviewed::before { background: #60efca; }
+
+    .m-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .m-card-id {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .m-card-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+      margin-bottom: 10px;
+    }
+    .m-field { display: flex; flex-direction: column; gap: 2px; }
+    .m-field-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+    .m-field-val { font-size: 12px; font-weight: 500; }
+    .m-field-val.mono { font-family: var(--mono); font-size: 11px; }
+    .m-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .m-card-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+    .m-card-time { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+    .m-proof-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 9px; color: var(--yellow);
+      background: rgba(255,209,102,.1);
+      border: 1px solid rgba(255,209,102,.2);
+      border-radius: 4px; padding: 2px 5px;
+    }
+
+    /* Modal bottom sheet */
+    .modal-overlay { padding: 0; align-items: flex-end; }
+    .modal-box {
+      border-radius: 18px 18px 0 0;
+      max-height: 90vh;
+      max-width: 100%;
+      padding: 0;
+    }
+    /* drag handle */
+    .modal-box::before {
+      content: '';
+      display: block;
+      width: 36px; height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin: 12px auto 0;
+    }
+    .modal-box h3 { padding: 14px 20px 0; font-size: 13px; }
+    #modal-detail-content { padding: 0 20px; }
+    .modal-actions {
+      position: sticky; bottom: 0;
+      background: var(--surface);
+      padding: 12px 20px 20px;
+      border-top: 1px solid var(--border);
+      margin-top: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+    }
+    .modal-actions button { min-width: unset; }
+    .btn-modal-done { grid-column: 1 / -1; }
+
+    /* Toast improved */
+    .toast {
+      bottom: 16px; left: 14px; right: 14px;
+      border-radius: 12px;
+      font-size: 13px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.4);
+    }
+
+    /* Lightbox adjustments */
+    #lightbox img { max-width: 96vw; max-height: 80vh; }
+    #lightbox-close { top: 12px; right: 14px; font-size: 22px; }
+
+    /* Bottom nav bar */
+    .mobile-bottom-nav {
+      display: flex;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: 62px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 150;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      box-shadow: 0 -2px 16px rgba(0,0,0,.35);
+    }
+    .bnav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 3px; color: var(--muted); font-size: 10px; cursor: pointer;
+      transition: color .15s; padding: 8px 4px 4px;
+      position: relative;
+    }
+    .bnav-item .bnav-icon { font-size: 18px; line-height: 1; }
+    .bnav-item.active { color: var(--accent); }
+    .bnav-item.active::after {
+      content: '';
+      position: absolute; top: 0; left: 20%; right: 20%;
+      height: 2px; background: var(--accent); border-radius: 0 0 3px 3px;
+    }
+    .bnav-badge {
+      position: absolute; top: 5px; right: calc(50% - 18px);
+      background: var(--yellow); color: #000;
+      font-size: 8px; font-weight: 700;
+      border-radius: 8px; padding: 1px 4px;
+      min-width: 14px; text-align: center;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-card { padding: 11px 10px; }
+    .stat-value { font-size: 15px; }
+    .stat-label { font-size: 9px; }
+    .main { padding: 62px 10px 76px; }
+    .filter-btn { font-size: 10px; padding: 4px 8px; }
+    .m-card-body { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* Hide bottom nav on desktop */
+  @media (min-width: 769px) {
+    .mobile-bottom-nav { display: none; }
+  }
+</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>// ADMIN PANEL</h1>
+    <p>Kokorbx — Dashboard Admin</p>
+    <input type="text" id="login-user" placeholder="Username" autocomplete="off">
+    <input type="password" id="login-pass" placeholder="Password">
+    <button onclick="doLogin()">Masuk</button>
+    <div class="login-err" id="login-err">Username atau password salah.</div>
+    <p style="font-size:11px;color:#555;text-align:center;margin-top:12px;"><code style="color:#7c6aff"></code><code style="color:#7c6aff"></code></p>
+  </div>
+</div>
+
+<!-- MOBILE TOPBAR -->
+<div class="mobile-topbar" id="mobile-topbar">
+  <span class="logo">Kokorbx Admin</span>
+  <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
+</div>
+<div class="mobile-overlay" id="mobile-overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <span>Kokorbx Admin</span>
+    <small>Control Panel v2.0</small>
+  </div>
+  <div class="nav-item active" onclick="showPage('dashboard', this)"><span class="icon">&#9672;</span> Dashboard</div>
+  <div class="nav-item" onclick="showPage('orders', this)"><span class="icon">&#9643;</span> Semua Order</div>
+  <div class="nav-item" onclick="showPage('pending', this)">
+    <span class="icon">&#9783;</span> Pending
+    <span id="pending-badge" style="margin-left:auto;background:var(--yellow);color:#000;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;"></span>
+  </div>
+  <div class="nav-item" onclick="showPage('stats', this)"><span class="icon">&#9660;</span> Statistik</div>
+  <div class="emailjs-section">
+    <h4>📧 EmailJS Config</h4>
+    <input class="emailjs-input" id="emailjs-service-id" placeholder="Service ID (emailjs.com)">
+    <input class="emailjs-input" id="emailjs-template-id" placeholder="Template ID">
+    <input class="emailjs-input" id="emailjs-public-key" placeholder="Public Key">
+    <button class="emailjs-save-btn" onclick="saveEmailJSConfig()">💾 Simpan Config</button>
+    <div class="emailjs-status" id="emailjs-status"></div>
+  </div>
+  <div class="sidebar-bottom">
+    <a href="index.html" style="display:block;text-align:center;padding:7px;margin-bottom:7px;font-size:11px;color:var(--accent);text-decoration:none;border:1px solid rgba(124,106,255,.25);border-radius:7px;background:rgba(124,106,255,.06);">&#8592; Ke Halaman Store</a>
+    <button class="logout-btn" onclick="doLogout()">&#9211; Logout</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div><h2>Dashboard <span class="live-badge"><span class="live-dot"></span>LIVE</span></h2><span id="dash-time"></span></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="btn-refresh" id="refresh-dashboard" onclick="refreshData('refresh-dashboard')"><span class="spin">&#8635;</span> Refresh</button>
+        <button class="filter-btn" onclick="addDummyOrder()" style="border-color:var(--accent);color:var(--accent)">+ Simulasi Order</button>
+      </div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card purple"><div class="stat-icon">&#128176;</div><div class="stat-label">Total Pendapatan</div><div class="stat-value" id="stat-revenue">Rp 0</div><div class="stat-sub" id="stat-rev-sub">0 transaksi sukses</div></div>
+      <div class="stat-card green"><div class="stat-icon">&#128230;</div><div class="stat-label">Total Order</div><div class="stat-value" id="stat-orders">0</div><div class="stat-sub" id="stat-ord-sub">Hari ini: 0</div></div>
+      <div class="stat-card yellow"><div class="stat-icon">&#9203;</div><div class="stat-label">Menunggu</div><div class="stat-value" id="stat-pending">0</div><div class="stat-sub">Perlu tindakan</div></div>
+      <div class="stat-card pink"><div class="stat-icon">&#128142;</div><div class="stat-label">Robux Terjual</div><div class="stat-value" id="stat-robux">0</div><div class="stat-sub">R$ dikirim</div></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header"><h3>Order Terbaru</h3></div>
+      <div class="table-scroll">
+        <table><thead><tr><th>Order ID</th><th>Username</th><th>Robux</th><th>Total</th><th>Metode</th><th>Bukti</th><th>Status</th><th>Waktu</th><th>Aksi</th></tr></thead>
+        <tbody id="recent-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL ORDERS -->
+  <div class="page" id="page-orders">
+    <div class="page-header">
+      <div><h2>Semua Order</h2><span>Riwayat lengkap transaksi</span></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="btn-refresh" id="refresh-orders" onclick="refreshData('refresh-orders')"><span class="spin">&#8635;</span> Refresh</button>
+        <input class="search-input" placeholder="Cari order ID / username..." oninput="searchOrders(this.value)">
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>Riwayat Order</h3>
+        <div class="table-filters">
+          <button class="filter-btn active" onclick="filterOrders('all', this)">Semua</button>
+          <button class="filter-btn" onclick="filterOrders('pending', this)">Pending</button>
+          <button class="filter-btn" onclick="filterOrders('success', this)">Sukses</button>
+          <button class="filter-btn" onclick="filterOrders('failed', this)">Gagal</button>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table><thead><tr><th>Order ID</th><th>Username</th><th>Robux</th><th>Total</th><th>Metode</th><th>Bukti</th><th>Status</th><th>Waktu</th><th>Aksi</th></tr></thead>
+        <tbody id="all-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PENDING -->
+  <div class="page" id="page-pending">
+    <div class="page-header">
+      <div><h2>Order Pending</h2><span>Menunggu konfirmasi pembayaran</span></div>
+      <button class="btn-refresh" id="refresh-pending" onclick="refreshData('refresh-pending')"><span class="spin">&#8635;</span> Refresh</button>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header"><h3>Perlu Dikonfirmasi</h3></div>
+      <div class="table-scroll">
+        <table><thead><tr><th>Order ID</th><th>Username</th><th>Robux</th><th>Total</th><th>Metode</th><th>Bukti Transfer</th><th>Waktu</th><th>Aksi</th></tr></thead>
+        <tbody id="pending-tbody"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="page" id="page-stats">
+    <div class="page-header"><div><h2>Statistik</h2><span>Performa toko kamu</span></div></div>
+    <div class="stats-grid">
+      <div class="stat-card purple"><div class="stat-icon">&#128176;</div><div class="stat-label">Pendapatan Total</div><div class="stat-value" id="s-revenue">Rp 0</div><div class="stat-sub">Semua waktu</div></div>
+      <div class="stat-card green"><div class="stat-icon">&#9989;</div><div class="stat-label">Order Sukses</div><div class="stat-value" id="s-success">0</div><div class="stat-sub" id="s-rate">0% success rate</div></div>
+      <div class="stat-card yellow"><div class="stat-icon">&#9203;</div><div class="stat-label">Order Pending</div><div class="stat-value" id="s-pending">0</div><div class="stat-sub">Belum dikonfirmasi</div></div>
+      <div class="stat-card pink"><div class="stat-icon">&#10060;</div><div class="stat-label">Order Gagal</div><div class="stat-value" id="s-failed">0</div><div class="stat-sub">Dibatalkan/expired</div></div>
+    </div>
+    <div class="chart-grid">
+      <div class="chart-card"><h3>Pendapatan per Paket Robux</h3><p>Distribusi penjualan berdasarkan paket</p><div class="bar-chart" id="bar-chart"></div></div>
+      <div class="chart-card"><h3>Metode Pembayaran</h3><p>Pilihan populer buyer</p><div class="donut-wrap"><canvas id="donut-chart" width="100" height="100"></canvas><div class="donut-legend" id="donut-legend"></div></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal-box">
+    <h3>// Detail Order</h3>
+    <div id="modal-detail-content"></div>
+    <div class="modal-actions" id="modal-detail-actions"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <span id="lightbox-close" onclick="closeLightbox()">&#10005;</span>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px;max-width:92vw;">
+    <div id="lightbox-order-id" style="font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.6);text-align:center;"></div>
+    <img id="lightbox-img" src="" alt="Bukti Transfer">
+    <div style="font-size:11px;color:rgba(255,255,255,.35);">Klik di luar gambar untuk tutup</div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+  <div class="bnav-item active" id="bnav-dashboard" onclick="showPage('dashboard', document.querySelectorAll('.nav-item')[0]);mobileNavActivate('dashboard')">
+    <span class="bnav-icon">⬡</span>
+    <span>Dash</span>
+  </div>
+  <div class="bnav-item" id="bnav-orders" onclick="showPage('orders', document.querySelectorAll('.nav-item')[1]);mobileNavActivate('orders')">
+    <span class="bnav-icon">☰</span>
+    <span>Order</span>
+  </div>
+  <div class="bnav-item" id="bnav-pending" onclick="showPage('pending', document.querySelectorAll('.nav-item')[2]);mobileNavActivate('pending')">
+    <span class="bnav-icon">⏳</span>
+    <span>Pending</span>
+    <span class="bnav-badge" id="bnav-badge" style="display:none"></span>
+  </div>
+  <div class="bnav-item" id="bnav-stats" onclick="showPage('stats', document.querySelectorAll('.nav-item')[3]);mobileNavActivate('stats')">
+    <span class="bnav-icon">◆</span>
+    <span>Statistik</span>
+  </div>
+</nav>
+
+<script>
+  const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'https://chisatobobaaaa.vercel.app'
+    : '';
+  const ADMIN_TOKEN_KEY = 'kokorbx_admin_token';
+
+  function getAdminToken() {
+    return sessionStorage.getItem(ADMIN_TOKEN_KEY) || '';
+  }
+
+  // ── SUPABASE CONFIG ───────────────────────────────────────────
+  // ── SUPABASE HELPERS ──────────────────────────────────────────
+  async function sbFetch(path, opts = {}) {
+    const res = await fetch(API_BASE + path, {
+      ...opts,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + getAdminToken(),
+        ...(opts.headers || {})
+      }
+    });
+    if (res.status === 401) {
+      sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+      document.getElementById('login-screen').classList.remove('hidden');
+      throw new Error('Sesi admin habis. Login ulang.');
+    }
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error('Backend error ' + res.status + ': ' + err);
+    }
+    const text = await res.text();
+    return text ? JSON.parse(text) : [];
+  }
+
+  // Ambil semua order dari Supabase (dipakai admin)
+  async function sbLoadAllOrders() {
+    try {
+      const rows = await sbFetch('/api/admin-orders');
+      return rows.map(sbRowToOrder);
+    } catch(e) {
+      console.warn('[Supabase] load gagal, fallback localStorage:', e);
+      return null; // null = pakai localStorage
+    }
+  }
+
+  // Update status order di Supabase
+  async function sbUpdateOrder(orderId, patch) {
+    try {
+      await sbFetch('/api/admin-orders', {
+        method: 'PATCH',
+        body: JSON.stringify({ id: orderId, patch })
+      });
+      return true;
+    } catch(e) {
+      console.warn('[Supabase] update gagal:', e);
+      return false;
+    }
+  }
+
+  // Hapus order di Supabase
+  async function sbDeleteOrder(orderId) {
+    try {
+      await sbFetch('/api/admin-orders?id=' + encodeURIComponent(orderId), {
+        method: 'DELETE'
+      });
+      return true;
+    } catch(e) {
+      console.warn('[Supabase] delete gagal:', e);
+      return false;
+    }
+  }
+
+  // Konversi row Supabase → format order admin
+  function sbRowToOrder(row) {
+    const statusMap = {
+      bukti_masuk: 'pending', completed: 'success', complete: 'success',
+      done: 'success', rejected: 'failed', cancelled: 'failed', canceled: 'failed'
+    };
+    const status = statusMap[row.status] || row.status || 'pending';
+    return {
+      id:          row.id           || row.order_id || '',
+      username:    row.username     || row.roblox_username || row.user || '-',
+      gpId:        row.gpId         || row.gp_id || row.gamepass_id || '',
+      robux:       Number(row.robux || 0),
+      price:       Number(row.price || row.total || row.amount || 0),
+      method:      row.method       || row.payment_method || row.metode || '-',
+      status:      status,
+      time:        row.created_at   ? new Date(row.created_at).getTime() : (row.time || Date.now()),
+      hasProof:    !!(row.proofImage || row.proof_url || row.hasProof || row.has_proof || row.bukti_url),
+      proofImage:  row.proofImage   || row.proof_url || row.bukti_url || null,
+      proofViewed: !!(row.proofViewed || row.proof_viewed),
+      sentAt:      row.sentAt       || (row.sent_at ? new Date(row.sent_at).getTime() : null),
+      emailSent:   !!(row.emailSent || row.email_sent),
+      emailSentAt: row.emailSentAt  || (row.email_sent_at ? new Date(row.email_sent_at).getTime() : null),
+      email:       row.email        || '',
+      _fromSupabase: true
+    };
+  }
+
+  // Supabase Realtime via long-poll (tanpa WebSocket SDK)
+  let _realtimePollTimer = null;
+  let _lastOrderCount    = 0;
+  let _lastOrderIds      = new Set();
+
+  function startSupabasePolling() {
+    if (_realtimePollTimer) return;
+    _realtimePollTimer = setInterval(async () => {
+      try {
+        const fresh = await sbLoadAllOrders();
+        if (!fresh) return;
+        const newOnes = fresh.filter(o => !_lastOrderIds.has(o.id));
+        if (newOnes.length > 0 || fresh.length !== _lastOrderCount) {
+          _lastOrderCount = fresh.length;
+          _lastOrderIds   = new Set(fresh.map(o => o.id));
+          orders = fresh;
+          if (newOnes.length > 0) newOnes.forEach(o => showNewOrderNotif(o));
+          renderAll();
+        }
+      } catch(e) {}
+    }, 4000); // poll tiap 4 detik
+  }
+  // ── END SUPABASE ──────────────────────────────────────────────
+
+  // ── IndexedDB helpers (baca proof yang disimpan index.html) ────
+  const _IDB_NAME = 'rbx_store';
+  const _IDB_STORE = 'proofs';
+  let _idbReady = null;
+  const _proofCache = {};
+
+  function openIDB() {
+    if (_idbReady) return _idbReady;
+    _idbReady = new Promise((resolve, reject) => {
+      const req = indexedDB.open(_IDB_NAME, 1);
+      req.onupgradeneeded = e => e.target.result.createObjectStore(_IDB_STORE);
+      req.onsuccess = e => resolve(e.target.result);
+      req.onerror = () => reject(req.error);
+    });
+    return _idbReady;
+  }
+
+  async function idbGet(key) {
+    try {
+      const db = await openIDB();
+      return new Promise(resolve => {
+        const req = db.transaction(_IDB_STORE, 'readonly').objectStore(_IDB_STORE).get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      });
+    } catch(e) { return localStorage.getItem(key) || null; }
+  }
+
+  async function preloadAllProofs() {
+    try {
+      const db = await openIDB();
+      return new Promise(resolve => {
+        const req = db.transaction(_IDB_STORE, 'readonly').objectStore(_IDB_STORE).openCursor();
+        req.onsuccess = e => {
+          const cursor = e.target.result;
+          if (cursor) {
+            if (String(cursor.key).startsWith('rbx_proof_'))
+              _proofCache[String(cursor.key).replace('rbx_proof_', '')] = cursor.value;
+            cursor.continue();
+          } else resolve();
+        };
+        req.onerror = () => resolve();
+      });
+    } catch(e) {
+      // Fallback: baca dari localStorage lama
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('rbx_proof_'))
+          _proofCache[k.replace('rbx_proof_', '')] = localStorage.getItem(k);
+      }
+    }
+  }
+
+  function getProofFromCache(oid) {
+    return _proofCache[oid] || localStorage.getItem('rbx_proof_' + oid) || null;
+  }
+  // ── End IndexedDB helpers ─────────────────────────────────────
+
+  // ── MERGE semua order dari rbx_orders_u_* ke rbx_orders ─────────
+  const ORDER_MASTER_KEY = 'rbx_orders';
+  const ORDER_USER_PREFIX = 'rbx_orders_u_';
+
+  function readOrderArray(key) {
+    try {
+      const data = JSON.parse(localStorage.getItem(key) || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function toNumber(value) {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    if (typeof value === 'string') {
+      const n = Number(value.replace(/[^\d]/g, ''));
+      return Number.isFinite(n) ? n : 0;
+    }
+    return 0;
+  }
+
+  function isOrderLike(value) {
+    if (!value || typeof value !== 'object') return false;
+    const id = String(value.id || value.orderId || value.order_id || '');
+    if (id.startsWith('RBX-')) return true;
+    return !!id && ('robux' in value || 'price' in value || 'total' in value || 'amount' in value);
+  }
+
+  function normalizeOrder(raw) {
+    const o = Object.assign({}, raw || {});
+    if (!o.id) o.id = o.orderId || o.order_id || '';
+    if (!o.username) o.username = o.robloxUsername || o.user || o.playerName || '-';
+    if (!o.method) o.method = o.paymentMethod || o.metode || '-';
+    if (!o.price) o.price = o.total || o.amount || 0;
+    o.robux = toNumber(o.robux);
+    o.price = toNumber(o.price);
+
+    if (!o.time) {
+      const rawTime = o.createdAt || o.timestamp || o.date;
+      const parsed = typeof rawTime === 'number' ? rawTime : Date.parse(rawTime || '');
+      o.time = Number.isFinite(parsed) && parsed > 0 ? parsed : Date.now();
+    }
+
+    const statusMap = {
+      bukti_masuk: 'pending',
+      completed: 'success',
+      complete: 'success',
+      done: 'success',
+      rejected: 'failed',
+      cancelled: 'failed',
+      canceled: 'failed'
+    };
+    o.status = statusMap[o.status] || o.status || 'pending';
+    if ((raw || {}).status === 'bukti_masuk' || o.proofImage || o.bukti) o.hasProof = true;
+    return o;
+  }
+
+  function toStorableOrder(order) {
+    const c = Object.assign({}, normalizeOrder(order));
+    if (c.proofImage && String(c.proofImage).startsWith('data:')) {
+      delete c.proofImage;
+      c.hasProof = true;
+    }
+    if (c.bukti && String(c.bukti).startsWith('data:')) {
+      delete c.bukti;
+      c.hasProof = true;
+    }
+    return c;
+  }
+
+  function mergeOrder(existing, incoming) {
+    if (!existing) return normalizeOrder(incoming);
+    const oldStatus = existing.status || 'pending';
+    const newStatus = incoming.status || 'pending';
+    const merged = Object.assign({}, existing, incoming);
+
+    if ((oldStatus === 'success' || oldStatus === 'failed') && newStatus === 'pending') {
+      merged.status = oldStatus;
+    }
+
+    merged.hasProof = !!(existing.hasProof || incoming.hasProof || existing.proofImage || incoming.proofImage || existing.bukti || incoming.bukti);
+    merged.proofViewed = !!(existing.proofViewed || incoming.proofViewed);
+    if (existing.sentAt && !incoming.sentAt) merged.sentAt = existing.sentAt;
+    if (existing.emailSent && !incoming.emailSent) merged.emailSent = existing.emailSent;
+    if (existing.emailSentAt && !incoming.emailSentAt) merged.emailSentAt = existing.emailSentAt;
+    if (existing.emailSentFailed && !incoming.emailSentFailed) merged.emailSentFailed = existing.emailSentFailed;
+    return normalizeOrder(merged);
+  }
+
+  function getOrderStorageKeys() {
+    const keys = new Set([ORDER_MASTER_KEY]);
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key) continue;
+      if (key === ORDER_MASTER_KEY || key.startsWith(ORDER_USER_PREFIX)) keys.add(key);
+    }
+    return Array.from(keys);
+  }
+
+  function mergeAllCustomerOrders() {
+    const before = localStorage.getItem(ORDER_MASTER_KEY) || '[]';
+    const byId = {};
+
+    getOrderStorageKeys().forEach(key => {
+      readOrderArray(key).forEach(raw => {
+        if (!isOrderLike(raw)) return;
+        const order = normalizeOrder(raw);
+        if (!order.id) return;
+        byId[order.id] = mergeOrder(byId[order.id], order);
+      });
+    });
+
+    const merged = Object.values(byId)
+      .sort((a, b) => (b.time || 0) - (a.time || 0))
+      .map(toStorableOrder);
+
+    try {
+      localStorage.setItem(ORDER_MASTER_KEY, JSON.stringify(merged));
+    } catch(e) {
+      console.warn('[Kokorbx] merge order gagal:', e);
+    }
+
+    return before !== JSON.stringify(merged);
+  }
+
+  function loadOrders() {
+    mergeAllCustomerOrders();
+    return readOrderArray(ORDER_MASTER_KEY).map(o => {
+      o = normalizeOrder(o);
+      if (!o.proofImage && !o.bukti) {
+        const proof = getProofFromCache(o.id);
+        if (proof) o.proofImage = proof;
+      }
+      if (!o.proofImage && o.bukti) o.proofImage = o.bukti;
+      if (!o.proofImage && o.hasProof) {
+        const proof = getProofFromCache(o.id);
+        if (proof) o.proofImage = proof;
+      }
+      if (!o.status) o.status = 'pending';
+      if (o.status === 'bukti_masuk') { o.status = 'pending'; o.hasProof = true; }
+      return o;
+    });
+  }
+  // Sementara load dari localStorage, Supabase akan override di init()
+  let orders = loadOrders();
+  let currentFilter = 'all';
+  let currentSearch = '';
+
+  // MOBILE SIDEBAR
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('mobile-overlay').classList.toggle('show');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('mobile-overlay').classList.remove('show');
+  }
+
+  // LOGIN
+  async function doLogin() {
+    const u = document.getElementById('login-user').value.trim();
+    const p = document.getElementById('login-pass').value;
+    const err = document.getElementById('login-err');
+    err.style.display = 'none';
+
+    try {
+      const res = await fetch(API_BASE + '/api/admin-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      });
+      if (!res.ok) throw new Error('Login gagal');
+      const data = await res.json();
+      sessionStorage.setItem(ADMIN_TOKEN_KEY, data.token);
+      document.getElementById('login-screen').classList.add('hidden');
+      init();
+    } catch(e) {
+      err.textContent = 'Username atau password salah, atau backend belum diset.';
+      err.style.display = 'block';
+    }
+  }
+  document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+  function doLogout() {
+    sessionStorage.removeItem(ADMIN_TOKEN_KEY);
+    document.getElementById('login-screen').classList.remove('hidden');
+    document.getElementById('login-user').value = '';
+    document.getElementById('login-pass').value = '';
+  }
+
+  // MOBILE NAV
+  function mobileNavActivate(name) {
+    document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
+    const el = document.getElementById('bnav-' + name);
+    if (el) el.classList.add('active');
+    closeSidebar();
+  }
+
+  // Patch showPage to also update bottom nav
+  const _origShowPage = window.showPage;
+
+  // MOBILE CARD RENDERING
+  function isMobile() { return window.innerWidth <= 768; }
+
+  function statusLabel(s) {
+    const map = { pending:'Pending', success:'Sukses', failed:'Gagal', process:'Diproses', reviewed:'Direview' };
+    return map[s] || s;
+  }
+
+  function renderMobileCards(containerId, ordersArr) {
+    let el = document.getElementById(containerId + '-mobile');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = containerId + '-mobile';
+      el.className = 'm-card-list';
+      // Insert after table-header inside closest table-wrap
+      const tbody = document.getElementById(containerId);
+      if (!tbody) return;
+      const wrap = tbody.closest('.table-wrap');
+      if (wrap) wrap.appendChild(el);
+    }
+    if (!isMobile()) { el.style.display = 'none'; return; }
+    el.style.display = 'flex';
+
+    if (!ordersArr || ordersArr.length === 0) {
+      el.innerHTML = '<div class="empty"><div class="icon">📭</div><p>Tidak ada order</p></div>';
+      return;
+    }
+
+    el.innerHTML = ordersArr.map(o => {
+      const hasProof = !!(o.proofImage || o.hasProof);
+      const proofBadge = hasProof
+        ? `<span class="m-proof-badge">📎 Bukti</span>`
+        : '';
+      const timeStr = new Date(o.time).toLocaleString('id-ID', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
+
+      let actionBtns = '';
+      if (o.status === 'pending') {
+        actionBtns = `
+          <button class="btn-confirm" onclick="openDetail('${o.id}')">✓ Konfirmasi</button>
+          <button class="btn-reject" onclick="rejectOrder('${o.id}')">✗ Tolak</button>
+          ${hasProof ? `<button class="btn-proof" onclick="openLightbox('${o.id}')">🖼</button>` : ''}
+        `;
+      } else {
+        actionBtns = `<button class="btn-process" onclick="openDetail('${o.id}')">Detail</button>`;
+      }
+
+      return `
+        <div class="m-card ${o.status}">
+          <div class="m-card-top">
+            <span class="m-card-id">${o.id}</span>
+            <span class="status-badge ${o.status}">${statusLabel(o.status)}</span>
+          </div>
+          <div class="m-card-body">
+            <div class="m-field">
+              <span class="m-field-label">Username</span>
+              <span class="m-field-val">${o.username}</span>
+            </div>
+            <div class="m-field">
+              <span class="m-field-label">Robux</span>
+              <span class="m-field-val mono">${o.robux.toLocaleString('id')} R$</span>
+            </div>
+            <div class="m-field">
+              <span class="m-field-label">Total</span>
+              <span class="m-field-val mono" style="color:var(--green)">Rp ${o.price.toLocaleString('id')}</span>
+            </div>
+            <div class="m-field">
+              <span class="m-field-label">Metode</span>
+              <span class="m-field-val" style="font-size:11px">${o.method}</span>
+            </div>
+          </div>
+          <div class="m-card-bottom">
+            <div class="m-card-actions">${actionBtns}</div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+              ${proofBadge}
+              <span class="m-card-time">${timeStr}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // ── REAL-TIME ORDER LISTENER ─────────────────────────────────
+  function setupRealtimeListener() {
+    // 1. BroadcastChannel — real-time antar tab di browser yang sama
+    try {
+      const bc = new BroadcastChannel('rbx_store_channel');
+      bc.onmessage = async (e) => {
+        if (e.data && (e.data.type === 'new_order' || e.data.type === 'proof_uploaded')) {
+          await preloadAllProofs();
+          const fresh = loadOrders();
+          const oldIds = new Set(orders.map(o => o.id));
+          const newOrders = fresh.filter(o => !oldIds.has(o.id));
+          orders = fresh;
+          if (newOrders.length > 0) newOrders.forEach(o => showNewOrderNotif(o));
+          else if (e.data.type === 'proof_uploaded') showToast('\u{1F4CE} Bukti transfer baru diterima dari ' + (e.data.username || 'customer') + '!', 'success');
+          renderAll();
+        }
+      };
+    } catch(e) {}
+
+    // 2. Storage event — menangkap perubahan dari tab/window lain
+    window.addEventListener('storage', async (evt) => {
+      if (!evt.key) return;
+      if (evt.key !== ORDER_MASTER_KEY && !evt.key.startsWith(ORDER_USER_PREFIX)) return;
+      await preloadAllProofs();
+      const fresh = loadOrders();
+      const oldIds = new Set(orders.map(o => o.id));
+      const newOrders = fresh.filter(o => !oldIds.has(o.id));
+      orders = fresh;
+      if (newOrders.length > 0) newOrders.forEach(o => showNewOrderNotif(o));
+      renderAll();
+    });
+  }
+
+  function showNewOrderNotif(o) {
+    showToast('\u{1F514} Order baru! ' + o.id + ' — ' + o.username + ' (' + (o.robux||0) + ' R\u24C8)', 'success');
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = 880; osc.type = 'sine';
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.12, ctx.currentTime + 0.05);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.35);
+      osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+    } catch(e) {}
+  }
+
+  async function init() {
+    loadEmailJSConfig();
+    updateClock();
+    setInterval(updateClock, 1000);
+    cleanupLocalStorageImages();
+    await preloadAllProofs();
+
+    // Coba load dari Supabase dulu
+    showToast('⏳ Memuat order dari server...', 'success');
+    const supaOrders = await sbLoadAllOrders();
+    if (supaOrders !== null && supaOrders.length >= 0) {
+      orders = supaOrders;
+      _lastOrderCount = orders.length;
+      _lastOrderIds   = new Set(orders.map(o => o.id));
+      showToast('✅ ' + orders.length + ' order dimuat dari Supabase.', 'success');
+    } else {
+      orders = loadOrders(); // fallback localStorage
+      showToast('⚠️ Supabase gagal, pakai data lokal.', 'error');
+    }
+
+    renderAll();
+    setupRealtimeListener();
+    startSupabasePolling(); // polling Supabase tiap 4 detik
+  }
+
+  function updateClock() {
+    const now = new Date();
+    const el = document.getElementById('dash-time');
+    if (el) el.textContent = now.toLocaleDateString('id-ID', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) + ' — ' + now.toLocaleTimeString('id-ID');
+  }
+
+  function showPage(name, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    if (el) el.classList.add('active');
+    closeSidebar();
+    renderAll();
+  }
+
+  function renderAll() {
+    renderStats();
+    renderRecentOrders();
+    renderAllOrders();
+    renderPendingOrders();
+    renderCharts();
+    updatePendingBadge();
+  }
+
+  function renderStats() {
+    const success = orders.filter(o => o.status === 'success');
+    const pending = orders.filter(o => o.status === 'pending');
+    const today = orders.filter(o => isToday(o.time));
+    const revenue = success.reduce((s, o) => s + o.price, 0);
+    const robux = success.reduce((s, o) => s + o.robux, 0);
+    document.getElementById('stat-revenue').textContent = 'Rp ' + revenue.toLocaleString('id');
+    document.getElementById('stat-rev-sub').textContent = success.length + ' transaksi sukses';
+    document.getElementById('stat-orders').textContent = orders.length;
+    document.getElementById('stat-ord-sub').textContent = 'Hari ini: ' + today.length;
+    document.getElementById('stat-pending').textContent = pending.length;
+    document.getElementById('stat-robux').textContent = robux.toLocaleString('id');
+    const failed = orders.filter(o => o.status === 'failed');
+    const rate = orders.length ? Math.round(success.length / orders.length * 100) : 0;
+    document.getElementById('s-revenue').textContent = 'Rp ' + revenue.toLocaleString('id');
+    document.getElementById('s-success').textContent = success.length;
+    document.getElementById('s-rate').textContent = rate + '% success rate';
+    document.getElementById('s-pending').textContent = pending.length;
+    document.getElementById('s-failed').textContent = failed.length;
+  }
+
+  function isToday(ts) {
+    const d = new Date(ts), n = new Date();
+    return d.getDate() === n.getDate() && d.getMonth() === n.getMonth() && d.getFullYear() === n.getFullYear();
+  }
+
+  function proofCell(o) {
+    const hasImg = !!(o.proofImage || o.proof_url);
+    if (hasImg) {
+      const viewedBadge = o.proofViewed
+        ? `<br><span style="font-size:9px;color:var(--green);font-weight:600;">&#10003; Sudah dilihat</span>`
+        : `<br><span style="font-size:9px;color:var(--yellow);font-weight:600;">&#9733; Baru!</span>`;
+      return `<button class="btn-proof" onclick="openLightbox('${o.id}')">&#128444; Lihat Bukti</button>${viewedBadge}`;
+    }
+    if (o.hasProof) {
+      return `<button class="btn-proof" onclick="openLightbox('${o.id}')">&#128444; Lihat Bukti</button><br><span style="font-size:9px;color:var(--yellow);font-weight:600;">&#9733; Baru!</span>`;
+    }
+    return `<span class="no-proof">&#8212; Belum ada</span>`;
+  }
+
+  function rowHTML(o) {
+    return `<tr>
+      <td><span class="order-id">${o.id}</span></td>
+      <td><span class="username">${o.username}</span></td>
+      <td><span class="robux-badge">${o.robux.toLocaleString('id')} R$</span></td>
+      <td><span class="price">Rp ${o.price.toLocaleString('id')}</span></td>
+      <td>${o.method}</td>
+      <td>${proofCell(o)}</td>
+      <td><span class="status-badge ${o.status}">${statusLabel(o.status)}</span></td>
+      <td><span class="time">${timeAgo(o.time)}</span></td>
+      <td><div class="action-btns">
+        ${o.status === 'pending' ? `<button class="btn-confirm" onclick="openDetail('${o.id}')">&#10003; Konfirmasi</button><button class="btn-reject" onclick="rejectOrder('${o.id}')">&#10007; Tolak</button>` : ''}
+        ${o.status === 'success' ? `<span style="color:var(--green);font-size:10px;font-weight:600;">&#10003; Selesai</span>` : ''}
+        ${o.status === 'failed' ? `<span style="color:var(--red);font-size:10px;font-weight:600;">&#10007; Ditolak</span>` : ''}
+        <button class="btn-process" onclick="openDetail('${o.id}')">Detail</button>
+        <button class="btn-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
+      </div></td>
+    </tr>`;
+  }
+
+  function pendingRowHTML(o) {
+    return `<tr>
+      <td><span class="order-id">${o.id}</span></td>
+      <td><span class="username">${o.username}</span></td>
+      <td><span class="robux-badge">${o.robux.toLocaleString('id')} R$</span></td>
+      <td><span class="price">Rp ${o.price.toLocaleString('id')}</span></td>
+      <td>${o.method}</td>
+      <td>
+        ${o.proofImage || o.hasProof
+          ? `<button class="btn-proof" onclick="openLightbox('${o.id}')">&#128444; Lihat Bukti</button>`
+          : `<span class="no-proof">Belum upload</span>`
+        }
+      </td>
+      <td><span class="time">${timeAgo(o.time)}</span></td>
+      <td><div class="action-btns">
+        <button class="btn-confirm" onclick="openDetail('${o.id}')">&#10003; Konfirmasi</button>
+        <button class="btn-reject" onclick="rejectOrder('${o.id}')">&#10007; Tolak</button>
+        <button class="btn-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
+      </div></td>
+    </tr>`;
+  }
+
+  function renderRecentOrders() {
+    const tbody = document.getElementById('recent-tbody');
+    const recent = [...orders].sort((a, b) => b.time - a.time).slice(0, 8);
+    tbody.innerHTML = recent.length ? recent.map(o => rowHTML(o)).join('') : emptyRow(9);
+    renderMobileCards('recent-tbody', recent);
+  }
+
+  function renderAllOrders() {
+    const tbody = document.getElementById('all-tbody');
+    let filtered = [...orders].sort((a, b) => b.time - a.time);
+    if (currentFilter !== 'all') filtered = filtered.filter(o => o.status === currentFilter);
+    if (currentSearch) filtered = filtered.filter(o =>
+      o.id.toLowerCase().includes(currentSearch) || o.username.toLowerCase().includes(currentSearch)
+    );
+    tbody.innerHTML = filtered.length ? filtered.map(o => rowHTML(o)).join('') : emptyRow(9);
+    renderMobileCards('all-tbody', filtered);
+  }
+
+  function renderPendingOrders() {
+    const tbody = document.getElementById('pending-tbody');
+    const pending = orders.filter(o => o.status === 'pending').sort((a, b) => b.time - a.time);
+    tbody.innerHTML = pending.length ? pending.map(o => pendingRowHTML(o)).join('') : emptyRow(8);
+    renderMobileCards('pending-tbody', pending);
+  }
+
+  function updatePendingBadge() {
+    const cnt = orders.filter(o => o.status === 'pending').length;
+    const badge = document.getElementById('pending-badge');
+    badge.textContent = cnt > 0 ? cnt : '';
+    // Update bottom nav badge
+    const bnavBadge = document.getElementById('bnav-badge');
+    if (bnavBadge) {
+      bnavBadge.textContent = cnt > 0 ? cnt : '';
+      bnavBadge.style.display = cnt > 0 ? 'block' : 'none';
+    }
+  }
+
+  function emptyRow(cols) {
+    return `<tr><td colspan="${cols}" class="empty"><div class="icon">&#128237;</div><p>Belum ada order</p></td></tr>`;
+  }
+
+  function timeAgo(ts) {
+    const diff = Date.now() - ts;
+    if (diff < 60000) return 'Baru saja';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' mnt lalu';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' jam lalu';
+    return new Date(ts).toLocaleDateString('id-ID');
+  }
+
+  // ── EMAILJS CONFIG ────────────────────────────────────────────
+  function saveEmailJSConfig() {
+    const svcId   = document.getElementById('emailjs-service-id').value.trim();
+    const tplId   = document.getElementById('emailjs-template-id').value.trim();
+    const pubKey  = document.getElementById('emailjs-public-key').value.trim();
+    if (!svcId || !tplId || !pubKey) { setEmailJSStatus('Semua field harus diisi!', false); return; }
+    localStorage.setItem('ejs_service_id', svcId);
+    localStorage.setItem('ejs_template_id', tplId);
+    localStorage.setItem('ejs_public_key', pubKey);
+    setEmailJSStatus('✓ Config tersimpan!', true);
+  }
+  function loadEmailJSConfig() {
+    const svcId  = localStorage.getItem('ejs_service_id') || '';
+    const tplId  = localStorage.getItem('ejs_template_id') || '';
+    const pubKey = localStorage.getItem('ejs_public_key') || '';
+    if (svcId)  document.getElementById('emailjs-service-id').value  = svcId;
+    if (tplId)  document.getElementById('emailjs-template-id').value = tplId;
+    if (pubKey) document.getElementById('emailjs-public-key').value  = pubKey;
+    if (svcId && tplId && pubKey) setEmailJSStatus('✓ Config aktif', true);
+  }
+  function setEmailJSStatus(msg, ok) {
+    const el = document.getElementById('emailjs-status');
+    el.textContent = msg;
+    el.className = 'emailjs-status ' + (ok ? 'ok' : 'err');
+  }
+  function getEmailJSConfig() {
+    return {
+      serviceId:  localStorage.getItem('ejs_service_id') || '',
+      templateId: localStorage.getItem('ejs_template_id') || '',
+      publicKey:  localStorage.getItem('ejs_public_key') || '',
+    };
+  }
+
+  // ── KIRIM EMAIL VIA EMAILJS ───────────────────────────────────
+  async function kirimEmailJS(toEmail, order) {
+    const cfg = getEmailJSConfig();
+    if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
+      return { ok: false, msg: 'Config EmailJS belum diset!' };
+    }
+    if (!toEmail) {
+      return { ok: false, msg: 'Email customer tidak ada di data order.' };
+    }
+    try {
+      // Load EmailJS SDK jika belum ada
+      if (!window.emailjs) {
+        await new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+          s.onload = resolve; s.onerror = reject;
+          document.head.appendChild(s);
+        });
+        emailjs.init(cfg.publicKey);
+      }
+      const params = {
+        to_email:    toEmail,
+        to_name:     order.username,
+        order_id:    order.id,
+        robux:       order.robux.toLocaleString('id') + ' R$',
+        total:       'Rp ' + order.price.toLocaleString('id'),
+        metode:      order.method,
+        dikirim_at:  new Date().toLocaleString('id-ID'),
+        roblox_link: 'https://www.roblox.com/my/money',
+      };
+      await emailjs.send(cfg.serviceId, cfg.templateId, params, cfg.publicKey);
+      return { ok: true, msg: 'Email terkirim ke ' + toEmail };
+    } catch(e) {
+      return { ok: false, msg: 'EmailJS error: ' + (e.text || e.message || JSON.stringify(e)) };
+    }
+  }
+
+  async function confirmAndSendRobux(id) {
+    console.log('[RBX] confirmAndSendRobux dipanggil, id:', id);
+    const o = orders.find(x => x.id === id);
+    if (!o) {
+      console.warn('[RBX] Order tidak ditemukan! id:', id);
+      alert('⚠️ Order tidak ditemukan. Coba refresh halaman (tombol 🔄) lalu coba lagi.');
+      return;
+    }
+
+    try {
+      o.status  = 'success';
+      o.sentAt  = Date.now();
+
+      // Update ke Supabase
+      const supaOk = await sbUpdateOrder(id, {
+        status:  'success',
+        sent_at: new Date(o.sentAt).toISOString()
+      });
+
+      saveOrders(); // tetap simpan lokal juga
+      const robuxStr = (typeof o.robux === 'number' ? o.robux : Number(o.robux) || 0).toLocaleString('id');
+      renderAll();
+      closeModal();
+      showToast((supaOk ? '✅' : '✅⚠️') + ' Robux ' + robuxStr + ' R$ berhasil dikirim ke ' + o.username + (supaOk ? '' : ' (Supabase gagal update)') + '!', 'success');
+
+      // Kirim Email via EmailJS
+      const cfg = getEmailJSConfig();
+      if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
+        showToast('⚠️ Config EmailJS belum diset — email tidak dikirim.', 'error');
+        return;
+      }
+
+      const toEmail = o.email || o.whatsapp || '';
+      showToast('📧 Mengirim email ke customer...', 'success');
+
+      const result = await kirimEmailJS(toEmail, o);
+      if (result.ok) {
+        showToast('✅ ' + result.msg, 'success');
+        o.emailSent   = true;
+        o.emailSentAt = Date.now();
+        await sbUpdateOrder(id, { email_sent: true, email_sent_at: new Date(o.emailSentAt).toISOString() });
+      } else {
+        showToast('⚠️ ' + result.msg, 'error');
+        o.emailSentFailed = result.msg;
+      }
+      saveOrders();
+    } catch(err) {
+      console.error('[RBX] Error di confirmAndSendRobux:', err);
+      alert('❌ Terjadi error: ' + err.message + '\n\nCek Console (F12) untuk detail.');
+    }
+  }
+
+  async function rejectOrder(id) {
+    if (!confirm('Yakin ingin menolak order ' + id + '?')) return;
+    const o = orders.find(x => x.id === id);
+    if (o) {
+      o.status = 'failed';
+      await sbUpdateOrder(id, { status: 'failed' });
+      saveOrders();
+      renderAll();
+      closeModal();
+      showToast('Order ' + id + ' ditolak.', 'error');
+    }
+  }
+
+  async function deleteOrder(id) {
+    if (!confirm('Yakin ingin MENGHAPUS permanen order ' + id + '?\nOrder yang dihapus tidak bisa dikembalikan.')) return;
+    orders = orders.filter(x => x.id !== id);
+
+    // Hapus dari Supabase
+    await sbDeleteOrder(id);
+
+    saveOrders();
+    // Hapus juga dari semua rbx_orders_u_* lokal
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith(ORDER_USER_PREFIX)) {
+        try {
+          const uOrders = readOrderArray(key);
+          const filtered = uOrders.filter(x => x.id !== id);
+          if (filtered.length !== uOrders.length) localStorage.setItem(key, JSON.stringify(filtered));
+        } catch(e) {}
+      }
+    }
+    renderAll();
+    closeModal();
+    showToast('Order ' + id + ' berhasil dihapus.', 'error');
+  }
+
+  async function refreshData(btnId) {
+    const btn = document.getElementById(btnId);
+    if (btn) { btn.classList.add('spinning'); setTimeout(() => btn.classList.remove('spinning'), 420); }
+
+    const supaOrders = await sbLoadAllOrders();
+    const oldLen = orders.length;
+    if (supaOrders !== null) {
+      orders = supaOrders;
+      _lastOrderCount = orders.length;
+      _lastOrderIds   = new Set(orders.map(o => o.id));
+    } else {
+      await preloadAllProofs();
+      orders = loadOrders();
+    }
+
+    renderAll();
+    const diff = orders.length - oldLen;
+    if (diff > 0) showToast('📥 ' + diff + ' order baru ditemukan!', 'success');
+    else showToast('✅ Data sudah terbaru (' + orders.length + ' order).', 'success');
+  }
+
+  function syncOrdersToCustomerKeys(cleanOrders) {
+    const byId = {};
+    cleanOrders.forEach(o => { if (o.id) byId[o.id] = o; });
+
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith(ORDER_USER_PREFIX)) continue;
+
+      const userOrders = readOrderArray(key);
+      let changed = false;
+      const updated = userOrders.map(raw => {
+        if (!isOrderLike(raw)) return raw;
+        const current = normalizeOrder(raw);
+        const master = byId[current.id];
+        if (!master) return raw;
+        changed = true;
+        return toStorableOrder(Object.assign({}, current, {
+          status: master.status,
+          sentAt: master.sentAt,
+          emailSent: master.emailSent,
+          emailSentAt: master.emailSentAt,
+          emailSentFailed: master.emailSentFailed,
+          proofViewed: !!(master.proofViewed || current.proofViewed),
+          hasProof: !!(master.hasProof || current.hasProof)
+        }));
+      });
+
+      if (changed) {
+        try { localStorage.setItem(key, JSON.stringify(updated)); } catch(e) {}
+      }
+    }
+  }
+
+  function saveOrders() {
+    const clean = orders.map(toStorableOrder);
+    try {
+      localStorage.setItem(ORDER_MASTER_KEY, JSON.stringify(clean));
+      syncOrdersToCustomerKeys(clean);
+    } catch(e) {
+      console.warn('[Kokorbx] saveOrders gagal:', e);
+    }
+  }
+
+  // Bersihkan gambar base64 lama yang masih nyangkut di rbx_orders / rbx_orders_u_*
+  function cleanupLocalStorageImages() {
+    try {
+      const all = readOrderArray(ORDER_MASTER_KEY);
+      let dirty = false;
+      all.forEach(o => {
+        if ((o.proofImage && o.proofImage.startsWith('data:')) ||
+            (o.bukti && o.bukti.startsWith('data:'))) {
+          if (o.proofImage) delete o.proofImage;
+          if (o.bukti) delete o.bukti;
+          o.hasProof = true;
+          dirty = true;
+        }
+      });
+      if (dirty) localStorage.setItem(ORDER_MASTER_KEY, JSON.stringify(all));
+    } catch(e) {}
+    // Bersihkan juga rbx_orders_u_*
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k || !k.startsWith(ORDER_USER_PREFIX)) continue;
+      try {
+        const arr = readOrderArray(k);
+        let dirty = false;
+        arr.forEach(o => {
+          if ((o.proofImage && o.proofImage.startsWith('data:')) ||
+              (o.bukti && o.bukti.startsWith('data:'))) {
+            if (o.proofImage) delete o.proofImage;
+            if (o.bukti) delete o.bukti;
+            o.hasProof = true;
+            dirty = true;
+          }
+        });
+        if (dirty) localStorage.setItem(k, JSON.stringify(arr));
+      } catch(e) {}
+    }
+  }
+
+  async function openDetail(id) {
+    const o = orders.find(x => x.id === id);
+    if (!o) return;
+
+    // Prioritas: proof_url dari Supabase > IndexedDB cache > localStorage lama
+    if (!o.proofImage) {
+      if (o.proof_url) {
+        o.proofImage = o.proof_url; // URL langsung dari Supabase Storage
+      } else {
+        o.proofImage = getProofFromCache(id) || await idbGet('rbx_proof_' + id);
+      }
+    }
+
+    if (o.proofImage && !o.proofViewed) {
+      o.proofViewed = true;
+      saveOrders();
+      sbUpdateOrder(id, { proof_viewed: true }).catch(() => {});
+    }
+
+    const proofHTML = o.proofImage
+      ? `<div class="proof-section">
+          <h4>&#128206; Bukti Transfer</h4>
+          <div class="proof-img-wrap">
+            <img src="${o.proofImage}" alt="Bukti Transfer" onclick="openLightbox('${id}')">
+          </div>
+          ${o.proof_url ? `<div style="margin-top:6px;"><a href="${o.proof_url}" target="_blank" style="font-size:10px;color:var(--accent);text-decoration:none;">🔗 Buka gambar penuh</a></div>` : ''}
+          ${o.proofViewed ? '<div class="proof-viewed-badge">&#10003; Sudah dilihat admin</div>' : ''}
+        </div>`
+      : `<div class="proof-section">
+          <h4>&#128206; Bukti Transfer</h4>
+          <div class="no-proof-box"><div class="icon">&#128336;</div>Customer belum upload bukti transfer</div>
+        </div>`;
+
+    document.getElementById('modal-detail-content').innerHTML = `
+      <div class="detail-row"><span class="key">Order ID</span><span class="val">${o.id}</span></div>
+      <div class="detail-row"><span class="key">Username Roblox</span><span class="val">${o.username}</span></div>
+      <div class="detail-row"><span class="key">Gamepass ID</span><span class="val">${o.gpId || '&#8212;'}</span></div>
+      <div class="detail-row"><span class="key">Robux</span><span class="val">${o.robux.toLocaleString('id')} R$</span></div>
+      <div class="detail-row"><span class="key">Total Bayar</span><span class="val">Rp ${o.price.toLocaleString('id')}</span></div>
+      <div class="detail-row"><span class="key">Metode</span><span class="val">${o.method}</span></div>
+      <div class="detail-row"><span class="key">Status</span><span class="val"><span class="status-badge ${o.status}">${statusLabel(o.status)}</span></span></div>
+      <div class="detail-row"><span class="key">Waktu Order</span><span class="val">${new Date(o.time).toLocaleString('id-ID')}</span></div>
+      ${o.sentAt ? `<div class="detail-row"><span class="key">Robux Dikirim</span><span class="val" style="color:var(--green)">${new Date(o.sentAt).toLocaleString('id-ID')}</span></div>` : ''}
+      ${(o.email || o.whatsapp) ? `<div class="detail-row"><span class="key">Email Customer</span><span class="val">${o.email || o.whatsapp}</span></div>` : '<div class="detail-row"><span class="key">Email Customer</span><span class="val" style="color:var(--muted)">— Tidak ada di data order</span></div>'}
+      ${o.emailSent ? `<div class="detail-row"><span class="key">Email Notif</span><span class="val"><span class="email-sending-badge">&#128231; Terkirim ${new Date(o.emailSentAt).toLocaleTimeString('id-ID')}</span></span></div>` : ''}
+      ${o.emailSentFailed ? `<div class="detail-row"><span class="key">Email Notif</span><span class="val"><span class="email-failed-badge">&#10060; Gagal: ${o.emailSentFailed}</span></span></div>` : ''}
+      ${proofHTML}
+    `;
+
+    const actions = document.getElementById('modal-detail-actions');
+    if (o.status === 'pending') {
+      // canSend: true kalau ada gambar ATAU flag hasProof (sudah upload, gambar ada di IndexedDB)
+      const canSend = !!(o.proofImage || o.hasProof);
+      actions.innerHTML = `
+        <button class="btn-modal-done" onclick="confirmAndSendRobux('${o.id}')"
+          ${canSend ? '' : 'disabled style="opacity:.45;cursor:not-allowed" title="Tunggu customer upload bukti dulu"'}>
+          ✅ Selesai &amp; Kirim Robux
+        </button>
+        <button class="btn-modal-reject" onclick="rejectOrder('${o.id}')">&#10007; Tolak</button>
+        <button class="btn-modal-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
+        <button class="btn-modal-close" onclick="closeModal()">Tutup</button>
+      `;
+    } else {
+      actions.innerHTML = `
+        <button class="btn-modal-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus Order</button>
+        <button class="btn-modal-close" style="flex:1" onclick="closeModal()">Tutup</button>
+      `;
+    }
+
+    document.getElementById('detail-modal').classList.add('show');
+  }
+
+  function closeModal() { document.getElementById('detail-modal').classList.remove('show'); }
+  document.getElementById('detail-modal').addEventListener('click', e => { if (e.target.id === 'detail-modal') closeModal(); });
+
+  async function openLightbox(id) {
+    const o = orders.find(x => x.id === id);
+    if (!o) return;
+    // Prioritas: proof_url Supabase > IndexedDB cache
+    if (!o.proofImage) {
+      if (o.proof_url) {
+        o.proofImage = o.proof_url;
+      } else {
+        o.proofImage = getProofFromCache(id) || await idbGet('rbx_proof_' + id);
+      }
+    }
+    if (!o.proofImage) {
+      alert('⚠️ Gambar bukti tidak ditemukan.\nMungkin customer belum upload bukti.');
+      return;
+    }
+    if (!o.proofViewed) { o.proofViewed = true; saveOrders(); renderAll(); }
+    document.getElementById('lightbox-img').src = o.proofImage;
+    document.getElementById('lightbox-order-id').textContent = o.id + ' — ' + o.username + ' — Rp ' + o.price.toLocaleString('id');
+    document.getElementById('lightbox').classList.add('show');
+  }
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('show'); }
+  document.getElementById('lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') closeLightbox(); });
+
+  function filterOrders(f, btn) {
+    currentFilter = f;
+    document.querySelectorAll('.table-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderAllOrders();
+  }
+  function searchOrders(v) { currentSearch = v.toLowerCase(); renderAllOrders(); }
+
+  function renderCharts() {
+    const packages = [80, 400, 800, 1600, 4500];
+    const labels = ['80R', '400R', '800R', '1600R', '4500R'];
+    const counts = packages.map(r => orders.filter(o => o.robux === r && o.status === 'success').length);
+    const max = Math.max(...counts, 1);
+    const bar = document.getElementById('bar-chart');
+    bar.innerHTML = counts.map((c, i) => `
+      <div class="bar-wrap">
+        <div class="bar ${i % 2 === 0 ? 'purple' : 'green'}" style="height:${Math.max(c / max * 100, 4)}%"></div>
+        <span class="bar-label">${labels[i]}</span>
+      </div>`).join('');
+
+    const methods = {};
+    orders.filter(o => o.status === 'success').forEach(o => { methods[o.method] = (methods[o.method] || 0) + 1; });
+    const colors = ['#7c6aff', '#ff6a9b', '#00e5a0', '#ffd166', '#60a5fa'];
+    const entries = Object.entries(methods);
+    const total = entries.reduce((s, [, v]) => s + v, 0) || 1;
+    const canvas = document.getElementById('donut-chart');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 100, 100);
+    let start = -Math.PI / 2;
+    entries.forEach(([, v], i) => {
+      const slice = (v / total) * Math.PI * 2;
+      ctx.beginPath(); ctx.moveTo(50, 50); ctx.arc(50, 50, 42, start, start + slice); ctx.closePath();
+      ctx.fillStyle = colors[i % colors.length]; ctx.fill(); start += slice;
+    });
+    ctx.beginPath(); ctx.arc(50, 50, 25, 0, Math.PI * 2); ctx.fillStyle = '#111118'; ctx.fill();
+    if (entries.length === 0) {
+      ctx.beginPath(); ctx.arc(50, 50, 42, 0, Math.PI * 2); ctx.fillStyle = '#2a2a3a'; ctx.fill();
+      ctx.beginPath(); ctx.arc(50, 50, 25, 0, Math.PI * 2); ctx.fillStyle = '#111118'; ctx.fill();
+    }
+    document.getElementById('donut-legend').innerHTML = entries.length
+      ? entries.map(([k, v], i) => `<div class="legend-item"><div class="legend-dot" style="background:${colors[i%colors.length]}"></div><span>${k}</span><span>${v}x</span></div>`).join('')
+      : '<div style="color:var(--muted);font-size:11px;text-align:center">Belum ada data</div>';
+  }
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type + ' show';
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  const dummyUsers = ['NightSlayer99', 'RobloxPro_ID', 'XxDarkness', 'CoolKid2025', 'StarBuilder'];
+  const dummyPkgs = [
+    { robux: 80, price: 8000 }, { robux: 400, price: 35000 },
+    { robux: 800, price: 65000 }, { robux: 1600, price: 125000 }, { robux: 4500, price: 350000 },
+  ];
+  const dummyMethods = ['DANA', 'GoPay', 'OVO', 'QRIS', 'BCA Virtual Account'];
+
+  function addDummyOrder() {
+    const pkg = dummyPkgs[Math.floor(Math.random() * dummyPkgs.length)];
+    const withProof = Math.random() > 0.4;
+    const order = {
+      id: 'RBX-' + Math.floor(100000 + Math.random() * 900000),
+      username: dummyUsers[Math.floor(Math.random() * dummyUsers.length)],
+      gpId: Math.floor(1000000000 + Math.random() * 9000000000).toString(),
+      robux: pkg.robux,
+      price: pkg.price,
+      method: dummyMethods[Math.floor(Math.random() * dummyMethods.length)],
+      status: 'pending',
+      time: Date.now(),
+      proofImage: withProof ? generateDummyProof(pkg.price) : null,
+      proofViewed: false,
+    };
+    orders.unshift(order);
+    saveOrders();
+    renderAll();
+    showToast('Order baru: ' + order.id + (withProof ? ' (+ bukti transfer)' : ''), 'success');
+  }
+
+  function generateDummyProof(amount) {
+    const c = document.createElement('canvas');
+    c.width = 320; c.height = 480;
+    const ctx = c.getContext('2d');
+    ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0, 0, 320, 480);
+    ctx.fillStyle = '#16213e'; ctx.fillRect(20, 20, 280, 440);
+    ctx.fillStyle = '#0f3460'; ctx.fillRect(20, 20, 280, 80);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 18px Arial'; ctx.textAlign = 'center';
+    ctx.fillText('Transfer Berhasil', 160, 55);
+    ctx.font = '12px Arial'; ctx.fillStyle = '#aaa';
+    ctx.fillText('DANA / GoPay', 160, 78);
+    ctx.fillStyle = '#00e5a0'; ctx.font = 'bold 28px Arial';
+    ctx.fillText('Rp ' + amount.toLocaleString('id'), 160, 160);
+    ctx.fillStyle = '#888'; ctx.font = '12px Arial';
+    ctx.fillText('Nominal Transfer', 160, 185);
+    ctx.fillStyle = '#ccc'; ctx.font = '13px Arial';
+    const lines = ['Ke: Kokorbx Official', 'No. Ref: TRX' + Math.floor(Math.random()*9999999), 'Waktu: ' + new Date().toLocaleString('id-ID')];
+    lines.forEach((l, i) => ctx.fillText(l, 160, 240 + i * 28));
+    ctx.strokeStyle = '#0f3460'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(40, 330); ctx.lineTo(280, 330); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '11px Arial';
+    ctx.fillText('Screenshot ini sebagai bukti pembayaran', 160, 360);
+    ctx.fillText('Simpan hingga Robux diterima', 160, 380);
+    return c.toDataURL('image/png');
+  }
+</script>
+</body>
+</html>

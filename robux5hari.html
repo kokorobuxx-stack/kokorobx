@@ -1,0 +1,2369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kokorbx — Top Up Robux</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://app.midtrans.com/snap/snap.js" data-client-key="Mid-client-vIdf2mWg0tpgpzKH"></script>
+<style>
+  :root {
+    --bg: #060608;
+    --s1: #0e0e14;
+    --s2: #14141e;
+    --s3: #1a1a28;
+    --border: #252535;
+    --border2: #2e2e45;
+    --accent: #7c5cfc;
+    --accent-glow: rgba(124,92,252,0.25);
+    --accent2: #fc5c7d;
+    --gold: #ffc857;
+    --green: #39d98a;
+    --text: #eeeef5;
+    --muted: #636380;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'JetBrains Mono', monospace; min-height: 100vh; overflow-x: hidden; }
+  .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .bg-fx::before { content: ''; position: absolute; top: -30%; left: -20%; width: 70%; height: 70%; background: radial-gradient(ellipse, rgba(124,92,252,0.08) 0%, transparent 65%); animation: bgFloat 8s ease-in-out infinite alternate; }
+  .bg-fx::after { content: ''; position: absolute; bottom: -20%; right: -10%; width: 60%; height: 60%; background: radial-gradient(ellipse, rgba(252,92,125,0.06) 0%, transparent 65%); animation: bgFloat 10s ease-in-out infinite alternate-reverse; }
+  @keyframes bgFloat { from{transform:translate(0,0)} to{transform:translate(3%,4%)} }
+  .grid-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(124,92,252,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,92,252,0.04) 1px, transparent 1px); background-size: 50px 50px; }
+  .wrapper { position: relative; z-index: 1; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid var(--border); background: rgba(6,6,8,0.9); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 100; gap: 8px; }
+  .logo { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.1rem; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .logo-gem { width: 26px; height: 26px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; box-shadow: 0 0 12px var(--accent-glow); }
+  .logo-text { color: var(--text); }
+  .logo-text em { font-style: normal; color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; overflow: hidden; }
+  .live-badge { display: flex; align-items: center; gap: 6px; background: rgba(57,217,138,0.08); border: 1px solid rgba(57,217,138,0.2); border-radius: 20px; padding: 5px 10px; font-size: 0.65rem; color: var(--green); letter-spacing: 0.3px; white-space: nowrap; }
+  @media(max-width:520px) { .live-badge { display: none; } }
+  @media(max-width:400px) { header { padding: 10px 12px; } }
+  .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.8)} }
+  .hero { max-width: 680px; margin: 0 auto; text-align: center; padding: 28px 16px 16px; animation: heroIn 0.6s ease both; }
+  @keyframes heroIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(124,92,252,0.3); background: rgba(124,92,252,0.06); padding: 5px 14px; border-radius: 20px; margin-bottom: 14px; }
+  .hero h1 { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: clamp(1.6rem, 7vw, 2.8rem); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 10px; }
+  .hero h1 .g1 { color: var(--accent); }
+  .hero h1 .g2 { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero p { font-size: 0.78rem; color: var(--muted); line-height: 1.7; max-width: 420px; margin: 0 auto; }
+  .how-section { max-width: 860px; margin: 0 auto 8px; padding: 0 14px; }
+  .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  @media(max-width:650px) { .how-grid { grid-template-columns: repeat(2,1fr); } }
+  .how-step { background: var(--s2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 12px; text-align: center; position: relative; overflow: hidden; transition: border-color 0.2s, transform 0.2s; animation: cardIn 0.5s ease both; }
+  .how-step:nth-child(1){animation-delay:0.1s} .how-step:nth-child(2){animation-delay:0.2s} .how-step:nth-child(3){animation-delay:0.3s} .how-step:nth-child(4){animation-delay:0.4s}
+  @keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+  .how-step:hover { border-color: rgba(124,92,252,0.4); transform: translateY(-2px); }
+  .how-num { position: absolute; top: 8px; right: 10px; font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 900; color: rgba(124,92,252,0.12); line-height: 1; }
+  .how-icon { font-size: 1.3rem; margin-bottom: 7px; display: block; }
+  .how-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.75rem; margin-bottom: 4px; color: var(--text); }
+  .how-desc { font-size: 0.64rem; color: var(--muted); line-height: 1.4; }
+  .main { max-width: 960px; margin: 12px auto 0; padding: 0 14px 60px; display: grid; grid-template-columns: 1fr 300px; gap: 12px; align-items: start; }
+  @media(max-width:720px) { .main { grid-template-columns: 1fr; padding: 0 12px 60px; } }
+  .card { background: var(--s1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; transition: border-color 0.2s; }
+  .card:hover { border-color: var(--border2); }
+  .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .card-head-icon { width: 32px; height: 32px; border-radius: 9px; background: linear-gradient(135deg, rgba(124,92,252,0.15), rgba(252,92,125,0.1)); border: 1px solid rgba(124,92,252,0.25); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .card-head-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; color: var(--text); }
+  .card-head-sub { font-size: 0.63rem; color: var(--muted); margin-top: 2px; }
+  .pkg-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+  @media(max-width:600px) { .pkg-grid { grid-template-columns: repeat(3,1fr); gap: 6px; } .custom-rbx-row, .tax-grid, .tax-result-grid, .tutorial-grid { grid-template-columns: 1fr; } .custom-rbx-preview { text-align: left; } }
+  .pkg { background: var(--s2); border: 1px solid var(--border); border-radius: 9px; padding: 10px 7px; cursor: pointer; text-align: center; transition: all 0.18s; position: relative; overflow: hidden; user-select: none; }
+  .pkg::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(124,92,252,0.08), transparent); opacity: 0; transition: opacity 0.2s; }
+  .pkg:hover::before { opacity: 1; }
+  .pkg:hover { border-color: rgba(124,92,252,0.45); transform: translateY(-2px); }
+  .pkg.selected { border-color: var(--accent); background: rgba(124,92,252,0.08); box-shadow: 0 0 18px rgba(124,92,252,0.15), inset 0 0 0 1px rgba(124,92,252,0.3); }
+  .pkg.selected::after { content: '✓'; position: absolute; top: 5px; right: 7px; width: 14px; height: 14px; background: var(--accent); color: #fff; border-radius: 50%; font-size: 0.5rem; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .pkg.hot .hot-tag { display: block; position: absolute; top: 0; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--accent), var(--accent2)); color: #fff; font-size: 0.45rem; font-weight: 700; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 0 0 5px 5px; text-transform: uppercase; }
+  .hot-tag { display: none; }
+  .pkg-emoji { font-size: 1.1rem; display: block; margin-bottom: 5px; }
+  .pkg-amount { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.82rem; color: var(--text); margin-bottom: 2px; }
+  .pkg-price { font-size: 0.65rem; color: var(--accent); }
+  .pkg-bonus { font-size: 0.58rem; color: var(--green); margin-top: 2px; }
+  .custom-rbx-box { margin-top: 12px; background: linear-gradient(135deg, rgba(124,92,252,0.08), rgba(252,92,125,0.05)); border: 1px solid rgba(124,92,252,0.25); border-radius: 10px; padding: 12px; }
+  .custom-rbx-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 9px; }
+  .custom-rbx-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.82rem; color: var(--text); }
+  .custom-rbx-rate { font-size: 0.62rem; color: var(--accent); white-space: nowrap; }
+  .custom-rbx-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; }
+  .custom-rbx-row input { width: 100%; background: var(--s3); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; outline: none; }
+  .custom-rbx-row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,0.1); }
+  .custom-rbx-preview { background: rgba(6,6,8,0.45); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; min-width: 132px; text-align: right; }
+  .custom-rbx-preview .p1 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.86rem; color: var(--green); }
+  .custom-rbx-preview .p2 { font-size: 0.58rem; color: var(--muted); margin-top: 2px; }
+  .tax-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tax-result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .tax-result-box { background: var(--s2); border: 1px solid var(--border); border-radius: 9px; padding: 10px; }
+  .tax-result-label { color: var(--muted); font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .tax-result-value { font-family: 'Outfit', sans-serif; font-size: 0.95rem; font-weight: 800; color: var(--text); }
+  .tax-result-value.gold { color: var(--gold); }
+  .tax-result-value.green { color: var(--green); }
+  .tax-use-btn { width: 100%; margin-top: 10px; background: rgba(124,92,252,0.12); border: 1px solid rgba(124,92,252,0.32); color: var(--accent); border-radius: 8px; padding: 10px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; }
+  .tax-use-btn:hover { background: rgba(124,92,252,0.18); transform: translateY(-1px); }
+  .tutorial-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .tutorial-box { background: rgba(255,255,255,0.025); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+  .tutorial-box-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.78rem; color: var(--text); margin-bottom: 8px; }
+  .tutorial-list { display: flex; flex-direction: column; gap: 7px; }
+  .tutorial-step { display: flex; gap: 8px; color: var(--muted); font-size: 0.67rem; line-height: 1.5; }
+  .tutorial-step b { color: var(--text); font-weight: 700; }
+  .tutorial-link { color: var(--accent); text-decoration: none; font-weight: 700; }
+  .tutorial-link:hover { text-decoration: underline; }
+  .field { margin-bottom: 12px; }
+  .field label { display: flex; align-items: center; gap: 5px; font-size: 0.64rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
+  .field label .req { color: var(--accent2); }
+  .input-wrap { position: relative; width: 100%; }
+  .input-wrap input { width: 100%; max-width: 100%; background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; box-sizing: border-box; }
+  .input-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,0.1); }
+  .input-wrap input::placeholder { color: rgba(100,100,128,0.6); }
+  .input-hint { font-size: 0.62rem; color: var(--muted); margin-top: 5px; line-height: 1.5; display: flex; align-items: flex-start; gap: 4px; }
+  .gamepass-guide { background: linear-gradient(135deg, rgba(124,92,252,0.06), rgba(252,92,125,0.04)); border: 1px solid rgba(124,92,252,0.2); border-radius: 9px; padding: 12px; margin-bottom: 12px; }
+  .gp-guide-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.75rem; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .gp-steps { display: flex; flex-direction: column; gap: 6px; }
+  .gp-step { display: flex; align-items: flex-start; gap: 8px; font-size: 0.68rem; color: var(--muted); line-height: 1.5; }
+  .gp-step-num { width: 18px; height: 18px; border-radius: 50%; background: rgba(124,92,252,0.15); border: 1px solid rgba(124,92,252,0.3); display: flex; align-items: center; justify-content: center; font-size: 0.55rem; color: var(--accent); flex-shrink: 0; font-weight: 700; }
+  .gp-input-box { background: var(--s2); border: 1px dashed rgba(124,92,252,0.4); border-radius: 9px; padding: 12px; }
+  .gp-url-row { display: flex; gap: 7px; margin-bottom: 8px; min-width: 0; }
+  .gp-url-row input { flex: 1; min-width: 0; background: var(--s3); border: 1px solid var(--border); border-radius: 7px; padding: 9px 11px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; outline: none; transition: border-color 0.2s; width: 0; box-sizing: border-box; }
+  .gp-url-row input:focus { border-color: var(--accent); }
+  .gp-url-row input::placeholder { color: rgba(100,100,128,0.5); }
+  .btn-extract { background: linear-gradient(135deg, var(--accent), #5b3de8); color: #fff; border: none; border-radius: 7px; padding: 9px 13px; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; cursor: pointer; white-space: nowrap; transition: all 0.2s; font-weight: 600; flex-shrink: 0; }
+  .btn-extract:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(124,92,252,0.3); }
+  .gp-divider { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.62rem; color: var(--muted); letter-spacing: 0.8px; }
+  .gp-divider::before,.gp-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .gp-id-input { width: 100%; max-width: 100%; box-sizing: border-box; background: var(--s3); border: 1px solid var(--border); border-radius: 7px; padding: 9px 11px; color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; letter-spacing: 1px; }
+  .gp-id-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,0.1); }
+  .gp-id-input::placeholder { color: rgba(100,100,128,0.5); }
+  .gp-preview { display: none; background: var(--s3); border: 1px solid rgba(57,217,138,0.25); border-radius: 10px; padding: 14px; margin-top: 12px; animation: fadeIn 0.3s ease; }
+  .gp-preview.show { display: flex; gap: 12px; align-items: center; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .gp-prev-icon { width: 48px; height: 48px; border-radius: 10px; background: linear-gradient(135deg, rgba(124,92,252,0.2), rgba(252,92,125,0.15)); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+  .gp-prev-info { flex: 1; }
+  .gp-prev-name { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.85rem; margin-bottom: 3px; color: var(--text); }
+  .gp-prev-id { font-size: 0.68rem; color: var(--muted); }
+  .gp-prev-badge { display: inline-flex; align-items: center; gap: 5px; background: rgba(57,217,138,0.1); border: 1px solid rgba(57,217,138,0.3); border-radius: 6px; padding: 3px 9px; font-size: 0.65rem; color: var(--green); margin-top: 5px; }
+  .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .pay-btn { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 7px; cursor: pointer; text-align: center; transition: all 0.18s; user-select: none; }
+  .pay-btn:hover { border-color: rgba(124,92,252,0.4); }
+  .pay-btn.selected { border-color: var(--accent); background: rgba(124,92,252,0.07); }
+  .pay-icon { font-size: 1.1rem; display: block; margin-bottom: 4px; }
+  .pay-name { font-size: 0.68rem; color: var(--muted); }
+  .pay-btn.selected .pay-name { color: var(--accent); }
+  .summary { background: var(--s1); border: 1px solid var(--border); border-radius: 12px; padding: 16px; position: sticky; top: 70px; }
+  @media(max-width:720px) { .summary { position: static; } }
+  .sum-head { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.88rem; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 7px; }
+  .rbx-display { background: var(--s2); border: 1px solid var(--border); border-radius: 9px; padding: 14px; text-align: center; margin-bottom: 10px; position: relative; overflow: hidden; }
+  .rbx-display::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(124,92,252,0.06), rgba(252,92,125,0.04)); }
+  .rbx-display > * { position: relative; }
+  .rbx-big { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 2rem; letter-spacing: -1.5px; background: linear-gradient(135deg, var(--gold), #ffa040); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; margin-bottom: 3px; }
+  .rbx-sub { font-size: 0.63rem; color: var(--muted); }
+  .gp-sum-box { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; font-size: 0.72rem; }
+  .gp-sum-icon { font-size: 1rem; }
+  .gp-sum-info { flex: 1; min-width: 0; }
+  .gp-sum-label { color: var(--muted); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.8px; }
+  .gp-sum-val { font-family: 'Outfit', sans-serif; font-weight: 700; color: var(--text); font-size: 0.78rem; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gp-sum-val.empty { color: var(--muted); font-weight: 400; font-family: inherit; }
+  .sum-row { display: flex; justify-content: space-between; font-size: 0.73rem; margin-bottom: 8px; align-items: center; }
+  .sum-row .k { color: var(--muted); }
+  .sum-row .v { font-family: 'Outfit', sans-serif; font-weight: 600; }
+  .sum-divider { height: 1px; background: var(--border); margin: 10px 0; }
+  .sum-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .sum-total .k { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.82rem; }
+  .sum-total .v { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.2rem; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .pend-box { background: rgba(255,200,87,0.06); border: 1px solid rgba(255,200,87,0.2); border-radius: 8px; padding: 10px; margin-bottom: 12px; font-size: 0.67rem; color: var(--gold); line-height: 1.6; display: flex; gap: 7px; }
+  .btn-order { width: 100%; background: linear-gradient(135deg, var(--accent) 0%, #5b3de8 50%, var(--accent2) 100%); background-size: 200% 200%; animation: gradShift 4s ease infinite; color: #fff; border: none; border-radius: 9px; padding: 13px; font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.3px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  @keyframes gradShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  .btn-order::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); transform: translateX(-100%); }
+  .btn-order:hover::before { animation: shimmer 0.6s ease; }
+  @keyframes shimmer { to{transform:translateX(100%)} }
+  .btn-order:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(124,92,252,0.35); }
+  .btn-order:disabled { background: var(--s2); color: var(--muted); animation: none; cursor: not-allowed; transform: none; box-shadow: none; border: 1px solid var(--border); }
+  .sum-footnote { text-align: center; font-size: 0.62rem; color: var(--muted); margin-top: 10px; line-height: 1.7; }
+  .modal-overlay { display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); align-items: center; justify-content: center; padding: 12px; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: var(--s1); border: 1px solid var(--border2); border-radius: 16px; padding: 18px 16px; max-width: 360px; width: 100%; max-height: 92vh; overflow-y: auto; text-align: center; animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both; position: relative; }
+  .modal::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 16px 16px 0 0; }
+  @keyframes modalPop { from{opacity:0;transform:scale(0.88) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
+  .modal-icon-big { font-size: 1.8rem; margin-bottom: 6px; display: block; animation: iconBounce 0.6s 0.3s ease both; }
+  @keyframes iconBounce { from{transform:scale(0)} to{transform:scale(1)} }
+  .modal h2 { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.1rem; letter-spacing: -0.3px; margin-bottom: 6px; }
+  .status-chip { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,200,87,0.1); border: 1px solid rgba(255,200,87,0.3); border-radius: 20px; padding: 5px 14px; font-size: 0.67rem; color: var(--gold); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 16px; }
+  .modal-progress { width: 100%; height: 4px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 14px; }
+  .modal-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2), var(--gold)); background-size: 200% 100%; animation: progAnim 1.8s ease-in-out infinite alternate, gradMove 3s linear infinite; border-radius: 3px; width: 55%; }
+  @keyframes progAnim { from{width:25%} to{width:75%} }
+  @keyframes gradMove { from{background-position:0%} to{background-position:200%} }
+  .modal-desc { font-size: 0.73rem; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+  .order-box { background: var(--s2); border: 1px dashed var(--border2); border-radius: 9px; padding: 12px; margin-bottom: 14px; }
+  .order-box-label { font-size: 0.58rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+  .order-id-val { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.05rem; letter-spacing: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .modal-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 14px; }
+  .meta-box { background: var(--s2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; text-align: left; }
+  .meta-box .ml { font-size: 0.57rem; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 3px; }
+  .meta-box .mv { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .meta-box .mv.gold { color: var(--gold); }
+  .meta-box .mv.green { color: var(--green); }
+  .meta-box .mv.purple { color: var(--accent); }
+  .modal-gp-box { background: linear-gradient(135deg, rgba(124,92,252,0.08), rgba(252,92,125,0.05)); border: 1px solid rgba(124,92,252,0.25); border-radius: 9px; padding: 11px; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; text-align: left; }
+  .modal-gp-emoji { font-size: 1.2rem; }
+  .modal-gp-info { flex: 1; min-width: 0; }
+  .modal-gp-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.78rem; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .modal-gp-id { font-size: 0.65rem; color: var(--muted); }
+  .modal-gp-status { background: rgba(57,217,138,0.1); border: 1px solid rgba(57,217,138,0.25); border-radius: 6px; padding: 2px 8px; font-size: 0.58rem; color: var(--green); flex-shrink: 0; }
+  .btn-wa { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; background: #25d366; color: #fff; border: none; border-radius: 8px; padding: 11px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.78rem; cursor: pointer; margin-bottom: 8px; transition: all 0.2s; }
+  .btn-wa:hover { background: #1db857; transform: translateY(-1px); }
+  .btn-close { width: 100%; background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; }
+  .btn-close:hover { border-color: var(--border2); color: var(--text); }
+  .pay-action-box { background: var(--s2); border: 1px solid var(--border2); border-radius: 9px; padding: 12px; margin-bottom: 12px; text-align: center; }
+  .pay-action-label { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 7px; }
+  .pay-number { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.15rem; color: var(--text); letter-spacing: 1.5px; margin-bottom: 7px; }
+  .btn-copy { background: var(--accent); border: none; border-radius: 6px; padding: 7px 16px; color: #fff; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%; }
+  .btn-copy:hover { opacity: 0.85; }
+  .btn-copy.copied { background: var(--green); }
+  .qris-overlay { display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,0.9); backdrop-filter: blur(12px); align-items: center; justify-content: center; }
+  .qris-overlay.show { display: flex; }
+  .qris-box { background: #fff; border-radius: 16px; padding: 24px; text-align: center; max-width: 300px; width: 90%; }
+  .qris-box h3 { color: #111; font-size: 1rem; margin-bottom: 4px; }
+  .qris-box p { color: #666; font-size: 0.75rem; margin-bottom: 16px; }
+  .qris-img { width: 100%; max-width: 260px; height: auto; margin: 0 auto 16px; display: block; border: 2px solid #eee; border-radius: 8px; }
+  .qris-amount { color: #111; font-weight: 900; font-size: 1.2rem; margin-bottom: 16px; }
+  .btn-qris-close { background: #7c5cfc; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-weight: 700; font-size: 0.8rem; cursor: pointer; width: 100%; }
+  .upload-section { margin-bottom: 14px; }
+  .upload-label { font-size: 0.65rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: block; }
+  .upload-area { border: 2px dashed var(--border2); border-radius: 10px; padding: 16px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+  .upload-area:hover { border-color: var(--accent); }
+  .upload-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+  .upload-area .upload-icon { font-size: 1.5rem; margin-bottom: 6px; }
+  .upload-area .upload-text { font-size: 0.72rem; color: var(--muted); }
+  .upload-preview { display: none; margin-top: 8px; }
+  .upload-preview img { width: 100%; max-height: 120px; object-fit: cover; border-radius: 8px; }
+  .btn-submit-bukti { width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 9px; padding: 12px; color: #fff; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; margin-bottom: 8px; }
+  .btn-submit-bukti:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-submit-bukti:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .trust {
+    overflow: hidden; padding: 0 0 40px; position: relative;
+    pointer-events: none; user-select: none; touch-action: none;
+  }
+  .trust::before, .trust::after {
+    content: ''; position: absolute; top: 0; bottom: 40px; width: 40px; z-index: 2; pointer-events: none;
+  }
+  .trust::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
+  .trust::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+  .trust-track {
+    display: flex; align-items: center; gap: 10px;
+    width: max-content;
+    pointer-events: none; user-select: none;
+    will-change: transform;
+  }
+  @keyframes trustScroll { from {} to {} }
+  .trust-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.63rem; color: var(--muted);
+    background: var(--s2); border: 1px solid var(--border);
+    border-radius: 20px; padding: 5px 12px;
+    white-space: nowrap; flex-shrink: 0;
+    pointer-events: none; user-select: none;
+  }
+  .trust-item .ti { font-size: 0.85rem; }
+  /* QRIS error state */
+  .qris-error { color: #cc4444; font-size: 0.75rem; margin-bottom: 12px; padding: 8px; background: #fff0f0; border-radius: 6px; }
+  .qris-placeholder { width: 200px; height: 200px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border: 2px dashed #ccc; border-radius: 8px; color: #999; font-size: 0.75rem; text-align: center; padding: 12px; }
+
+  /* ── PESANAN SAYA ── */
+  .my-orders-section { max-width: 960px; margin: 0 auto 28px; padding: 0 14px; display: none; }
+  .my-orders-section.show { display: block; animation: cardIn .4s ease both; }
+  .my-orders-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .my-orders-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+  .my-orders-count { background: rgba(124,92,252,.15); border: 1px solid rgba(124,92,252,.3); border-radius: 20px; padding: 2px 9px; font-size: 0.65rem; color: var(--accent); font-weight: 700; }
+  .my-orders-subtitle { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+
+  /* Order card — baris ringkasan */
+  .order-card {
+    background: var(--s1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    transition: border-color .2s, box-shadow .2s;
+    cursor: pointer;
+  }
+  .order-card:hover { border-color: rgba(124,92,252,.35); box-shadow: 0 4px 20px rgba(0,0,0,.3); }
+  .order-card.expanded { border-color: rgba(124,92,252,.4); }
+
+  .order-card-summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .order-card-icon { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, rgba(124,92,252,.15), rgba(252,92,125,.1)); border: 1px solid rgba(124,92,252,.2); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .order-card-info { flex: 1; min-width: 0; }
+  .order-card-id { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--accent); margin-bottom: 2px; }
+  .order-card-main { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--text); }
+  .order-card-sub { font-size: 0.62rem; color: var(--muted); margin-top: 2px; }
+  .order-card-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; max-width: 110px; }
+  .order-card-price { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.85rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .order-card-chevron { font-size: 0.65rem; color: var(--muted); transition: transform .25s; }
+  .order-card.expanded .order-card-chevron { transform: rotate(180deg); }
+
+  /* Status chip */
+  .order-status { display: inline-flex; align-items: center; gap: 3px; border-radius: 20px; padding: 2px 7px; font-size: 0.52rem; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; max-width: 100%; }
+  .order-status.pending { background: rgba(255,200,87,.1); border: 1px solid rgba(255,200,87,.3); color: var(--gold); }
+  .order-status.bukti_masuk { background: rgba(124,92,252,.1); border: 1px solid rgba(124,92,252,.3); color: var(--accent); }
+  .order-status.success { background: rgba(57,217,138,.1); border: 1px solid rgba(57,217,138,.3); color: var(--green); }
+  .order-status.failed { background: rgba(252,92,125,.1); border: 1px solid rgba(252,92,125,.3); color: var(--accent2); }
+
+  /* Detail expand panel */
+  .order-detail {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 14px;
+    background: var(--s2);
+    animation: fadeIn .2s ease;
+  }
+  .order-card.expanded .order-detail { display: block; }
+
+  .order-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  @media(max-width:480px) { .order-detail-grid { grid-template-columns: repeat(2,1fr); } }
+
+  .od-box { background: var(--s3); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; }
+  .od-label { font-size: 0.55rem; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 3px; }
+  .od-val { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.78rem; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .od-val.gold { color: var(--gold); }
+  .od-val.green { color: var(--green); }
+  .od-val.purple { color: var(--accent); }
+
+  /* Bukti section dalam detail */
+  .order-bukti-section { }
+  .order-bukti-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .order-bukti-label span { flex: 1; height: 1px; background: var(--border); display: block; }
+
+  .bukti-preview-thumb {
+    width: 100%;
+    max-height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border2);
+    margin-bottom: 10px;
+    cursor: zoom-in;
+  }
+
+  .btn-kirim-bukti {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: 8px;
+    padding: 11px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    letter-spacing: .2px;
+  }
+  .btn-kirim-bukti:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 5px 16px rgba(124,92,252,.3); }
+  .btn-kirim-bukti.done {
+    background: rgba(57,217,138,.12);
+    border: 1px solid rgba(57,217,138,.3);
+    color: var(--green);
+    cursor: default;
+    transform: none;
+    box-shadow: none;
+  }
+  .btn-update-bukti {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(124,92,252,.4);
+    border-radius: 8px;
+    padding: 10px;
+    color: var(--accent);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+    margin-top: 7px;
+  }
+  .btn-update-bukti:hover { background: rgba(124,92,252,.08); }
+
+  .my-orders-empty { text-align: center; padding: 28px; color: var(--muted); font-size: 0.78rem; background: var(--s1); border: 1px dashed var(--border); border-radius: 12px; }
+  .my-orders-empty .empty-icon { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .my-orders-empty p { font-size: 0.7rem; color: var(--muted); margin-top: 4px; }
+
+  /* mobile safe */
+  @media(max-width:480px) {
+    .order-card-right { align-items: flex-end; }
+  }
+
+  /* Bukti image lightbox */
+  .bukti-lightbox { display: none; position: fixed; inset: 0; z-index: 99999; background: rgba(0,0,0,.95); align-items: center; justify-content: center; cursor: zoom-out; }
+  /* CS Button */
+  /* cs-fab now lives inside footer, not fixed */
+  .cs-fab { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #25D366, #128C7E); border: none; border-radius: 50px; padding: 11px 20px 11px 16px; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none; box-shadow: 0 4px 20px rgba(34,158,217,0.45); transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap; }
+  .cs-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(34,158,217,0.6); }
+  .cs-fab svg { flex-shrink: 0; }
+  /* Site footer */
+  .site-footer { border-top: 1px solid var(--border); background: rgba(6,6,8,0.95); padding: 28px 20px 32px; text-align: center; position: relative; z-index: 1; }
+  .site-footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .footer-brand { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1rem; color: var(--accent); letter-spacing: -0.3px; }
+  .footer-tagline { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+  .footer-divider { width: 40px; height: 1px; background: var(--border); }
+  .footer-cs-label { font-size: 0.62rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .footer-copy { font-size: 0.6rem; color: var(--muted); opacity: 0.5; margin-top: 4px; }
+  .bukti-lightbox.show { display: flex; }
+  .bukti-lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 10px; object-fit: contain; }
+
+  /* ══════════════════════════════════════════════
+     MOBILE IMPROVEMENTS — comprehensive overhaul
+  ══════════════════════════════════════════════ */
+
+  /* Sticky bottom order bar (mobile only) */
+  .mobile-order-bar {
+    display: none;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(10, 10, 16, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border2);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 400;
+    box-shadow: 0 -8px 32px rgba(0,0,0,0.55);
+  }
+  .mob-bar-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mob-bar-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .mob-bar-robux {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, var(--gold), #ffa040);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+  }
+  .mob-bar-price {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .mob-bar-price strong { color: var(--green); }
+  .mob-bar-btn {
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--accent) 0%, #5b3de8 50%, var(--accent2) 100%);
+    background-size: 200% 200%;
+    animation: gradShift 4s ease infinite;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 0.82rem;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .mob-bar-btn:disabled {
+    background: var(--s2);
+    color: var(--muted);
+    animation: none;
+    cursor: not-allowed;
+    border: 1px solid var(--border);
+  }
+  .mob-bar-btn:not(:disabled):active { transform: scale(0.97); }
+
+  @media (max-width: 720px) {
+    /* ── Global: prevent all horizontal overflow ── */
+    * { max-width: 100%; }
+    input, textarea, select { max-width: 100%; box-sizing: border-box; }
+
+    /* Show mobile bar */
+    .mobile-order-bar { display: block; }
+
+    /* Body padding for sticky bar */
+    body { padding-bottom: 80px; }
+
+    /* Header: tighter, admin jadi icon only, hide live badge */
+    header { padding: 10px 14px; gap: 6px; }
+    .logo-text { font-size: 0.95rem; }
+    .admin-label { display: none; }
+    .live-badge { display: none; }
+    .btn-admin { padding: 6px 9px !important; font-size: 14px !important; }
+
+    /* Hero: compact, no overflow */
+    .hero { padding: 20px 16px 12px; }
+    .hero h1 { font-size: clamp(1.5rem, 7vw, 2.2rem); letter-spacing: -1px; margin-bottom: 8px; }
+    .hero p { font-size: 0.75rem; }
+    .hero-eyebrow { font-size: 0.58rem; padding: 4px 12px; margin-bottom: 10px; }
+
+    /* How-steps: 2x2 grid on mobile, no scroll needed */
+    .how-section { padding: 0 12px; margin-bottom: 12px; }
+    .how-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      overflow: visible;
+    }
+    .how-step { padding: 12px 10px; }
+    .how-icon { font-size: 1.1rem; margin-bottom: 5px; }
+    .how-title { font-size: 0.7rem; }
+    .how-desc { font-size: 0.6rem; }
+
+    /* Main: single column */
+    .main { grid-template-columns: 1fr; padding: 0 12px 20px; gap: 0; }
+
+    /* Hide entire sidebar column on mobile */
+    .main > div:last-child { display: none; }
+
+    /* Cards */
+    .card { padding: 14px 12px; margin-bottom: 8px; border-radius: 14px; }
+    .card-head { margin-bottom: 12px; gap: 9px; }
+    .card-head-icon { width: 30px; height: 30px; font-size: 0.9rem; border-radius: 8px; }
+    .card-head-title { font-size: 0.82rem; }
+    .card-head-sub { font-size: 0.6rem; }
+
+    /* Package grid: 3-col on mobile */
+    .pkg-grid { grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .pkg { padding: 11px 6px; border-radius: 10px; touch-action: manipulation; }
+    .pkg-emoji { font-size: 1.2rem; margin-bottom: 5px; }
+    .pkg-amount { font-size: 0.82rem; }
+    .pkg-price { font-size: 0.64rem; }
+    .pkg.hot .hot-tag { font-size: 0.46rem; padding: 2px 8px; }
+
+    /* Gamepass guide */
+    .gamepass-guide { padding: 10px; }
+    .gp-guide-title { font-size: 0.72rem; margin-bottom: 7px; }
+    .gp-step { font-size: 0.66rem; gap: 7px; }
+    .gp-step-num { width: 17px; height: 17px; font-size: 0.52rem; flex-shrink: 0; }
+
+    /* Gamepass URL row: stack */
+    .gp-url-row { flex-direction: column; gap: 6px; }
+    .btn-extract { width: 100%; padding: 10px; text-align: center; font-size: 0.72rem; }
+    .gp-url-row input { font-size: 0.75rem; padding: 10px 11px; }
+    .gp-id-input { font-size: 0.8rem; padding: 10px 11px; }
+
+    /* Input fields */
+    .input-wrap input { padding: 12px; font-size: 0.85rem; }
+    .field { margin-bottom: 14px; }
+    .field label { font-size: 0.62rem; margin-bottom: 7px; }
+    .input-hint { font-size: 0.62rem; }
+
+    /* Payment methods */
+    .pay-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .pay-btn { padding: 12px 6px; touch-action: manipulation; }
+    .pay-icon { font-size: 1.2rem; margin-bottom: 5px; }
+    .pay-name { font-size: 0.66rem; }
+
+    /* pend-box fix */
+    .pend-box { font-size: 0.68rem; line-height: 1.5; }
+
+    /* Modal: bottom sheet */
+    .modal-overlay { padding: 0; align-items: flex-end; }
+    .modal {
+      display: flex; flex-direction: column;
+      border-radius: 20px 20px 0 0;
+      max-width: 100%; max-height: 92vh;
+      padding: 0 16px 20px;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
+    }
+    .modal::before { border-radius: 20px 20px 0 0; }
+    .modal::after {
+      content: ''; display: block;
+      width: 36px; height: 4px;
+      background: var(--border2); border-radius: 2px;
+      margin: 10px auto 14px; order: 0; flex-shrink: 0;
+    }
+    .modal > * { order: 1; }
+    .modal h2 { font-size: 1rem; }
+    .modal-desc { font-size: 0.7rem; }
+    .modal-meta-grid { grid-template-columns: 1fr 1fr; }
+    .meta-box .mv { font-size: 0.75rem; }
+
+    /* My orders section */
+    .my-orders-section { padding: 0 12px; margin-bottom: 20px; }
+    .my-orders-title { font-size: 0.88rem; }
+    .order-card-main { font-size: 0.82rem; }
+    .order-card-price { font-size: 0.85rem; }
+    .order-detail-grid { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+
+    /* Trust bar: marquee, no override needed */
+    .trust { padding: 0 0 20px; }
+
+    /* QRIS */
+    .qris-box { padding: 20px 16px; }
+    .qris-box h3 { font-size: 0.95rem; }
+    .qris-img { max-width: 220px; }
+  }
+
+  @media (max-width: 400px) {
+    .pkg-grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+    .pkg { padding: 10px 4px; }
+    .pkg-amount { font-size: 0.76rem; }
+    .pkg-price { font-size: 0.6rem; }
+    .pkg-emoji { font-size: 1.1rem; }
+  }
+</style>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
+</head>
+<body>
+<div class="bg-fx"></div>
+<div class="grid-fx"></div>
+<div class="wrapper">
+
+  <header>
+    <div class="logo">
+      <div style="background:#1a1a2a;border-radius:9px;width:30px;height:30px;box-shadow:0 2px 8px rgba(0,0,0,0.6);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g transform="rotate(-12 10 10)">
+            <rect x="2" y="2" width="16" height="16" rx="4" fill="none" stroke="white" stroke-width="2.2"/>
+            <rect x="6.5" y="6.5" width="7" height="7" rx="2" fill="none" stroke="white" stroke-width="2"/>
+          </g>
+        </svg>
+      </div>
+            <div class="logo-text">Koko<em>r</em><em>bx</em></div>
+    </div>
+    <div class="header-right">
+      <div id="user-bar" style="display:none;align-items:center;gap:8px;">
+        <span id="user-bar-name" style="font-size:12px;color:#aaa;font-weight:600;"></span>
+        <button onclick="logoutStore()" style="background:rgba(255,80,80,.12);border:1px solid rgba(255,80,80,.3);border-radius:7px;padding:5px 10px;color:#ff6060;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Keluar</button>
+      </div>
+      <div id="login-bar" style="display:none;">
+        <a href="rbxstore_auth.html" style="background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.4);border-radius:7px;padding:5px 11px;color:var(--accent);font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap;">🔑 Masuk</a>
+      </div>
+      <a href="admin.html" class="btn-admin" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:7px;padding:5px 10px;color:#aaa;font-size:11px;font-weight:600;text-decoration:none;white-space:nowrap;">⚙ <span class="admin-label">Admin</span></a>
+      <div class="live-badge">
+        <div class="live-dot"></div>
+        Online 24/7
+      </div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-eyebrow">🎮 Sistem Gamepass</div>
+    <h1>Top Up <span class="g2">Robux</span><br>via <span class="g1">Gamepass</span></h1>
+    <p>Masukkan username Roblox kamu → pilih paket → bayar → Robux masuk otomatis. Cara paling aman tanpa perlu login akun.</p>
+  </div>
+
+  <div class="how-section">
+    <div class="how-grid">
+      <div class="how-step"><div class="how-num">1</div><span class="how-icon">👤</span><div class="how-title">Masukkan Username</div><div class="how-desc">Masukkan username Roblox kamu ke form di bawah</div></div>
+      <div class="how-step"><div class="how-num">2</div><span class="how-icon">📦</span><div class="how-title">Pilih Paket</div><div class="how-desc">Pilih jumlah Robux yang kamu inginkan sesuai budget</div></div>
+      <div class="how-step"><div class="how-num">3</div><span class="how-icon">💸</span><div class="how-title">Lakukan Pembayaran</div><div class="how-desc">Bayar sesuai paket yang dipilih via DANA, GoPay, atau QRIS</div></div>
+      <div class="how-step"><div class="how-num">4</div><span class="how-icon">💎</span><div class="how-title">Robux Masuk!</div><div class="how-desc">Robux langsung masuk ke akun Roblox kamu dalam 5 hari</div></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div>
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon" style="background:transparent;border:none;padding:0;"><img src="data:image/png;base64,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" style="width:28px;height:28px;object-fit:contain;mix-blend-mode:screen;" alt="Robux"></div>
+          <div class="card-head-text">
+            <div class="card-head-title">Pilih Jumlah Robux</div>
+            <div class="card-head-sub">Harga gamepass harus sesuai jumlah yang dipilih</div>
+          </div>
+        </div>
+        <div class="pkg-grid">
+          <div class="pkg" onclick="selectPkg(this,100,12000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">100 R$</div><div class="pkg-price">Rp 12.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,200,24000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">200 R$</div><div class="pkg-price">Rp 24.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,300,36000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">300 R$</div><div class="pkg-price">Rp 36.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,400,48000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">400 R$</div><div class="pkg-price">Rp 48.000</div></div>
+          <div class="pkg hot" onclick="selectPkg(this,500,60000)"><div class="hot-tag">POPULER</div><span class="pkg-emoji">R$</span><div class="pkg-amount">500 R$</div><div class="pkg-price">Rp 60.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,600,72000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">600 R$</div><div class="pkg-price">Rp 72.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,700,84000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">700 R$</div><div class="pkg-price">Rp 84.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,800,96000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">800 R$</div><div class="pkg-price">Rp 96.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,900,108000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">900 R$</div><div class="pkg-price">Rp 108.000</div></div>
+          <div class="pkg" onclick="selectPkg(this,1000,120000)"><span class="pkg-emoji">R$</span><div class="pkg-amount">1.000 R$</div><div class="pkg-price">Rp 120.000</div></div>
+        </div>
+
+        <div class="custom-rbx-box">
+          <div class="custom-rbx-head">
+            <div class="custom-rbx-title">Custom Robux</div>
+            <div class="custom-rbx-rate">Rp 120 / R$</div>
+          </div>
+          <div class="custom-rbx-row">
+            <input type="number" id="custom-rbx" min="10" step="1" placeholder="Masukkan nominal Robux bebas..." oninput="selectCustomRobux(this.value)">
+            <div class="custom-rbx-preview">
+              <div class="p1" id="custom-rbx-price">Rp -</div>
+              <div class="p2" id="custom-rbx-tax">Before tax: -</div>
+            </div>
+          </div>
+          <div class="input-hint">Minimal 10 Robux. Harga dan gamepass before tax otomatis mengikuti nominal yang kamu isi.</div>
+        </div>
+      </div>
+
+
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">👤</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Data Akun</div>
+            <div class="card-head-sub">Username Roblox kamu</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Username Roblox <span class="req">*</span></label>
+          <div class="input-wrap">
+            <input type="text" id="username" placeholder="Username Roblox kamu..." oninput="updateSummary()">
+          </div>
+          <div class="input-hint">⚠️ Masukkan username Roblox kamu dengan benar</div>
+        </div>
+        <div class="field">
+          <label>Email <span class="req">*</span></label>
+          <div class="input-wrap">
+            <input type="email" id="contact" placeholder="email@kamu.com (untuk notifikasi order)..." oninput="updateSummary()">
+          </div>
+          <div class="input-hint">📧 Notifikasi status order akan dikirim ke email ini</div>
+        </div>
+      </div>
+
+      <div class="card" id="gamepass-id-card" style="display:none">
+        <div class="card-head">
+          <div class="card-head-icon">🎮</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Gamepass Roblox</div>
+            <div class="card-head-sub">Isi link atau ID gamepass yang sudah dijual</div>
+          </div>
+        </div>
+
+        <div class="gamepass-guide">
+          <div class="gp-guide-title">Harga gamepass untuk order ini</div>
+          <div class="gp-steps">
+            <div class="gp-step"><span class="gp-step-num">1</span><span>Pasang harga gamepass sesuai <b id="guide-before-tax">before tax: -</b>.</span></div>
+            <div class="gp-step"><span class="gp-step-num">2</span><span>Robux yang masuk ke kamu setelah tax akan muncul sebagai <b id="guide-after-tax">after tax: -</b>.</span></div>
+            <div class="gp-step"><span class="gp-step-num">3</span><span>Pastikan gamepass sudah public/on sale, lalu kirim link atau ID-nya di bawah.</span></div>
+          </div>
+        </div>
+
+        <div class="gp-input-box">
+          <div class="gp-url-row">
+            <input type="url" id="gp-url" placeholder="Paste link gamepass Roblox..." oninput="parseGamepassUrl()">
+            <button type="button" class="btn-extract" onclick="extractAndVerify()">Ambil ID</button>
+          </div>
+          <div class="gp-divider">ATAU ISI ID</div>
+          <input type="text" inputmode="numeric" id="gp-id" class="gp-id-input" placeholder="Contoh: 1234567890" oninput="onIdInput()">
+          <div class="gp-preview" id="gp-preview">
+            <div class="gp-prev-icon">R$</div>
+            <div class="gp-prev-info">
+              <div class="gp-prev-name">Gamepass terdeteksi</div>
+              <div class="gp-prev-id">ID: <span id="gp-prev-id-val">-</span></div>
+              <div class="gp-prev-badge">Siap dipakai order</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">🧮</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Kalkulator Tax Robux</div>
+            <div class="card-head-sub">Hitung before tax dan after tax Roblox</div>
+          </div>
+        </div>
+        <div class="tax-grid">
+          <div class="field">
+            <label>After Tax / Robux diterima</label>
+            <div class="input-wrap"><input type="number" id="tax-after" min="1" step="1" placeholder="Contoh: 500" oninput="calcTaxFromAfter()"></div>
+          </div>
+          <div class="field">
+            <label>Before Tax / Harga Gamepass</label>
+            <div class="input-wrap"><input type="number" id="tax-before" min="1" step="1" placeholder="Contoh: 715" oninput="calcTaxFromBefore()"></div>
+          </div>
+        </div>
+        <div class="tax-result-grid">
+          <div class="tax-result-box"><div class="tax-result-label">Before Tax</div><div class="tax-result-value gold" id="tax-result-before">- R$</div></div>
+          <div class="tax-result-box"><div class="tax-result-label">After Tax</div><div class="tax-result-value green" id="tax-result-after">- R$</div></div>
+          <div class="tax-result-box"><div class="tax-result-label">Tax Roblox</div><div class="tax-result-value" id="tax-result-fee">- R$</div></div>
+        </div>
+        <button type="button" class="tax-use-btn" onclick="useTaxAfterAsOrder()">Pakai nominal after tax untuk order</button>
+        <div class="input-hint">Roblox mengambil sekitar 30% tax, jadi pembuat menerima sekitar 70% dari harga gamepass.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">📘</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Tutorial Gamepass & Public</div>
+            <div class="card-head-sub">Panduan cepat sebelum checkout</div>
+          </div>
+        </div>
+        <div class="tutorial-grid">
+          <div class="tutorial-box">
+            <div class="tutorial-box-title">Bikin Gamepass</div>
+            <div class="tutorial-list">
+              <div class="tutorial-step"><span class="gp-step-num">1</span><span>Buka <a class="tutorial-link" href="https://create.roblox.com/dashboard/creations" target="_blank" rel="noopener">Creator Dashboard</a>, pilih experience kamu.</span></div>
+              <div class="tutorial-step"><span class="gp-step-num">2</span><span>Masuk ke bagian <b>Associated Items</b> atau <b>Passes</b>, lalu pilih <b>Create a Pass</b>.</span></div>
+              <div class="tutorial-step"><span class="gp-step-num">3</span><span>Upload gambar, isi nama pass, lalu simpan. Setelah itu buka pass yang dibuat.</span></div>
+              <div class="tutorial-step"><span class="gp-step-num">4</span><span>Aktifkan <b>Item for Sale</b>, isi harga <b>before tax</b>, lalu save.</span></div>
+            </div>
+          </div>
+          <div class="tutorial-box">
+            <div class="tutorial-box-title">Creation Jadi Public</div>
+            <div class="tutorial-list">
+              <div class="tutorial-step"><span class="gp-step-num">1</span><span>Buka <b>Creator Dashboard</b> lalu pilih experience yang dipakai untuk gamepass.</span></div>
+              <div class="tutorial-step"><span class="gp-step-num">2</span><span>Masuk ke <b>Settings</b> atau <b>Permissions</b>, lalu ubah visibility/access menjadi <b>Public</b>.</span></div>
+              <div class="tutorial-step"><span class="gp-step-num">3</span><span>Lengkapi questionnaire/content maturity kalau Roblox meminta.</span></div>
+              <div class="tutorial-step"><span class="gp-step-num">4</span><span>Klik <b>Save</b>, lalu pastikan tombol Play sudah bisa muncul di halaman experience.</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="input-hint">Kalau menu Roblox sedikit berbeda, cari bagian Passes, Sales, Visibility, atau Permissions di Creator Dashboard.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-head-icon">💳</div>
+          <div class="card-head-text">
+            <div class="card-head-title">Metode Pembayaran</div>
+            <div class="card-head-sub">Pilih metode pembayaran</div>
+          </div>
+        </div>
+        <div class="pay-grid">
+          <div class="pay-btn" onclick="selectPay(this,'DANA')"><span class="pay-icon">🔵</span><div class="pay-name">DANA</div></div>
+          <div class="pay-btn" onclick="selectPay(this,'GoPay')"><span class="pay-icon">🟢</span><div class="pay-name">GoPay</div></div>
+          <div class="pay-btn" onclick="selectPay(this,'QRIS')"><span class="pay-icon">📱</span><div class="pay-name">QRIS</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="summary">
+        <div class="sum-head">📋 Ringkasan Order</div>
+        <div class="rbx-display">
+          <div class="rbx-big" id="sum-rbx">— R$</div>
+          <div class="rbx-sub">Robux yang akan kamu terima</div>
+        </div>
+
+        <div class="pend-box">⏳ Robux masuk <strong>5 hari</strong> setelah pembayaran. Status: <strong>PENDING</strong></div>
+        <div class="sum-row"><span class="k">Paket</span><span class="v" id="sum-pkg">—</span></div>
+        <div class="sum-row"><span class="k">Username</span><span class="v" id="sum-user">—</span></div>
+        <div class="sum-row"><span class="k">Layanan</span><span class="v" id="sum-gp">Robux 5 Hari</span></div>
+        <div class="sum-row"><span class="k">Before Tax</span><span class="v" id="sum-before-tax">—</span></div>
+        <div class="sum-row"><span class="k">After Tax</span><span class="v" id="sum-after-tax">—</span></div>
+        <div class="sum-row"><span class="k">Metode Bayar</span><span class="v" id="sum-pay">—</span></div>
+        <div class="sum-row"><span class="k">Biaya Admin</span><span class="v">Rp 0</span></div>
+        <div class="sum-divider"></div>
+        <div class="sum-total"><span class="k">Total Bayar</span><span class="v" id="sum-total">Rp —</span></div>
+        <button class="btn-order" id="btn-order" onclick="placeOrder()" disabled>🚀 ORDER SEKARANG</button>
+        <div class="sum-footnote">🔒 Transaksi aman & terenkripsi<br>Tanpa login akun Roblox kamu</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PESANAN SAYA -->
+  <div class="my-orders-section" id="my-orders-section">
+    <div class="my-orders-header">
+      <div>
+        <div class="my-orders-title">📦 Pesanan Saya <span class="my-orders-count" id="my-orders-count">0</span></div>
+        <div class="my-orders-subtitle">Klik pesanan untuk lihat detail & kirim bukti pembayaran</div>
+      </div>
+    </div>
+    <div id="my-orders-list"></div>
+  </div>
+
+  <!-- LIGHTBOX BUKTI -->
+  <div class="bukti-lightbox" id="bukti-lightbox" onclick="closeLightbox()">
+    <img id="bukti-lightbox-img" src="" alt="Bukti Pembayaran">
+  </div>
+
+  <div class="trust">
+    <div class="trust-track">
+      <div class="trust-item"><span class="ti">🔐</span> Tanpa Password</div>
+      <div class="trust-item"><span class="ti">⚡</span> 5 hari</div>
+      <div class="trust-item"><span class="ti">✅</span> 50K+ Transaksi</div>
+      <div class="trust-item"><span class="ti">🕐</span> 24/7 Online</div>
+      <div class="trust-item"><span class="ti">💯</span> Garansi Aman</div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE STICKY ORDER BAR -->
+<div class="mobile-order-bar" id="mobile-order-bar">
+  <div class="mob-bar-inner">
+    <div class="mob-bar-info">
+      <div class="mob-bar-robux" id="mob-bar-robux">Pilih paket</div>
+      <div class="mob-bar-price" id="mob-bar-price">Belum ada paket dipilih</div>
+    </div>
+    <button class="mob-bar-btn" id="mob-bar-btn" onclick="placeOrder()" disabled>🚀 ORDER</button>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeOutside(event)">
+  <div class="modal">
+    <span class="modal-icon-big">⏳</span>
+    <h2>Order Diterima!</h2>
+    <div class="status-chip"><div class="live-dot"></div>PENDING — Diproses</div>
+    <div class="modal-progress"><div class="modal-progress-fill"></div></div>
+    <p class="modal-desc">Pesanan kamu sedang <strong>diverifikasi</strong>. Setelah pembayaran dikonfirmasi, kami akan membeli gamepass kamu dan Robux akan masuk dalam <strong>5 hari</strong>.</p>
+    <div class="order-box">
+      <div class="order-box-label">Nomor Order</div>
+      <div class="order-id-val" id="modal-oid">RBX-000000</div>
+    </div>
+    <div class="modal-gp-box">
+      <div class="modal-gp-emoji">🎫</div>
+      <div class="modal-gp-info">
+        <div class="modal-gp-title" id="modal-gp-name">Robux 5 Hari</div>
+        <div class="modal-gp-id" id="modal-gp-id">Diproses admin</div>
+
+      </div>
+      <div class="modal-gp-status">5 Hari</div>
+    </div>
+    <div class="modal-meta-grid">
+      <div class="meta-box"><div class="ml">Robux</div><div class="mv gold" id="modal-rbx">—</div></div>
+      <div class="meta-box"><div class="ml">Total Bayar</div><div class="mv green" id="modal-total">—</div></div>
+      <div class="meta-box"><div class="ml">Username</div><div class="mv purple" id="modal-user">—</div></div>
+      <div class="meta-box"><div class="ml">Pembayaran</div><div class="mv" id="modal-pay">—</div></div>
+    </div>
+    <div id="pay-action-area"></div>
+    <button class="btn-close" onclick="closeModal()">Tutup</button>
+
+  </div>
+</div>
+
+<!-- QRIS POPUP -->
+<div class="qris-overlay" id="qris-overlay" onclick="closeQris(event)">
+  <div class="qris-box">
+    <h3>💳 Bayar via QRIS</h3>
+    <p>Scan QR code dengan GoPay / OVO / DANA / m-Banking</p>
+    <div id="qris-content"><!-- diisi JS --></div>
+    <div class="qris-amount" id="qris-amount"></div>
+    <button class="btn-qris-close" onclick="document.getElementById('qris-overlay').classList.remove('show')">✕ Tutup</button>
+  </div>
+</div>
+
+<!-- MODAL UPLOAD BUKTI (dari Pesanan Saya) -->
+<div class="modal-overlay" id="modal-bukti" onclick="if(event.target===this)closeBuktiModal()">
+  <div class="modal" style="text-align:left;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1rem;">📤 Kirim Bukti Transfer</div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:2px;" id="bukti-modal-oid"></div>
+      </div>
+      <button onclick="closeBuktiModal()" style="background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;padding:5px 10px;color:var(--muted);cursor:pointer;font-size:12px;">✕</button>
+    </div>
+    <div id="bukti-modal-info" style="background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:16px;font-size:0.78rem;"></div>
+    <div style="font-size:0.65rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Foto Bukti Transfer</div>
+    <input type="file" id="bukti-modal-file" accept="image/*" style="display:none" onchange="handleBuktiFile(this)">
+    <div id="bukti-modal-zone" style="border:2px dashed var(--border2);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:8px;" onclick="document.getElementById('bukti-modal-file').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor=''" ondrop="handleBuktiDrop(event)">
+      <div id="bukti-modal-placeholder">
+        <div style="font-size:1.8rem;margin-bottom:8px;">🖼️</div>
+        <div style="font-size:0.75rem;color:var(--muted);">Klik atau drag foto bukti pembayaran</div>
+        <div style="font-size:0.65rem;color:var(--muted);margin-top:4px;">JPG, PNG, WEBP</div>
+      </div>
+    </div>
+    <img id="bukti-modal-preview" src="" alt="" style="display:none;width:100%;max-height:200px;object-fit:contain;border-radius:10px;border:1px solid var(--border2);margin-bottom:12px;cursor:pointer;" onclick="document.getElementById('bukti-modal-file').click()">
+    <button id="bukti-modal-btn" onclick="submitBuktiModal()" disabled style="width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:9px;padding:13px;color:#fff;font-family:'Outfit',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;transition:all .2s;opacity:.5;">📤 Kirim Bukti Pembayaran</button>
+  </div>
+</div>
+
+<script>
+  let _rbx = 0, _price = 0, _pkg = '', _pay = '', _gpId = 'Robux 5 Hari', _gpVerified = true, _isCustomPkg = false;
+  const PRICE_PER_ROBUX = 120;
+  const ROBLOX_PAYOUT_RATE = 0.70;
+
+  // ============================================================
+  // GANTI INI SESUAI DATA KAMU
+  // ============================================================
+  const PAYMENT_NUMBERS = {
+    'DANA':  '081996112019',   // ← nomor DANA kamu
+    'GoPay': '081996112019',   // ← nomor GoPay kamu
+  };
+  // Upload foto QRIS ke imgur.com lalu paste URL-nya di sini:
+  // Contoh: 'https://i.imgur.com/AbCdEfG.png'
+  const QRIS_URL = 'https://i.imgur.com/GNkyXuY.jpg';   // QRIS
+
+  const BACKEND_URL = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'https://chisatobobaaaa.vercel.app'
+    : '';
+  // ============================================================
+
+  // ── SUPABASE CONFIG ──────────────────────────────────────────
+  async function sbInsertOrder(order) {
+    try {
+      const res = await fetch(BACKEND_URL + '/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify(order)
+      });
+      if (!res.ok) console.warn('[Backend] insert order gagal:', await res.text());
+    } catch(e) { console.warn('[Backend] insert order error:', e); }
+  }
+
+  async function sbUpdateOrderStatus(oid, patch) {
+    try {
+      await fetch(BACKEND_URL + '/api/orders?id=' + encodeURIComponent(oid), {
+        method: 'PATCH',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify(patch)
+      });
+    } catch(e) { console.warn('[Backend] update error:', e); }
+  }
+
+  async function sbGetMyOrders(username) {
+    try {
+      const res = await fetch(BACKEND_URL + '/api/orders?username=' + encodeURIComponent(username));
+      if (!res.ok) return null;
+      return await res.json();
+    } catch(e) { return null; }
+  }
+
+  // Upload bukti ke Supabase Storage → kembalikan public URL
+  async function sbUploadBukti(orderId, base64Data) {
+    try {
+      const res = await fetch(BACKEND_URL + '/api/upload-proof', {
+        method: 'POST',
+        headers: { 'Content-Type':'application/json' },
+        body: JSON.stringify({ orderId, imageBase64: base64Data })
+      });
+      if (!res.ok) {
+        console.warn('[Backend Upload] upload gagal:', await res.text());
+        return null;
+      }
+      const data = await res.json();
+      return data.publicUrl || null;
+    } catch(e) {
+      console.warn('[Backend Upload] upload error:', e);
+      return null;
+    }
+    try {
+      // Konversi base64 → Blob
+      const [meta, b64] = base64Data.split(',');
+      const mime = (meta.match(/:(.*?);/) || ['','image/jpeg'])[1];
+      const ext  = mime.includes('png') ? 'png' : 'jpg';
+      const binary = atob(b64);
+      const arr = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) arr[i] = binary.charCodeAt(i);
+      const blob = new Blob([arr], { type: mime });
+
+      const filePath = 'bukti/' + orderId + '_' + Date.now() + '.' + ext;
+
+      const res = await fetch(
+        '',
+        {
+          method: 'POST',
+          headers: {
+            'apikey': '',
+            'Authorization': 'Bearer ',
+            'Content-Type': mime,
+            'x-upsert': 'true'
+          },
+          body: blob
+        }
+      );
+
+      if (!res.ok) {
+        console.warn('[Supabase Storage] upload gagal:', await res.text());
+        return null;
+      }
+
+      // Public URL
+      const publicUrl = '';
+      return publicUrl;
+    } catch(e) {
+      console.warn('[Supabase Storage] upload error:', e);
+      return null;
+    }
+  }
+  // ── END SUPABASE ─────────────────────────────────────────────
+
+  function fmtRbx(n) {
+    return Number(n || 0).toLocaleString('id');
+  }
+
+  function calcBeforeTax(afterTax) {
+    return afterTax ? Math.ceil(Number(afterTax) / ROBLOX_PAYOUT_RATE) : 0;
+  }
+
+  function calcAfterTax(beforeTax) {
+    return beforeTax ? Math.floor(Number(beforeTax) * ROBLOX_PAYOUT_RATE) : 0;
+  }
+
+  function calcRobuxPrice(rbx) {
+    return Math.round(Number(rbx || 0) * PRICE_PER_ROBUX);
+  }
+
+  function getSelectedTax() {
+    const before = calcBeforeTax(_rbx);
+    const after = calcAfterTax(before);
+    return { before, after, fee: Math.max(before - after, 0) };
+  }
+
+  function updateTaxLabels() {
+    const t = getSelectedTax();
+    const has = _rbx > 0;
+    const beforeTxt = has ? fmtRbx(t.before) + ' R$' : '-';
+    const afterTxt = has ? fmtRbx(t.after) + ' R$' : '-';
+    const feeTxt = has ? fmtRbx(t.fee) + ' R$' : '-';
+    const map = {
+      'guide-before-tax': has ? 'before tax: ' + beforeTxt : 'before tax: -',
+      'guide-after-tax': has ? 'after tax: ' + afterTxt : 'after tax: -',
+      'sum-before-tax': has ? beforeTxt : '—',
+      'sum-after-tax': has ? afterTxt : '—',
+      'custom-rbx-tax': has && _isCustomPkg ? 'Before tax: ' + beforeTxt : 'Before tax: -'
+    };
+    Object.keys(map).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = map[id];
+    });
+    const taxBefore = document.getElementById('tax-result-before');
+    const taxAfter = document.getElementById('tax-result-after');
+    const taxFee = document.getElementById('tax-result-fee');
+    if (taxBefore && taxAfter && taxFee) {
+      taxBefore.textContent = has ? beforeTxt : '- R$';
+      taxAfter.textContent = has ? afterTxt : '- R$';
+      taxFee.textContent = has ? feeTxt : '- R$';
+    }
+  }
+
+  function selectPkg(el, rbx, price) {
+    document.querySelectorAll('.pkg').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    _isCustomPkg = false;
+    const custom = document.getElementById('custom-rbx');
+    const customPrice = document.getElementById('custom-rbx-price');
+    if (custom) custom.value = '';
+    if (customPrice) customPrice.textContent = 'Rp -';
+    _rbx = rbx; _price = price;
+    _pkg = rbx.toLocaleString('id') + ' R$';
+    syncTaxInputsFromSelection();
+    updateSummary();
+  }
+
+  function selectCustomRobux(value) {
+    const clean = Math.floor(Number(value || 0));
+    const priceEl = document.getElementById('custom-rbx-price');
+    document.querySelectorAll('.pkg').forEach(p => p.classList.remove('selected'));
+    if (!clean) {
+      _rbx = 0; _price = 0; _pkg = ''; _isCustomPkg = false;
+      if (priceEl) priceEl.textContent = 'Rp -';
+      updateSummary();
+      return;
+    }
+    if (clean < 10) {
+      _rbx = 0; _price = 0; _pkg = ''; _isCustomPkg = false;
+      if (priceEl) priceEl.textContent = 'Min. 10 R$';
+      updateSummary();
+      return;
+    }
+    _rbx = clean;
+    _price = calcRobuxPrice(clean);
+    _pkg = 'Custom ' + fmtRbx(clean) + ' R$';
+    _isCustomPkg = true;
+    if (priceEl) priceEl.textContent = 'Rp ' + _price.toLocaleString('id');
+    syncTaxInputsFromSelection();
+    updateSummary();
+  }
+
+  function syncTaxInputsFromSelection() {
+    if (!_rbx) return;
+    const t = getSelectedTax();
+    const afterInput = document.getElementById('tax-after');
+    const beforeInput = document.getElementById('tax-before');
+    if (afterInput) afterInput.value = _rbx;
+    if (beforeInput) beforeInput.value = t.before;
+    updateTaxLabels();
+  }
+
+  function calcTaxFromAfter() {
+    const afterInput = document.getElementById('tax-after');
+    const beforeInput = document.getElementById('tax-before');
+    const after = Math.floor(Number(afterInput?.value || 0));
+    const before = calcBeforeTax(after);
+    if (beforeInput) beforeInput.value = before || '';
+    const received = calcAfterTax(before);
+    const fee = Math.max(before - received, 0);
+    document.getElementById('tax-result-before').textContent = before ? fmtRbx(before) + ' R$' : '- R$';
+    document.getElementById('tax-result-after').textContent = received ? fmtRbx(received) + ' R$' : '- R$';
+    document.getElementById('tax-result-fee').textContent = fee ? fmtRbx(fee) + ' R$' : '- R$';
+  }
+
+  function calcTaxFromBefore() {
+    const beforeInput = document.getElementById('tax-before');
+    const afterInput = document.getElementById('tax-after');
+    const before = Math.floor(Number(beforeInput?.value || 0));
+    const after = calcAfterTax(before);
+    if (afterInput) afterInput.value = after || '';
+    const fee = Math.max(before - after, 0);
+    document.getElementById('tax-result-before').textContent = before ? fmtRbx(before) + ' R$' : '- R$';
+    document.getElementById('tax-result-after').textContent = after ? fmtRbx(after) + ' R$' : '- R$';
+    document.getElementById('tax-result-fee').textContent = fee ? fmtRbx(fee) + ' R$' : '- R$';
+  }
+
+  function useTaxAfterAsOrder() {
+    const after = Math.floor(Number(document.getElementById('tax-after')?.value || 0));
+    if (!after || after < 10) {
+      alert('Isi nominal after tax minimal 10 Robux dulu.');
+      return;
+    }
+    const custom = document.getElementById('custom-rbx');
+    if (custom) custom.value = after;
+    selectCustomRobux(after);
+  }
+
+  function selectPay(el, method) {
+    document.querySelectorAll('.pay-btn').forEach(p => p.classList.remove('selected'));
+    el.classList.add('selected');
+    _pay = method;
+    updateSummary();
+
+    // Highlight saja — QR & nomor muncul di modal order setelah checkout
+  }
+
+  // Toast notif kecil di bawah payment grid
+  function showPayToast(method, num) {
+    let toast = document.getElementById('pay-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'pay-toast';
+      toast.style.cssText = [
+        'margin-top:10px',
+        'background:rgba(57,217,138,0.1)',
+        'border:1px solid rgba(57,217,138,0.3)',
+        'border-radius:9px',
+        'padding:10px 14px',
+        'font-size:0.72rem',
+        'color:#39d98a',
+        'display:flex',
+        'align-items:center',
+        'gap:8px',
+        'animation:fadeIn .3s ease',
+        'transition:opacity .3s'
+      ].join(';');
+      const grid = document.querySelector('.pay-grid');
+      grid.parentNode.insertBefore(toast, grid.nextSibling);
+    }
+    toast.style.opacity = '1';
+    toast.innerHTML = '✅ Nomor <strong style="color:#eeeef5;letter-spacing:1px">' + num + '</strong> (' + method + ') sudah ter-copy! Buka app-nya lalu paste.';
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => { toast.style.opacity = '0'; }, 4000);
+  }
+
+  function parseGamepassUrl() {
+    const input = document.getElementById('gp-url');
+    if (!input) return;
+    const url = input.value.trim();
+    const match = url.match(/(?:game-pass|passes)\/(\d+)/i) || url.match(/[?&]id=(\d+)/i);
+    if (match) {
+      document.getElementById('gp-id').value = match[1];
+      onIdInput();
+    }
+  }
+
+  function extractAndVerify() {
+    parseGamepassUrl();
+    const id = document.getElementById('gp-id').value.trim();
+    if (id) showGamepassPreview(id);
+  }
+
+  function onIdInput() {
+    const id = document.getElementById('gp-id').value.trim();
+    if (id.length >= 6 && /^\d+$/.test(id)) {
+      setTimeout(() => showGamepassPreview(id), 300);
+    } else {
+      hidePreview();
+    }
+    updateSummary();
+  }
+
+  function showGamepassPreview(id) {
+    _gpId = id;
+    _gpVerified = true;
+    const prevId = document.getElementById('gp-prev-id-val');
+    const preview = document.getElementById('gp-preview');
+    if (prevId) prevId.textContent = id;
+    if (preview) preview.classList.add('show');
+    updateSummary();
+  }
+
+  function hidePreview() {
+    _gpId = '';
+    _gpVerified = false;
+    const preview = document.getElementById('gp-preview');
+    if (preview) preview.classList.remove('show');
+    updateSummary();
+  }
+
+  function updateSummary() {
+    const user = document.getElementById('username').value.trim();
+    document.getElementById('sum-rbx').textContent = _rbx ? _rbx.toLocaleString('id') + ' R$' : '— R$';
+    document.getElementById('sum-pkg').textContent = _pkg || '—';
+    document.getElementById('sum-user').textContent = user || '—';
+    const gpSum = document.getElementById('sum-gp');
+    if (gpSum) gpSum.textContent = 'Robux 5 Hari';
+    document.getElementById('sum-pay').textContent = _pay || '—';
+    document.getElementById('sum-total').textContent = _price ? 'Rp ' + _price.toLocaleString('id') : 'Rp —';
+    updateTaxLabels();
+    const emailVal = document.getElementById('contact').value.trim();
+    const emailOk = emailVal && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal);
+    const canOrder = _rbx > 0 && _price > 0 && _pkg && _pay && user && emailOk;
+    document.getElementById('btn-order').disabled = !canOrder;
+
+    const mobRobux = document.getElementById('mob-bar-robux');
+    const mobPrice = document.getElementById('mob-bar-price');
+    const mobBtn   = document.getElementById('mob-bar-btn');
+    if (mobRobux && mobPrice && mobBtn) {
+      if (_rbx) {
+        mobRobux.textContent = _rbx.toLocaleString('id') + ' R$';
+        mobPrice.innerHTML = _price
+          ? 'Total: <strong>Rp ' + _price.toLocaleString('id') + '</strong>'
+          : 'Pilih metode bayar';
+      } else {
+        mobRobux.textContent = 'Pilih paket';
+        mobPrice.textContent = 'Belum ada paket dipilih';
+      }
+      mobBtn.disabled = !canOrder;
+    }
+  }
+
+  // ── FIX: Copy nomor dengan fallback ──────────────────────────
+  function tapSalinNomor(num, el) {
+    navigator.clipboard.writeText(num).then(() => {
+      const hint = el.nextElementSibling;
+      const orig = el.textContent;
+      el.style.color = 'var(--green, #4caf50)';
+      if (hint) hint.textContent = '✅ Nomor tersalin!';
+      setTimeout(() => {
+        el.style.color = '';
+        if (hint) hint.textContent = '👆 Ketuk nomor untuk menyalin';
+      }, 2000);
+    }).catch(() => {
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = num; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      el.style.color = 'var(--green, #4caf50)';
+      setTimeout(() => { el.style.color = ''; }, 2000);
+    });
+  }
+
+  function salinNomor(num, btn) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(num)
+        .then(() => showCopied(btn))
+        .catch(() => fallbackCopy(num, btn));
+    } else {
+      fallbackCopy(num, btn);
+    }
+  }
+
+  function fallbackCopy(num, btn) {
+    const el = document.createElement('textarea');
+    el.value = num;
+    el.setAttribute('readonly', '');
+    el.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;';
+    document.body.appendChild(el);
+    el.focus();
+    el.select();
+    try {
+      const ok = document.execCommand('copy');
+      if (ok) {
+        showCopied(btn);
+      } else {
+        // Semua cara gagal — tampilkan nomor biar bisa manual
+        alert('Salin nomor ini:\n' + num);
+      }
+    } catch(e) {
+      alert('Salin nomor ini:\n' + num);
+    }
+    document.body.removeChild(el);
+  }
+
+  function showCopied(btn) {
+    const ori = btn.textContent;
+    btn.textContent = '✓ Tersalin!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = ori;
+      btn.classList.remove('copied');
+    }, 2000);
+  }
+  // ─────────────────────────────────────────────────────────────
+
+  async function placeOrder() {
+    const oid = 'RBX-' + Math.floor(100000 + Math.random() * 900000);
+    const user = document.getElementById('username').value.trim();
+    const gpId = 'Robux 5 Hari';
+    _currentOrder = { oid, user, gpId };
+    const btn = document.getElementById('btn-order');
+    btn.disabled = true;
+    btn.textContent = '⏳ Memproses...';
+    try {
+      const resp = await fetch(`${BACKEND_URL}/api/create-transaction`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ order_id: oid, gross_amount: _price, robux: _rbx, username: user, gamepass_id: gpId, gamepass_before_tax: getSelectedTax().before, payment_method: _pay, item_name: `Top Up ${_rbx.toLocaleString('id')} Robux` })
+      });
+      if (!resp.ok) throw new Error('Backend error');
+      const { snap_token } = await resp.json();
+      window.snap.pay(snap_token, {
+        onSuccess: r => showOrderModal(oid, user, gpId, r.payment_type || _pay),
+        onPending: r => showOrderModal(oid, user, gpId, r.payment_type || _pay),
+        onError: r => alert('❌ Pembayaran gagal: ' + (r.status_message || 'Coba lagi.')),
+        onClose: () => {}
+      });
+    } catch(err) {
+      console.warn('[Midtrans] Fallback mode:', err.message);
+      showOrderModal(oid, user, gpId, _pay);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '🚀 ORDER SEKARANG';
+    }
+  }
+
+  let _currentOrder = {};
+
+  async function kirimTelegram(oid, user, gpId, payMethod) {
+    const now = new Date().toLocaleString('id-ID', { timeZone:'Asia/Jakarta', day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' }) + ' WIB';
+    const nl = '\n';
+    const tax = getSelectedTax();
+    const text = '🛒 ORDER TOP UP ROBUX' + nl + nl +
+      '📋 ID Pesanan: ' + oid + nl + '🕐 Waktu: ' + now + nl +
+      '👤 Username Roblox: ' + user + nl + '⚡ Layanan: Robux 5 Hari' + nl +
+      '💎 Paket: ' + (_pkg || (_rbx.toLocaleString('id') + ' Robux')) + nl +
+      '🧮 Before Tax Gamepass: ' + tax.before.toLocaleString('id') + ' Robux' + nl +
+      '✅ After Tax Diterima: ' + tax.after.toLocaleString('id') + ' Robux' + nl +
+      '💰 Total: Rp ' + _price.toLocaleString('id') + nl +
+      '💳 Pembayaran: ' + payMethod + nl + '📌 Status: Menunggu Pembayaran';
+    try {
+      await fetch(BACKEND_URL + '/api/notify-order', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ text })
+      });
+    } catch(e) { console.warn('Telegram error:', e); }
+  }
+
+  function showOrderModal(oid, user, gpId, payMethod) {
+    document.getElementById('modal-oid').textContent   = oid;
+    document.getElementById('modal-rbx').textContent   = _rbx.toLocaleString('id') + ' R$';
+    document.getElementById('modal-total').textContent = 'Rp ' + _price.toLocaleString('id');
+    document.getElementById('modal-user').textContent  = user;
+    document.getElementById('modal-pay').textContent   = payMethod;
+    const modalGpId = document.getElementById('modal-gp-id');
+    if (modalGpId) modalGpId.textContent = 'Diproses admin';
+    const modalGpName = document.getElementById('modal-gp-name');
+    if (modalGpName) modalGpName.textContent = 'Robux 5 Hari';
+
+    const area = document.getElementById('pay-action-area');
+    const num = PAYMENT_NUMBERS[payMethod];
+
+    if (payMethod === 'QRIS') {
+      area.innerHTML =
+        '<button onclick="bukaQRIS()" style="' +
+          'width:100%;background:linear-gradient(135deg,var(--accent),#5b3de8);' +
+          'color:#fff;border:none;border-radius:9px;padding:13px;' +
+          'font-family:\'Outfit\',sans-serif;font-weight:800;font-size:0.85rem;' +
+          'cursor:pointer;margin-bottom:8px;display:flex;align-items:center;' +
+          'justify-content:center;gap:8px;transition:all .2s;' +
+        '">💳 Buka QR Code untuk Bayar</button>';
+    } else if (num) {
+      area.innerHTML =
+        '<div class="pay-action-box">' +
+          '<div class="pay-action-label">Nomor ' + payMethod + '</div>' +
+          '<div class="pay-number" id="pay-num-display" title="Ketuk untuk salin" style="cursor:pointer" onclick="tapSalinNomor(\'' + num + '\', this)">' + num + '</div>' +
+          '<div style="font-size:10px;color:#888;text-align:center;margin-top:4px;">👆 Ketuk nomor untuk menyalin</div>' +
+        '</div>';
+    } else {
+      area.innerHTML = '';
+    }
+
+    // Simpan order ke localStorage — per user + global untuk admin
+    const contact = (document.getElementById('contact')?.value || '').trim();
+    const tax = getSelectedTax();
+    const orderData = {
+      id: oid, username: user, gpId: gpId,
+      robux: _rbx, price: _price, method: payMethod,
+      packageLabel: _pkg,
+      gamepassBeforeTax: tax.before,
+      gamepassAfterTax: tax.after,
+      robloxTax: tax.fee,
+      email: contact,
+      whatsapp: '',
+      status: 'pending', bukti: null, proofImage: null, buktiTime: null, time: Date.now()
+    };
+    saveOrderForUser(orderData);
+    renderMyOrders();
+
+    document.getElementById('modal').classList.add('show');
+    kirimTelegram(oid, user, gpId, payMethod);
+  }
+
+  // ── FIX: QRIS popup dengan validasi URL ──────────────────────
+  function bukaQRIS() {
+    const content = document.getElementById('qris-content');
+    document.getElementById('qris-amount').textContent = 'Rp ' + _price.toLocaleString('id');
+
+    if (!QRIS_URL || QRIS_URL.trim() === '') {
+      // URL belum diisi
+      content.innerHTML =
+        '<div class="qris-placeholder">⚠️ URL QRIS belum diset.<br><br>Upload foto QRIS ke Imgur lalu isi variabel QRIS_URL di script.</div>';
+    } else {
+      // Tampilkan gambar, dengan fallback jika gagal load
+      content.innerHTML = '<img class="qris-img" id="qris-img-el" src="' + QRIS_URL + '" alt="QRIS" onerror="qrisImgError()">';
+    }
+
+    document.getElementById('qris-overlay').classList.add('show');
+  }
+
+  function qrisImgError() {
+    document.getElementById('qris-content').innerHTML =
+      '<div class="qris-error">❌ Gambar QRIS gagal dimuat.<br>Pastikan URL benar dan bukan link Discord (expired).</div>' +
+      '<div class="qris-placeholder">Ganti QRIS_URL dengan link Imgur permanen</div>';
+  }
+  // ─────────────────────────────────────────────────────────────
+
+  function closeQris(e) {
+    if (e.target === document.getElementById('qris-overlay'))
+      document.getElementById('qris-overlay').classList.remove('show');
+  }
+
+  // previewBukti removed (upload via Pesanan Saya)
+
+  // Kirim foto bukti ke Telegram via sendPhoto (base64 → Blob → FormData)
+  function sendBuktiTelegram(imageBase64, caption) {
+    try {
+      fetch(BACKEND_URL + '/api/notify-proof', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64, caption })
+      }).catch(e => console.warn('Telegram sendPhoto error:', e));
+    } catch(e) { console.warn('Telegram sendPhoto error:', e); }
+  }
+
+  // kirimBukti removed (upload via Pesanan Saya)
+
+  function closeModal() { document.getElementById('modal').classList.remove('show'); }
+  function closeOutside(e) { if (e.target === document.getElementById('modal')) closeModal(); }
+
+  // ── ORDER STORAGE (per user + mirrored ke global untuk admin) ──
+  function getCurrentUsername() {
+    try {
+      const s = JSON.parse(localStorage.getItem('rbx_session') || 'null');
+      return s ? s.username : 'guest';
+    } catch(e) { return 'guest'; }
+  }
+  function userOrderKey(uname) { return 'rbx_orders_u_' + (uname || getCurrentUsername()); }
+
+  function stripProofFromOrder(o) {
+    const c = Object.assign({}, o);
+    if (c.proofImage && c.proofImage.startsWith('data:')) { delete c.proofImage; c.hasProof = true; }
+    if (c.bukti && c.bukti.startsWith('data:')) { delete c.bukti; c.hasProof = true; }
+    return c;
+  }
+
+  function saveOrderForUser(order) {
+    const uname = getCurrentUsername();
+    const uKey = userOrderKey(uname);
+    const clean = stripProofFromOrder(order);
+    try {
+      const uOrders = JSON.parse(localStorage.getItem(uKey) || '[]');
+      if (!uOrders.find(o => o.id === clean.id)) uOrders.unshift(clean);
+      localStorage.setItem(uKey, JSON.stringify(uOrders));
+    } catch(e) { console.warn('saveOrderForUser uKey gagal:', e); }
+    try {
+      const all = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
+      if (!all.find(o => o.id === clean.id)) all.unshift(clean);
+      localStorage.setItem('rbx_orders', JSON.stringify(all));
+    } catch(e) { console.warn('saveOrderForUser rbx_orders gagal:', e); }
+
+    // ── Simpan ke Supabase (terpusat, bisa dilihat admin) ──
+    sbInsertOrder(order);
+  }
+
+  // Kompres gambar base64 supaya tidak overload localStorage (maks ~400KB)
+  function compressImageBase64(base64, maxW, maxH, quality) {
+    return new Promise(resolve => {
+      try {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > maxW || h > maxH) {
+            const ratio = Math.min(maxW / w, maxH / h);
+            w = Math.round(w * ratio); h = Math.round(h * ratio);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = () => resolve(base64);
+        img.src = base64;
+      } catch(e) { resolve(base64); }
+    });
+  }
+
+  async function updateOrderById(oid, patch) {
+    const proofData = patch.bukti || patch.proofImage;
+    if (proofData) {
+      patch = Object.assign({}, patch);
+      // Simpan gambar ke IndexedDB (persist saat refresh, kapasitas besar)
+      _proofMemoryCache[oid] = proofData;
+      await idbSet('rbx_proof_' + oid, proofData);
+      // Jangan simpan base64 besar di dalam array orders
+      delete patch.proofImage;
+      delete patch.bukti;
+      patch.hasProof = true;
+    }
+
+    // Update di semua key rbx_orders_u_* (tanpa gambar besar)
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith('rbx_orders_u_')) continue;
+      try {
+        const uOrders = JSON.parse(localStorage.getItem(key) || '[]');
+        const ui = uOrders.findIndex(o => o.id === oid);
+        if (ui !== -1) {
+          Object.assign(uOrders[ui], patch);
+          localStorage.setItem(key, JSON.stringify(uOrders));
+        }
+      } catch(e) { console.warn('updateOrderById user error:', e); }
+    }
+
+    // Update di rbx_orders global (tanpa gambar besar)
+    try {
+      const all = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
+      const ai = all.findIndex(o => o.id === oid);
+      if (ai !== -1) {
+        Object.assign(all[ai], patch);
+        localStorage.setItem('rbx_orders', JSON.stringify(all));
+      }
+    } catch(e) { console.warn('updateOrderById global error:', e); }
+  }
+
+  function getProofImage(oid) {
+    // Ambil dari memory cache (sudah diisi dari IndexedDB saat preloadAllProofs())
+    return _proofMemoryCache[oid] || null;
+  }
+
+  function getMyOrders() {
+    const uname = getCurrentUsername();
+    const uKey = userOrderKey(uname);
+    let uOrders = JSON.parse(localStorage.getItem(uKey) || '[]');
+
+    // Fallback: kalau uOrders kosong, cari di semua key rbx_orders_u_*
+    if (uOrders.length === 0) {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key || !key.startsWith('rbx_orders_u_')) continue;
+        try {
+          const found = JSON.parse(localStorage.getItem(key) || '[]');
+          if (found.length > 0) { uOrders = found; break; }
+        } catch(e) {}
+      }
+    }
+
+    // Sinkronkan proof dari rbx_orders lokal, tapi status SELALU dari rbx_orders_u_ (Supabase)
+    const all = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
+    const STATUS_RANK = { 'pending': 0, 'bukti_masuk': 1, 'success': 2, 'failed': 2 };
+    return uOrders.map(o => {
+      const adminVer = all.find(a => a.id === o.id);
+      const proof = getProofImage(o.id);
+      // Status: pakai yang lebih tinggi ranknya (Supabase via uOrders menang atas rbx_orders lama)
+      let finalStatus = o.status;
+      if (adminVer && adminVer.status) {
+        const rankU = STATUS_RANK[o.status] ?? 0;
+        const rankA = STATUS_RANK[adminVer.status] ?? 0;
+        finalStatus = rankA > rankU ? adminVer.status : o.status;
+      }
+      if (adminVer) {
+        return Object.assign({}, o, {
+          status: finalStatus,
+          sentAt: adminVer.sentAt || o.sentAt,
+          proofImage: proof || adminVer.proofImage || o.proofImage,
+          bukti: proof || adminVer.bukti || o.bukti,
+        });
+      }
+      if (proof) { return Object.assign({}, o, { proofImage: proof, bukti: proof }); }
+      return o;
+    });
+  }
+
+  // ── PESANAN SAYA ──────────────────────────────────────────────
+  function renderMyOrders() {
+    const s = getSession();
+    const section = document.getElementById('my-orders-section');
+    if (!s) { section.classList.remove('show'); return; }
+
+    const orders = getMyOrders();
+    section.classList.toggle('show', orders.length > 0);
+    document.getElementById('my-orders-count').textContent = orders.length;
+
+    const statusLabel = {
+      pending:     '⏳ Menunggu',
+      bukti_masuk: '📋 Diverifikasi',
+      success:     '✅ Selesai',
+      failed:      '❌ Ditolak'
+    };
+
+    const list = document.getElementById('my-orders-list');
+    if (orders.length === 0) {
+      list.innerHTML = '<div class="my-orders-empty"><span class="empty-icon">📭</span>Belum ada pesanan<p>Pesanan kamu akan muncul di sini setelah checkout</p></div>';
+      return;
+    }
+
+    list.innerHTML = orders.map(o => {
+      // Normalisasi status dari berbagai sumber (Supabase bisa return 'completed'/'done')
+      const rawStatus = o.status || 'pending';
+      const normStatus = (rawStatus === 'completed' || rawStatus === 'done' || rawStatus === 'success') ? 'success'
+                       : (rawStatus === 'rejected' || rawStatus === 'canceled' || rawStatus === 'cancelled' || rawStatus === 'failed') ? 'failed'
+                       : (rawStatus === 'bukti_masuk') ? 'bukti_masuk'
+                       : rawStatus;
+      o.status = normStatus; // normalisasi in-place
+      const statusClass = normStatus;
+      const statusTxt   = statusLabel[normStatus] || '⏳ Menunggu';
+      const sudahKirim  = o.bukti || o.proofImage || o.proof_url;
+      const tgl = new Date(o.time).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      const buktiTgl = o.buktiTime ? new Date(o.buktiTime).toLocaleDateString('id-ID', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : null;
+
+      const isFinished = normStatus === 'success' || normStatus === 'failed';
+
+      // Bukti section dalam detail
+      let buktiSection = '';
+      if (isFinished) {
+        buktiSection = `
+          <div class="btn-kirim-bukti done">
+            ${o.status === 'success' ? '✅ Robux Sudah Dikirim' : '❌ Order Ditolak'}
+          </div>`;
+      } else if (sudahKirim) {
+        buktiSection = `
+          <div class="order-bukti-label">Bukti Pembayaran <span></span></div>
+          <img class="bukti-preview-thumb" src="${sudahKirim}" alt="bukti" onclick="openLightbox(this.src)">
+          ${buktiTgl ? `<div style="font-size:0.62rem;color:var(--muted);margin-bottom:10px;">Dikirim: ${buktiTgl}</div>` : ''}
+          <button class="btn-update-bukti" onclick="event.stopPropagation();openBuktiModal('${o.id}', event)">🔄 Update Bukti Pembayaran</button>`;
+      } else {
+        buktiSection = `
+          <div class="order-bukti-label">Bukti Pembayaran <span></span></div>
+          <div style="background:rgba(255,200,87,.06);border:1px dashed rgba(255,200,87,.25);border-radius:8px;padding:12px;text-align:center;margin-bottom:10px;">
+            <div style="font-size:1.4rem;margin-bottom:5px;">📸</div>
+            <div style="font-size:0.7rem;color:var(--gold);font-weight:600;">Bukti belum dikirim</div>
+            <div style="font-size:0.62rem;color:var(--muted);margin-top:3px;">Upload foto transfer untuk mempercepat proses</div>
+          </div>
+          <button class="btn-kirim-bukti" onclick="event.stopPropagation();openBuktiModal('${o.id}', event)">
+            📤 Kirim Bukti Pembayaran
+          </button>`;
+      }
+
+      return `
+        <div class="order-card" id="ordercard-${o.id}" onclick="toggleOrderCard('${o.id}')">
+          <div class="order-card-summary">
+            <div class="order-card-icon">💎</div>
+            <div class="order-card-info">
+              <div class="order-card-id">${o.id}</div>
+              <div class="order-card-main">${o.robux ? o.robux.toLocaleString('id') + ' Robux' : '—'}</div>
+              <div class="order-card-sub">${o.method || '—'} · ${tgl}</div>
+            </div>
+            <div class="order-card-right">
+              <div class="order-card-price">Rp ${o.price ? o.price.toLocaleString('id') : '—'}</div>
+              <span class="order-status ${statusClass}">${statusTxt}</span>
+              <div class="order-card-chevron">▼</div>
+            </div>
+          </div>
+          <div class="order-detail" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">
+            <div class="order-detail-grid">
+              <div class="od-box">
+                <div class="od-label">Robux</div>
+                <div class="od-val gold">${o.robux ? o.robux.toLocaleString('id') + ' R$' : '—'}</div>
+              </div>
+              <div class="od-box">
+                <div class="od-label">Total Bayar</div>
+                <div class="od-val green">Rp ${o.price ? o.price.toLocaleString('id') : '—'}</div>
+              </div>
+              <div class="od-box">
+                <div class="od-label">Metode</div>
+                <div class="od-val purple">${o.method || '—'}</div>
+              </div>
+              <div class="od-box">
+                <div class="od-label">Layanan</div>
+                <div class="od-val" title="${o.gpId || 'Robux 5 Hari'}">${o.gpId || 'Robux 5 Hari'}</div>
+              </div>
+              <div class="od-box">
+                <div class="od-label">Before Tax</div>
+                <div class="od-val gold">${o.gamepassBeforeTax ? o.gamepassBeforeTax.toLocaleString('id') + ' R$' : (o.robux ? calcBeforeTax(o.robux).toLocaleString('id') + ' R$' : '—')}</div>
+              </div>
+              <div class="od-box">
+                <div class="od-label">After Tax</div>
+                <div class="od-val green">${o.gamepassAfterTax ? o.gamepassAfterTax.toLocaleString('id') + ' R$' : (o.robux ? calcAfterTax(calcBeforeTax(o.robux)).toLocaleString('id') + ' R$' : '—')}</div>
+              </div>
+              <div class="od-box">
+                <div class="od-label">Username</div>
+                <div class="od-val" title="${o.username || '—'}">${o.username || '—'}</div>
+              </div>
+              <div class="od-box">
+                <div class="od-label">Tanggal Order</div>
+                <div class="od-val" style="font-size:0.68rem">${tgl}</div>
+              </div>
+            </div>
+            <div class="order-bukti-section" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">
+              ${buktiSection}
+              ${!isFinished && o.status !== 'bukti_masuk' && !sudahKirim ? `
+              <button onclick="event.stopPropagation();cancelOrder('${o.id}')" style="width:100%;margin-top:8px;background:transparent;border:1px solid rgba(252,92,125,.35);border-radius:9px;padding:10px;color:#fc5c7d;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(252,92,125,.12)'" onmouseout="this.style.background='transparent'">
+                ✕ Batalkan Order
+              </button>` : ''}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function cancelOrder(oid) {
+    if (!confirm('Yakin ingin membatalkan order ' + oid + '?\nOrder yang dibatalkan tidak bisa dikembalikan.')) return;
+
+    // Hapus dari semua localStorage (user key + global)
+    const uname = getCurrentUsername();
+    const uKey = userOrderKey(uname);
+    let uOrders = JSON.parse(localStorage.getItem(uKey) || '[]');
+    uOrders = uOrders.filter(o => o.id !== oid);
+    localStorage.setItem(uKey, JSON.stringify(uOrders));
+
+    try {
+      let all = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
+      all = all.filter(o => o.id !== oid);
+      localStorage.setItem('rbx_orders', JSON.stringify(all));
+    } catch(e) {}
+
+    // Tandai sebagai cancelled di Supabase
+    await sbUpdateOrderStatus(oid, { status: 'cancelled' });
+
+    renderMyOrders();
+    showStatusToast('Order ' + oid + ' berhasil dibatalkan.', 'error');
+  }
+
+  function toggleOrderCard(oid) {
+    const card = document.getElementById('ordercard-' + oid);
+    if (!card) return;
+    card.classList.toggle('expanded');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('bukti-lightbox-img').src = src;
+    document.getElementById('bukti-lightbox').classList.add('show');
+  }
+  function closeLightbox() {
+    document.getElementById('bukti-lightbox').classList.remove('show');
+  }
+
+  // ── INDEXEDDB PROOF STORAGE ───────────────────────────────────
+  // Ganti localStorage untuk gambar bukti → IndexedDB (kapasitas jauh lebih besar, persist saat refresh)
+  const _IDB_NAME = 'rbx_store';
+  const _IDB_STORE = 'proofs';
+  let _idbReady = null;
+
+  function openIDB() {
+    if (_idbReady) return _idbReady;
+    _idbReady = new Promise((resolve, reject) => {
+      const req = indexedDB.open(_IDB_NAME, 1);
+      req.onupgradeneeded = e => {
+        e.target.result.createObjectStore(_IDB_STORE);
+      };
+      req.onsuccess = e => resolve(e.target.result);
+      req.onerror = () => reject(req.error);
+    });
+    return _idbReady;
+  }
+
+  async function idbSet(key, value) {
+    try {
+      const db = await openIDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(_IDB_STORE, 'readwrite');
+        tx.objectStore(_IDB_STORE).put(value, key);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error);
+      });
+    } catch(e) {
+      // Fallback ke localStorage kalau IndexedDB gagal
+      try { localStorage.setItem(key, value); } catch(_) {}
+      return false;
+    }
+  }
+
+  async function idbGet(key) {
+    try {
+      const db = await openIDB();
+      return new Promise((resolve) => {
+        const tx = db.transaction(_IDB_STORE, 'readonly');
+        const req = tx.objectStore(_IDB_STORE).get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      });
+    } catch(e) {
+      // Fallback ke localStorage
+      return localStorage.getItem(key) || null;
+    }
+  }
+
+  // Memory cache untuk akses sync sementara (diisi saat load)
+  const _proofMemoryCache = {};
+
+  // Preload semua proof dari IndexedDB ke memory cache saat halaman load
+  async function preloadAllProofs() {
+    try {
+      const db = await openIDB();
+      return new Promise(resolve => {
+        const tx = db.transaction(_IDB_STORE, 'readonly');
+        const req = tx.objectStore(_IDB_STORE).openCursor();
+        req.onsuccess = e => {
+          const cursor = e.target.result;
+          if (cursor) {
+            if (String(cursor.key).startsWith('rbx_proof_')) {
+              const oid = String(cursor.key).replace('rbx_proof_', '');
+              _proofMemoryCache[oid] = cursor.value;
+            }
+            cursor.continue();
+          } else {
+            resolve();
+          }
+        };
+        req.onerror = () => resolve();
+      });
+    } catch(e) {
+      // Fallback: load dari localStorage
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('rbx_proof_')) {
+          _proofMemoryCache[k.replace('rbx_proof_', '')] = localStorage.getItem(k);
+        }
+      }
+    }
+  }
+
+  // Bersihkan gambar base64 lama dari localStorage supaya tidak QuotaExceededError
+  function cleanupLocalStorageImages() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+    keys.forEach(k => {
+      if (!k) return;
+      if (k === 'rbx_orders' || k.startsWith('rbx_orders_u_')) {
+        try {
+          const arr = JSON.parse(localStorage.getItem(k) || '[]');
+          let dirty = false;
+          arr.forEach(o => {
+            if ((o.proofImage && o.proofImage.startsWith('data:')) ||
+                (o.bukti && o.bukti.startsWith('data:'))) {
+              if (o.proofImage) delete o.proofImage;
+              if (o.bukti) delete o.bukti;
+              o.hasProof = true;
+              dirty = true;
+            }
+          });
+          if (dirty) localStorage.setItem(k, JSON.stringify(arr));
+        } catch(e) {}
+      }
+    });
+  }
+  cleanupLocalStorageImages();
+
+  // Panggil preload saat DOM ready — setelah selesai baru render UI
+  preloadAllProofs().then(() => {
+    updateUserBar();
+    renderMyOrders();
+  });
+
+  // ── MODAL BUKTI (dari Pesanan Saya) ──────────────────────────
+  let _buktiOrderId = null;
+  let _buktiFile = null;
+
+  function openBuktiModal(oid, ev) {
+    if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+    const orders = getMyOrders();
+    const o = orders.find(x => x.id === oid);
+    if (!o) return;
+    _buktiOrderId = oid;
+    _buktiFile = null;
+
+    document.getElementById('bukti-modal-oid').textContent = oid;
+    document.getElementById('bukti-modal-info').innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-weight:700;font-size:0.85rem;">${o.robux ? o.robux.toLocaleString('id') + ' Robux' : '—'}</div>
+          <div style="color:var(--muted);font-size:0.7rem;margin-top:2px;">${o.method || '—'} · Rp ${o.price ? o.price.toLocaleString('id') : '—'}</div>
+        </div>
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:1rem;color:var(--accent);">Rp ${o.price ? o.price.toLocaleString('id') : '—'}</div>
+      </div>`;
+
+    // Reset preview — kalau sudah ada bukti sebelumnya, tampilkan
+    const preview = document.getElementById('bukti-modal-preview');
+    const zone = document.getElementById('bukti-modal-zone');
+    const placeholder = document.getElementById('bukti-modal-placeholder');
+    const existing = o.bukti || o.proofImage;
+    if (existing) {
+      preview.src = existing;
+      preview.style.display = 'block';
+      zone.style.display = 'none';
+      placeholder.style.display = 'block';
+      const btn = document.getElementById('bukti-modal-btn');
+      btn.disabled = false; btn.style.opacity = '1';
+      btn.textContent = '🔄 Update Bukti Pembayaran';
+    } else {
+      preview.src = '';
+      preview.style.display = 'none';
+      zone.style.display = 'block';
+      placeholder.style.display = 'block';
+      const btn = document.getElementById('bukti-modal-btn');
+      btn.disabled = true; btn.style.opacity = '.5';
+      btn.textContent = '📤 Kirim Bukti Pembayaran';
+    }
+
+    // Reset input file
+    const fileInput = document.getElementById('bukti-modal-file');
+    if (fileInput) fileInput.value = '';
+
+    document.getElementById('modal-bukti').classList.add('show');
+  }
+
+  function closeBuktiModal() {
+    document.getElementById('modal-bukti').classList.remove('show');
+    _buktiOrderId = null; _buktiFile = null;
+  }
+
+  function handleBuktiFile(input) {
+    if (input.files && input.files[0]) processBuktiFile(input.files[0]);
+  }
+  function handleBuktiDrop(e) {
+    e.preventDefault();
+    document.getElementById('bukti-modal-zone').style.borderColor = '';
+    const file = e.dataTransfer.files[0];
+    if (file) processBuktiFile(file);
+  }
+  function processBuktiFile(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      _buktiFile = e.target.result;
+      const preview = document.getElementById('bukti-modal-preview');
+      const zone = document.getElementById('bukti-modal-zone');
+      preview.src = _buktiFile;
+      preview.style.display = 'block';
+      zone.style.display = 'none';
+      const btn = document.getElementById('bukti-modal-btn');
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.background = '';
+      btn.style.color = '';
+      btn.textContent = '📤 Kirim Bukti Pembayaran';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function submitBuktiModal() {
+    if (!_buktiOrderId) return;
+
+    // Kalau tidak ada file baru, cek apakah sudah ada bukti sebelumnya
+    if (!_buktiFile) {
+      const orders = getMyOrders();
+      const o = orders.find(x => x.id === _buktiOrderId);
+      const existing = (o && (o.bukti || o.proofImage)) || getProofImage(_buktiOrderId);
+      if (!existing) {
+        alert('⚠️ Pilih foto bukti pembayaran terlebih dahulu!');
+        return;
+      }
+      _buktiFile = existing;
+    }
+
+    const btn = document.getElementById('bukti-modal-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Memproses...';
+
+    // Kompres gambar (maks 800x800, kualitas 70%)
+    let buktiData = _buktiFile;
+    try {
+      buktiData = await compressImageBase64(_buktiFile, 800, 800, 0.70);
+    } catch(e) { buktiData = _buktiFile; }
+
+    btn.textContent = '⏳ Mengupload...';
+
+    // 1. Upload ke Supabase Storage
+    const proofUrl = await sbUploadBukti(_buktiOrderId, buktiData);
+
+    if (proofUrl) {
+      // 2. Update kolom proof_url & has_proof di Supabase
+      await sbUpdateOrderStatus(_buktiOrderId, {
+        proof_url: proofUrl,
+        has_proof: true,
+        status: 'pending'
+      });
+      btn.textContent = '⏳ Mengirim...';
+    } else {
+      // Fallback: lanjut pakai IndexedDB saja kalau Supabase Storage gagal
+      console.warn('[Bukti] Supabase Storage gagal, lanjut IndexedDB only');
+    }
+
+    // 3. Simpan ke IndexedDB lokal juga (untuk tampil di sisi customer)
+    await updateOrderById(_buktiOrderId, {
+      bukti: buktiData,
+      proofImage: buktiData,
+      buktiTime: Date.now(),
+      status: 'bukti_masuk',
+      ...(proofUrl ? { proof_url: proofUrl, hasProof: true } : {})
+    });
+
+    // 4. Kirim foto bukti ke Telegram
+    const orders = getMyOrders();
+    const o = orders.find(x => x.id === _buktiOrderId) || {};
+    const caption2 = '📸 BUKTI PEMBAYARAN MASUK\n\nOrder: ' + _buktiOrderId +
+      '\nUsername: ' + (o.username || '—') +
+      '\nRobux: ' + (o.robux ? o.robux.toLocaleString('id') + ' R$' : '—') +
+      '\nTotal: Rp ' + (o.price ? o.price.toLocaleString('id') : '—') +
+      '\nMetode: ' + (o.method || '—') +
+      (proofUrl ? '\n🔗 Bukti: ' + proofUrl : '') +
+      '\n\n✅ Segera cek dan konfirmasi order!';
+    sendBuktiTelegram(buktiData, caption2);
+
+    btn.textContent = '✅ Bukti Terkirim!';
+    btn.style.background = 'var(--green)';
+    btn.style.color = '#000';
+    setTimeout(() => {
+      closeBuktiModal();
+      renderMyOrders();
+    }, 1200);
+  }
+
+  // ── SESSION INTEGRATION ──────────────────────────────────────
+  function getSession() {
+    try { return JSON.parse(localStorage.getItem('rbx_session') || 'null'); } catch(e) { return null; }
+  }
+  function logoutStore() {
+    localStorage.removeItem('rbx_session');
+    updateUserBar();
+    renderMyOrders();
+  }
+  function updateUserBar() {
+    const s = getSession();
+    const userBar  = document.getElementById('user-bar');
+    const loginBar = document.getElementById('login-bar');
+    const nameEl   = document.getElementById('user-bar-name');
+    if (s) {
+      userBar.style.display  = 'flex';
+      loginBar.style.display = 'none';
+      nameEl.textContent = '👤 @' + s.username;
+      const uField = document.getElementById('username');
+      if (uField && !uField.value) uField.value = s.username;
+    } else {
+      userBar.style.display  = 'none';
+      loginBar.style.display = 'block';
+    }
+    // renderMyOrders dipanggil oleh preloadAllProofs() setelah IndexedDB siap
+    // agar gambar bukti sudah dimuat ke memory cache sebelum render
+  }
+  // Redirect to upload_bukti page with current order id
+  function goToUploadBukti() {
+    const oid = document.getElementById('modal-oid').textContent;
+    if (oid && oid !== 'RBX-000000') {
+      window.location.href = 'rbxstore_upload_bukti.html?oid=' + oid;
+    } else {
+      window.location.href = 'rbxstore_upload_bukti.html';
+    }
+  }
+  // updateUserBar & renderMyOrders dipanggil setelah preloadAllProofs() selesai (lihat di atas)
+
+  // ── POLLING STATUS ORDER dari Supabase (tiap 5 detik) ──
+  async function pollOrderStatus() {
+    const s = getSession();
+    if (!s) return;
+    const uname = getCurrentUsername();
+
+    // Ambil status terbaru dari Supabase
+    const supaOrders = await sbGetMyOrders(uname);
+    if (!supaOrders) {
+      // Fallback ke localStorage lama
+      _pollLocalFallback(uname);
+      return;
+    }
+
+    const uKey = userOrderKey(uname);
+    let uOrders = JSON.parse(localStorage.getItem(uKey) || '[]');
+    let changed = false;
+
+    supaOrders.forEach(sRow => {
+      // Skip order yang sudah dibatalkan customer
+      if (sRow.status === 'cancelled' || sRow.status === 'canceled') {
+        // Pastikan juga dihapus dari localStorage kalau masih ada
+        const idx = uOrders.findIndex(o => o.id === sRow.id);
+        if (idx !== -1) { uOrders.splice(idx, 1); changed = true; }
+        return;
+      }
+
+      const local = uOrders.find(o => o.id === sRow.id);
+      const rawSt = sRow.status || 'pending';
+      const newStatus = (rawSt === 'completed' || rawSt === 'done' || rawSt === 'success') ? 'success'
+                      : (rawSt === 'rejected' || rawSt === 'failed') ? 'failed'
+                      : (rawSt === 'bukti_masuk') ? 'bukti_masuk'
+                      : rawSt;
+      if (local) {
+        // Selalu update sentAt dari Supabase
+        if (sRow.sent_at) local.sentAt = new Date(sRow.sent_at).getTime();
+        // Update status hanya kalau berbeda
+        if (local.status !== newStatus) {
+          local.status = newStatus;
+          changed = true;
+          if (newStatus === 'success') {
+            showStatusToast('\u2705 Order ' + sRow.id + ' \u2014 Robux berhasil dikirim!', 'success');
+          } else if (newStatus === 'failed') {
+            showStatusToast('\u274c Order ' + sRow.id + ' \u2014 ditolak oleh admin.', 'error');
+          }
+        }
+      }
+      // Sync proof_url dari Supabase ke lokal
+      if (local && sRow.proof_url && !local.proof_url) {
+        local.proof_url = sRow.proof_url;
+        local.hasProof = true;
+        changed = true;
+      }
+      // Kalau ada order di Supabase yang belum ada di localStorage (misal login device lain)
+      if (!local) {
+        const normalized = {
+          id: sRow.id, username: sRow.username, gpId: sRow.gp_id || '',
+          robux: Number(sRow.robux||0), price: Number(sRow.price||0),
+          method: sRow.method||'-', email: sRow.email||'',
+          status: newStatus,
+          time: sRow.created_at ? new Date(sRow.created_at).getTime() : Date.now(),
+          hasProof: !!(sRow.proof_url || sRow.has_proof),
+          proof_url: sRow.proof_url || null,
+        };
+        uOrders.unshift(normalized);
+        changed = true;
+      }
+    });
+
+    if (changed) {
+      localStorage.setItem(uKey, JSON.stringify(uOrders));
+      renderMyOrders();
+    }
+  }
+
+  function _pollLocalFallback(uname) {
+    const uKey = userOrderKey(uname);
+    const uOrders = JSON.parse(localStorage.getItem(uKey) || '[]');
+    const all = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
+    let changed = false;
+    const filtered = uOrders.filter(o => { const e = all.find(a => a.id === o.id); if (!e) { changed = true; return false; } return true; });
+    filtered.forEach(o => {
+      const av = all.find(a => a.id === o.id);
+      if (av && av.status !== o.status) {
+        o.status = av.status;
+        if (av.sentAt) o.sentAt = av.sentAt;
+        changed = true;
+        if (av.status === 'success') showStatusToast('✅ Order ' + o.id + ' — Robux berhasil dikirim!', 'success');
+        else if (av.status === 'failed') showStatusToast('❌ Order ' + o.id + ' — ditolak oleh admin.', 'error');
+      }
+    });
+    if (changed) { localStorage.setItem(uKey, JSON.stringify(filtered)); renderMyOrders(); }
+  }
+
+  function showStatusToast(msg, type) {
+    let t = document.getElementById('status-toast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'status-toast';
+      t.style.cssText = [
+        'position:fixed', 'bottom:20px', 'left:50%', 'transform:translateX(-50%) translateY(10px)',
+        'background:#111118', 'border-radius:10px', 'padding:12px 20px',
+        'font-size:0.78rem', 'font-weight:600', 'z-index:9999',
+        'opacity:0', 'transition:all .3s', 'pointer-events:none',
+        'white-space:nowrap', 'max-width:90vw', 'text-align:center'
+      ].join(';');
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.borderColor = type === 'success' ? 'rgba(57,217,138,.5)' : 'rgba(252,92,125,.5)';
+    t.style.border = '1px solid ' + (type === 'success' ? 'rgba(57,217,138,.5)' : 'rgba(252,92,125,.5)');
+    t.style.color = type === 'success' ? '#39d98a' : '#fc5c7d';
+    t.style.opacity = '1';
+    t.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(t._t);
+    t._t = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(10px)'; }, 4000);
+  }
+
+  setInterval(pollOrderStatus, 2000);
+  pollOrderStatus(); // langsung poll saat halaman dibuka
+
+  // ── TRUST BAR: muncul dari kanan, hilang ke kiri sampai habis, ulang ──
+  (function() {
+    const track = document.querySelector('.trust-track');
+    if (!track) return;
+
+    // Matikan CSS animation
+    track.style.animation = 'none';
+
+    const speed = 80; // px per second
+    let x = 0;
+    let trackW = 0;
+    let vw = 0;
+    let last = null;
+
+    function reset() {
+      vw = window.innerWidth;
+      trackW = track.scrollWidth;
+      // Mulai dari kanan layar (item pertama tepat di tepi kanan)
+      x = vw;
+    }
+
+    reset();
+    track.style.transform = `translateX(${x}px)`;
+
+    window.addEventListener('resize', reset);
+
+    function tick(ts) {
+      if (!last) last = ts;
+      const dt = (ts - last) / 1000;
+      last = ts;
+
+      x -= speed * dt;
+
+      // Kalau seluruh track sudah hilang ke kiri (item terakhir keluar layar)
+      if (x + trackW < 0) {
+        reset(); // langsung reset ke kanan
+      }
+
+      track.style.transform = `translateX(${x}px)`;
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  })();
+</script>
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div>
+        <div class="footer-brand">✦ Kokorbx</div>
+        <div class="footer-tagline">Top Up Robux via Gamepass · Cepat & Aman</div>
+      </div>
+      <div class="footer-divider"></div>
+      <div>
+        <div class="footer-cs-label">Butuh bantuan?</div>
+<a class="cs-fab" href="https://wa.me/6281234567890" target="_blank" rel="noopener">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+    <path d="M20.52 3.48A11.91 11.91 0 0012.03 0C5.41 0 .06 5.36.06 11.98c0 2.11.55 4.16 1.6 5.97L0 24l6.23-1.63a11.94 11.94 0 005.8 1.48h.01c6.62 0 11.97-5.36 11.97-11.98 0-3.2-1.25-6.2-3.49-8.39zM12.04 21.3c-1.8 0-3.57-.48-5.13-1.39l-.37-.22-3.7.97.99-3.6-.24-.37a9.3 9.3 0 01-1.43-4.97c0-5.14 4.18-9.32 9.33-9.32 2.49 0 4.83.97 6.59 2.73a9.26 9.26 0 012.73 6.59c0 5.14-4.18 9.32-9.33 9.32zm5.11-6.97c-.28-.14-1.64-.81-1.9-.9-.25-.09-.43-.14-.62.14-.18.28-.71.9-.87 1.08-.16.18-.32.21-.6.07-.28-.14-1.17-.43-2.22-1.37-.82-.73-1.37-1.64-1.53-1.92-.16-.28-.02-.43.12-.57.13-.13.28-.32.43-.48.14-.16.18-.28.28-.46.09-.18.05-.34-.02-.48-.07-.14-.62-1.5-.85-2.05-.22-.53-.45-.46-.62-.47h-.53c-.18 0-.48.07-.73.34-.25.28-.96.94-.96 2.3s.99 2.66 1.13 2.84c.14.18 1.95 2.98 4.73 4.18.66.28 1.17.45 1.57.58.66.21 1.26.18 1.73.11.53-.08 1.64-.67 1.87-1.31.23-.64.23-1.18.16-1.31-.07-.13-.25-.21-.53-.34z"/>
+  </svg>
+  Chat WhatsApp
+</a>
+      <div class="footer-copy">© 2025 Kokorbx — All rights reserved</div>
+    </div>
+  </footer>
+
+</body>
+</html>

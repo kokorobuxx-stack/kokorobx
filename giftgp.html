@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kokorbx - Gift GP Ingame</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%237c5cfc'/%3E%3Ctext x='50' y='70' font-size='64' font-family='Arial' font-weight='900' text-anchor='middle' fill='white'%3EK%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #060608;
+    --s1: #0e0e14;
+    --s2: #14141e;
+    --s3: #1a1a28;
+    --border: #252535;
+    --accent: #7c5cfc;
+    --accent2: #fc5c7d;
+    --green: #39d98a;
+    --gold: #ffc857;
+    --text: #eeeef5;
+    --muted: #8b8ba3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(124,92,252,.18), transparent 30%),
+      radial-gradient(circle at 85% 12%, rgba(252,92,125,.14), transparent 28%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(6,6,8,.88);
+    backdrop-filter: blur(18px);
+  }
+  .logo {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    letter-spacing: 0;
+  }
+  .logo span { color: var(--accent); }
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav a {
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,.1);
+    background: rgba(255,255,255,.05);
+    border-radius: 8px;
+    padding: 8px 11px;
+    font-size: .72rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .shell {
+    width: min(980px, 100%);
+    margin: 0 auto;
+    padding: 30px 14px 60px;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 14px;
+    align-items: stretch;
+    margin-bottom: 14px;
+  }
+  .hero-main,
+  .panel {
+    border: 1px solid var(--border);
+    background: rgba(14,14,20,.86);
+    border-radius: 12px;
+  }
+  .hero-main {
+    padding: 24px;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .hero-main::after {
+    content: '';
+    position: absolute;
+    right: -80px;
+    bottom: -120px;
+    width: 260px;
+    height: 260px;
+    border: 1px solid rgba(124,92,252,.35);
+    transform: rotate(16deg);
+    border-radius: 36px;
+    background: linear-gradient(135deg, rgba(124,92,252,.12), rgba(252,92,125,.07));
+  }
+  .eyebrow {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: .66rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2rem, 7vw, 4rem);
+    line-height: .95;
+    letter-spacing: 0;
+    max-width: 620px;
+    position: relative;
+    z-index: 1;
+  }
+  h1 span {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-main p {
+    margin-top: 14px;
+    color: var(--muted);
+    max-width: 520px;
+    line-height: 1.7;
+    font-size: .82rem;
+    position: relative;
+    z-index: 1;
+  }
+  .panel { padding: 18px; }
+  .panel-title {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    margin-bottom: 12px;
+  }
+  .steps {
+    display: grid;
+    gap: 8px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px;
+    align-items: start;
+    padding: 10px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 9px;
+    background: rgba(255,255,255,.03);
+  }
+  .step-num {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 8px;
+    background: rgba(124,92,252,.14);
+    color: var(--accent);
+    font-weight: 900;
+  }
+  .step strong {
+    display: block;
+    font-family: 'Outfit', sans-serif;
+    font-size: .82rem;
+    margin-bottom: 2px;
+  }
+  .step span {
+    color: var(--muted);
+    font-size: .68rem;
+    line-height: 1.5;
+  }
+  form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    border: 1px solid var(--border);
+    background: rgba(14,14,20,.92);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .full { grid-column: 1 / -1; }
+  label {
+    display: grid;
+    gap: 7px;
+    color: var(--muted);
+    font-size: .68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+  }
+  input,
+  textarea,
+  select {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--s2);
+    color: var(--text);
+    font: inherit;
+    font-size: .82rem;
+    outline: none;
+    padding: 11px 12px;
+  }
+  textarea {
+    min-height: 92px;
+    resize: vertical;
+  }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(124,92,252,.12);
+  }
+  .summary {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .sum-item {
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 9px;
+    background: var(--s3);
+    padding: 11px;
+    min-width: 0;
+  }
+  .sum-item span {
+    display: block;
+    color: var(--muted);
+    font-size: .62rem;
+    margin-bottom: 4px;
+  }
+  .sum-item strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: 'Outfit', sans-serif;
+    font-size: .92rem;
+  }
+  .actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  button,
+  .wa-link {
+    border: 0;
+    border-radius: 9px;
+    padding: 13px 16px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: .86rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+  }
+  button {
+    flex: 1 1 220px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+  }
+  .wa-link {
+    flex: 1 1 180px;
+    color: #07180e;
+    background: var(--green);
+  }
+  .notice {
+    grid-column: 1 / -1;
+    display: none;
+    border: 1px solid rgba(57,217,138,.25);
+    background: rgba(57,217,138,.08);
+    color: var(--green);
+    border-radius: 9px;
+    padding: 11px;
+    font-size: .72rem;
+    line-height: 1.5;
+  }
+  .notice.show { display: block; }
+  @media (max-width: 760px) {
+    .hero,
+    form,
+    .summary { grid-template-columns: 1fr; }
+    .hero-main { min-height: 210px; }
+    header { padding: 12px 14px; }
+    .nav a { padding: 7px 9px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Koko<span>RBLX</span></div>
+  <nav class="nav">
+    <a href="index.html">Home</a>
+    <a href="rbxstore_auth.html">Masuk</a>
+  </nav>
+</header>
+
+<main class="shell">
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">Gift GP Ingame</div>
+      <h1>Request <span>Gamepass</span></h1>
+      <p>Pilih game, isi detail akun dan gamepass, lalu kirim request ke admin untuk pengecekan harga dan ketersediaan.</p>
+    </div>
+    <aside class="panel">
+      <div class="panel-title">Alur Order</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><strong>Isi request</strong><span>Masukkan username, game, dan gamepass.</span></div></div>
+        <div class="step"><div class="step-num">2</div><div><strong>Admin cek harga</strong><span>Admin validasi item dan total pembayaran.</span></div></div>
+        <div class="step"><div class="step-num">3</div><div><strong>Gift diproses</strong><span>Pesanan diproses setelah pembayaran dikonfirmasi.</span></div></div>
+      </div>
+    </aside>
+  </section>
+
+  <form id="gift-form">
+    <label>
+      Username Roblox
+      <input id="username" name="username" autocomplete="username" placeholder="Nama akun Roblox" required>
+    </label>
+    <label>
+      Kontak
+      <input id="contact" name="contact" placeholder="Email atau WhatsApp" required>
+    </label>
+    <label>
+      Nama Game
+      <input id="game" name="game" placeholder="Contoh: Blox Fruits" required>
+    </label>
+    <label>
+      Nama Gamepass
+      <input id="gamepass" name="gamepass" placeholder="Contoh: 2x Money" required>
+    </label>
+    <label>
+      Link Gamepass
+      <input id="link" name="link" type="url" placeholder="https://www.roblox.com/...">
+    </label>
+    <label>
+      Estimasi Budget
+      <select id="budget" name="budget">
+        <option value="Belum tahu">Belum tahu</option>
+        <option value="< Rp 50.000">&lt; Rp 50.000</option>
+        <option value="Rp 50.000 - Rp 100.000">Rp 50.000 - Rp 100.000</option>
+        <option value="> Rp 100.000">&gt; Rp 100.000</option>
+      </select>
+    </label>
+    <label class="full">
+      Catatan
+      <textarea id="note" name="note" placeholder="Detail tambahan untuk admin"></textarea>
+    </label>
+
+    <div class="summary">
+      <div class="sum-item"><span>User</span><strong id="sum-user">-</strong></div>
+      <div class="sum-item"><span>Game</span><strong id="sum-game">-</strong></div>
+      <div class="sum-item"><span>Gamepass</span><strong id="sum-pass">-</strong></div>
+    </div>
+
+    <div class="notice" id="notice">Request tersimpan di browser ini. WhatsApp admin akan terbuka dengan detail order.</div>
+
+    <div class="actions">
+      <button type="submit">Kirim Request</button>
+      <a class="wa-link" id="wa-link" href="https://wa.me/6281234567890" target="_blank" rel="noopener">Chat Admin</a>
+    </div>
+  </form>
+</main>
+
+<script>
+  const ADMIN_WA = '6281234567890';
+  const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'https://chisatobobaaaa.vercel.app'
+    : '';
+  const form = document.getElementById('gift-form');
+  const fields = {
+    username: document.getElementById('username'),
+    contact: document.getElementById('contact'),
+    game: document.getElementById('game'),
+    gamepass: document.getElementById('gamepass'),
+    link: document.getElementById('link'),
+    budget: document.getElementById('budget'),
+    note: document.getElementById('note'),
+  };
+
+  function value(id) {
+    return (fields[id].value || '').trim();
+  }
+
+  function updateSummary() {
+    document.getElementById('sum-user').textContent = value('username') || '-';
+    document.getElementById('sum-game').textContent = value('game') || '-';
+    document.getElementById('sum-pass').textContent = value('gamepass') || '-';
+  }
+
+  function buildMessage(orderId) {
+    return [
+      'Halo admin Kokorbx, saya mau request Gift GP Ingame.',
+      '',
+      `Order ID: ${orderId}`,
+      `Username: ${value('username')}`,
+      `Kontak: ${value('contact')}`,
+      `Game: ${value('game')}`,
+      `Gamepass: ${value('gamepass')}`,
+      `Link: ${value('link') || '-'}`,
+      `Budget: ${value('budget')}`,
+      `Catatan: ${value('note') || '-'}`,
+    ].join('\n');
+  }
+
+  async function saveRequest(orderId) {
+    const request = {
+      id: orderId,
+      type: 'giftgp',
+      username: value('username'),
+      contact: value('contact'),
+      game: value('game'),
+      gamepass: value('gamepass'),
+      link: value('link'),
+      budget: value('budget'),
+      note: value('note'),
+      status: 'request',
+      time: Date.now(),
+    };
+    const orders = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
+    orders.unshift(request);
+    localStorage.setItem('rbx_orders', JSON.stringify(orders));
+
+    try {
+      await fetch(API_BASE + '/api/create-gift-request', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request)
+      });
+    } catch(e) {
+      console.warn('[Gift GP] gagal simpan ke backend:', e);
+    }
+  }
+
+  form.addEventListener('input', updateSummary);
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!form.reportValidity()) return;
+
+    const orderId = 'GGP-' + Math.floor(100000 + Math.random() * 900000);
+    await saveRequest(orderId);
+
+    const message = encodeURIComponent(buildMessage(orderId));
+    const url = `https://wa.me/${ADMIN_WA}?text=${message}`;
+    const notice = document.getElementById('notice');
+    document.getElementById('wa-link').href = url;
+    notice.classList.add('show');
+    window.open(url, '_blank', 'noopener');
+  });
+
+  updateSummary();
+</script>
+</body>
+</html>
