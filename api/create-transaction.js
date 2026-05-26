@@ -93,7 +93,7 @@ module.exports = async function handler(req, res) {
     const finishUrl =
       process.env.PAYMENT_FINISH_URL ||
       req.headers.origin ||
-      'https://kokorbx.vercel.app';
+      'https://koko-rbx.vercel.app';
 
     const parameter = {
       transaction_details: {

@@ -471,7 +471,7 @@
 <div id="login-screen">
   <div class="login-box">
     <h1>// ADMIN PANEL</h1>
-    <p>Kokorbx — Dashboard Admin</p>
+    <p>KokoRBX — Dashboard Admin</p>
     <input type="text" id="login-user" placeholder="Username" autocomplete="off">
     <input type="password" id="login-pass" placeholder="Password">
     <button onclick="doLogin()">Masuk</button>
@@ -482,7 +482,7 @@
 
 <!-- MOBILE TOPBAR -->
 <div class="mobile-topbar" id="mobile-topbar">
-  <span class="logo">Kokorbx Admin</span>
+  <span class="logo">KokoRBX Admin</span>
   <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
 </div>
 <div class="mobile-overlay" id="mobile-overlay" onclick="closeSidebar()"></div>
@@ -490,7 +490,7 @@
 <!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
   <div class="sidebar-logo">
-    <span>Kokorbx Admin</span>
+    <span>KokoRBX Admin</span>
     <small>Control Panel v2.0</small>
   </div>
   <div class="nav-item active" onclick="showPage('dashboard', this)"><span class="icon">&#9672;</span> Dashboard</div>
@@ -944,7 +944,7 @@
     try {
       localStorage.setItem(ORDER_MASTER_KEY, JSON.stringify(merged));
     } catch(e) {
-      console.warn('[Kokorbx] merge order gagal:', e);
+      console.warn('[KokoRBX] merge order gagal:', e);
     }
 
     return before !== JSON.stringify(merged);
@@ -1565,7 +1565,7 @@
       localStorage.setItem(ORDER_MASTER_KEY, JSON.stringify(clean));
       syncOrdersToCustomerKeys(clean);
     } catch(e) {
-      console.warn('[Kokorbx] saveOrders gagal:', e);
+      console.warn('[KokoRBX] saveOrders gagal:', e);
     }
   }
 
@@ -1799,7 +1799,7 @@
     ctx.fillStyle = '#888'; ctx.font = '12px Arial';
     ctx.fillText('Nominal Transfer', 160, 185);
     ctx.fillStyle = '#ccc'; ctx.font = '13px Arial';
-    const lines = ['Ke: Kokorbx Official', 'No. Ref: TRX' + Math.floor(Math.random()*9999999), 'Waktu: ' + new Date().toLocaleString('id-ID')];
+    const lines = ['Ke: KokoRBX Official', 'No. Ref: TRX' + Math.floor(Math.random()*9999999), 'Waktu: ' + new Date().toLocaleString('id-ID')];
     lines.forEach((l, i) => ctx.fillText(l, 160, 240 + i * 28));
     ctx.strokeStyle = '#0f3460'; ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(40, 330); ctx.lineTo(280, 330); ctx.stroke();
