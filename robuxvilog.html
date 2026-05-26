@@ -183,6 +183,8 @@
   .modal-gp-status { background: rgba(57,217,138,0.1); border: 1px solid rgba(57,217,138,0.25); border-radius: 6px; padding: 2px 8px; font-size: 0.58rem; color: var(--green); flex-shrink: 0; }
   .btn-wa { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; background: #25d366; color: #fff; border: none; border-radius: 8px; padding: 11px; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.78rem; cursor: pointer; margin-bottom: 8px; transition: all 0.2s; }
   .btn-wa:hover { background: #1db857; transform: translateY(-1px); }
+  .btn-view-orders { width: 100%; background: rgba(124,92,252,.14); border: 1px solid rgba(124,92,252,.36); border-radius: 8px; padding: 11px; color: var(--text); font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 800; cursor: pointer; margin-bottom: 8px; transition: all .2s; }
+  .btn-view-orders:hover { background: rgba(124,92,252,.22); transform: translateY(-1px); }
   .btn-close { width: 100%; background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; }
   .btn-close:hover { border-color: var(--border2); color: var(--text); }
   .pay-action-box { background: var(--s2); border: 1px solid var(--border2); border-radius: 9px; padding: 12px; margin-bottom: 12px; text-align: center; }
@@ -819,6 +821,7 @@
       <div class="meta-box"><div class="ml">Pembayaran</div><div class="mv" id="modal-pay">—</div></div>
     </div>
     <div id="pay-action-area"></div>
+    <button class="btn-view-orders" onclick="scrollToMyOrders()">📦 Lihat Pesanan Saya</button>
     <button class="btn-close" onclick="closeModal()">Tutup</button>
 
   </div>
@@ -1341,6 +1344,15 @@
   // kirimBukti removed (upload via Pesanan Saya)
 
   function closeModal() { document.getElementById('modal').classList.remove('show'); }
+  function scrollToMyOrders() {
+    closeModal();
+    renderMyOrders();
+    const section = document.getElementById('my-orders-section');
+    if (section) {
+      section.classList.add('show');
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
   function closeOutside(e) { if (e.target === document.getElementById('modal')) closeModal(); }
 
   // ── ORDER STORAGE (per user + mirrored ke global untuk admin) ──
@@ -1488,10 +1500,7 @@
 
   // ── PESANAN SAYA ──────────────────────────────────────────────
   function renderMyOrders() {
-    const s = getSession();
     const section = document.getElementById('my-orders-section');
-    if (!s) { section.classList.remove('show'); return; }
-
     const orders = getMyOrders();
     section.classList.toggle('show', orders.length > 0);
     document.getElementById('my-orders-count').textContent = orders.length;
