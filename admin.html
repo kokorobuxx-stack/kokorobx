@@ -1368,6 +1368,20 @@
     };
   }
 
+  async function getEmailJSBackendConfig() {
+    try {
+      const cfg = await sbFetch('/api/admin-orders?action=email-config');
+      return {
+        serviceId:  cfg.serviceId || '',
+        templateId: cfg.templateId || '',
+        publicKey:  cfg.publicKey || '',
+      };
+    } catch(e) {
+      console.warn('[EmailJS config] gagal ambil config Vercel:', e);
+      return null;
+    }
+  }
+
   // ── KIRIM EMAIL VIA EMAILJS ───────────────────────────────────
   async function kirimEmailJS(toEmail, order) {
     if (!toEmail) {
@@ -1386,10 +1400,16 @@
       console.warn('[EmailJS backend] gagal, coba fallback browser:', e);
     }
 
-    const cfg = getEmailJSConfig();
+    let cfg = await getEmailJSBackendConfig();
+    if (!cfg || !cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
+      cfg = getEmailJSConfig();
+    }
+
     if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
       const msg = backendError.includes('EMAILJS_CONFIG_MISSING')
         ? 'Config EmailJS belum diset di Vercel. Isi EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, dan EMAILJS_PUBLIC_KEY.'
+        : backendError.includes('EMAILJS_NON_BROWSER_DISABLED')
+          ? 'EmailJS Security belum mengizinkan backend, dan config fallback browser belum tersedia.'
         : (backendError || 'Config EmailJS belum diset.');
       return { ok: false, msg };
     }

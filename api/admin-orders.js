@@ -59,10 +59,32 @@ async function sendOrderEmail(req, res) {
 
   const text = await emailRes.text();
   if (!emailRes.ok) {
+    if (emailRes.status === 403 && /non-browser environments/i.test(text)) {
+      return res.status(403).json({
+        code: 'EMAILJS_NON_BROWSER_DISABLED',
+        error: 'EmailJS belum mengizinkan kirim dari backend. Admin akan mencoba kirim dari browser.',
+      });
+    }
     return res.status(502).json({ error: 'EmailJS error ' + emailRes.status + ': ' + text });
   }
 
   return res.status(200).json({ ok: true, message: 'Email terkirim ke ' + email });
+}
+
+function sendEmailConfig(res) {
+  const cfg = getEmailConfig();
+  if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
+    return res.status(500).json({
+      code: 'EMAILJS_CONFIG_MISSING',
+      error: 'EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, dan EMAILJS_PUBLIC_KEY belum diset di Vercel',
+    });
+  }
+
+  return res.status(200).json({
+    serviceId: cfg.serviceId,
+    templateId: cfg.templateId,
+    publicKey: cfg.publicKey,
+  });
 }
 
 module.exports = async function handler(req, res) {
@@ -72,6 +94,10 @@ module.exports = async function handler(req, res) {
   if (!requireAdmin(req, res)) return;
 
   try {
+    if (req.method === 'GET' && req.query && req.query.action === 'email-config') {
+      return sendEmailConfig(res);
+    }
+
     if (req.method === 'POST' && req.query && req.query.action === 'send-email') {
       return await sendOrderEmail(req, res);
     }
