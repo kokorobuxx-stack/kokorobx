@@ -1593,15 +1593,17 @@
           <div class="order-bukti-label">Bukti Pembayaran <span></span></div>
           <img class="bukti-preview-thumb" src="${sudahKirim}" alt="bukti" onclick="openLightbox(this.src)">
           ${buktiTgl ? `<div style="font-size:0.62rem;color:var(--muted);margin-bottom:10px;">Dikirim: ${buktiTgl}</div>` : ''}
-          <div style="font-size:0.65rem;color:var(--muted);text-align:center;">Bukti sudah masuk, admin akan verifikasi.</div>`;
+          <div style="font-size:0.65rem;color:var(--muted);text-align:center;">Bukti sudah masuk, admin akan verifikasi.</div>
+          <button class="btn-update-bukti" onclick="openBuktiModal('${o.id}', event)">🔄 Ganti Bukti Transfer</button>`;
       } else {
         buktiSection = `
           <div class="order-bukti-label">Status Pembayaran <span></span></div>
           <div style="background:rgba(255,200,87,.06);border:1px dashed rgba(255,200,87,.25);border-radius:8px;padding:12px;text-align:center;margin-bottom:10px;">
             <div style="font-size:1.4rem;margin-bottom:5px;">📸</div>
             <div style="font-size:0.7rem;color:var(--gold);font-weight:600;">Bukti belum dikirim</div>
-            <div style="font-size:0.62rem;color:var(--muted);margin-top:3px;">Upload bukti dilakukan dari pop-up setelah checkout.</div>
-          </div>`;
+            <div style="font-size:0.62rem;color:var(--muted);margin-top:3px;">Upload bukti transfer di sini supaya admin cepat verifikasi.</div>
+          </div>
+          <button class="btn-kirim-bukti" onclick="openBuktiModal('${o.id}', event)">📤 Upload Bukti Transfer</button>`;
       }
 
       return `
