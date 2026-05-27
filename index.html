@@ -117,12 +117,6 @@
             animation: heroIn 0.6s ease both;
         }
         @keyframes heroIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .hero-eyebrow {
-            display: inline-flex; align-items: center; gap: 6px; font-size: 0.62rem;
-            letter-spacing: 2px; text-transform: uppercase; color: var(--accent);
-            border: 1px solid rgba(124,92,252,0.3); background: rgba(124,92,252,0.06);
-            padding: 5px 14px; border-radius: 20px; margin-bottom: 14px;
-        }
         .hero h1 {
             font-family: 'Outfit', sans-serif; font-weight: 900;
             font-size: clamp(1.6rem, 7vw, 2.8rem); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 10px;
@@ -137,6 +131,11 @@
         .section-title span { color: var(--accent); font-size: 13px; letter-spacing: 3px; }
         .section-title h2 { font-size: 40px; color: white; margin-top: 10px; font-family: 'Outfit', sans-serif; }
         .section-title h2 span { color: var(--accent); }
+        .section-title-logo {
+            display: block; width: min(700px, 92vw); max-height: 150px;
+            object-fit: contain; margin: 8px auto 0;
+            filter: drop-shadow(0 10px 24px rgba(124,92,252,0.28));
+        }
         .section-title p { color: var(--muted); margin-top: 10px; }
 
         .product-grid {
@@ -314,6 +313,7 @@
 
         @media (max-width: 768px) {
             .section-title h2 { font-size: 32px; }
+            .section-title-logo { width: min(430px, 94vw); max-height: 110px; }
             .product-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
             .product-box { min-height: 150px; padding: 12px; }
             .product-logo { height: 120px; }
@@ -359,7 +359,6 @@
     </header>
 
     <div class="hero">
-        <div class="hero-eyebrow">🎮 Pilih Layanan Top Up</div>
         <h1>Top Up <span class="g2">Robux</span><br>Di <span class="g1">KokoRBX</span></h1>
         <p>Pilih metode Robux yang ingin kamu gunakan. Proses aman, cepat, dan terpercaya 🚀</p>
     </div>
@@ -367,7 +366,7 @@
     <section class="home-products">
         <div class="section-title">
             <span>✦ PRODUK KokoRBX</span>
-            <h2>Pilih Layanan <span>TopUp</span></h2>
+            <img class="section-title-logo" src="assets/logo-pilih-layanan-topup.png" alt="Pilih Layanan Top Up">
             <p>Klik salah satu produk untuk melanjutkan ke halaman order</p>
         </div>
         <div class="product-grid">
@@ -590,4 +589,3 @@
 </script>
 </body>
 </html>
-
