@@ -213,6 +213,10 @@
   .btn-submit-bukti { width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; border-radius: 9px; padding: 12px; color: #fff; font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; margin-bottom: 8px; }
   .btn-submit-bukti:hover { opacity: 0.9; transform: translateY(-1px); }
   .btn-submit-bukti:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .modal-proof-cta { background: rgba(255,200,87,.07); border: 1px dashed rgba(255,200,87,.35); border-radius: 10px; padding: 10px; margin-bottom: 8px; text-align: center; }
+  .modal-proof-title { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 0.8rem; color: var(--gold); margin-bottom: 3px; }
+  .modal-proof-text { font-size: 0.68rem; color: var(--muted); line-height: 1.5; margin-bottom: 8px; }
+  .modal-proof-cta .btn-submit-bukti { margin-bottom: 0; }
   .trust {
     overflow: hidden; padding: 0 0 40px; position: relative;
     pointer-events: none; user-select: none; touch-action: none;
@@ -761,7 +765,7 @@
     <div class="my-orders-header">
       <div>
         <div class="my-orders-title">📦 Pesanan Saya <span class="my-orders-count" id="my-orders-count">0</span></div>
-        <div class="my-orders-subtitle">Klik pesanan untuk lihat detail & kirim bukti pembayaran</div>
+        <div class="my-orders-subtitle">Klik pesanan untuk lihat detail atau batalkan order</div>
       </div>
     </div>
     <div id="my-orders-list"></div>
@@ -801,7 +805,7 @@
     <h2>Order Diterima!</h2>
     <div class="status-chip"><div class="live-dot"></div>PENDING — Diproses</div>
     <div class="modal-progress"><div class="modal-progress-fill"></div></div>
-    <p class="modal-desc">Pesanan kamu sedang <strong>diverifikasi</strong>. Setelah pembayaran dikonfirmasi, admin akan memproses order Via Login/Instant sesuai antrian.</p>
+    <p class="modal-desc">Pesanan kamu sedang <strong>diverifikasi</strong>. Setelah bayar, upload bukti di bawah supaya admin bisa cepat memproses order Via Login/Instant.</p>
     <div class="order-box">
       <div class="order-box-label">Nomor Order</div>
       <div class="order-id-val" id="modal-oid">RBX-000000</div>
@@ -821,7 +825,12 @@
       <div class="meta-box"><div class="ml">Pembayaran</div><div class="mv" id="modal-pay">—</div></div>
     </div>
     <div id="pay-action-area"></div>
-    <button class="btn-view-orders" onclick="scrollToMyOrders()">📦 Lihat Pesanan Saya</button>
+    <div class="modal-proof-cta">
+      <div class="modal-proof-title">Sudah bayar?</div>
+      <div class="modal-proof-text">Upload bukti pembayaran langsung dari sini supaya admin cepat verifikasi.</div>
+      <button class="btn-submit-bukti" onclick="openBuktiFromOrderModal(event)">📤 Kirim Bukti Pembayaran</button>
+    </div>
+    <button class="btn-view-orders" onclick="scrollToMyOrders()">📦 Cek Pesanan / Batalkan</button>
     <button class="btn-close" onclick="closeModal()">Tutup</button>
 
   </div>
@@ -838,7 +847,7 @@
   </div>
 </div>
 
-<!-- MODAL UPLOAD BUKTI (dari Pesanan Saya) -->
+<!-- MODAL UPLOAD BUKTI (setelah checkout) -->
 <div class="modal-overlay" id="modal-bukti" onclick="if(event.target===this)closeBuktiModal()">
   <div class="modal" style="text-align:left;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
@@ -1534,7 +1543,7 @@
 
       const isFinished = normStatus === 'success' || normStatus === 'failed';
 
-      // Bukti section dalam detail
+      // Status bukti dalam detail, tanpa tombol upload agar Pesanan Saya fokus untuk cek dan batal order.
       let buktiSection = '';
       if (isFinished) {
         buktiSection = `
@@ -1546,18 +1555,15 @@
           <div class="order-bukti-label">Bukti Pembayaran <span></span></div>
           <img class="bukti-preview-thumb" src="${sudahKirim}" alt="bukti" onclick="openLightbox(this.src)">
           ${buktiTgl ? `<div style="font-size:0.62rem;color:var(--muted);margin-bottom:10px;">Dikirim: ${buktiTgl}</div>` : ''}
-          <button class="btn-update-bukti" onclick="event.stopPropagation();openBuktiModal('${o.id}', event)">🔄 Update Bukti Pembayaran</button>`;
+          <div style="font-size:0.65rem;color:var(--muted);text-align:center;">Bukti sudah masuk, admin akan verifikasi.</div>`;
       } else {
         buktiSection = `
-          <div class="order-bukti-label">Bukti Pembayaran <span></span></div>
+          <div class="order-bukti-label">Status Pembayaran <span></span></div>
           <div style="background:rgba(255,200,87,.06);border:1px dashed rgba(255,200,87,.25);border-radius:8px;padding:12px;text-align:center;margin-bottom:10px;">
             <div style="font-size:1.4rem;margin-bottom:5px;">📸</div>
             <div style="font-size:0.7rem;color:var(--gold);font-weight:600;">Bukti belum dikirim</div>
-            <div style="font-size:0.62rem;color:var(--muted);margin-top:3px;">Upload foto transfer untuk mempercepat proses</div>
-          </div>
-          <button class="btn-kirim-bukti" onclick="event.stopPropagation();openBuktiModal('${o.id}', event)">
-            📤 Kirim Bukti Pembayaran
-          </button>`;
+            <div style="font-size:0.62rem;color:var(--muted);margin-top:3px;">Upload bukti dilakukan dari pop-up setelah checkout.</div>
+          </div>`;
       }
 
       return `
@@ -1768,9 +1774,16 @@
     renderMyOrders();
   });
 
-  // ── MODAL BUKTI (dari Pesanan Saya) ──────────────────────────
+  // ── MODAL BUKTI (setelah checkout) ──────────────────────────
   let _buktiOrderId = null;
   let _buktiFile = null;
+
+  function openBuktiFromOrderModal(ev) {
+    if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+    const oid = (document.getElementById('modal-oid')?.textContent || '').trim();
+    if (!oid || oid === 'RBX-000000') return;
+    openBuktiModal(oid);
+  }
 
   function openBuktiModal(oid, ev) {
     if (ev) { ev.stopPropagation(); ev.preventDefault(); }
