@@ -1,6 +1,7 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { requireAdmin } = require('./_lib/admin-auth');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
+const { SETTINGS_USERNAME } = require('./_lib/rates');
 
 function getEmailConfig() {
   return {
@@ -115,7 +116,10 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
-      const rows = await supabaseFetch('/rest/v1/orders?order=created_at.desc&limit=500');
+      const rows = await supabaseFetch(
+        '/rest/v1/orders?username=neq.' + encodeURIComponent(SETTINGS_USERNAME) +
+          '&order=created_at.desc&limit=500'
+      );
       return res.status(200).json(rows.map(rowToOrder));
     }
 

@@ -1009,9 +1009,11 @@
   </div>
 </div>
 
+<script src="assets/rate-client.js"></script>
 <script>
   let _rbx = 0, _price = 0, _pkg = '', _pay = '', _gpId = 'Robux 5 Hari', _gpVerified = true, _isCustomPkg = false;
-  const PRICE_PER_ROBUX = 120;
+  let PRICE_PER_ROBUX = 120;
+  const RATE_KEY = 'gamepass';
   const ROBLOX_PAYOUT_RATE = 0.70;
 
   // ============================================================
@@ -1132,7 +1134,58 @@
   }
 
   function calcRobuxPrice(rbx) {
+    if (window.KokoRates && KokoRates.calcPrice) {
+      return KokoRates.calcPrice(rbx, PRICE_PER_ROBUX);
+    }
     return Math.round(Number(rbx || 0) * PRICE_PER_ROBUX);
+  }
+
+  function formatRatePrice(value) {
+    return window.KokoRates && KokoRates.formatRupiah
+      ? KokoRates.formatRupiah(value)
+      : 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+  }
+
+  function getPackageRobux(pkg) {
+    if (pkg.dataset.rbx) return Number(pkg.dataset.rbx) || 0;
+    const match = String(pkg.getAttribute('onclick') || '').match(/selectPkg\(this,\s*(\d+)/);
+    const rbx = match ? Number(match[1]) : 0;
+    if (rbx) pkg.dataset.rbx = String(rbx);
+    return rbx;
+  }
+
+  function applyRobuxRate() {
+    document.querySelectorAll('.pkg').forEach(pkg => {
+      const rbx = getPackageRobux(pkg);
+      if (!rbx) return;
+      const price = calcRobuxPrice(rbx);
+      pkg.dataset.price = String(price);
+      const priceEl = pkg.querySelector('.pkg-price');
+      if (priceEl) priceEl.textContent = formatRatePrice(price);
+      if (pkg.classList.contains('selected') && _rbx === rbx) _price = price;
+    });
+    document.querySelectorAll('.custom-rbx-rate').forEach(el => {
+      el.textContent = formatRatePrice(PRICE_PER_ROBUX) + ' / R$';
+    });
+    if (typeof _isCustomPkg !== 'undefined' && _isCustomPkg && _rbx) {
+      _price = calcRobuxPrice(_rbx);
+      const priceEl = document.getElementById('custom-rbx-price');
+      if (priceEl) priceEl.textContent = formatRatePrice(_price);
+    }
+    updateSummary();
+  }
+
+  async function loadRobuxRate() {
+    try {
+      if (window.KokoRates && KokoRates.load) {
+        const settings = await KokoRates.load();
+        const rate = Number(settings.rates && settings.rates[RATE_KEY]);
+        if (Number.isFinite(rate) && rate > 0) PRICE_PER_ROBUX = Math.round(rate);
+      }
+    } catch(e) {
+      console.warn('[KokoRBX] gagal load rate:', e);
+    }
+    applyRobuxRate();
   }
 
   function getSelectedTax() {
@@ -1176,7 +1229,7 @@
     const customPrice = document.getElementById('custom-rbx-price');
     if (custom) custom.value = '';
     if (customPrice) customPrice.textContent = 'Rp -';
-    _rbx = rbx; _price = price;
+    _rbx = rbx; _price = calcRobuxPrice(rbx);
     _pkg = rbx.toLocaleString('id') + ' R$';
     syncTaxInputsFromSelection();
     updateSummary();
@@ -2036,6 +2089,7 @@
     });
   }
   cleanupLocalStorageImages();
+  loadRobuxRate();
 
   // Panggil preload saat DOM ready — setelah selesai baru render UI
   preloadAllProofs().then(() => {

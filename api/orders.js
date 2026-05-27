@@ -1,5 +1,6 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
+const { isSettingsUsername } = require('./_lib/rates');
 
 function publicOrderPatch(patch) {
   const clean = {};
@@ -18,6 +19,7 @@ module.exports = async function handler(req, res) {
     if (req.method === 'GET') {
       const username = req.query && req.query.username;
       if (!username) return res.status(400).json({ error: 'Username wajib diisi' });
+      if (isSettingsUsername(username)) return res.status(400).json({ error: 'Username tidak valid' });
 
       const rows = await supabaseFetch(
         '/rest/v1/orders?username=eq.' + encodeURIComponent(username) + '&order=created_at.desc'
@@ -29,6 +31,9 @@ module.exports = async function handler(req, res) {
       const order = readJsonBody(req);
       if (!order.id || !order.username) {
         return res.status(400).json({ error: 'Data order belum lengkap' });
+      }
+      if (isSettingsUsername(order.username)) {
+        return res.status(400).json({ error: 'Username tidak valid' });
       }
 
       await supabaseFetch('/rest/v1/orders', {

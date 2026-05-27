@@ -220,6 +220,26 @@
   .robux-amount-big { font-family: var(--mono); font-size: 20px; font-weight: 700; color: var(--green); display: block; margin-bottom: 4px; }
   .send-confirm-box small { color: var(--muted); font-size: 10px; }
 
+  /* RATE SETTINGS */
+  .rate-settings-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .rate-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .rate-card label { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .rate-input-wrap { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .rate-input-wrap span { font-family: var(--mono); color: var(--accent); font-size: 13px; font-weight: 700; }
+  .rate-input-wrap input { width: 100%; background: transparent; border: 0; outline: 0; color: var(--text); font-family: var(--mono); font-size: 20px; font-weight: 700; }
+  .rate-card small { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 8px; }
+  .rate-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .rate-save-btn { background: var(--accent); border: 0; border-radius: 7px; padding: 9px 14px; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .rate-status { display: none; border-radius: 8px; padding: 10px 12px; font-size: 12px; margin-bottom: 14px; }
+  .rate-status.ok { display: block; border: 1px solid rgba(0,229,160,.3); color: var(--green); background: rgba(0,229,160,.08); }
+  .rate-status.err { display: block; border: 1px solid rgba(255,77,109,.35); color: var(--red); background: rgba(255,77,109,.08); }
+  .rate-preview-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  .rate-preview-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .rate-preview-card h3 { font-size: 12px; margin-bottom: 8px; color: var(--text); }
+  .rate-preview-card p { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+  .rate-preview-card p:last-child { border-bottom: 0; }
+  .rate-preview-card strong { color: var(--green); font-family: var(--mono); }
+
   /* EMAILJS SETTINGS */
   .emailjs-section { padding: 16px; border-top: 1px solid var(--border); margin-top: 8px; }
   .emailjs-section h4 { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
@@ -282,6 +302,7 @@
 
     /* Stats grid */
     .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .rate-settings-grid, .rate-preview-grid { grid-template-columns: 1fr; }
     .stat-card { padding: 13px 12px; }
     .stat-value { font-size: 17px; }
     .stat-icon { font-size: 16px; opacity: .2; }
@@ -500,6 +521,7 @@
     <span id="pending-badge" style="margin-left:auto;background:var(--yellow);color:#000;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;"></span>
   </div>
   <div class="nav-item" onclick="showPage('stats', this)"><span class="icon">&#9660;</span> Statistik</div>
+  <div class="nav-item" onclick="showPage('rates', this)"><span class="icon">Rp</span> Rate Robux</div>
   <div class="emailjs-section">
     <h4>📧 EmailJS Config</h4>
     <div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:8px;">Utama: env Vercel. Form ini hanya fallback per browser.</div>
@@ -598,6 +620,37 @@
     </div>
   </div>
 
+  <!-- RATES -->
+  <div class="page" id="page-rates">
+    <div class="page-header">
+      <div><h2>Rate Robux</h2><span>Harga otomatis = jumlah Robux x rate.</span></div>
+      <button class="btn-refresh" id="refresh-rates" onclick="loadRateSettings(true)"><span class="spin">&#8635;</span> Refresh</button>
+    </div>
+    <div class="rate-settings-grid">
+      <div class="rate-card">
+        <label for="rate-gamepass">Sistem Gamepass</label>
+        <div class="rate-input-wrap"><span>Rp</span><input id="rate-gamepass" type="number" min="1" step="1" inputmode="numeric"></div>
+        <small>Dipakai halaman Robux 5 Hari dan custom Robux.</small>
+      </div>
+      <div class="rate-card">
+        <label for="rate-username">Via Username</label>
+        <div class="rate-input-wrap"><span>Rp</span><input id="rate-username" type="number" min="1" step="1" inputmode="numeric"></div>
+        <small>Dipakai halaman Robux Username.</small>
+      </div>
+      <div class="rate-card">
+        <label for="rate-vilog">Sistem Vilog</label>
+        <div class="rate-input-wrap"><span>Rp</span><input id="rate-vilog" type="number" min="1" step="1" inputmode="numeric"></div>
+        <small>Dipakai halaman Robux Vilog.</small>
+      </div>
+    </div>
+    <div class="rate-actions">
+      <button class="rate-save-btn" onclick="saveRateSettings()">Simpan Rate</button>
+      <button class="btn-refresh" onclick="renderRatePreview()">Preview Harga</button>
+    </div>
+    <div class="rate-status" id="rate-status"></div>
+    <div class="rate-preview-grid" id="rate-preview"></div>
+  </div>
+
 </div>
 
 <!-- DETAIL MODAL -->
@@ -641,6 +694,10 @@
     <span class="bnav-icon">◆</span>
     <span>Statistik</span>
   </div>
+  <div class="bnav-item" id="bnav-rates" onclick="showPage('rates', document.querySelectorAll('.nav-item')[4]);mobileNavActivate('rates')">
+    <span class="bnav-icon">Rp</span>
+    <span>Rate</span>
+  </div>
 </nav>
 
 <script>
@@ -648,6 +705,8 @@
     ? 'https://chisatobobaaaa.vercel.app'
     : '';
   const ADMIN_TOKEN_KEY = 'kokorbx_admin_token';
+  const DEFAULT_RATE_SETTINGS = { gamepass: 120, username: 140, vilog: 160 };
+  let rateSettings = { ...DEFAULT_RATE_SETTINGS };
 
   function getAdminToken() {
     return sessionStorage.getItem(ADMIN_TOKEN_KEY) || '';
@@ -675,6 +734,91 @@
     }
     const text = await res.text();
     return text ? JSON.parse(text) : [];
+  }
+
+  function normalizeRate(value, fallback) {
+    const n = Number(String(value || '').replace(/[^\d]/g, ''));
+    return Number.isFinite(n) && n > 0 ? Math.round(n) : fallback;
+  }
+
+  function rateInputValue(id, fallback) {
+    const el = document.getElementById(id);
+    return normalizeRate(el ? el.value : '', fallback);
+  }
+
+  function rupiah(value) {
+    return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+  }
+
+  function setRateStatus(message, type) {
+    const el = document.getElementById('rate-status');
+    if (!el) return;
+    el.textContent = message;
+    el.className = 'rate-status ' + (type || 'ok');
+  }
+
+  function fillRateInputs() {
+    const pairs = {
+      'rate-gamepass': rateSettings.gamepass,
+      'rate-username': rateSettings.username,
+      'rate-vilog': rateSettings.vilog,
+    };
+    Object.keys(pairs).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = pairs[id];
+    });
+    renderRatePreview();
+  }
+
+  function getRateFormValues() {
+    return {
+      gamepass: rateInputValue('rate-gamepass', DEFAULT_RATE_SETTINGS.gamepass),
+      username: rateInputValue('rate-username', DEFAULT_RATE_SETTINGS.username),
+      vilog: rateInputValue('rate-vilog', DEFAULT_RATE_SETTINGS.vilog),
+    };
+  }
+
+  function renderRatePreview() {
+    const preview = document.getElementById('rate-preview');
+    if (!preview) return;
+    const rates = getRateFormValues();
+    const samples = [
+      { key: 'gamepass', title: 'Sistem Gamepass', list: [100, 500, 1000] },
+      { key: 'username', title: 'Via Username', list: [500, 1000, 5000] },
+      { key: 'vilog', title: 'Sistem Vilog', list: [500, 1000, 10000] },
+    ];
+    preview.innerHTML = samples.map(item => `
+      <div class="rate-preview-card">
+        <h3>${item.title}</h3>
+        ${item.list.map(rbx => `<p><span>${rbx.toLocaleString('id-ID')} R$ x ${rates[item.key]}</span><strong>${rupiah(rbx * rates[item.key])}</strong></p>`).join('')}
+      </div>
+    `).join('');
+  }
+
+  async function loadRateSettings(showMessage) {
+    try {
+      const data = await sbFetch('/api/admin-rates');
+      rateSettings = Object.assign({}, DEFAULT_RATE_SETTINGS, data.rates || {});
+      fillRateInputs();
+      if (showMessage) setRateStatus('Rate berhasil dimuat dari server.', 'ok');
+    } catch(e) {
+      fillRateInputs();
+      if (showMessage) setRateStatus('Gagal memuat rate: ' + e.message, 'err');
+    }
+  }
+
+  async function saveRateSettings() {
+    rateSettings = getRateFormValues();
+    renderRatePreview();
+    try {
+      await sbFetch('/api/admin-rates', {
+        method: 'POST',
+        body: JSON.stringify({ rates: rateSettings })
+      });
+      setRateStatus('Rate tersimpan. Harga di halaman order akan ikut berubah otomatis.', 'ok');
+    } catch(e) {
+      setRateStatus('Gagal menyimpan rate: ' + e.message, 'err');
+    }
   }
 
   // Ambil semua order dari Supabase (dipakai admin)
@@ -1157,6 +1301,7 @@
 
   async function init() {
     loadEmailJSConfig();
+    await loadRateSettings(false);
     updateClock();
     setInterval(updateClock, 1000);
     cleanupLocalStorageImages();
@@ -1192,6 +1337,7 @@
     document.getElementById('page-' + name).classList.add('active');
     if (el) el.classList.add('active');
     closeSidebar();
+    if (name === 'rates') renderRatePreview();
     renderAll();
   }
 

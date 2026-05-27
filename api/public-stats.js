@@ -1,5 +1,6 @@
 const { setCors } = require('./_lib/http');
 const { supabaseFetch } = require('./_lib/supabase');
+const { SETTINGS_USERNAME } = require('./_lib/rates');
 
 module.exports = async function handler(req, res) {
   setCors(req, res);
@@ -10,7 +11,10 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const rows = await supabaseFetch('/rest/v1/orders?select=*&order=created_at.desc&limit=1000');
+    const rows = await supabaseFetch(
+      '/rest/v1/orders?select=*&username=neq.' + encodeURIComponent(SETTINGS_USERNAME) +
+        '&order=created_at.desc&limit=1000'
+    );
     const totalOrders = rows.length;
     const totalRobux = rows.reduce((sum, order) => sum + (Number(order.robux) || 0), 0);
     const recentOrders = rows.slice(0, 5).map(order => ({
