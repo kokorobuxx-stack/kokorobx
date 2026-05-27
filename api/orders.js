@@ -1,6 +1,6 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
-const { isSettingsUsername } = require('./_lib/rates');
+const { DEFAULT_RATES, isSettingsUsername, loadRateSettings } = require('./_lib/rates');
 
 function publicOrderPatch(patch) {
   const clean = {};
@@ -16,6 +16,20 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   try {
+    if (req.method === 'GET' && req.query && req.query.action === 'rates') {
+      try {
+        return res.status(200).json(await loadRateSettings());
+      } catch (err) {
+        return res.status(200).json({
+          rates: DEFAULT_RATES,
+          defaults: DEFAULT_RATES,
+          source: 'default',
+          warning: err.message,
+          updatedAt: null,
+        });
+      }
+    }
+
     if (req.method === 'GET') {
       const username = req.query && req.query.username;
       if (!username) return res.status(400).json({ error: 'Username wajib diisi' });

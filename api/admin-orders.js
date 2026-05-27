@@ -1,7 +1,7 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { requireAdmin } = require('./_lib/admin-auth');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
-const { SETTINGS_USERNAME } = require('./_lib/rates');
+const { SETTINGS_USERNAME, loadRateSettings, saveRateSettings } = require('./_lib/rates');
 
 function getEmailConfig() {
   return {
@@ -113,6 +113,17 @@ module.exports = async function handler(req, res) {
 
     if (req.method === 'POST' && req.query && req.query.action === 'send-email') {
       return await sendOrderEmail(req, res);
+    }
+
+    if (req.query && req.query.action === 'rates') {
+      if (req.method === 'GET') {
+        return res.status(200).json(await loadRateSettings());
+      }
+      if (req.method === 'POST' || req.method === 'PATCH') {
+        const body = readJsonBody(req);
+        return res.status(200).json(await saveRateSettings(body.rates || body));
+      }
+      return res.status(405).json({ error: 'Method not allowed' });
     }
 
     if (req.method === 'GET') {

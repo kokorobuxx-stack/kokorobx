@@ -40,7 +40,7 @@
   async function load() {
     const fallback = readCache();
     try {
-      const res = await fetch(API_BASE + '/api/rates?ts=' + Date.now(), { cache: 'no-store' });
+      const res = await fetch(API_BASE + '/api/orders?action=rates&ts=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) throw new Error('Rate request failed');
       const data = normalizeSettings(await res.json());
       localStorage.setItem(CACHE_KEY, JSON.stringify(data));
