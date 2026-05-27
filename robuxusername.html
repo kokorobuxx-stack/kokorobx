@@ -45,7 +45,7 @@
   @keyframes heroIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
   .hero-eyebrow { display: inline-flex; align-items: center; gap: 6px; font-size: 0.62rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(124,92,252,0.3); background: rgba(124,92,252,0.06); padding: 5px 14px; border-radius: 20px; margin-bottom: 14px; }
   .hero-eyebrow.logo-eyebrow { border: 0; background: transparent; padding: 0; border-radius: 0; margin-bottom: 8px; filter: drop-shadow(0 8px 18px rgba(124,92,252,0.32)); }
-  .hero-eyebrow.logo-eyebrow img { width: min(260px, 78vw); height: auto; display: block; }
+  .hero-eyebrow.logo-eyebrow img { width: auto; height: 32px; max-width: min(210px, 70vw); object-fit: contain; display: block; }
   .hero h1 { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: clamp(1.6rem, 7vw, 2.8rem); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 10px; }
   .hero h1 .g1 { color: var(--accent); }
   .hero h1 .g2 { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
