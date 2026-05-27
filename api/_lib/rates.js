@@ -6,6 +6,7 @@ const DEFAULT_RATES = {
   gamepass: 120,
   username: 140,
   vilog: 160,
+  giftgp: 140,
 };
 
 const RATE_ROWS = {
@@ -23,6 +24,11 @@ const RATE_ROWS = {
     id: '__kokorbx_rate_vilog',
     method: 'rate:vilog',
     label: 'Sistem Vilog',
+  },
+  giftgp: {
+    id: '__kokorbx_rate_giftgp',
+    method: 'rate:giftgp',
+    label: 'Gift GP Ingame',
   },
 };
 

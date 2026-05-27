@@ -269,6 +269,8 @@
         <div class="summary-grid">
           <div class="sum-item"><span>User</span><strong id="sum-user">-</strong></div>
           <div class="sum-item"><span>Total</span><strong class="gold" id="sum-total">-</strong></div>
+          <div class="sum-item"><span>Rate</span><strong id="sum-rate">Rp 140 / R$</strong></div>
+          <div class="sum-item"><span>Total Bayar</span><strong class="gold" id="sum-price">Rp -</strong></div>
         </div>
       </aside>
     </section>
@@ -289,11 +291,14 @@
   <div class="footer-tagline">Gift GP Ingame · Cepat & Aman</div>
 </footer>
 
+<script src="assets/rate-client.js"></script>
 <script>
   const ADMIN_WA = '6281996112019';
   const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'https://chisatobobaaaa.vercel.app'
     : '';
+  let PRICE_PER_ROBUX = 140;
+  const RATE_KEY = 'giftgp';
   const form = document.getElementById('gift-form');
   const fields = {
     username: document.getElementById('username'),
@@ -315,13 +320,42 @@
     return cleaned ? Number(cleaned).toLocaleString('id-ID') : '-';
   }
 
+  function calcGiftPrice(raw) {
+    const total = Number(cleanRobux(raw) || 0);
+    if (window.KokoRates && KokoRates.calcPrice) {
+      return KokoRates.calcPrice(total, PRICE_PER_ROBUX);
+    }
+    return total * PRICE_PER_ROBUX;
+  }
+
+  function formatRupiah(value) {
+    return window.KokoRates && KokoRates.formatRupiah
+      ? KokoRates.formatRupiah(value)
+      : 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+  }
+
+  async function loadGiftRate() {
+    try {
+      if (window.KokoRates && KokoRates.load) {
+        const settings = await KokoRates.load();
+        const rate = Number(settings.rates && settings.rates[RATE_KEY]);
+        if (Number.isFinite(rate) && rate > 0) PRICE_PER_ROBUX = Math.round(rate);
+      }
+    } catch(e) {
+      console.warn('[Gift GP] gagal load rate:', e);
+    }
+    updatePreview();
+  }
+
   function buildFormat() {
+    const price = calcGiftPrice(value('totalRobux'));
     return [
       'Format Ingame Gifting',
       'Username: ' + (value('username') || '-'),
       'Nama game: ' + (value('game') || '-'),
       'Nama gamepass: ' + (value('gamepass') || '-'),
       'Total robux: ' + (displayRobux(value('totalRobux')) || '-'),
+      'Total bayar: ' + (price ? formatRupiah(price) : '-'),
       'Note: Pastikan format yang kamu isi sudah sesuai!'
     ].join('\n');
   }
@@ -330,6 +364,9 @@
     document.getElementById('format-preview').textContent = buildFormat();
     document.getElementById('sum-user').textContent = value('username') || '-';
     document.getElementById('sum-total').textContent = displayRobux(value('totalRobux'));
+    document.getElementById('sum-rate').textContent = formatRupiah(PRICE_PER_ROBUX) + ' / R$';
+    const price = calcGiftPrice(value('totalRobux'));
+    document.getElementById('sum-price').textContent = price ? formatRupiah(price) : 'Rp -';
   }
 
   async function saveRequest(orderId) {
@@ -343,6 +380,8 @@
       gamepass: value('gamepass'),
       totalRobux: total,
       robux: Number(total || 0),
+      rate: PRICE_PER_ROBUX,
+      price: calcGiftPrice(total),
       method: 'Gift GP Ingame',
       status: 'request',
       time: Date.now(),
@@ -384,6 +423,7 @@
   });
 
   updatePreview();
+  loadGiftRate();
 </script>
 </body>
 </html>

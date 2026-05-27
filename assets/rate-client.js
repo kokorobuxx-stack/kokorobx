@@ -3,6 +3,7 @@
     gamepass: 120,
     username: 140,
     vilog: 160,
+    giftgp: 140,
   };
 
   const CACHE_KEY = 'kokorbx_rate_settings_v1';
@@ -22,6 +23,7 @@
         gamepass: normalizeRate(input.gamepass, DEFAULT_RATES.gamepass),
         username: normalizeRate(input.username, DEFAULT_RATES.username),
         vilog: normalizeRate(input.vilog, DEFAULT_RATES.vilog),
+        giftgp: normalizeRate(input.giftgp, DEFAULT_RATES.giftgp),
       },
       source: raw && raw.source ? raw.source : 'default',
       updatedAt: raw && raw.updatedAt ? raw.updatedAt : null,

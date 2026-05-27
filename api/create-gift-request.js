@@ -1,5 +1,6 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { supabaseFetch } = require('./_lib/supabase');
+const { DEFAULT_RATES, loadRateSettings, normalizeRate } = require('./_lib/rates');
 
 module.exports = async function handler(req, res) {
   setCors(req, res);
@@ -17,10 +18,19 @@ module.exports = async function handler(req, res) {
     const game = String(body.game || '').trim();
     const gamepass = String(body.gamepass || '').trim();
     const totalRobux = Number(String(body.totalRobux || body.robux || '0').replace(/[^\d]/g, ''));
+    let rate = normalizeRate(body.rate, DEFAULT_RATES.giftgp);
 
     if (!username || !game || !gamepass || !totalRobux) {
       return res.status(400).json({ error: 'Data request Gift GP belum lengkap' });
     }
+
+    try {
+      const settings = await loadRateSettings();
+      rate = normalizeRate(settings.rates && settings.rates.giftgp, DEFAULT_RATES.giftgp);
+    } catch (err) {
+      rate = normalizeRate(body.rate, DEFAULT_RATES.giftgp);
+    }
+    const price = totalRobux * rate;
 
     const detail = [
       'Format Ingame Gifting',
@@ -28,6 +38,7 @@ module.exports = async function handler(req, res) {
       `Nama game: ${game}`,
       `Nama gamepass: ${gamepass}`,
       `Total robux: ${totalRobux.toLocaleString('id-ID')}`,
+      `Total bayar: Rp ${price.toLocaleString('id-ID')}`,
       'Note: Pastikan format yang kamu isi sudah sesuai!',
     ].join(' | ');
 
@@ -38,7 +49,7 @@ module.exports = async function handler(req, res) {
         username,
         gp_id: detail,
         robux: totalRobux,
-        price: 0,
+        price,
         method: 'Gift GP Ingame',
         status: 'pending',
         email: contact,
