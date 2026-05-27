@@ -19,6 +19,10 @@ function formatRobux(value) {
   return Number(value || 0).toLocaleString('id-ID') + ' R$';
 }
 
+function isValidEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+}
+
 async function sendOrderEmail(req, res) {
   const cfg = getEmailConfig();
   if (!cfg.serviceId || !cfg.templateId || !cfg.publicKey) {
@@ -29,8 +33,14 @@ async function sendOrderEmail(req, res) {
   }
 
   const { toEmail, order } = readJsonBody(req);
-  const email = String(toEmail || '').trim();
+  const email = String(toEmail || '').trim().toLowerCase();
   if (!email) return res.status(400).json({ error: 'Email customer tidak ada di data order' });
+  if (!isValidEmail(email)) {
+    return res.status(400).json({
+      code: 'EMAIL_CUSTOMER_INVALID',
+      error: 'Email customer tidak valid: ' + email,
+    });
+  }
   if (!order || !order.id) return res.status(400).json({ error: 'Data order tidak valid' });
 
   const payload = {
@@ -39,6 +49,8 @@ async function sendOrderEmail(req, res) {
     user_id: cfg.publicKey,
     template_params: {
       to_email: email,
+      email,
+      reply_to: email,
       to_name: order.username || 'Customer',
       order_id: order.id,
       robux: formatRobux(order.robux),

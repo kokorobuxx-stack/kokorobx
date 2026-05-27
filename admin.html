@@ -1368,6 +1368,15 @@
     };
   }
 
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim());
+  }
+
+  function getOrderEmail(order) {
+    const email = String((order && order.email) || '').trim().toLowerCase();
+    return isValidEmail(email) ? email : '';
+  }
+
   async function getEmailJSBackendConfig() {
     try {
       const cfg = await sbFetch('/api/admin-orders?action=email-config');
@@ -1384,8 +1393,9 @@
 
   // ── KIRIM EMAIL VIA EMAILJS ───────────────────────────────────
   async function kirimEmailJS(toEmail, order) {
-    if (!toEmail) {
-      return { ok: false, msg: 'Email customer tidak ada di data order.' };
+    toEmail = String(toEmail || '').trim().toLowerCase();
+    if (!toEmail || !isValidEmail(toEmail)) {
+      return { ok: false, msg: 'Email customer tidak valid atau belum ada di data order.' };
     }
 
     let backendError = '';
@@ -1427,6 +1437,8 @@
       }
       const params = {
         to_email:    toEmail,
+        email:       toEmail,
+        reply_to:    toEmail,
         to_name:     order.username,
         order_id:    order.id,
         robux:       order.robux.toLocaleString('id') + ' R$',
@@ -1468,7 +1480,7 @@
       showToast((supaOk ? '✅' : '✅⚠️') + ' Robux ' + robuxStr + ' R$ berhasil dikirim ke ' + o.username + (supaOk ? '' : ' (Supabase gagal update)') + '!', 'success');
 
       // Kirim Email via EmailJS
-      const toEmail = o.email || o.whatsapp || '';
+      const toEmail = getOrderEmail(o);
       showToast('📧 Mengirim email ke customer...', 'success');
 
       const result = await kirimEmailJS(toEmail, o);
@@ -1669,7 +1681,7 @@
       <div class="detail-row"><span class="key">Status</span><span class="val"><span class="status-badge ${o.status}">${statusLabel(o.status)}</span></span></div>
       <div class="detail-row"><span class="key">Waktu Order</span><span class="val">${new Date(o.time).toLocaleString('id-ID')}</span></div>
       ${o.sentAt ? `<div class="detail-row"><span class="key">Robux Dikirim</span><span class="val" style="color:var(--green)">${new Date(o.sentAt).toLocaleString('id-ID')}</span></div>` : ''}
-      ${(o.email || o.whatsapp) ? `<div class="detail-row"><span class="key">Email Customer</span><span class="val">${o.email || o.whatsapp}</span></div>` : '<div class="detail-row"><span class="key">Email Customer</span><span class="val" style="color:var(--muted)">— Tidak ada di data order</span></div>'}
+      ${getOrderEmail(o) ? `<div class="detail-row"><span class="key">Email Customer</span><span class="val">${getOrderEmail(o)}</span></div>` : '<div class="detail-row"><span class="key">Email Customer</span><span class="val" style="color:var(--muted)">— Email tidak valid / tidak ada</span></div>'}
       ${o.emailSent ? `<div class="detail-row"><span class="key">Email Notif</span><span class="val"><span class="email-sending-badge">&#128231; Terkirim ${new Date(o.emailSentAt).toLocaleTimeString('id-ID')}</span></span></div>` : ''}
       ${o.emailSentFailed ? `<div class="detail-row"><span class="key">Email Notif</span><span class="val"><span class="email-failed-badge">&#10060; Gagal: ${o.emailSentFailed}</span></span></div>` : ''}
       ${proofHTML}
