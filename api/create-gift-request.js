@@ -16,17 +16,19 @@ module.exports = async function handler(req, res) {
     const contact = String(body.contact || '').trim();
     const game = String(body.game || '').trim();
     const gamepass = String(body.gamepass || '').trim();
+    const totalRobux = Number(String(body.totalRobux || body.robux || '0').replace(/[^\d]/g, ''));
 
-    if (!username || !contact || !game || !gamepass) {
+    if (!username || !game || !gamepass || !totalRobux) {
       return res.status(400).json({ error: 'Data request Gift GP belum lengkap' });
     }
 
     const detail = [
-      `Game: ${game}`,
-      `Gamepass: ${gamepass}`,
-      `Link: ${body.link || '-'}`,
-      `Budget: ${body.budget || '-'}`,
-      `Catatan: ${body.note || '-'}`,
+      'Format Ingame Gifting',
+      `Username: ${username}`,
+      `Nama game: ${game}`,
+      `Nama gamepass: ${gamepass}`,
+      `Total robux: ${totalRobux.toLocaleString('id-ID')}`,
+      'Note: Pastikan format yang kamu isi sudah sesuai!',
     ].join(' | ');
 
     await supabaseFetch('/rest/v1/orders', {
@@ -35,9 +37,9 @@ module.exports = async function handler(req, res) {
         id: orderId,
         username,
         gp_id: detail,
-        robux: 0,
+        robux: totalRobux,
         price: 0,
-        method: 'Gift GP',
+        method: 'Gift GP Ingame',
         status: 'pending',
         email: contact,
         has_proof: false,

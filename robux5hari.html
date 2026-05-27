@@ -386,6 +386,20 @@
     transform: none;
     box-shadow: none;
   }
+  .btn-delete-order {
+    width: 100%;
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid rgba(252,92,125,.35);
+    border-radius: 9px;
+    padding: 10px;
+    color: #fc5c7d;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .btn-delete-order:hover { background: rgba(252,92,125,.12); }
   .btn-update-bukti {
     display: flex;
     align-items: center;
@@ -1834,6 +1848,10 @@
             </div>
             <div class="order-bukti-section" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">
               ${buktiSection}
+              ${normStatus === 'failed' ? `
+              <button class="btn-delete-order" onclick="event.stopPropagation();deleteRejectedOrder('${o.id}')">
+                🗑 Hapus Order Ditolak
+              </button>` : ''}
               ${!isFinished && o.status !== 'bukti_masuk' && !sudahKirim ? `
               <button onclick="event.stopPropagation();cancelOrder('${o.id}')" style="width:100%;margin-top:8px;background:transparent;border:1px solid rgba(252,92,125,.35);border-radius:9px;padding:10px;color:#fc5c7d;font-size:0.75rem;font-weight:700;cursor:pointer;transition:all .2s;" onmouseover="this.style.background='rgba(252,92,125,.12)'" onmouseout="this.style.background='transparent'">
                 ✕ Batalkan Order
@@ -1865,6 +1883,31 @@
 
     renderMyOrders();
     showStatusToast('Order ' + oid + ' berhasil dibatalkan.', 'error');
+  }
+
+  function removeOrderLocalOnly(oid) {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key === 'rbx_orders' || (key && key.startsWith('rbx_orders_u_'))) keys.push(key);
+    }
+    keys.forEach(key => {
+      try {
+        const orders = JSON.parse(localStorage.getItem(key) || '[]');
+        localStorage.setItem(key, JSON.stringify(orders.filter(o => o.id !== oid)));
+      } catch(e) {}
+    });
+    try {
+      localStorage.removeItem('rbx_proof_' + oid);
+      delete _proofMemoryCache[oid];
+    } catch(e) {}
+  }
+
+  function deleteRejectedOrder(oid) {
+    if (!confirm('Hapus order ditolak ' + oid + ' dari Pesanan Saya?')) return;
+    removeOrderLocalOnly(oid);
+    renderMyOrders();
+    showStatusToast('Order ' + oid + ' dihapus dari Pesanan Saya.', 'success');
   }
 
   function toggleOrderCard(oid) {
