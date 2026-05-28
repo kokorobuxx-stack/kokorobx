@@ -5,7 +5,8 @@ const SETTINGS_USERNAME = '__kokorbx_settings__';
 const DEFAULT_RATES = {
   gamepass: 120,
   username: 140,
-  vilog: 160,
+  vilogA: 160,
+  vilogB: 160,
   giftgp: 140,
 };
 
@@ -20,15 +21,27 @@ const RATE_ROWS = {
     method: 'rate:username',
     label: 'Via Username',
   },
-  vilog: {
-    id: '__kokorbx_rate_vilog',
-    method: 'rate:vilog',
-    label: 'Sistem Vilog',
+  vilogA: {
+    id: '__kokorbx_rate_vilog_a',
+    method: 'rate:vilogA',
+    label: 'Sistem Vilog Paket A',
+  },
+  vilogB: {
+    id: '__kokorbx_rate_vilog_b',
+    method: 'rate:vilogB',
+    label: 'Sistem Vilog Paket B',
   },
   giftgp: {
     id: '__kokorbx_rate_giftgp',
     method: 'rate:giftgp',
     label: 'Gift GP Ingame',
+  },
+};
+
+const LEGACY_RATE_ROWS = {
+  vilog: {
+    id: '__kokorbx_rate_vilog',
+    method: 'rate:vilog',
   },
 };
 
@@ -41,6 +54,8 @@ function normalizeRate(value, fallback) {
 function keyFromRow(row) {
   const byId = Object.keys(RATE_ROWS).find(key => RATE_ROWS[key].id === row.id);
   if (byId) return byId;
+  const byLegacyId = Object.keys(LEGACY_RATE_ROWS).find(key => LEGACY_RATE_ROWS[key].id === row.id);
+  if (byLegacyId) return byLegacyId;
   const method = String(row.method || '');
   if (method.startsWith('rate:')) return method.slice(5);
   return '';
@@ -48,18 +63,34 @@ function keyFromRow(row) {
 
 function rowsToRateSettings(rows) {
   const rates = { ...DEFAULT_RATES };
+  const found = {};
+  let legacyVilogRate = null;
   let source = 'default';
   let updatedAt = null;
 
   (rows || []).forEach(row => {
     const key = keyFromRow(row);
+    if (key === 'vilog') {
+      legacyVilogRate = normalizeRate(row.price, DEFAULT_RATES.vilogA);
+      source = 'server';
+      if (row.created_at && (!updatedAt || new Date(row.created_at) > new Date(updatedAt))) {
+        updatedAt = row.created_at;
+      }
+      return;
+    }
     if (!Object.prototype.hasOwnProperty.call(DEFAULT_RATES, key)) return;
     rates[key] = normalizeRate(row.price, DEFAULT_RATES[key]);
+    found[key] = true;
     source = 'server';
     if (row.created_at && (!updatedAt || new Date(row.created_at) > new Date(updatedAt))) {
       updatedAt = row.created_at;
     }
   });
+
+  if (legacyVilogRate) {
+    if (!found.vilogA) rates.vilogA = legacyVilogRate;
+    if (!found.vilogB) rates.vilogB = legacyVilogRate;
+  }
 
   return { rates, defaults: DEFAULT_RATES, source, updatedAt };
 }

@@ -891,8 +891,9 @@
 <script src="assets/rate-client.js"></script>
 <script>
   let _rbx = 0, _price = 0, _pkg = '', _pay = '', _gpId = '', _gpVerified = false;
-  let PRICE_PER_ROBUX = 160;
-  const RATE_KEY = 'vilog';
+  const VILOG_PACKAGE_A_MAX = 400;
+  let VILOG_RATE_A = 160;
+  let VILOG_RATE_B = 160;
 
   // ============================================================
   // GANTI INI SESUAI DATA KAMU
@@ -1038,11 +1039,16 @@
   }
   // ── END SUPABASE ─────────────────────────────────────────────
 
+  function getVilogRate(rbx) {
+    return Number(rbx || 0) <= VILOG_PACKAGE_A_MAX ? VILOG_RATE_A : VILOG_RATE_B;
+  }
+
   function calcRobuxPrice(rbx) {
+    const rate = getVilogRate(rbx);
     if (window.KokoRates && KokoRates.calcPrice) {
-      return KokoRates.calcPrice(rbx, PRICE_PER_ROBUX);
+      return KokoRates.calcPrice(rbx, rate);
     }
-    return Math.round(Number(rbx || 0) * PRICE_PER_ROBUX);
+    return Math.round(Number(rbx || 0) * rate);
   }
 
   function formatRatePrice(value) {
@@ -1076,8 +1082,13 @@
     try {
       if (window.KokoRates && KokoRates.load) {
         const settings = await KokoRates.load();
-        const rate = Number(settings.rates && settings.rates[RATE_KEY]);
-        if (Number.isFinite(rate) && rate > 0) PRICE_PER_ROBUX = Math.round(rate);
+        const rates = settings.rates || {};
+        const legacyRate = Number(rates.vilog);
+        const fallbackRate = Number.isFinite(legacyRate) && legacyRate > 0 ? legacyRate : VILOG_RATE_A;
+        const rateA = Number(rates.vilogA);
+        const rateB = Number(rates.vilogB);
+        VILOG_RATE_A = Number.isFinite(rateA) && rateA > 0 ? Math.round(rateA) : Math.round(fallbackRate);
+        VILOG_RATE_B = Number.isFinite(rateB) && rateB > 0 ? Math.round(rateB) : Math.round(fallbackRate);
       }
     } catch(e) {
       console.warn('[KokoRBX] gagal load rate:', e);

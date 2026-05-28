@@ -221,7 +221,7 @@
   .send-confirm-box small { color: var(--muted); font-size: 10px; }
 
   /* RATE SETTINGS */
-  .rate-settings-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .rate-settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-bottom: 14px; }
   .rate-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
   .rate-card label { display: block; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
   .rate-input-wrap { display: flex; align-items: center; gap: 8px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; }
@@ -233,7 +233,7 @@
   .rate-status { display: none; border-radius: 8px; padding: 10px 12px; font-size: 12px; margin-bottom: 14px; }
   .rate-status.ok { display: block; border: 1px solid rgba(0,229,160,.3); color: var(--green); background: rgba(0,229,160,.08); }
   .rate-status.err { display: block; border: 1px solid rgba(255,77,109,.35); color: var(--red); background: rgba(255,77,109,.08); }
-  .rate-preview-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .rate-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
   .rate-preview-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
   .rate-preview-card h3 { font-size: 12px; margin-bottom: 8px; color: var(--text); }
   .rate-preview-card p { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
@@ -638,9 +638,14 @@
         <small>Dipakai halaman Robux Username.</small>
       </div>
       <div class="rate-card">
-        <label for="rate-vilog">Sistem Vilog</label>
-        <div class="rate-input-wrap"><span>Rp</span><input id="rate-vilog" type="number" min="1" step="1" inputmode="numeric"></div>
-        <small>Dipakai halaman Robux Vilog.</small>
+        <label for="rate-vilog-a">Sistem Vilog A</label>
+        <div class="rate-input-wrap"><span>Rp</span><input id="rate-vilog-a" type="number" min="1" step="1" inputmode="numeric"></div>
+        <small>Dipakai paket 80, 160, 240, 320, dan 400 R$.</small>
+      </div>
+      <div class="rate-card">
+        <label for="rate-vilog-b">Sistem Vilog B</label>
+        <div class="rate-input-wrap"><span>Rp</span><input id="rate-vilog-b" type="number" min="1" step="1" inputmode="numeric"></div>
+        <small>Dipakai paket 500 R$ ke atas.</small>
       </div>
       <div class="rate-card">
         <label for="rate-giftgp">Gift GP Ingame</label>
@@ -710,7 +715,7 @@
     ? 'https://chisatobobaaaa.vercel.app'
     : '';
   const ADMIN_TOKEN_KEY = 'kokorbx_admin_token';
-  const DEFAULT_RATE_SETTINGS = { gamepass: 120, username: 140, vilog: 160, giftgp: 140 };
+  const DEFAULT_RATE_SETTINGS = { gamepass: 120, username: 140, vilogA: 160, vilogB: 160, giftgp: 140 };
   let rateSettings = { ...DEFAULT_RATE_SETTINGS };
 
   function getAdminToken() {
@@ -751,6 +756,18 @@
     return normalizeRate(el ? el.value : '', fallback);
   }
 
+  function mergeRateSettings(rates) {
+    const input = rates || {};
+    const legacyVilog = normalizeRate(input.vilog, DEFAULT_RATE_SETTINGS.vilogA);
+    return {
+      gamepass: normalizeRate(input.gamepass, DEFAULT_RATE_SETTINGS.gamepass),
+      username: normalizeRate(input.username, DEFAULT_RATE_SETTINGS.username),
+      vilogA: normalizeRate(input.vilogA, legacyVilog),
+      vilogB: normalizeRate(input.vilogB, legacyVilog),
+      giftgp: normalizeRate(input.giftgp, DEFAULT_RATE_SETTINGS.giftgp),
+    };
+  }
+
   function rupiah(value) {
     return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
   }
@@ -766,7 +783,8 @@
     const pairs = {
       'rate-gamepass': rateSettings.gamepass,
       'rate-username': rateSettings.username,
-      'rate-vilog': rateSettings.vilog,
+      'rate-vilog-a': rateSettings.vilogA,
+      'rate-vilog-b': rateSettings.vilogB,
       'rate-giftgp': rateSettings.giftgp,
     };
     Object.keys(pairs).forEach(id => {
@@ -780,7 +798,8 @@
     return {
       gamepass: rateInputValue('rate-gamepass', DEFAULT_RATE_SETTINGS.gamepass),
       username: rateInputValue('rate-username', DEFAULT_RATE_SETTINGS.username),
-      vilog: rateInputValue('rate-vilog', DEFAULT_RATE_SETTINGS.vilog),
+      vilogA: rateInputValue('rate-vilog-a', DEFAULT_RATE_SETTINGS.vilogA),
+      vilogB: rateInputValue('rate-vilog-b', DEFAULT_RATE_SETTINGS.vilogB),
       giftgp: rateInputValue('rate-giftgp', DEFAULT_RATE_SETTINGS.giftgp),
     };
   }
@@ -792,7 +811,8 @@
     const samples = [
       { key: 'gamepass', title: 'Sistem Gamepass', list: [100, 500, 1000] },
       { key: 'username', title: 'Via Username', list: [500, 1000, 5000] },
-      { key: 'vilog', title: 'Sistem Vilog', list: [500, 1000, 10000] },
+      { key: 'vilogA', title: 'Vilog Paket A', list: [80, 160, 240, 320, 400] },
+      { key: 'vilogB', title: 'Vilog Paket B', list: [500, 1000, 2000, 5000, 10000] },
       { key: 'giftgp', title: 'Gift GP Ingame', list: [450, 1000, 5000] },
     ];
     preview.innerHTML = samples.map(item => `
@@ -806,7 +826,7 @@
   async function loadRateSettings(showMessage) {
     try {
       const data = await sbFetch('/api/admin-orders?action=rates');
-      rateSettings = Object.assign({}, DEFAULT_RATE_SETTINGS, data.rates || {});
+      rateSettings = mergeRateSettings(data.rates);
       fillRateInputs();
       if (showMessage) setRateStatus('Rate berhasil dimuat dari server.', 'ok');
     } catch(e) {

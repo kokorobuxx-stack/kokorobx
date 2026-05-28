@@ -2,7 +2,8 @@
   const DEFAULT_RATES = {
     gamepass: 120,
     username: 140,
-    vilog: 160,
+    vilogA: 160,
+    vilogB: 160,
     giftgp: 140,
   };
 
@@ -18,11 +19,13 @@
 
   function normalizeSettings(raw) {
     const input = raw && raw.rates ? raw.rates : raw || {};
+    const legacyVilog = normalizeRate(input.vilog, DEFAULT_RATES.vilogA);
     return {
       rates: {
         gamepass: normalizeRate(input.gamepass, DEFAULT_RATES.gamepass),
         username: normalizeRate(input.username, DEFAULT_RATES.username),
-        vilog: normalizeRate(input.vilog, DEFAULT_RATES.vilog),
+        vilogA: normalizeRate(input.vilogA, legacyVilog),
+        vilogB: normalizeRate(input.vilogB, legacyVilog),
         giftgp: normalizeRate(input.giftgp, DEFAULT_RATES.giftgp),
       },
       source: raw && raw.source ? raw.source : 'default',
