@@ -567,7 +567,7 @@
 
     <header class="main-header">
       <div class="header-inner">
-        <a href="marketplace-preview.html" class="brand" aria-label="KokoRBX">
+        <a href="index.html" class="brand" aria-label="KokoRBX">
           <span class="brand-mark">
             <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <g transform="rotate(-12 10 10)">
@@ -583,7 +583,6 @@
           <input id="order-search" type="search" placeholder="Cari ID, produk, buyer..." autocomplete="off">
         </label>
         <div class="header-actions">
-          <a class="header-btn primary" href="marketplace-preview.html">Marketplace</a>
           <a class="header-btn" href="admin.html">Admin</a>
           <a class="header-btn" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Bantuan WA</a>
         </div>
@@ -604,7 +603,7 @@
 
       <section class="panel-card detail-card" id="detail-card">
         <div class="empty-state">
-          Belum ada transaksi yang dipilih. Buka <a href="marketplace-preview.html#manual">marketplace</a> lalu klik produk manual, atau tekan Demo.
+          Belum ada transaksi yang dipilih. Pilih produk dari <a href="index.html#produk">halaman utama</a>, atau tekan Demo.
         </div>
       </section>
 
@@ -765,7 +764,7 @@
         buyerMessage: urlParams.get('buyerMessage') || 'Halo seller, aku mau order ' + product + '. Tolong cek stok/harga ya.',
         username: urlParams.get('username') || '',
         buyer: urlParams.get('buyer') || urlParams.get('username') || 'Buyer KokoRBX',
-        source: urlParams.get('source') || 'marketplace-preview.html',
+        source: urlParams.get('source') || 'index.html',
       });
       history.replaceState(null, '', 'transaksi.html?order=' + encodeURIComponent(order.id));
       activeId = order.id;
@@ -835,7 +834,7 @@
 
     function renderDetail(order) {
       if (!order) {
-        detailCard.innerHTML = '<div class="empty-state">Belum ada transaksi yang dipilih. Buka <a href="marketplace-preview.html#manual">marketplace</a> lalu klik produk manual, atau tekan Demo.</div>';
+        detailCard.innerHTML = '<div class="empty-state">Belum ada transaksi yang dipilih. Pilih produk dari <a href="index.html#produk">halaman utama</a>, atau tekan Demo.</div>';
         return;
       }
       const timeline = (order.timeline || []).map(step => (

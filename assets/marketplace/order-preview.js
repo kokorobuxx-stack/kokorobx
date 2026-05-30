@@ -2,7 +2,6 @@
   'use strict';
 
   var pages = [
-    { href: 'marketplace-preview.html', label: 'Marketplace' },
     { href: 'robux5hari.html', label: 'Robux 5 Hari' },
     { href: 'robuxvilog.html', label: 'VILOG' },
     { href: 'robuxusername.html', label: 'Username' },
@@ -33,15 +32,7 @@
 
   function improveHeader() {
     var logo = document.querySelector('header .logo, header .brand');
-    if (logo) logo.setAttribute('href', 'marketplace-preview.html');
-
-    var host = document.querySelector('.header-right') || document.querySelector('.header-actions');
-    if (!host || host.querySelector('.koko-market-link')) return;
-    var link = document.createElement('a');
-    link.className = 'koko-market-link';
-    link.href = 'marketplace-preview.html';
-    link.textContent = 'Marketplace';
-    host.insertBefore(link, host.firstChild);
+    if (logo) logo.setAttribute('href', 'index.html');
   }
 
   function injectHeroMedia() {
