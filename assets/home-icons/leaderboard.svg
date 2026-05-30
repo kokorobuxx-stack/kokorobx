@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Leaderboard">
+  <defs>
+    <linearGradient id="bg" x1="24" y1="18" x2="140" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fffdf3"/>
+      <stop offset="1" stop-color="#fff1bf"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="52" y1="34" x2="110" y2="124" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffe989"/>
+      <stop offset=".55" stop-color="#ffbd25"/>
+      <stop offset="1" stop-color="#e99a12"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#f6b431" flood-opacity=".24"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#ffffff" flood-opacity=".75"/>
+    </filter>
+  </defs>
+  <rect x="11" y="10" width="138" height="138" rx="34" fill="url(#bg)" stroke="#ffffff" stroke-width="6"/>
+  <g filter="url(#soft)">
+    <path d="M51 44h58v15c0 24-12 43-29 43S51 83 51 59V44Z" fill="url(#gold)"/>
+    <path d="M54 48h52v11c0 21-10 37-26 37S54 80 54 59V48Z" fill="#ffd35a" opacity=".45"/>
+    <path d="M51 55H35c1 20 13 31 27 34" fill="none" stroke="#efa313" stroke-width="11" stroke-linecap="round"/>
+    <path d="M109 55h16c-1 20-13 31-27 34" fill="none" stroke="#efa313" stroke-width="11" stroke-linecap="round"/>
+    <path d="M73 100h14v17h20v13H53v-13h20v-17Z" fill="url(#gold)"/>
+    <path d="M66 38h28" stroke="#fff7cf" stroke-width="8" stroke-linecap="round" opacity=".85"/>
+  </g>
+</svg>

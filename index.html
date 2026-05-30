@@ -295,14 +295,13 @@
         linear-gradient(180deg, #0f1830 0%, #0b1220 100%);
     }
     .home-hero {
-      max-width: 1120px;
+      max-width: 1144px;
       min-height: 400px;
       margin: 0 auto;
       position: relative;
       overflow: hidden;
       border-radius: 8px;
       border: 1px solid rgba(194,215,255,.55);
-      transform: translateX(24px);
       background:
         linear-gradient(90deg, rgba(250,253,255,.98) 0%, rgba(248,252,255,.94) 48%, rgba(226,239,255,.82) 100%),
         #f6fbff;
@@ -390,8 +389,8 @@
       margin-bottom: 14px;
     }
     .home-mini-icon {
-      width: 27px;
-      height: 27px;
+      width: 30px;
+      height: 30px;
       display: grid;
       place-items: center;
       overflow: hidden;
@@ -511,8 +510,8 @@
       display: block;
     }
     .home-stat-icon {
-      width: 46px;
-      height: 46px;
+      width: 50px;
+      height: 50px;
       display: grid;
       place-items: center;
       overflow: hidden;
@@ -908,7 +907,6 @@
       .header-actions::-webkit-scrollbar { display: none; }
       .suggestions { display: none; }
       .hero-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .home-hero { transform: none; }
       .home-hero-content { width: 100%; padding-right: 32px; }
       .home-hero::after { width: 100%; opacity: .18; }
       .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -920,27 +918,62 @@
       .top-strip-inner { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
       .top-strip-inner::-webkit-scrollbar { display: none; }
       .brand { font-size: 23px; }
-      .search-box { height: 44px; }
-      .nav-inner { gap: 18px; height: 44px; }
+      .header-inner { padding: 12px 10px; gap: 10px; }
+      .header-actions { gap: 8px; }
+      .header-btn { height: 36px; padding: 0 12px; font-size: 12px; }
+      .search-box { height: 42px; grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0 10px; }
+      .search-box input { font-size: 12px; }
+      .search-box > span:first-child,
+      .search-key { display: none; }
+      .nav-inner { gap: 18px; height: 42px; padding: 0 10px; }
       .hero-inner { grid-template-columns: 1fr; padding: 18px; min-height: auto; }
       .promo-card { min-height: 190px; }
       .promo-title { font-size: 24px; }
-      .home-hero-wrap { padding: 14px 12px 20px; }
+      .home-hero-wrap { padding: 8px 10px 12px; }
       .home-hero { width: 100%; min-height: auto; }
-      .home-hero-content { width: 100%; max-width: 100%; min-height: auto; padding: 24px 16px; gap: 16px; }
-      .home-title-row { gap: 10px; }
-      .home-title { font-size: 44px; }
-      .home-line { min-width: 48px; }
-      .home-copy { width: 100%; font-size: 13px; }
-      .home-panels,
-      .home-stats { grid-template-columns: 1fr; }
-      .home-panel { padding: 14px; }
-      .home-stat { grid-template-columns: 48px minmax(0, 1fr); }
-      .home-stat-value { font-size: 20px; }
-      .leader-row { grid-template-columns: 24px 30px minmax(0, 1fr) auto; }
-      .leader-value { font-size: 12px; }
-      .recent-row { grid-template-columns: 30px minmax(0, 1fr) auto; column-gap: 8px; }
-      .recent-time { font-size: 12px; }
+      .home-hero::after { display: none; }
+      .home-hero-content { width: 100%; max-width: 100%; min-height: auto; padding: 14px 12px; gap: 10px; }
+      .home-title-row { gap: 9px; }
+      .home-title { font-size: 32px; }
+      .home-line { min-width: 36px; }
+      .home-spark { font-size: 18px; }
+      .home-copy { width: 100%; font-size: 10px; line-height: 1.35; }
+      .home-panels {
+        display: flex;
+        gap: 9px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        margin: 0 -2px;
+        padding: 0 2px 2px;
+      }
+      .home-panels::-webkit-scrollbar { display: none; }
+      .home-panel {
+        flex: 0 0 min(72vw, 280px);
+        min-height: 150px;
+        padding: 10px;
+        scroll-snap-align: start;
+      }
+      .home-panel-title { font-size: 13px; gap: 7px; }
+      .home-panel-sub { font-size: 10px; margin-bottom: 7px; }
+      .home-mini-icon { width: 23px; height: 23px; }
+      .leader-row,
+      .recent-row { min-height: 24px; gap: 7px; font-size: 11px; }
+      .leader-row { grid-template-columns: 20px 24px minmax(0, 1fr) auto; }
+      .leader-rank { width: 19px; height: 19px; font-size: 10px; }
+      .home-avatar { width: 24px; height: 24px; font-size: 10px; }
+      .leader-value { font-size: 10px; }
+      .recent-row { grid-template-columns: 24px minmax(0, 1fr) auto; column-gap: 7px; }
+      .recent-time { font-size: 10px; max-width: 54px; overflow: hidden; text-overflow: ellipsis; }
+      .recent-meta { font-size: 9px; }
+      #home-recent-list .recent-row:nth-child(n+4) { display: none; }
+      .home-panel-link { height: 22px; margin-top: 5px; font-size: 10px; }
+      .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+      .home-stat { min-height: 56px; grid-template-columns: 30px minmax(0, 1fr); gap: 6px; padding: 6px; }
+      .home-stat-icon { width: 30px; height: 30px; }
+      .home-stat-label { font-size: 9px; }
+      .home-stat-value { font-size: 13px; margin-top: 1px; }
+      .home-stat-note { font-size: 8px; margin-top: 1px; }
       .category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
       .category-item { min-height: 76px; }
       .cat-icon { width: 42px; height: 42px; font-size: 12px; border-radius: 8px; }
@@ -948,6 +981,11 @@
       .section-head { align-items: flex-start; flex-direction: column; }
       .product-grid { grid-template-columns: 1fr; }
       .product-card { min-height: auto; }
+      .product-media { height: 92px; padding: 10px; }
+      .product-media img { max-height: 68px; }
+      .product-body { padding: 10px; gap: 6px; }
+      .product-title { font-size: 16px; }
+      .product-desc { font-size: 11px; }
       .status-form { grid-template-columns: 1fr; }
       .info-list { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
@@ -1023,7 +1061,7 @@
 
           <div class="home-panels">
             <article class="home-panel">
-              <div class="home-panel-title"><span class="home-mini-icon"><img class="home-icon-img" src="assets/home-icons/leaderboard.png" alt=""></span>Top Leaderboard</div>
+              <div class="home-panel-title"><span class="home-mini-icon"><img class="home-icon-img" src="assets/home-icons/leaderboard.svg" alt=""></span>Top Leaderboard</div>
               <div class="home-panel-sub">Rangking pembelian Robux</div>
               <div id="home-leaderboard-list">
                 <div class="leader-row">
@@ -1049,7 +1087,7 @@
             </article>
 
             <article class="home-panel">
-              <div class="home-panel-title"><span class="home-mini-icon"><img class="home-icon-img" src="assets/home-icons/recent.png" alt=""></span>Robux Baru Saja Dibeli</div>
+              <div class="home-panel-title"><span class="home-mini-icon"><img class="home-icon-img" src="assets/home-icons/recent.svg" alt=""></span>Robux Baru Saja Dibeli</div>
               <div class="home-panel-sub">Transaksi terbaru pelanggan</div>
               <div id="home-recent-list">
                 <div class="recent-row">
@@ -1079,19 +1117,19 @@
 
           <div class="home-stats">
             <div class="home-stat">
-              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/stock.png" alt=""></span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/stock.svg" alt=""></span>
               <span><span class="home-stat-label">Stock Robux</span><span class="home-stat-value">1.250.000</span><span class="home-stat-note">Robux tersedia</span></span>
             </div>
             <div class="home-stat">
-              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/ready.png" alt=""></span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/ready.svg" alt=""></span>
               <span><span class="home-stat-label">Status Ready</span><span class="home-stat-value">100%</span><span class="home-stat-note">Layanan aktif</span></span>
             </div>
             <div class="home-stat">
-              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/sold.png" alt=""></span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/sold.svg" alt=""></span>
               <span><span class="home-stat-label">Robux Terjual</span><span class="home-stat-value" id="home-stat-sold">2.847.650</span><span class="home-stat-note">Total Robux</span></span>
             </div>
             <div class="home-stat">
-              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/orders.png" alt=""></span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/orders.svg" alt=""></span>
               <span><span class="home-stat-label">Total Orderan</span><span class="home-stat-value" id="home-stat-orders">15.632</span><span class="home-stat-note">Pesanan selesai</span></span>
             </div>
           </div>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Stock Robux">
+  <defs>
+    <linearGradient id="bg" x1="20" y1="14" x2="138" y2="146" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbfdff"/>
+      <stop offset="1" stop-color="#dceaff"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="44" y1="30" x2="116" y2="130" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6aa8ff"/>
+      <stop offset="1" stop-color="#2e6df4"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="13" stdDeviation="11" flood-color="#4f83ff" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <rect x="11" y="10" width="138" height="138" rx="34" fill="url(#bg)" stroke="#ffffff" stroke-width="6"/>
+  <g filter="url(#soft)">
+    <path d="M80 34 119 57v46l-39 23-39-23V57l39-23Z" fill="url(#blue)"/>
+    <path d="M80 54 102 67v26l-22 13-22-13V67l22-13Z" fill="#f7fbff"/>
+    <circle cx="80" cy="80" r="11" fill="url(#blue)"/>
+  </g>
+</svg>

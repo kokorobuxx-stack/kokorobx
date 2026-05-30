@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Robux Terjual">
+  <defs>
+    <linearGradient id="bg" x1="20" y1="16" x2="140" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fffbff"/>
+      <stop offset="1" stop-color="#eadfff"/>
+    </linearGradient>
+    <linearGradient id="purple" x1="42" y1="34" x2="120" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#c2a2ff"/>
+      <stop offset="1" stop-color="#7356f2"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="13" stdDeviation="11" flood-color="#8f6cf6" flood-opacity=".24"/>
+    </filter>
+  </defs>
+  <rect x="11" y="10" width="138" height="138" rx="34" fill="url(#bg)" stroke="#ffffff" stroke-width="6"/>
+  <g filter="url(#soft)" fill="url(#purple)">
+    <path d="M47 49h12l6 48h47l10-34H68l-2-15H47Z"/>
+    <path d="M70 113a11 11 0 1 0 0 22 11 11 0 0 0 0-22Zm37 0a11 11 0 1 0 0 22 11 11 0 0 0 0-22Z"/>
+    <path d="M71 76h34" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity=".75"/>
+  </g>
+</svg>

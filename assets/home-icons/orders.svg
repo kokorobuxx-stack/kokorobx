@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Total Orderan">
+  <defs>
+    <linearGradient id="bg" x1="20" y1="16" x2="140" y2="148" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fbfdff"/>
+      <stop offset="1" stop-color="#dfeaff"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="48" y1="30" x2="112" y2="128" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6aa4ff"/>
+      <stop offset="1" stop-color="#2f6df0"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="13" stdDeviation="11" flood-color="#4d80f5" flood-opacity=".23"/>
+    </filter>
+  </defs>
+  <rect x="11" y="10" width="138" height="138" rx="34" fill="url(#bg)" stroke="#ffffff" stroke-width="6"/>
+  <g filter="url(#soft)">
+    <path d="M55 43h50c6 0 11 5 11 11v67H44V54c0-6 5-11 11-11Z" fill="url(#blue)"/>
+    <path d="M69 38h22c5 0 9 4 9 9v7H60v-7c0-5 4-9 9-9Z" fill="#7fb0ff"/>
+    <path d="M63 74h34M63 91h34M63 108h27" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+  </g>
+</svg>
