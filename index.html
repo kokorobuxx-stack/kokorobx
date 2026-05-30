@@ -287,6 +287,260 @@
       background: rgba(255,255,255,.12);
     }
 
+    .home-hero-wrap {
+      padding: 22px 18px 28px;
+      background:
+        radial-gradient(circle at 12% 16%, rgba(159,216,255,.24), transparent 24%),
+        radial-gradient(circle at 92% 12%, rgba(167,139,250,.2), transparent 28%),
+        linear-gradient(180deg, #0f1830 0%, #0b1220 100%);
+    }
+    .home-hero {
+      max-width: 1180px;
+      min-height: 420px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(194,215,255,.55);
+      background:
+        linear-gradient(90deg, rgba(250,253,255,.98) 0%, rgba(248,252,255,.94) 48%, rgba(226,239,255,.82) 100%),
+        #f6fbff;
+      color: #253552;
+      box-shadow: 0 24px 60px rgba(4,12,27,.34);
+    }
+    .home-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 48%;
+      background:
+        linear-gradient(90deg, rgba(247,252,255,.92), rgba(247,252,255,.08) 34%, rgba(247,252,255,.02)),
+        url("assets/marketplace/kokorbx-home-visual.jpeg") center right / cover no-repeat;
+      opacity: .95;
+      z-index: 0;
+    }
+    .home-hero-content {
+      width: min(760px, 68%);
+      min-height: 420px;
+      position: relative;
+      z-index: 1;
+      padding: 36px 38px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 22px;
+    }
+    .home-title-row {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .home-title {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(48px, 6vw, 72px);
+      line-height: .9;
+      color: #5e80bd;
+      letter-spacing: 0;
+      font-weight: 700;
+    }
+    .home-line {
+      flex: 1;
+      height: 1px;
+      min-width: 110px;
+      background: linear-gradient(90deg, rgba(110,139,190,.45), transparent);
+    }
+    .home-spark {
+      color: #88a8de;
+      font-size: 26px;
+      font-weight: 900;
+    }
+    .home-copy {
+      width: min(440px, 100%);
+      color: #7788a6;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .home-panels {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 14px;
+    }
+    .home-panel {
+      min-height: 178px;
+      border: 1px solid rgba(197,213,240,.78);
+      border-radius: 8px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 12px 34px rgba(108,137,188,.14);
+      backdrop-filter: blur(12px);
+      padding: 18px;
+    }
+    .home-panel-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #334567;
+      font-size: 17px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .home-panel-sub {
+      color: #9aa8bd;
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+    .home-mini-icon {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      color: #6f8ed1;
+      background: #edf5ff;
+      border: 1px solid #dbe8ff;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .leader-row,
+    .recent-row {
+      min-height: 30px;
+      display: grid;
+      align-items: center;
+      gap: 10px;
+      color: #53647f;
+      font-size: 13px;
+    }
+    .leader-row {
+      grid-template-columns: 28px 34px minmax(0, 1fr) auto;
+    }
+    .recent-row {
+      grid-template-columns: 34px minmax(0, 1fr) auto;
+    }
+    .leader-rank {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #dfe9f8;
+      color: #6d7f9c;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .leader-row:first-of-type .leader-rank { background: #ffe786; color: #9b6b0d; }
+    .leader-row:nth-of-type(2) .leader-rank { background: #d7e0ee; }
+    .leader-row:nth-of-type(3) .leader-rank { background: #f4bd76; color: #8d4b13; }
+    .home-avatar {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: linear-gradient(135deg, #9fd8ff, #a78bfa);
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 8px 16px rgba(120,153,207,.18);
+    }
+    .leader-name,
+    .recent-name {
+      color: #334567;
+      font-weight: 800;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .leader-value,
+    .recent-time {
+      color: #5e80bd;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+    .recent-meta {
+      display: block;
+      color: #9aa8bd;
+      font-size: 11px;
+      margin-top: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .home-panel-link {
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+      color: #5e80bd;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .home-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .home-stat {
+      min-height: 86px;
+      display: grid;
+      grid-template-columns: 40px minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(197,213,240,.72);
+      border-radius: 8px;
+      background: rgba(255,255,255,.74);
+      box-shadow: 0 12px 30px rgba(108,137,188,.13);
+      padding: 10px;
+    }
+    .home-stat > span:last-child {
+      min-width: 0;
+      display: block;
+    }
+    .home-stat-icon {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: #5c79d4;
+      background: linear-gradient(135deg, #eef6ff, #e8edff);
+      box-shadow: 0 8px 18px rgba(93,124,201,.16);
+      font-size: 16px;
+      font-weight: 900;
+    }
+    .home-stat:nth-child(2) .home-stat-icon {
+      color: #2fa772;
+      background: linear-gradient(135deg, #e9fff4, #ddf7ea);
+    }
+    .home-stat:nth-child(3) .home-stat-icon {
+      color: #8c70db;
+      background: linear-gradient(135deg, #f3edff, #eee8ff);
+    }
+    .home-stat:nth-child(4) .home-stat-icon {
+      color: #4476c9;
+      background: linear-gradient(135deg, #ecf6ff, #e5f0ff);
+    }
+    .home-stat-label {
+      display: block;
+      color: #8090a8;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .home-stat-value {
+      display: block;
+      color: #253552;
+      font-size: 19px;
+      line-height: 1.1;
+      font-weight: 900;
+      margin-top: 4px;
+      white-space: nowrap;
+    }
+    .home-stat-note {
+      display: block;
+      color: #9aa8bd;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
     .main {
       max-width: 1180px;
       margin: 0 auto;
@@ -656,6 +910,9 @@
       .header-actions::-webkit-scrollbar { display: none; }
       .suggestions { display: none; }
       .hero-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .home-hero-content { width: 100%; padding-right: 32px; }
+      .home-hero::after { width: 100%; opacity: .18; }
+      .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .category-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
       .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .split-layout { grid-template-columns: 1fr; }
@@ -669,6 +926,22 @@
       .hero-inner { grid-template-columns: 1fr; padding: 18px; min-height: auto; }
       .promo-card { min-height: 190px; }
       .promo-title { font-size: 24px; }
+      .home-hero-wrap { padding: 14px 12px 20px; }
+      .home-hero { width: 100%; min-height: auto; }
+      .home-hero-content { width: 100%; max-width: 100%; min-height: auto; padding: 24px 16px; gap: 16px; }
+      .home-title-row { gap: 10px; }
+      .home-title { font-size: 44px; }
+      .home-line { min-width: 48px; }
+      .home-copy { width: 100%; font-size: 13px; }
+      .home-panels,
+      .home-stats { grid-template-columns: 1fr; }
+      .home-panel { padding: 14px; }
+      .home-stat { grid-template-columns: 48px minmax(0, 1fr); }
+      .home-stat-value { font-size: 20px; }
+      .leader-row { grid-template-columns: 24px 30px minmax(0, 1fr) auto; }
+      .leader-value { font-size: 12px; }
+      .recent-row { grid-template-columns: 30px minmax(0, 1fr) auto; column-gap: 8px; }
+      .recent-time { font-size: 12px; }
       .category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
       .category-item { min-height: 76px; }
       .cat-icon { width: 42px; height: 42px; font-size: 12px; border-radius: 8px; }
@@ -737,31 +1010,85 @@
   </nav>
 
   <section class="hero-band">
-    <div class="hero-inner">
-      <a class="promo-card" href="robuxvilog.html" style="--promo-bg:linear-gradient(135deg,#2b195f,#0f0a23);">
-        <span class="promo-badge">Hot Roblox</span>
-        <div class="promo-title">Robux Via Login</div>
-        <div class="promo-sub">Rate VILOG A/B bisa kamu atur langsung dari admin panel.</div>
-        <span class="promo-cta">Top Up</span>
-      </a>
-      <a class="promo-card" href="akunroblox.html" style="--promo-bg:linear-gradient(135deg,#7c5cfc,#fc5c7d);">
-        <span class="promo-badge">Akun</span>
-        <div class="promo-title">Akun Roblox</div>
-        <div class="promo-sub">Katalog akun ready dan custom request lewat admin.</div>
-        <span class="promo-cta">Lihat</span>
-      </a>
-      <a class="promo-card" href="giftgp.html" style="--promo-bg:linear-gradient(135deg,#00a884,#151033);">
-        <span class="promo-badge">Gift GP</span>
-        <div class="promo-title">Gift Gamepass</div>
-        <div class="promo-sub">Order gift gamepass ingame dengan total Robux custom.</div>
-        <span class="promo-cta">Order</span>
-      </a>
-      <a class="promo-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20custom%20request%20Roblox." target="_blank" rel="noopener" style="--promo-bg:linear-gradient(135deg,#fc5c7d,#26113f);">
-        <span class="promo-badge">Custom</span>
-        <div class="promo-title">Request Item</div>
-        <div class="promo-sub">Item game, jasa farming, joki, dan kebutuhan Roblox lain.</div>
-        <span class="promo-cta">Chat</span>
-      </a>
+    <div class="home-hero-wrap">
+      <section class="home-hero" aria-label="Ringkasan toko KokoRBX">
+        <div class="home-hero-content">
+          <div>
+            <div class="home-title-row">
+              <h1 class="home-title">HOME</h1>
+              <span class="home-line"></span>
+              <span class="home-spark">*</span>
+            </div>
+            <p class="home-copy">Selamat datang di toko Robux terpercaya. Cepat, aman, dan harga terbaik untuk kebutuhan Roblox kamu.</p>
+          </div>
+
+          <div class="home-panels">
+            <article class="home-panel">
+              <div class="home-panel-title"><span class="home-mini-icon">T</span>Top Leaderboard</div>
+              <div class="home-panel-sub">Rangking pembelian Robux</div>
+              <div class="leader-row">
+                <span class="leader-rank">1</span>
+                <span class="home-avatar">NF</span>
+                <span class="leader-name">NightFrost</span>
+                <span class="leader-value">128.450 R$</span>
+              </div>
+              <div class="leader-row">
+                <span class="leader-rank">2</span>
+                <span class="home-avatar">BS</span>
+                <span class="leader-name">BlueSkyy</span>
+                <span class="leader-value">98.760 R$</span>
+              </div>
+              <div class="leader-row">
+                <span class="leader-rank">3</span>
+                <span class="home-avatar">SL</span>
+                <span class="leader-name">StarLuvv</span>
+                <span class="leader-value">76.320 R$</span>
+              </div>
+              <a class="home-panel-link" href="#produk">Lihat Peringkat &gt;</a>
+            </article>
+
+            <article class="home-panel">
+              <div class="home-panel-title"><span class="home-mini-icon">R$</span>Robux Baru Saja Dibeli</div>
+              <div class="home-panel-sub">Transaksi terbaru pelanggan</div>
+              <div class="recent-row">
+                <span class="home-avatar">FX</span>
+                <span><span class="recent-name">frostbite_x</span><span class="recent-meta">Membeli 10.000 Robux</span></span>
+                <span class="recent-time">2 menit</span>
+              </div>
+              <div class="recent-row">
+                <span class="home-avatar">CV</span>
+                <span><span class="recent-name">cloudyy</span><span class="recent-meta">Membeli 4.500 Robux</span></span>
+                <span class="recent-time">5 menit</span>
+              </div>
+              <div class="recent-row">
+                <span class="home-avatar">ZX</span>
+                <span><span class="recent-name">ZyrenXD</span><span class="recent-meta">Membeli 2.200 Robux</span></span>
+                <span class="recent-time">9 menit</span>
+              </div>
+              <a class="home-panel-link" href="#status">Lihat Semua Transaksi &gt;</a>
+            </article>
+          </div>
+
+          <div class="home-stats">
+            <div class="home-stat">
+              <span class="home-stat-icon">S</span>
+              <span><span class="home-stat-label">Stock Robux</span><span class="home-stat-value">1.250.000</span><span class="home-stat-note">Robux tersedia</span></span>
+            </div>
+            <div class="home-stat">
+              <span class="home-stat-icon">OK</span>
+              <span><span class="home-stat-label">Status Ready</span><span class="home-stat-value">100%</span><span class="home-stat-note">Layanan aktif</span></span>
+            </div>
+            <div class="home-stat">
+              <span class="home-stat-icon">R$</span>
+              <span><span class="home-stat-label">Robux Terjual</span><span class="home-stat-value">2.847.650</span><span class="home-stat-note">Total Robux</span></span>
+            </div>
+            <div class="home-stat">
+              <span class="home-stat-icon">ID</span>
+              <span><span class="home-stat-label">Total Orderan</span><span class="home-stat-value">15.632</span><span class="home-stat-note">Pesanan selesai</span></span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </section>
 
