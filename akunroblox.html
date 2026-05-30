@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akun Roblox - KokoRBX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/cart-client.css">
+  <style>
+    :root {
+      --bg: #07070b;
+      --panel: #101018;
+      --panel2: #171724;
+      --line: #2d2a3d;
+      --line2: #3d3559;
+      --text: #f7f3ff;
+      --muted: #a59cbe;
+      --purple: #7c5cfc;
+      --pink: #fc5c7d;
+      --green: #39d98a;
+      --cyan: #35d7ff;
+      --font: "Pixelify Sans", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      color: var(--text);
+      font-family: var(--font);
+      background:
+        linear-gradient(rgba(124,92,252,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(124,92,252,.045) 1px, transparent 1px),
+        radial-gradient(circle at 12% 4%, rgba(124,92,252,.25), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(252,92,125,.14), transparent 24%),
+        radial-gradient(circle at 76% 84%, rgba(57,217,138,.12), transparent 24%),
+        var(--bg);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto, auto;
+      overflow-x: hidden;
+      letter-spacing: 0;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    img { display: block; }
+    .page { position: relative; z-index: 1; }
+
+    .top-strip {
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(7,7,11,.9);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .top-inner {
+      max-width: 1220px;
+      height: 30px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      white-space: nowrap;
+    }
+    .main-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(9,9,15,.92);
+      backdrop-filter: blur(18px);
+    }
+    .header-inner {
+      max-width: 1220px;
+      min-height: 74px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: auto minmax(260px, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(124,92,252,.44), rgba(252,92,125,.28));
+      box-shadow: 0 0 22px rgba(124,92,252,.3);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand em { color: var(--green); font-style: normal; }
+    .search-box {
+      height: 48px;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      border: 2px solid var(--green);
+      border-radius: 8px;
+      background: #fff;
+      color: #544c6d;
+      padding: 0 12px;
+      box-shadow: 0 0 0 4px rgba(57,217,138,.08), 0 16px 28px rgba(0,0,0,.24);
+    }
+    .search-box input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: #171322;
+      font-size: 14px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: visible;
+    }
+    .header-btn {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 8px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .header-btn.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--green), #08a6a6);
+      color: #041411;
+    }
+    .nav-bar {
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(14,14,22,.95);
+    }
+    .nav-inner {
+      max-width: 1220px;
+      height: 46px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-inner a {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .main {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 18px 16px 56px;
+      display: grid;
+      gap: 14px;
+    }
+    .hero {
+      min-height: 258px;
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(320px, .7fr);
+      gap: 14px;
+    }
+    .hero-copy,
+    .hero-photo,
+    .catalog,
+    .request-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(16,16,24,.94);
+      box-shadow: 0 18px 36px rgba(0,0,0,.22);
+    }
+    .hero-copy {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      background:
+        linear-gradient(135deg, rgba(124,92,252,.28), rgba(57,217,138,.09)),
+        rgba(16,16,24,.94);
+    }
+    .hero-copy::after {
+      content: "ACC";
+      position: absolute;
+      right: 18px;
+      bottom: -18px;
+      color: rgba(255,255,255,.05);
+      font-size: 118px;
+      font-weight: 900;
+      pointer-events: none;
+    }
+    .eyebrow {
+      width: fit-content;
+      border: 1px solid rgba(57,217,138,.34);
+      border-radius: 999px;
+      background: rgba(57,217,138,.1);
+      color: var(--green);
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .hero-copy h1 {
+      max-width: 640px;
+      font-size: 52px;
+      line-height: .98;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+    .hero-copy h1 span {
+      background: linear-gradient(90deg, var(--green), var(--cyan), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-copy p {
+      max-width: 640px;
+      color: #c0b8d4;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .hero-action {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 8px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      padding: 0 13px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .hero-action.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--green), #0ea5a5);
+      color: #061511;
+    }
+    .hero-photo {
+      overflow: hidden;
+      min-height: 258px;
+      position: relative;
+    }
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      min-height: 258px;
+      object-fit: cover;
+    }
+    .hero-photo::after {
+      content: "READY CHECK";
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      background: rgba(7,7,11,.72);
+      color: var(--green);
+      padding: 8px 10px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .catalog {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+    }
+    .filters {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.035);
+      overflow: hidden;
+      align-self: start;
+    }
+    .filter-head {
+      padding: 13px;
+      border-bottom: 1px solid var(--line);
+      color: var(--green);
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .filter-btn {
+      width: 100%;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: transparent;
+      color: var(--muted);
+      padding: 0 13px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: rgba(124,92,252,.14);
+      color: var(--text);
+    }
+    .filter-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .catalog-content { min-width: 0; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+    .section-title::before {
+      content: "";
+      width: 8px;
+      height: 26px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--green), var(--pink));
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+    .account-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .account-card {
+      min-height: 210px;
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(13,13,20,.98);
+      padding: 10px;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .account-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(57,217,138,.45);
+      box-shadow: 0 18px 28px rgba(0,0,0,.28);
+    }
+    .account-art {
+      min-height: 188px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      background: #0b0b11;
+    }
+    .account-art img {
+      width: 100%;
+      height: 100%;
+      min-height: 188px;
+      object-fit: cover;
+    }
+    .account-body {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 3px 0;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .badge {
+      min-height: 21px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(124,92,252,.34);
+      border-radius: 999px;
+      background: rgba(124,92,252,.12);
+      color: #c8bcff;
+      padding: 0 8px;
+      font-size: 10px;
+      font-weight: 900;
+    }
+    .badge.manual {
+      border-color: rgba(57,217,138,.4);
+      background: rgba(57,217,138,.12);
+      color: var(--green);
+    }
+    .account-title {
+      font-size: 20px;
+      font-weight: 900;
+      line-height: 1.12;
+    }
+    .account-desc {
+      flex: 1;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.48;
+    }
+    .account-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .price {
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .order-btn {
+      min-height: 32px;
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      color: #fff;
+      padding: 0 11px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .request-panel {
+      padding: 16px;
+    }
+    .request-panel h2 {
+      font-size: 24px;
+      font-weight: 900;
+      margin-bottom: 5px;
+    }
+    .request-panel p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+    .request-form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .request-form label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .request-form label.full { grid-column: 1 / -1; }
+    .request-form input,
+    .request-form select,
+    .request-form textarea {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line2);
+      border-radius: 8px;
+      background: var(--panel2);
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+      text-transform: none;
+    }
+    .request-form textarea {
+      min-height: 96px;
+      resize: vertical;
+      padding-top: 10px;
+      line-height: 1.55;
+    }
+    .submit-wa {
+      grid-column: 1 / -1;
+      min-height: 42px;
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--green), #0ea5a5);
+      color: #061511;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .note {
+      margin-top: 12px;
+      border: 1px solid rgba(57,217,138,.3);
+      border-radius: 8px;
+      background: rgba(57,217,138,.08);
+      color: #baf7db;
+      padding: 10px 12px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: rgba(7,7,11,.94);
+      color: var(--muted);
+    }
+    .footer-inner {
+      max-width: 1220px;
+      min-height: 84px;
+      margin: 0 auto;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .footer-brand {
+      color: var(--green);
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .footer-inner p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1040px) {
+      .header-inner { grid-template-columns: 1fr; }
+      .header-actions { overflow-x: auto; scrollbar-width: none; }
+      .header-actions::-webkit-scrollbar { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .catalog { grid-template-columns: 1fr; }
+      .filters { display: flex; overflow-x: auto; scrollbar-width: none; }
+      .filters::-webkit-scrollbar { display: none; }
+      .filter-head { display: none; }
+      .filter-btn { min-width: 148px; border-right: 1px solid rgba(255,255,255,.06); }
+    }
+    @media (max-width: 680px) {
+      .top-inner { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+      .top-inner::-webkit-scrollbar { display: none; }
+      .brand { font-size: 22px; }
+      .nav-inner { height: 44px; gap: 16px; }
+      .main { padding: 12px 14px 42px; }
+      .hero-copy { padding: 18px; }
+      .hero-copy h1 { font-size: 36px; }
+      .hero-copy p { font-size: 13px; }
+      .hero-photo { min-height: 220px; }
+      .hero-photo img { min-height: 220px; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .account-grid { grid-template-columns: 1fr; }
+      .account-card { grid-template-columns: 1fr; }
+      .account-art { min-height: 210px; }
+      .request-form { grid-template-columns: 1fr; }
+      .request-form label.full, .submit-wa { grid-column: auto; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+<link rel="stylesheet" href="assets/kokorbx-theme.css?v=soft-purple-2">
+</head>
+<body>
+  <div class="page">
+    <div class="top-strip">
+      <div class="top-inner">
+        <span>Bantuan 24/7</span>
+        <span>ID - IDR</span>
+        <span>Akun Roblox ready check</span>
+      </div>
+    </div>
+
+    <header class="main-header">
+      <div class="header-inner">
+        <a href="marketplace-preview.html" class="brand" aria-label="KokoRBX">
+          <span class="brand-mark">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <g transform="rotate(-12 10 10)">
+                <rect x="2" y="2" width="16" height="16" rx="4" stroke="white" stroke-width="2.2"/>
+                <rect x="7" y="7" width="6" height="6" rx="1.5" stroke="white" stroke-width="2"/>
+              </g>
+            </svg>
+          </span>
+          <span>Koko<em>RBX</em></span>
+        </a>
+        <label class="search-box">
+          <span>Cari</span>
+          <input id="account-search" type="search" placeholder="Starter, progress, avatar, sultan..." autocomplete="off">
+        </label>
+        <div class="header-actions">
+          <a class="header-btn primary" href="transaksi.html?new=akun&product=Akun%20Roblox&category=akun&priceText=Chat%20harga&image=assets%2Fmarketplace%2Faccount-showcase.png&detail=Cek%20stok%20akun%20Roblox%20di%20Panel%20Transaksi.">Panel Transaksi</a>
+          <a class="header-btn" href="marketplace-preview.html">Marketplace</a>
+          <a class="header-btn" href="admin.html">Admin</a>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav-bar">
+      <div class="nav-inner">
+        <a href="marketplace-preview.html">Marketplace</a>
+        <a href="robux5hari.html">Robux 5 Hari</a>
+        <a href="robuxvilog.html">VILOG</a>
+        <a href="giftgp.html">Gift GP</a>
+        <a href="#katalog">Akun Roblox</a>
+        <a href="#request">Request Akun</a>
+      </div>
+    </nav>
+
+    <main class="main">
+      <section class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Akun Roblox</div>
+          <h1>Katalog akun <span>ready check</span> dan request custom.</h1>
+          <p>Pilih tipe akun, lalu lanjut lewat Panel Transaksi. Chat buyer dan seller tetap di website.</p>
+          <div class="hero-actions">
+            <a class="hero-action primary" href="#katalog">Lihat Akun</a>
+            <a class="hero-action" href="#request">Custom Request</a>
+          </div>
+        </div>
+        <a class="hero-photo" href="#katalog" aria-label="Katalog akun Roblox">
+          <img src="assets/marketplace/account-showcase.png" alt="Akun Roblox KokoRBX">
+        </a>
+      </section>
+
+      <section class="catalog" id="katalog">
+        <div class="filters">
+          <div class="filter-head">Kategori Akun</div>
+          <button class="filter-btn active" data-filter="all"><span class="filter-icon">ALL</span> Semua Akun</button>
+          <button class="filter-btn" data-filter="starter"><span class="filter-icon">ST</span> Starter</button>
+          <button class="filter-btn" data-filter="progress"><span class="filter-icon">GM</span> Progress Game</button>
+          <button class="filter-btn" data-filter="avatar"><span class="filter-icon">AV</span> Avatar Outfit</button>
+          <button class="filter-btn" data-filter="custom"><span class="filter-icon">SL</span> Sultan Request</button>
+        </div>
+
+        <div class="catalog-content">
+          <div class="section-head">
+            <div>
+              <div class="section-title">Akun Ready Check</div>
+              <div class="section-sub">Stok dan harga final dikonfirmasi admin sebelum transaksi.</div>
+            </div>
+          </div>
+          <div class="account-grid" id="account-grid">
+            <article class="account-card" data-category="starter" data-name="starter account alt basic murah ready check">
+              <div class="account-art"><img src="assets/marketplace/account-showcase.png" alt="Starter Account"></div>
+              <div class="account-body">
+                <div class="badges"><span class="badge">Ready Check</span><span class="badge manual">Manual</span></div>
+                <div class="account-title">Starter Account</div>
+                <div class="account-desc">Akun basic siap pakai, cocok buat alt account atau kebutuhan awal.</div>
+                <div class="account-foot"><span class="price">Chat harga</span><button class="order-btn" data-product="Starter Account">Order Panel</button></div>
+              </div>
+            </article>
+
+            <article class="account-card" data-category="progress" data-name="game progress blox fruits fisch grow a garden">
+              <div class="account-art"><img src="assets/marketplace/joki-service.png" alt="Game Progress Account"></div>
+              <div class="account-body">
+                <div class="badges"><span class="badge">Game Ready</span><span class="badge manual">Request</span></div>
+                <div class="account-title">Game Progress</div>
+                <div class="account-desc">Request akun dengan progress game tertentu seperti Blox Fruits, Fisch, atau game lain.</div>
+                <div class="account-foot"><span class="price">By request</span><button class="order-btn" data-product="Game Progress Account">Order Panel</button></div>
+              </div>
+            </article>
+
+            <article class="account-card" data-category="avatar" data-name="avatar outfit style akun roblox">
+              <div class="account-art"><img src="assets/marketplace/account-showcase.png" alt="Avatar Outfit Account"></div>
+              <div class="account-body">
+                <div class="badges"><span class="badge">Outfit</span><span class="badge manual">Check</span></div>
+                <div class="account-title">Avatar Outfit</div>
+                <div class="account-desc">Akun dengan style/avatar tertentu, cocok buat koleksi atau roleplay.</div>
+                <div class="account-foot"><span class="price">Chat harga</span><button class="order-btn" data-product="Avatar Outfit Account">Order Panel</button></div>
+              </div>
+            </article>
+
+            <article class="account-card" data-category="custom" data-name="sultan request akun spek khusus premium">
+              <div class="account-art"><img src="assets/marketplace/custom-request.png" alt="Sultan Request Account"></div>
+              <div class="account-body">
+                <div class="badges"><span class="badge manual">Custom</span><span class="badge">Premium</span></div>
+                <div class="account-title">Sultan Request</div>
+                <div class="account-desc">Request akun spek khusus sesuai budget dan target yang kamu cari.</div>
+                <div class="account-foot"><span class="price">Custom</span><button class="order-btn" data-product="Sultan Request Account">Order Panel</button></div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="request-panel" id="request">
+        <h2>Custom Request</h2>
+        <p>Isi kebutuhan akun Roblox, lalu request masuk ke Panel Transaksi website.</p>
+        <form class="request-form" id="account-request-form">
+          <label>
+            Tipe Akun
+            <select id="account-type">
+              <option>Starter Account</option>
+              <option>Game Progress</option>
+              <option>Avatar Outfit</option>
+              <option>Sultan Request</option>
+              <option>Lainnya</option>
+            </select>
+          </label>
+          <label>
+            Game / Tema
+            <input id="account-game" type="text" placeholder="Blox Fruits, Fisch, Grow a Garden">
+          </label>
+          <label>
+            Budget
+            <input id="account-budget" type="text" placeholder="50k - 200k">
+          </label>
+          <label class="full">
+            Detail Request
+            <textarea id="account-detail" placeholder="Level tinggi, item tertentu, umur akun, outfit, atau request lain."></textarea>
+          </label>
+          <button class="submit-wa" type="submit">Buat Transaksi Panel</button>
+        </form>
+        <div class="note">Halaman ini tidak meminta password, email, atau kode keamanan. Detail sensitif hanya dibahas langsung dengan admin.</div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">KokoRBX Akun Roblox</div>
+          <p>Preview katalog akun yang nyambung dengan marketplace KokoRBX.</p>
+        </div>
+        <a class="header-btn primary" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20butuh%20bantuan%20akun%20Roblox." target="_blank" rel="noopener">Bantuan WhatsApp</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/marketplace/panel-store.js"></script>
+  <script>
+    function buildPanelUrl(input) {
+      const params = new URLSearchParams({
+        new: input.category || 'akun',
+        product: input.product || 'Akun Roblox',
+        category: input.category || 'akun',
+        priceText: input.priceText || 'Menunggu seller',
+        image: input.image || 'assets/marketplace/account-showcase.png',
+        detail: input.detail || 'Request akun Roblox.',
+        buyerMessage: input.buyerMessage || 'Halo seller, aku mau cek stok akun Roblox.',
+        source: 'akunroblox.html'
+      });
+      return 'transaksi.html?' + params.toString();
+    }
+
+    function openPanel(input) {
+      location.href = buildPanelUrl(input || {});
+    }
+
+    function applyAccountFilters() {
+      const active = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
+      const query = String(document.getElementById('account-search')?.value || '').toLowerCase().trim();
+      document.querySelectorAll('.account-card').forEach(card => {
+        const categoryMatch = active === 'all' || card.dataset.category === active;
+        const queryMatch = !query || String(card.dataset.name + ' ' + card.textContent).toLowerCase().includes(query);
+        card.style.display = categoryMatch && queryMatch ? '' : 'none';
+      });
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(item => item.classList.remove('active'));
+        btn.classList.add('active');
+        applyAccountFilters();
+      });
+    });
+
+    document.getElementById('account-search').addEventListener('input', applyAccountFilters);
+
+    document.querySelectorAll('.order-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.account-card');
+        const image = card?.querySelector('img')?.getAttribute('src') || 'assets/marketplace/account-showcase.png';
+        const detail = card?.querySelector('.account-desc')?.textContent.trim() || 'Request akun Roblox.';
+        const priceText = card?.querySelector('.price')?.textContent.trim() || 'Menunggu seller';
+        openPanel({
+          product: btn.dataset.product,
+          image,
+          priceText,
+          detail,
+          buyerMessage: 'Halo seller, aku mau tanya stok ' + btn.dataset.product + '. Bisa proses di panel ini?'
+        });
+      });
+    });
+
+    document.getElementById('account-request-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const type = document.getElementById('account-type').value;
+      const game = document.getElementById('account-game').value.trim() || '-';
+      const budget = document.getElementById('account-budget').value.trim() || '-';
+      const detail = document.getElementById('account-detail').value.trim() || '-';
+      const requestText = [
+        'Request akun Roblox',
+        'Tipe: ' + type,
+        'Game/Tema: ' + game,
+        'Budget: ' + budget,
+        'Detail: ' + detail
+      ].join('\n');
+      openPanel({
+        product: 'Custom ' + type,
+        image: 'assets/marketplace/custom-request.png',
+        priceText: budget === '-' ? 'Custom' : budget,
+        detail: requestText,
+        buyerMessage: 'Halo seller, aku mau request akun Roblox.\n' + requestText
+      });
+    });
+  </script>
+  <script src="assets/cart-client.js"></script>
+</body>
+</html>

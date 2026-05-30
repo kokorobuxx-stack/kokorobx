@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KokoRBX - Gift GP Ingame</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/cart-client.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
 <style>
   :root {
@@ -194,6 +195,8 @@
     main { padding-top: 24px; }
   }
 </style>
+<link rel="stylesheet" href="assets/marketplace/order-preview.css">
+<link rel="stylesheet" href="assets/kokorbx-theme.css?v=soft-purple-2">
 </head>
 <body>
 <div class="bg-fx"></div>
@@ -223,7 +226,7 @@
       <div class="hero-copy">
         <div class="eyebrow logo-eyebrow"><img src="assets/logo-service-giftgp.png" alt="Gift GP Ingame"></div>
         <h1>Request <span>Gift Gamepass</span></h1>
-        <p>Isi format gifting sesuai data Roblox kamu, lalu kirim ke admin lewat WhatsApp untuk dicek dan diproses.</p>
+        <p>Isi format gifting sesuai data Roblox kamu, lalu transaksi dan chat lanjut di Panel Transaksi website.</p>
       </div>
       <div class="hero-logo">
         <img src="assets/logo-gift-gp.png" alt="Gift GP Ingame">
@@ -255,16 +258,16 @@
           </div>
           <div class="note-box">Note: Pastikan format yang kamu isi sudah sesuai!</div>
           <div class="actions">
-            <button type="submit">Kirim Format ke WhatsApp</button>
-            <a class="wa-link" id="wa-link" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Chat Admin</a>
+            <button type="submit">Buat Transaksi Panel</button>
+            <a class="wa-link" id="wa-link" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Bantuan Admin</a>
           </div>
         </div>
-        <div class="notice" id="notice">Format sudah dibuat. WhatsApp admin akan terbuka dengan detail request kamu.</div>
+        <div class="notice" id="notice">Format sudah dibuat. Kamu akan diarahkan ke Panel Transaksi.</div>
       </form>
 
       <aside class="preview-panel">
         <div class="preview-title">Preview Format</div>
-        <p>Ini yang akan terkirim ke WhatsApp admin.</p>
+        <p>Ini yang akan masuk ke Panel Transaksi.</p>
         <pre class="format-preview" id="format-preview"></pre>
         <div class="summary-grid">
           <div class="sum-item"><span>User</span><strong id="sum-user">-</strong></div>
@@ -292,8 +295,8 @@
 </footer>
 
 <script src="assets/rate-client.js"></script>
+<script src="assets/marketplace/panel-store.js"></script>
 <script>
-  const ADMIN_WA = '6281996112019';
   const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'https://chisatobobaaaa.vercel.app'
     : '';
@@ -416,14 +419,30 @@
     const orderId = 'GGP-' + Math.floor(100000 + Math.random() * 900000);
     await saveRequest(orderId);
 
-    const url = 'https://wa.me/' + ADMIN_WA + '?text=' + encodeURIComponent(buildFormat());
-    document.getElementById('wa-link').href = url;
+    const price = calcGiftPrice(value('totalRobux'));
+    const detail = buildFormat();
+    if (window.KokoPanel) {
+      KokoPanel.createOrder({
+        id: orderId,
+        product: 'Gift GP Ingame',
+        category: 'gift',
+        image: 'assets/logo-gift-gp.png',
+        price,
+        priceText: price ? formatRupiah(price) : 'Menunggu seller',
+        username: value('username'),
+        detail,
+        buyerMessage: 'Halo seller, aku sudah isi format Gift GP.\n' + detail,
+        source: 'gift-gp.html'
+      });
+    }
     document.getElementById('notice').classList.add('show');
-    window.open(url, '_blank', 'noopener');
+    location.href = 'transaksi.html?order=' + encodeURIComponent(orderId);
   });
 
   updatePreview();
   loadGiftRate();
 </script>
+<script src="assets/marketplace/order-preview.js"></script>
+<script src="assets/cart-client.js"></script>
 </body>
 </html>

@@ -1,591 +1,1034 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KokoRBX — Top up Robux</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
-    <style>
-        :root {
-            --bg: #060608;
-            --s1: #0e0e14;
-            --s2: #14141e;
-            --s3: #1a1a28;
-            --border: #252535;
-            --border2: #2e2e45;
-            --accent: #7c5cfc;
-            --accent-glow: rgba(124,92,252,0.25);
-            --accent2: #fc5c7d;
-            --gold: #ffc857;
-            --green: #39d98a;
-            --text: #eeeef5;
-            --muted: #636380;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KokoRBX - Marketplace Roblox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/cart-client.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
+  <style>
+    :root {
+      --blue: #7c5cfc;
+      --blue2: #16102f;
+      --blue3: #9a7cff;
+      --orange: #39d98a;
+      --green: #00c8a0;
+      --purple: #fc5c7d;
+      --red: #ff4d6d;
+      --sky: #f0ecff;
+      --soft: #f8f5ff;
+      --line: #ded6ff;
+      --text: #1b1730;
+      --muted: #746f8d;
+      --card: #ffffff;
+      --mono: "JetBrains Mono", monospace;
+      --sans: "Outfit", sans-serif;
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(135deg, rgba(124,92,252,.1) 25%, transparent 25%) -18px 0/36px 36px,
+        linear-gradient(225deg, rgba(252,92,125,.07) 25%, transparent 25%) -18px 0/36px 36px,
+        var(--soft);
+      color: var(--text);
+      font-family: var(--sans);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    .top-strip {
+      background: #0f0a23;
+      color: #e9e2ff;
+      font-size: 12px;
+    }
+    .top-strip-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      padding: 0 18px;
+      white-space: nowrap;
+    }
+    .main-header {
+      background:
+        radial-gradient(circle at 15% 0%, rgba(57,217,138,.22), transparent 28%),
+        linear-gradient(180deg, #251451, var(--blue2));
+      color: #fff;
+      box-shadow: 0 4px 18px rgba(22,16,47,.24);
+    }
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      min-height: 74px;
+      display: grid;
+      grid-template-columns: auto minmax(240px, 1fr) auto;
+      align-items: center;
+      gap: 18px;
+      padding: 0 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 26px;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(124,92,252,.36), rgba(252,92,125,.28));
+      border: 1px solid rgba(255,255,255,.24);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand em { font-style: normal; color: #9effd4; }
+    .search-wrap {
+      min-width: 0;
+    }
+    .search-box {
+      height: 48px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 2px solid var(--green);
+      border-radius: 8px;
+      padding: 0 12px;
+      color: var(--muted);
+      box-shadow: 0 6px 18px rgba(15,10,35,.18);
+    }
+    .search-box input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .search-key {
+      border: 1px solid #e7ddff;
+      border-radius: 5px;
+      padding: 4px 7px;
+      color: #9b92b7;
+      font-family: var(--mono);
+      font-size: 10px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .header-btn {
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,.24);
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .header-btn.sell {
+      background: linear-gradient(135deg, var(--green), #0ea5a5);
+      border-color: rgba(255,255,255,.28);
+      color: #fff;
+    }
+    #user-bar { display: none; align-items: center; gap: 8px; }
+    #user-bar-name {
+      max-width: 128px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .logout-btn {
+      height: 34px;
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 7px;
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .suggestions {
+      display: flex;
+      gap: 6px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .suggestions a {
+      background: rgba(255,255,255,.95);
+      color: #5e5878;
+      border-radius: 5px;
+      padding: 5px 9px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .nav-bar {
+      background: #120c2b;
+      color: #fff;
+    }
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      overflow-x: auto;
+      padding: 0 18px;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-inner a {
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .nav-inner a:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        /* Background FX */
-        .bg-fx {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-        }
-        .bg-fx::before {
-            content: ''; position: absolute; top: -30%; left: -20%; width: 70%; height: 70%;
-            background: radial-gradient(ellipse, rgba(124,92,252,0.08) 0%, transparent 65%);
-            animation: bgFloat 8s ease-in-out infinite alternate;
-        }
-        .bg-fx::after {
-            content: ''; position: absolute; bottom: -20%; right: -10%; width: 60%; height: 60%;
-            background: radial-gradient(ellipse, rgba(252,92,125,0.06) 0%, transparent 65%);
-            animation: bgFloat 10s ease-in-out infinite alternate-reverse;
-        }
-        @keyframes bgFloat {
-            from { transform: translate(0,0); }
-            to { transform: translate(3%,4%); }
-        }
+    .hero-band {
+      background:
+        radial-gradient(circle at 8% 78%, rgba(57,217,138,.24), transparent 16%),
+        radial-gradient(circle at 92% 22%, rgba(252,92,125,.22), transparent 18%),
+        linear-gradient(135deg, #7c5cfc, #1a103d);
+      color: #fff;
+    }
+    .hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 16px;
+      padding: 26px 18px 24px;
+      min-height: 318px;
+      align-items: stretch;
+    }
+    .promo-card {
+      min-height: 278px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 6px;
+      background: linear-gradient(180deg, rgba(5,18,51,.18), rgba(2,14,38,.78));
+      border: 1px solid rgba(255,255,255,.14);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 18px;
+      box-shadow: 0 14px 28px rgba(15,10,35,.24);
+    }
+    .promo-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), transparent 40%),
+        var(--promo-bg, linear-gradient(135deg, #2b195f, #0f0a23));
+      z-index: 0;
+    }
+    .promo-card > * { position: relative; z-index: 1; }
+    .promo-badge {
+      align-self: flex-start;
+      background: var(--purple);
+      color: #fff;
+      border-radius: 3px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 900;
+      margin-bottom: 12px;
+    }
+    .promo-title {
+      font-size: 28px;
+      line-height: 1.02;
+      font-weight: 900;
+      margin-bottom: 10px;
+      text-shadow: 0 3px 12px rgba(0,0,0,.25);
+    }
+    .promo-sub {
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255,255,255,.86);
+      min-height: 40px;
+    }
+    .promo-cta {
+      width: 124px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 7px;
+      color: #fff;
+      font-weight: 900;
+      font-size: 14px;
+      margin-top: 18px;
+      background: rgba(255,255,255,.12);
+    }
 
-        .grid-fx {
-            position: fixed; inset: 0; z-index: 0; pointer-events: none;
-            background-image: linear-gradient(rgba(124,92,252,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(124,92,252,0.04) 1px, transparent 1px);
-            background-size: 50px 50px;
-        }
+    .main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 18px 48px;
+    }
+    .category-strip {
+      transform: translateY(-14px);
+      background: #fff;
+      border: 1px solid #ded6ff;
+      border-radius: 8px;
+      box-shadow: 0 14px 30px rgba(124,92,252,.14);
+      padding: 18px 16px;
+    }
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .category-item {
+      min-height: 92px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border-radius: 8px;
+      color: #544c72;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: #fff;
+      transition: background .16s ease, border-color .16s ease, transform .16s ease;
+    }
+    .category-item:hover,
+    .category-item.active {
+      background: #f0ecff;
+      border-color: #c8baff;
+      transform: translateY(-2px);
+    }
+    .cat-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 900;
+      font-size: 15px;
+      background: linear-gradient(135deg, var(--blue3), var(--purple));
+      box-shadow: 0 8px 20px rgba(124,92,252,.18);
+    }
+    .cat-icon.green { background: linear-gradient(135deg, #39d98a, #00a884); }
+    .cat-icon.orange { background: linear-gradient(135deg, #fc5c7d, #7c5cfc); }
+    .cat-icon.pink { background: linear-gradient(135deg, #ff7bb5, #fc5c7d); }
+    .cat-icon.cyan { background: linear-gradient(135deg, #00c8a0, #7c5cfc); }
+    .category-item span:last-child {
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.25;
+    }
 
-        .wrapper { position: relative; z-index: 1; }
+    .section {
+      margin-top: 22px;
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 900;
+    }
+    .section-title::before {
+      content: "";
+      width: 8px;
+      height: 26px;
+      border-radius: 999px;
+      background: var(--purple);
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+    .see-all {
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      border: 1px solid #c8baff;
+      color: var(--blue);
+      background: #fff;
+      padding: 0 14px;
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
 
-        /* Header */
-        header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 20px; border-bottom: 1px solid var(--border);
-            background: rgba(6,6,8,0.9); backdrop-filter: blur(20px);
-            position: sticky; top: 0; z-index: 100; gap: 8px;
-        }
-        .logo {
-            font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.1rem;
-            letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-        }
-        .logo-svg-box {
-            background: #1a1a2a; border-radius: 9px; width: 30px; height: 30px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.6); flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .logo-text { color: var(--text); }
-        .logo-text em { font-style: normal; color: var(--accent); }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .product-card {
+      min-height: 248px;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+      border: 1px solid #ded6ff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(124,92,252,.08);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: #b8a9ff;
+      box-shadow: 0 15px 28px rgba(124,92,252,.16);
+    }
+    .product-media {
+      height: 118px;
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      background: linear-gradient(135deg, #efeaff, #fff7fb);
+      border-bottom: 1px solid #e7ddff;
+    }
+    .product-media img {
+      max-width: 92%;
+      max-height: 86px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 14px rgba(124,92,252,.18));
+    }
+    .product-token {
+      width: 70px;
+      height: 70px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--blue3), var(--purple));
+      color: #fff;
+      font-size: 20px;
+      font-weight: 900;
+      box-shadow: 0 10px 20px rgba(124,92,252,.2);
+    }
+    .product-token.green { background: linear-gradient(135deg, #39d98a, #00a884); }
+    .product-token.orange { background: linear-gradient(135deg, #fc5c7d, #7c5cfc); }
+    .product-token.pink { background: linear-gradient(135deg, #ff7bb5, #fc5c7d); }
+    .product-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .badge {
+      height: 21px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 8px;
+      color: var(--blue);
+      background: #f0ecff;
+      border: 1px solid #ded6ff;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .badge.hot { color: #b9184f; background: #fff0f5; border-color: #ffc4d6; }
+    .badge.manual { color: #0f766e; background: #e8fbf4; border-color: #bff0de; }
+    .product-title {
+      font-size: 17px;
+      line-height: 1.22;
+      font-weight: 900;
+    }
+    .product-desc {
+      flex: 1;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .product-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 2px;
+    }
+    .price {
+      color: var(--orange);
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .order-btn {
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--green), #0ea5a5);
+      color: #fff;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
 
-        .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: nowrap; }
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      margin-top: 22px;
+    }
+    .panel {
+      background: #fff;
+      border: 1px solid #ded6ff;
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 8px 22px rgba(124,92,252,.08);
+    }
+    .panel h3 {
+      font-size: 21px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .panel p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+    .status-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+    }
+    .status-form input {
+      height: 42px;
+      border: 1px solid #c8baff;
+      border-radius: 7px;
+      outline: none;
+      padding: 0 12px;
+      color: var(--text);
+      background: #fff;
+      font-size: 13px;
+    }
+    .status-form button {
+      height: 42px;
+      border: 0;
+      border-radius: 7px;
+      color: #fff;
+      background: linear-gradient(135deg, var(--blue), #5f45d8);
+      padding: 0 16px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .status-result {
+      display: none;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: 1px solid #ded6ff;
+      background: #fbf9ff;
+      padding: 12px;
+      font-size: 13px;
+    }
+    .status-result.show { display: block; }
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid #e9e2ff;
+    }
+    .status-row:last-child { border-bottom: 0; }
+    .status-row span { color: var(--muted); }
+    .status-row strong { text-align: right; }
+    .info-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .info-item {
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #e4dcff;
+      border-radius: 8px;
+      background: #fbf9ff;
+      padding: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .info-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+      flex: 0 0 auto;
+    }
+    .info-dot.blue { background: var(--blue3); }
+    .info-dot.orange { background: var(--orange); }
+    .info-dot.purple { background: var(--purple); }
+    .info-item b {
+      color: var(--text);
+      display: block;
+      font-size: 13px;
+    }
 
-        #user-bar { display: none; align-items: center; gap: 8px; }
-        #login-bar { display: block; }
-        #login-bar a {
-            background: rgba(124,92,252,0.15); border: 1px solid rgba(124,92,252,0.4);
-            border-radius: 7px; padding: 5px 11px; color: var(--accent); font-size: 11px;
-            font-weight: 600; text-decoration: none; white-space: nowrap;
-        }
+    .footer {
+      margin-top: 38px;
+      background: #fff;
+      border-top: 1px solid #ded6ff;
+      color: var(--muted);
+    }
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 18px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .footer-brand {
+      color: var(--blue);
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .footer p { font-size: 13px; line-height: 1.5; }
+    .wa-footer {
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #25d366, #128c7e);
+      color: #fff;
+      padding: 0 16px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .hidden { display: none !important; }
 
-        .btn-admin {
-            background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 7px; padding: 5px 10px; color: #aaa; font-size: 11px;
-            font-weight: 600; text-decoration: none; white-space: nowrap;
-        }
-
-        .live-badge {
-            display: flex; align-items: center; gap: 6px;
-            background: rgba(57,217,138,0.08); border: 1px solid rgba(57,217,138,0.2);
-            border-radius: 20px; padding: 5px 10px; font-size: 0.65rem;
-            color: var(--green); letter-spacing: 0.3px; white-space: nowrap;
-        }
-        .live-dot {
-            width: 6px; height: 6px; border-radius: 50%; background: var(--green);
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%,100% { opacity:1; transform:scale(1); }
-            50% { opacity:0.4; transform:scale(0.8); }
-        }
-
-        /* Hero */
-        .hero {
-            max-width: 680px; margin: 0 auto; text-align: center; padding: 28px 16px 16px;
-            animation: heroIn 0.6s ease both;
-        }
-        @keyframes heroIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        .hero h1 {
-            font-family: 'Outfit', sans-serif; font-weight: 900;
-            font-size: clamp(1.6rem, 7vw, 2.8rem); line-height: 1.1; letter-spacing: -1.5px; margin-bottom: 10px;
-        }
-        .hero h1 .g2 { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero h1 .g1 { color: var(--accent); }
-        .hero p { font-size: 0.78rem; color: var(--muted); line-height: 1.7; max-width: 420px; margin: 0 auto; }
-
-        /* Produk Section */
-        .home-products { padding: 30px 7% 20px; }
-        .section-title { text-align: center; margin-bottom: 30px; }
-        .section-title span { color: var(--accent); font-size: 13px; letter-spacing: 3px; }
-        .section-title h2 { font-size: 40px; color: white; margin-top: 10px; font-family: 'Outfit', sans-serif; }
-        .section-title h2 span { color: var(--accent); }
-        .section-title-logo {
-            display: block; width: min(540px, 88vw); max-height: 95px;
-            object-fit: contain; margin: 8px auto 0;
-            filter: drop-shadow(0 10px 24px rgba(124,92,252,0.28));
-        }
-        .section-title p { color: var(--muted); margin-top: 10px; }
-
-        .product-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px; animation: fadeInUp 0.7s ease-out 0.1s both;
-        }
-        @keyframes fadeInUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
-
-        .product-box {
-            background: rgba(15,15,30,0.95); border: 1px solid rgba(139,92,246,0.15);
-            border-radius: 16px; padding: 18px; text-decoration: none; transition: 0.3s ease;
-            position: relative; overflow: hidden; cursor: pointer; display: flex;
-            align-items: center; justify-content: center; min-height: 190px;
-        }
-        .product-box::before {
-            content: ""; position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(139,92,246,0.15), transparent);
-            opacity: 0; transition: opacity 0.3s ease;
-        }
-        .product-box:hover::before { opacity: 1; }
-        .product-box:hover {
-            transform: translateY(-5px); border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(139,92,246,0.25), 0 0 50px rgba(139,92,246,0.15);
-        }
-        .product-logo {
-            width: 100%; height: 150px; position: relative; z-index: 2;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .product-logo img {
-            width: 100%; height: 100%; object-fit: contain; display: block;
-            filter: drop-shadow(0 8px 18px rgba(124,92,252,0.28));
-        }
-
-        /* Stats Section - DI BAWAH PRODUK */
-        .stats-section {
-            max-width: 960px;
-            margin: 30px auto 40px;
-            padding: 0 14px;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-        .stat-card {
-            background: var(--s1);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 18px 14px;
-            text-align: center;
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(124,92,252,0.05), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .stat-card:hover {
-            border-color: rgba(124,92,252,0.4);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-        .stat-card:hover::before { opacity: 1; }
-        .stat-label {
-            font-size: 0.6rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 6px;
-            position: relative;
-            z-index: 2;
-        }
-        .stat-value {
-            font-family: 'Outfit', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: var(--text);
-            position: relative;
-            z-index: 2;
-            letter-spacing: -0.3px;
-        }
-        .stat-value.green { color: var(--green); }
-        .stat-value.gold { color: var(--gold); }
-        .stat-value.purple { color: var(--accent); }
-        .stat-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(57,217,138,0.1);
-            border: 1px solid rgba(57,217,138,0.25);
-            border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 0.55rem;
-            color: var(--green);
-            letter-spacing: 0.5px;
-        }
-
-        /* Popup Notifikasi "Baru Saja Beli" */
-        .recent-buy-popup {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            pointer-events: none;
-        }
-        .popup-item {
-            background: rgba(20, 20, 35, 0.95);
-            border: 1px solid rgba(57,217,138, 0.3);
-            border-radius: 12px;
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.78rem;
-            color: var(--text);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            animation: popupSlide 4s ease-in-out forwards;
-            pointer-events: auto;
-            max-width: 300px;
-        }
-        .popup-info { flex: 1; }
-        .popup-info .buyer-name { font-weight: 700; color: #fff; }
-        .popup-info .buyer-product { font-size: 0.7rem; color: var(--muted); }
-        .popup-info .buyer-time { font-size: 0.65rem; color: var(--green); margin-top: 2px; }
-
-        @keyframes popupSlide {
-            0% { opacity: 0; transform: translateX(-100px); }
-            10% { opacity: 1; transform: translateX(0); }
-            80% { opacity: 1; transform: translateX(0); }
-            100% { opacity: 0; transform: translateX(-100px); }
-        }
-
-        /* Trust Bar */
-        .trust { overflow: hidden; padding: 0 0 40px; position: relative; pointer-events: none; user-select: none; }
-        .trust::before, .trust::after {
-            content: ''; position: absolute; top: 0; bottom: 40px; width: 40px; z-index: 2; pointer-events: none;
-        }
-        .trust::before { left: 0; background: linear-gradient(to right, var(--bg), transparent); }
-        .trust::after { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
-        .trust-track { display: flex; align-items: center; gap: 10px; width: max-content; will-change: transform; }
-        .trust-item {
-            display: flex; align-items: center; gap: 6px; font-size: 0.63rem; color: var(--muted);
-            background: var(--s2); border: 1px solid var(--border); border-radius: 20px;
-            padding: 5px 12px; white-space: nowrap; flex-shrink: 0;
-        }
-        .trust-item .ti { font-size: 0.85rem; }
-
-        /* Footer */
-        .site-footer {
-            border-top: 1px solid var(--border); background: rgba(6,6,8,0.95);
-            padding: 28px 20px 32px; text-align: center; position: relative; z-index: 1;
-        }
-        .site-footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-        .footer-brand { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1rem; color: var(--accent); letter-spacing: -0.3px; }
-        .footer-tagline { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
-        .footer-divider { width: 40px; height: 1px; background: var(--border); }
-        .cs-fab {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: linear-gradient(135deg, #25D366, #128C7E); border: none;
-            border-radius: 50px; padding: 11px 20px 11px 16px; color: #fff;
-            font-size: 13px; font-weight: 700; cursor: pointer; text-decoration: none;
-            box-shadow: 0 4px 20px rgba(34,158,217,0.45); transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap;
-        }
-        .cs-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(34,158,217,0.6); }
-        .footer-copy { font-size: 0.6rem; color: var(--muted); opacity: 0.5; margin-top: 4px; }
-
-        @media (max-width: 768px) {
-            .section-title h2 { font-size: 32px; }
-            .section-title-logo { width: min(330px, 86vw); max-height: 65px; }
-            .product-grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-            .product-box { min-height: 150px; padding: 12px; }
-            .product-logo { height: 120px; }
-            .hero h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
-            .live-badge { display: none; }
-            .btn-admin .admin-label { display: none; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .stat-card { padding: 14px 10px; }
-            .stat-value { font-size: 1rem; }
-            .popup-item { max-width: 260px; padding: 10px 12px; font-size: 0.7rem; }
-        }
-    </style>
+    @media (max-width: 1020px) {
+      .header-inner { grid-template-columns: 1fr; padding: 14px 18px; gap: 12px; }
+      .header-actions { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+      .header-actions::-webkit-scrollbar { display: none; }
+      .suggestions { display: none; }
+      .hero-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .category-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .split-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .top-strip-inner { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+      .top-strip-inner::-webkit-scrollbar { display: none; }
+      .brand { font-size: 23px; }
+      .search-box { height: 44px; }
+      .nav-inner { gap: 18px; height: 44px; }
+      .hero-inner { grid-template-columns: 1fr; padding: 18px; min-height: auto; }
+      .promo-card { min-height: 190px; }
+      .promo-title { font-size: 24px; }
+      .category-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+      .category-item { min-height: 76px; }
+      .cat-icon { width: 42px; height: 42px; font-size: 12px; border-radius: 8px; }
+      .category-item span:last-child { font-size: 11px; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .product-grid { grid-template-columns: 1fr; }
+      .product-card { min-height: auto; }
+      .status-form { grid-template-columns: 1fr; }
+      .info-list { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+      .wa-footer { width: 100%; }
+    }
+  </style>
+<link rel="stylesheet" href="assets/kokorbx-theme.css?v=soft-purple-2">
 </head>
 <body>
-<div class="bg-fx"></div>
-<div class="grid-fx"></div>
-<div class="wrapper">
-    <header>
-        <div class="logo">
-            <div class="logo-svg-box">
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <g transform="rotate(-12 10 10)">
-                        <rect x="2" y="2" width="16" height="16" rx="4" fill="none" stroke="white" stroke-width="2.2"/>
-                        <rect x="6.5" y="6.5" width="7" height="7" rx="2" fill="none" stroke="white" stroke-width="2"/>
-                    </g>
-                </svg>
-            </div>
-            <div class="logo-text">Koko<em>RBX</em></div>
-        </div>
-        <div class="header-right">
-            <div id="user-bar" style="display:none;align-items:center;gap:8px;">
-                <span id="user-bar-name" style="font-size:12px;color:#aaa;font-weight:600;"></span>
-                <button onclick="logoutStore()" style="background:rgba(255,80,80,.12);border:1px solid rgba(255,80,80,.3);border-radius:7px;padding:5px 10px;color:#ff6060;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;">Keluar</button>
-            </div>
-            <div id="login-bar">
-                <a href="rbxstore_auth.html">🔑 Masuk</a>
-            </div>
-            <a href="admin.html" class="btn-admin">⚙ <span class="admin-label">Admin</span></a>
-            <div class="live-badge">
-                <div class="live-dot"></div> Online 24/7
-            </div>
-        </div>
-    </header>
-
-    <div class="hero">
-        <h1>Top Up <span class="g2">Robux</span><br>Di <span class="g1">KokoRBX</span></h1>
-        <p>Pilih metode Robux yang ingin kamu gunakan. Proses aman, cepat, dan terpercaya 🚀</p>
+  <div class="top-strip">
+    <div class="top-strip-inner">
+      <span>Bantuan 24/7</span>
+      <span>ID - IDR</span>
+      <span>Marketplace khusus Roblox</span>
     </div>
+  </div>
 
-    <section class="home-products">
-        <div class="section-title">
-            <span>✦ PRODUK KokoRBX</span>
-            <img class="section-title-logo" src="assets/logo-pilih-layanan-topup.png" alt="Pilih Layanan Top Up">
-            <p>Klik salah satu produk untuk melanjutkan ke halaman order</p>
+  <header class="main-header">
+    <div class="header-inner">
+      <a href="index.html" class="brand" aria-label="KokoRBX">
+        <span class="brand-mark">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <g transform="rotate(-12 10 10)">
+              <rect x="2" y="2" width="16" height="16" rx="4" stroke="white" stroke-width="2.2"/>
+              <rect x="7" y="7" width="6" height="6" rx="1.5" stroke="white" stroke-width="2"/>
+            </g>
+          </svg>
+        </span>
+        <span>Koko<em>RBX</em></span>
+      </a>
+
+      <div class="search-wrap">
+        <label class="search-box">
+          <span aria-hidden="true">Search</span>
+          <input id="product-search" type="search" placeholder="Cari Robux, akun, item, jasa Roblox..." autocomplete="off">
+          <span class="search-key">ENTER</span>
+        </label>
+        <div class="suggestions">
+          <a href="robux5hari.html">Robux 5 Hari</a>
+          <a href="robuxvilog.html">Robux Via Login</a>
+          <a href="akunroblox.html">Akun Roblox</a>
+          <a href="#produk">Item Game</a>
+          <a href="#status">Cek Order</a>
         </div>
-        <div class="product-grid">
-            <a href="robux5hari.html" class="product-box" aria-label="Robux 5 Hari">
-                <div class="product-logo">
-                    <img src="assets/logo-robux-5day.png" alt="Robux 5day">
-                </div>
-            </a>
-            <a href="robuxvilog.html" class="product-box" aria-label="Robux Vilog">
-                <div class="product-logo">
-                    <img src="assets/logo-robux-vilog.png" alt="Robux vilog">
-                </div>
-            </a>
-            <a href="robuxusername.html" class="product-box" aria-label="Robux Username">
-                <div class="product-logo">
-                    <img src="assets/logo-robux-username.png" alt="Robux username">
-                </div>
-            </a>
-            <a href="giftgp.html" class="product-box" aria-label="Gift GP Ingame">
-                <div class="product-logo">
-                    <img src="assets/logo-gift-gp.png" alt="Gift GP ingame">
-                </div>
-            </a>
+      </div>
+
+      <div class="header-actions">
+        <a class="header-btn sell" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20mulai%20order%20Roblox." target="_blank" rel="noopener">Mulai Order</a>
+        <div id="user-bar">
+          <span id="user-bar-name"></span>
+          <button class="logout-btn" onclick="logoutStore()">Keluar</button>
         </div>
+        <a id="login-bar" class="header-btn" href="rbxstore_auth.html">Masuk</a>
+        <a class="header-btn" href="admin.html">Admin</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav-bar">
+    <div class="nav-inner">
+      <a href="#kategori"><span>Grid</span> Kategori</a>
+      <a href="robux5hari.html">Robux 5 Hari</a>
+      <a href="robuxvilog.html">Robux Via Login</a>
+      <a href="giftgp.html">Gift GP</a>
+      <a href="akunroblox.html">Akun Roblox</a>
+      <a href="#produk">Item Game</a>
+      <a href="#status">Cek Order</a>
+    </div>
+  </nav>
+
+  <section class="hero-band">
+    <div class="hero-inner">
+      <a class="promo-card" href="robuxvilog.html" style="--promo-bg:linear-gradient(135deg,#2b195f,#0f0a23);">
+        <span class="promo-badge">Hot Roblox</span>
+        <div class="promo-title">Robux Via Login</div>
+        <div class="promo-sub">Rate VILOG A/B bisa kamu atur langsung dari admin panel.</div>
+        <span class="promo-cta">Top Up</span>
+      </a>
+      <a class="promo-card" href="akunroblox.html" style="--promo-bg:linear-gradient(135deg,#7c5cfc,#fc5c7d);">
+        <span class="promo-badge">Akun</span>
+        <div class="promo-title">Akun Roblox</div>
+        <div class="promo-sub">Katalog akun ready dan custom request lewat admin.</div>
+        <span class="promo-cta">Lihat</span>
+      </a>
+      <a class="promo-card" href="giftgp.html" style="--promo-bg:linear-gradient(135deg,#00a884,#151033);">
+        <span class="promo-badge">Gift GP</span>
+        <div class="promo-title">Gift Gamepass</div>
+        <div class="promo-sub">Order gift gamepass ingame dengan total Robux custom.</div>
+        <span class="promo-cta">Order</span>
+      </a>
+      <a class="promo-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20custom%20request%20Roblox." target="_blank" rel="noopener" style="--promo-bg:linear-gradient(135deg,#fc5c7d,#26113f);">
+        <span class="promo-badge">Custom</span>
+        <div class="promo-title">Request Item</div>
+        <div class="promo-sub">Item game, jasa farming, joki, dan kebutuhan Roblox lain.</div>
+        <span class="promo-cta">Chat</span>
+      </a>
+    </div>
+  </section>
+
+  <main class="main">
+    <section class="category-strip" id="kategori">
+      <div class="category-grid">
+        <button class="category-item active" data-filter="all"><span class="cat-icon">ALL</span><span>Semua</span></button>
+        <button class="category-item" data-filter="robux"><span class="cat-icon">R$</span><span>Top Up</span></button>
+        <button class="category-item" data-filter="akun"><span class="cat-icon pink">ACC</span><span>Akun</span></button>
+        <button class="category-item" data-filter="gift"><span class="cat-icon orange">GP</span><span>Gift GP</span></button>
+        <button class="category-item" data-filter="item"><span class="cat-icon green">ITM</span><span>Item</span></button>
+        <button class="category-item" data-filter="jasa"><span class="cat-icon cyan">JOB</span><span>Joki</span></button>
+        <button class="category-item" data-filter="game"><span class="cat-icon">RBLX</span><span>Roblox Games</span></button>
+        <button class="category-item" data-filter="voucher"><span class="cat-icon orange">VCR</span><span>Voucher</span></button>
+        <button class="category-item" data-filter="custom"><span class="cat-icon green">REQ</span><span>Custom</span></button>
+        <button class="category-item" data-filter="status"><span class="cat-icon cyan">ID</span><span>Status</span></button>
+      </div>
     </section>
 
-    <!-- Stats Bar (data dari Supabase) -->
-    <div class="stats-section">
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Stock Robux</div>
-                <div class="stat-value green">UNLIMITED</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Status</div>
-                <div class="stat-value green">
-                    <span class="stat-badge"><span class="live-dot"></span> READY</span>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Robux Terjual</div>
-                <div class="stat-value gold" id="stat-robux-terjual">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Orderan</div>
-                <div class="stat-value purple" id="stat-total-orderan">0</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Popup "Baru Saja Beli" -->
-    <div class="recent-buy-popup" id="recentBuyPopup"></div>
-
-    <div class="trust">
-        <div class="trust-track" id="trustTrack">
-            <div class="trust-item"><span class="ti">🔐</span> Tanpa Password</div>
-            <div class="trust-item"><span class="ti">⚡</span> 5 Hari</div>
-            <div class="trust-item"><span class="ti">✅</span> 50K+ Transaksi</div>
-            <div class="trust-item"><span class="ti">🕐</span> 24/7 Online</div>
-            <div class="trust-item"><span class="ti">💯</span> Garansi Aman</div>
-            <div class="trust-item"><span class="ti">🔐</span> Tanpa Password</div>
-            <div class="trust-item"><span class="ti">⚡</span> 5 Hari</div>
-            <div class="trust-item"><span class="ti">✅</span> 50K+ Transaksi</div>
-            <div class="trust-item"><span class="ti">🕐</span> 24/7 Online</div>
-            <div class="trust-item"><span class="ti">💯</span> Garansi Aman</div>
-        </div>
-    </div>
-</div>
-
-<footer class="site-footer">
-    <div class="site-footer-inner">
+    <section class="section" id="produk">
+      <div class="section-head">
         <div>
-            <div class="footer-brand">✦ KokoRBX</div>
-            <div class="footer-tagline">Top Up Robux via Username · Cepat & Aman</div>
+          <div class="section-title">Top Up Roblox</div>
+          <div class="section-sub">Produk utama yang sudah punya halaman order otomatis.</div>
         </div>
-        <div class="footer-divider"></div>
-        <a class="cs-fab" href="https://wa.me/6281996112019" target="_blank" rel="noopener">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20.52 3.48A11.91 11.91 0 0012.03 0C5.41 0 .06 5.36.06 11.98c0 2.11.55 4.16 1.6 5.97L0 24l6.23-1.63a11.94 11.94 0 005.8 1.48h.01c6.62 0 11.97-5.36 11.97-11.98 0-3.2-1.25-6.2-3.49-8.39zM12.04 21.3c-1.8 0-3.57-.48-5.13-1.39l-.37-.22-3.7.97.99-3.6-.24-.37a9.3 9.3 0 01-1.43-4.97c0-5.14 4.18-9.32 9.33-9.32 2.49 0 4.83.97 6.59 2.73a9.26 9.26 0 012.73 6.59c0 5.14-4.18 9.32-9.33 9.32z"/></svg>
-            Chat WhatsApp
+        <a class="see-all" href="#produk">Lihat Semua</a>
+      </div>
+      <div class="product-grid" id="product-grid">
+        <a class="product-card" href="robux5hari.html" data-category="robux" data-name="robux 5 hari gamepass top up">
+          <div class="product-media"><img src="assets/logo-robux-5day.png" alt="Robux 5 Hari"></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge hot">Best Seller</span><span class="badge">Gamepass</span></div>
+            <div class="product-title">Robux 5 Hari</div>
+            <div class="product-desc">Top up lewat gamepass, cocok buat order aman dengan jadwal masuk.</div>
+            <div class="product-foot"><span class="price">Rate admin</span><span class="order-btn">Order</span></div>
+          </div>
         </a>
-        <div class="footer-copy">© 2025 KokoRBX — All rights reserved</div>
+
+        <a class="product-card" href="robuxvilog.html" data-category="robux" data-name="robux vilog via login instant">
+          <div class="product-media"><img src="assets/logo-robux-vilog.png" alt="Robux VILOG"></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge hot">Instant</span><span class="badge manual">Rate A/B</span></div>
+            <div class="product-title">Robux Via Login</div>
+            <div class="product-desc">Paket VILOG dengan dua rate terpisah untuk paket kecil dan besar.</div>
+            <div class="product-foot"><span class="price">Mulai 80 R$</span><span class="order-btn">Order</span></div>
+          </div>
+        </a>
+
+        <a class="product-card" href="robuxusername.html" data-category="robux" data-name="robux username no gamepass">
+          <div class="product-media"><img src="assets/logo-robux-username.png" alt="Robux Username"></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge">Username</span></div>
+            <div class="product-title">Robux Username</div>
+            <div class="product-desc">Order Robux via username dengan form yang cepat dan simpel.</div>
+            <div class="product-foot"><span class="price">Rate admin</span><span class="order-btn">Order</span></div>
+          </div>
+        </a>
+
+        <a class="product-card" href="giftgp.html" data-category="gift robux" data-name="gift gp ingame robux gift gamepass">
+          <div class="product-media"><img src="assets/logo-gift-gp.png" alt="Gift GP Ingame"></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge manual">Custom R$</span></div>
+            <div class="product-title">Gift GP Ingame</div>
+            <div class="product-desc">Buat pesanan gift gamepass ingame dengan total Robux custom.</div>
+            <div class="product-foot"><span class="price">Custom</span><span class="order-btn">Order</span></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <div class="section-title">Roblox Marketplace</div>
+          <div class="section-sub">Etalase manual untuk akun, item game, jasa, dan custom request.</div>
+        </div>
+        <a class="see-all" href="akunroblox.html">Akun Roblox</a>
+      </div>
+      <div class="product-grid">
+        <a class="product-card" href="akunroblox.html" data-category="akun" data-name="akun roblox ready akun murah akun sultan">
+          <div class="product-media"><span class="product-token">ACC</span></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge manual">Admin Review</span><span class="badge hot">New</span></div>
+            <div class="product-title">Akun Roblox</div>
+            <div class="product-desc">Katalog akun ready dan request akun tertentu lewat admin.</div>
+            <div class="product-foot"><span class="price">Chat harga</span><span class="order-btn">Lihat</span></div>
+          </div>
+        </a>
+
+        <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20order%20item%20game%20Roblox." target="_blank" rel="noopener" data-category="item game" data-name="item game roblox pet currency grow a garden blox fruits fisch">
+          <div class="product-media"><span class="product-token green">ITM</span></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge manual">Manual</span></div>
+            <div class="product-title">Item Game</div>
+            <div class="product-desc">Pet, currency, item event, dan kebutuhan game populer.</div>
+            <div class="product-foot"><span class="price">By request</span><span class="order-btn">Chat</span></div>
+          </div>
+        </a>
+
+        <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20jasa%20farming%20atau%20joki%20Roblox." target="_blank" rel="noopener" data-category="jasa game" data-name="jasa farming joki leveling quest roblox">
+          <div class="product-media"><span class="product-token orange">JOB</span></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge manual">Queue</span></div>
+            <div class="product-title">Jasa Farming</div>
+            <div class="product-desc">Bantu leveling, grinding, quest, raid, atau progress game.</div>
+            <div class="product-foot"><span class="price">Cek slot</span><span class="order-btn">Chat</span></div>
+          </div>
+        </a>
+
+        <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20punya%20custom%20request%20Roblox." target="_blank" rel="noopener" data-category="custom voucher" data-name="custom request roblox voucher private server gamepass">
+          <div class="product-media"><span class="product-token pink">REQ</span></div>
+          <div class="product-body">
+            <div class="badges"><span class="badge manual">Custom</span></div>
+            <div class="product-title">Custom Request</div>
+            <div class="product-desc">Kalau produk belum ada, kirim detail kebutuhanmu ke admin.</div>
+            <div class="product-foot"><span class="price">Manual</span><span class="order-btn">Chat</span></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="split-layout" id="status">
+      <div class="panel" data-category="status">
+        <h3>Cek Status Order</h3>
+        <p>Masukkan ID order seperti RBX-123456 untuk melihat status terbaru.</p>
+        <form class="status-form" id="status-form">
+          <input id="order-id-input" type="text" placeholder="RBX-123456" autocomplete="off">
+          <button type="submit">Cek Order</button>
+        </form>
+        <div class="status-result" id="status-result"></div>
+      </div>
+      <div class="panel">
+        <h3>Kenapa KokoRBX?</h3>
+        <p>Satu tempat untuk kebutuhan Roblox, dari top up otomatis sampai produk manual lewat admin.</p>
+        <div class="info-list">
+          <div class="info-item"><span class="info-dot"></span><span><b>Order jelas</b>Status bisa dicek pakai ID order.</span></div>
+          <div class="info-item"><span class="info-dot blue"></span><span><b>Rate fleksibel</b>Harga bisa diatur dari admin panel.</span></div>
+          <div class="info-item"><span class="info-dot orange"></span><span><b>Produk manual</b>Akun, item, dan jasa lewat admin.</span></div>
+          <div class="info-item"><span class="info-dot purple"></span><span><b>Katalog Roblox</b>Fokus hanya kebutuhan Roblox.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">KokoRBX Marketplace</div>
+        <p>Robux, gamepass, item game, jasa, akun Roblox, dan custom request.</p>
+      </div>
+      <a class="wa-footer" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20tanya%20produk%20Roblox." target="_blank" rel="noopener">Chat WhatsApp</a>
     </div>
-</footer>
+  </footer>
 
-<script>
+  <script>
     const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-        ? 'https://chisatobobaaaa.vercel.app'
-        : '';
+      ? 'https://koko-rbx.vercel.app'
+      : '';
 
-    // Session
     function getSession() {
-        try { return JSON.parse(localStorage.getItem('rbx_session') || 'null'); } catch(e) { return null; }
+      try { return JSON.parse(localStorage.getItem('rbx_session') || 'null'); } catch(e) { return null; }
     }
+
     function logoutStore() {
-        localStorage.removeItem('rbx_session');
-        updateUserBar();
+      localStorage.removeItem('rbx_session');
+      updateUserBar();
     }
+
     function updateUserBar() {
-        const s = getSession();
-        document.getElementById('user-bar').style.display = s ? 'flex' : 'none';
-        document.getElementById('login-bar').style.display = s ? 'none' : 'block';
-        if (s) document.getElementById('user-bar-name').textContent = '👤 @' + s.username;
+      const session = getSession();
+      const userBar = document.getElementById('user-bar');
+      const loginBar = document.getElementById('login-bar');
+      if (userBar) userBar.style.display = session ? 'flex' : 'none';
+      if (loginBar) loginBar.style.display = session ? 'none' : 'inline-flex';
+      if (session) document.getElementById('user-bar-name').textContent = session.username || 'User';
     }
+
+    function normalizeText(value) {
+      return String(value || '').toLowerCase().trim();
+    }
+
+    function allProductCards() {
+      return Array.from(document.querySelectorAll('.product-card'));
+    }
+
+    function applyProductFilters() {
+      const active = document.querySelector('.category-item.active')?.dataset.filter || 'all';
+      const query = normalizeText(document.getElementById('product-search')?.value);
+      allProductCards().forEach(card => {
+        const category = normalizeText(card.dataset.category);
+        const name = normalizeText(card.dataset.name + ' ' + card.textContent);
+        const categoryMatch = active === 'all' || category.split(/\s+/).includes(active);
+        const queryMatch = !query || name.includes(query);
+        card.classList.toggle('hidden', !(categoryMatch && queryMatch));
+      });
+      if (active === 'status') document.getElementById('status')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    document.querySelectorAll('.category-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
+        btn.classList.add('active');
+        applyProductFilters();
+      });
+    });
+
+    document.getElementById('product-search')?.addEventListener('input', applyProductFilters);
+
+    function rupiah(value) {
+      return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+    }
+
+    function statusLabel(status) {
+      const map = {
+        pending: 'Pending',
+        bukti_masuk: 'Bukti Masuk',
+        process: 'Diproses',
+        reviewed: 'Diproses',
+        success: 'Selesai',
+        failed: 'Ditolak',
+        cancelled: 'Dibatalkan'
+      };
+      return map[status] || status || '-';
+    }
+
+    function renderStatus(order) {
+      return [
+        ['Order ID', order.id],
+        ['Status', statusLabel(order.status)],
+        ['Username', order.username],
+        ['Produk', order.method || '-'],
+        ['Robux', Number(order.robux || 0).toLocaleString('id-ID') + ' R$'],
+        ['Total', rupiah(order.price)],
+        ['Bukti Bayar', order.hasProof ? 'Sudah masuk' : 'Belum ada']
+      ].map(row => '<div class="status-row"><span>' + row[0] + '</span><strong>' + row[1] + '</strong></div>').join('');
+    }
+
+    document.getElementById('status-form')?.addEventListener('submit', async event => {
+      event.preventDefault();
+      const input = document.getElementById('order-id-input');
+      const result = document.getElementById('status-result');
+      const id = String(input.value || '').trim().toUpperCase();
+      if (!id) {
+        result.className = 'status-result show';
+        result.textContent = 'Masukkan ID order dulu.';
+        return;
+      }
+      result.className = 'status-result show';
+      result.textContent = 'Mencari order...';
+      try {
+        const res = await fetch(API_BASE + '/api/order-status?id=' + encodeURIComponent(id), { cache: 'no-store' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Order tidak ditemukan');
+        result.innerHTML = renderStatus(data.order);
+      } catch(e) {
+        result.textContent = e.message || 'Order tidak ditemukan.';
+      }
+    });
+
     updateUserBar();
-
-    // Trust bar animation
-    (function() {
-        const track = document.getElementById('trustTrack');
-        if (!track) return;
-        const speed = 80;
-        let x = 0, trackW = 0, vw = 0, last = null;
-        function reset() {
-            vw = window.innerWidth;
-            trackW = track.scrollWidth / 2;
-            x = vw;
-        }
-        reset();
-        track.style.transform = `translateX(${x}px)`;
-        window.addEventListener('resize', reset);
-        function tick(ts) {
-            if (!last) last = ts;
-            const dt = (ts - last) / 1000;
-            last = ts;
-            x -= speed * dt;
-            if (x + trackW < 0) { x = vw; }
-            track.style.transform = `translateX(${x}px)`;
-            requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-    })();
-
-    // ========== AMBIL DATA DARI BACKEND ==========
-    async function fetchPublicStats() {
-        try {
-            const res = await fetch(API_BASE + '/api/public-stats');
-            if (!res.ok) throw new Error('Gagal fetch stats');
-            return await res.json();
-        } catch(e) {
-            console.warn('Stats fetch error:', e);
-            return { totalOrders: 0, totalRobux: 0, recentOrders: [] };
-        }
-    }
-
-    let publicStatsCache = null;
-
-    async function updateStatsFromBackend() {
-        publicStatsCache = await fetchPublicStats();
-
-        document.getElementById('stat-robux-terjual').textContent = Number(publicStatsCache.totalRobux || 0).toLocaleString('id-ID');
-        document.getElementById('stat-total-orderan').textContent = Number(publicStatsCache.totalOrders || 0).toLocaleString('id-ID');
-    }
-
-    // Popup "Baru Saja Beli"
-    let popupQueue = [];
-    let popupIndex = 0;
-    const popupContainer = document.getElementById('recentBuyPopup');
-
-    async function refreshPopupQueue() {
-        if (!publicStatsCache) publicStatsCache = await fetchPublicStats();
-        const orders = publicStatsCache.recentOrders || [];
-        popupQueue = orders.map(o => ({
-            username: o.username || 'Seseorang',
-            robux: Number(o.robux) || 0,
-            time: o.time,
-            package: o.package || o.method || 'Robux'
-        }));
-        popupIndex = 0;
-    }
-
-    function getTimeAgo(dateString) {
-        const now = new Date();
-        const then = new Date(dateString);
-        const diffMs = now - then;
-        const seconds = Math.floor(diffMs / 1000);
-        if (seconds < 60) return 'Baru saja';
-        const minutes = Math.floor(seconds / 60);
-        if (minutes < 60) return minutes + ' menit lalu';
-        const hours = Math.floor(minutes / 60);
-        if (hours < 24) return hours + ' jam lalu';
-        const days = Math.floor(hours / 24);
-        return days + ' hari lalu';
-    }
-
-    function displayNextPopup() {
-        if (popupQueue.length === 0) return;
-        const order = popupQueue[popupIndex % popupQueue.length];
-        const popup = document.createElement('div');
-        popup.className = 'popup-item';
-        const amount = order.robux > 0 ? order.robux.toLocaleString('id-ID') + ' R$' : '';
-        const product = order.package || 'Robux';
-        const time = order.time ? getTimeAgo(order.time) : 'Baru saja';
-        popup.innerHTML = `
-            <div class="popup-info">
-                <div class="buyer-name">${order.username}</div>
-                <div class="buyer-product">${product} ${amount}</div>
-                <div class="buyer-time">${time}</div>
-            </div>
-        `;
-        popupContainer.appendChild(popup);
-        setTimeout(() => popup.remove(), 4000);
-        popupIndex++;
-    }
-
-    // Inisialisasi
-    async function initPublicFeatures() {
-        await updateStatsFromBackend();
-        await refreshPopupQueue();
-        if (popupQueue.length > 0) {
-            displayNextPopup(); // tampilkan satu segera
-            setInterval(displayNextPopup, 5000); // lalu tiap 5 detik
-        }
-        // Refresh data setiap 30 detik
-        setInterval(async () => {
-            await updateStatsFromBackend();
-            await refreshPopupQueue();
-        }, 30000);
-    }
-
-    initPublicFeatures();
-</script>
+  </script>
+  <script src="assets/cart-client.js"></script>
 </body>
 </html>

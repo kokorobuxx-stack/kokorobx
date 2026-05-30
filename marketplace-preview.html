@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KokoRBX - Marketplace Roblox</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/cart-client.css">
+  <style>
+    :root {
+      --bg: #080d18;
+      --panel: #101827;
+      --panel2: #152033;
+      --panel3: #1d2d47;
+      --line: #263756;
+      --line2: #38517c;
+      --text: #f3f8ff;
+      --muted: #9fb3d3;
+      --soft: #6f88b4;
+      --purple: #a78bfa;
+      --pink: #7da2ff;
+      --green: #8cc2ff;
+      --cyan: #9fd8ff;
+      --gold: #c8ddff;
+      --font: "Pixelify Sans", monospace;
+      --serif: "Cormorant Garamond", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      background:
+        linear-gradient(rgba(143,178,255,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(143,178,255,.045) 1px, transparent 1px),
+        radial-gradient(circle at 14% 4%, rgba(143,178,255,.22), transparent 27%),
+        radial-gradient(circle at 88% 14%, rgba(159,216,255,.16), transparent 26%),
+        radial-gradient(circle at 72% 82%, rgba(111,165,255,.13), transparent 26%),
+        var(--bg);
+      background-size: 44px 44px, 44px 44px, auto, auto, auto, auto;
+      color: var(--text);
+      font-family: var(--font);
+      overflow-x: hidden;
+      letter-spacing: 0;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(7,7,11,.06), rgba(7,7,11,.58)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+      z-index: 0;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    img { display: block; }
+    .page { position: relative; z-index: 1; }
+
+    .top-strip {
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(7,7,11,.9);
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .top-inner {
+      max-width: 1220px;
+      height: 30px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 16px;
+      white-space: nowrap;
+    }
+    .main-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(9,9,15,.92);
+      backdrop-filter: blur(18px);
+    }
+    .header-inner {
+      max-width: 1220px;
+      min-height: 74px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: auto minmax(260px, 1fr) auto;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(167,139,250,.52), rgba(143,178,255,.34));
+      box-shadow: 0 0 22px rgba(167,139,250,.24);
+    }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand em {
+      color: var(--purple);
+      font-style: normal;
+      text-shadow: 0 0 18px rgba(167,139,250,.28);
+    }
+    .search-box {
+      height: 48px;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      border: 2px solid rgba(167,139,250,.72);
+      border-radius: 8px;
+      background: #fff;
+      color: #544c6d;
+      padding: 0 12px;
+      box-shadow: 0 0 0 4px rgba(167,139,250,.1), 0 16px 28px rgba(0,0,0,.24);
+    }
+    .search-box input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: #171322;
+      font-size: 14px;
+    }
+    .search-key {
+      border: 1px solid #d9d2ef;
+      border-radius: 5px;
+      color: #8f86aa;
+      padding: 4px 7px;
+      font-size: 10px;
+      font-weight: 900;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow: visible;
+    }
+    .header-btn {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 8px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .header-btn.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--purple), #86bdff);
+      color: #07111d;
+    }
+    .nav-bar {
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      background: rgba(14,14,22,.95);
+    }
+    .nav-inner {
+      max-width: 1220px;
+      height: 46px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-inner a {
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .market-shell {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 14px 16px 56px;
+      display: grid;
+      grid-template-columns: 228px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+    .category-panel {
+      position: sticky;
+      top: 92px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(16,16,24,.94);
+      overflow: hidden;
+      box-shadow: 0 18px 36px rgba(0,0,0,.24);
+    }
+    .side-head {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      color: #cdbfff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .category-list {
+      display: grid;
+      gap: 0;
+    }
+    .category-item {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 0;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      background: transparent;
+      color: var(--muted);
+      padding: 0 13px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .category-item.active,
+    .category-item:hover {
+      background: rgba(143,178,255,.14);
+      color: var(--text);
+    }
+    .cat-token {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .side-card {
+      margin: 12px;
+      border: 1px solid rgba(143,178,255,.28);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(143,178,255,.12), rgba(159,216,255,.1));
+      padding: 12px;
+    }
+    .side-card strong {
+      display: block;
+      color: #cdbfff;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    .side-card span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .content { display: grid; gap: 14px; min-width: 0; }
+    .quick-panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(16,16,24,.86);
+      box-shadow: 0 18px 36px rgba(0,0,0,.2);
+      padding: 12px;
+      backdrop-filter: blur(14px);
+    }
+    .quick-panel-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .quick-panel-title {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.05;
+    }
+    .quick-panel-sub {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 4px;
+    }
+    .hero-board {
+      min-height: 278px;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(380px, 1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+    .hero-copy,
+    .quick-order,
+    .section,
+    .status-row > * {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(16,16,24,.94);
+      box-shadow: 0 18px 36px rgba(0,0,0,.22);
+    }
+    .hero-copy {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      display: grid;
+      align-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, rgba(143,178,255,.26), rgba(159,216,255,.1)), rgba(16,24,39,.94);
+    }
+    .hero-copy::after {
+      content: "RBX";
+      position: absolute;
+      right: 18px;
+      bottom: -18px;
+      color: rgba(255,255,255,.05);
+      font-size: 118px;
+      font-weight: 900;
+      pointer-events: none;
+    }
+    .eyebrow {
+      width: fit-content;
+      border: 1px solid rgba(143,178,255,.34);
+      border-radius: 999px;
+      background: rgba(143,178,255,.1);
+      color: #cdbfff;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .hero-copy h1 {
+      max-width: 540px;
+      font-size: 58px;
+      line-height: .94;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+    .hero-copy h1 span {
+      background: linear-gradient(90deg, var(--green), var(--cyan), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-copy p {
+      max-width: 560px;
+      color: #c0b8d4;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+    .hero-action {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 8px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      padding: 0 13px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .hero-action.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--purple), #86bdff);
+      color: #07111d;
+    }
+    .quick-order {
+      padding: 14px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .quick-panel .quick-order {
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      padding: 0;
+    }
+    .quick-tile {
+      position: relative;
+      min-height: 94px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      background: var(--tile-bg, linear-gradient(135deg, #1d1636, #101018));
+      padding: 11px;
+      display: grid;
+      align-content: end;
+      gap: 7px;
+    }
+    .quick-tile img {
+      position: absolute;
+      right: -8px;
+      top: 8px;
+      width: 88px;
+      max-height: 54px;
+      object-fit: contain;
+      opacity: .76;
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,.25));
+    }
+    .quick-tile strong {
+      position: relative;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.08;
+    }
+    .quick-tile span {
+      position: relative;
+      color: rgba(255,255,255,.76);
+      font-size: 11px;
+      line-height: 1.38;
+    }
+
+    .section {
+      padding: 14px;
+    }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 25px;
+      font-weight: 900;
+    }
+    .section-title::before {
+      content: "";
+      width: 8px;
+      height: 26px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--cyan), var(--purple));
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 2px;
+    }
+    .pill-link {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(143,178,255,.34);
+      border-radius: 8px;
+      background: rgba(143,178,255,.13);
+      color: #d7ccff;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .product-card {
+      min-height: 268px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(13,20,33,.98);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(143,178,255,.45);
+      box-shadow: 0 18px 28px rgba(0,0,0,.28);
+    }
+    .product-media {
+      height: 108px;
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(143,178,255,.24), transparent 52%),
+        linear-gradient(135deg, #182947, #0b111d);
+    }
+    .product-media img {
+      max-width: 94%;
+      max-height: 82px;
+      object-fit: contain;
+      filter: drop-shadow(0 13px 20px rgba(143,178,255,.22));
+    }
+    .product-media.photo {
+      height: 128px;
+      padding: 0;
+      background: #0b111d;
+    }
+    .product-media.photo img {
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      max-height: none;
+      object-fit: cover;
+      filter: none;
+    }
+    .product-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px;
+    }
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .badge {
+      min-height: 21px;
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid rgba(143,178,255,.34);
+      border-radius: 999px;
+      background: rgba(143,178,255,.12);
+      color: #d7ccff;
+      padding: 0 8px;
+      font-size: 10px;
+      font-weight: 900;
+    }
+    .badge.hot {
+      border-color: rgba(111,165,255,.4);
+      background: rgba(111,165,255,.13);
+      color: #d7ccff;
+    }
+    .badge.ready {
+      border-color: rgba(159,216,255,.4);
+      background: rgba(159,216,255,.12);
+      color: #cdbfff;
+    }
+    .product-title {
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1.12;
+    }
+    .product-desc {
+      flex: 1;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.48;
+    }
+    .product-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 2px;
+    }
+    .price {
+      color: #cdbfff;
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .product-actions {
+      display: flex;
+      gap: 6px;
+    }
+    .mini-btn {
+      min-height: 32px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 8px;
+      background: rgba(255,255,255,.07);
+      color: var(--text);
+      padding: 0 9px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .mini-btn.primary {
+      border: 0;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      color: #fff;
+    }
+    .manual-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .status-row {
+      display: grid;
+      grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+      gap: 14px;
+    }
+    .status-panel,
+    .flow-panel {
+      padding: 16px;
+    }
+    .status-panel h3,
+    .flow-panel h3 {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 7px;
+    }
+    .status-panel p,
+    .flow-panel p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin-bottom: 12px;
+    }
+    .status-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+    }
+    .status-form input {
+      min-width: 0;
+      height: 42px;
+      border: 1px solid var(--line2);
+      border-radius: 8px;
+      background: var(--panel2);
+      color: var(--text);
+      padding: 0 12px;
+      outline: none;
+    }
+    .status-form button {
+      height: 42px;
+      border: 0;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--purple), #86bdff);
+      color: #07111d;
+      padding: 0 15px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .flow-item {
+      min-height: 82px;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 8px;
+      background: rgba(255,255,255,.04);
+      padding: 10px;
+    }
+    .flow-item b {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+    .flow-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: rgba(8,13,24,.94);
+      color: var(--muted);
+    }
+    .footer-inner {
+      max-width: 1220px;
+      min-height: 84px;
+      margin: 0 auto;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .footer-brand {
+      color: #cdbfff;
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .footer-inner p {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .hidden { display: none !important; }
+
+    @media (max-width: 1060px) {
+      .header-inner { grid-template-columns: 1fr; }
+      .header-actions { overflow-x: auto; scrollbar-width: none; }
+      .header-actions::-webkit-scrollbar { display: none; }
+      .market-shell { grid-template-columns: 1fr; }
+      .category-panel { position: static; }
+      .category-list { display: flex; overflow-x: auto; scrollbar-width: none; }
+      .category-list::-webkit-scrollbar { display: none; }
+      .category-item { min-width: 132px; border-right: 1px solid rgba(255,255,255,.06); }
+      .side-card { display: none; }
+      .hero-board { grid-template-columns: 1fr; }
+      .quick-order { grid-template-columns: repeat(4, minmax(220px, 1fr)); overflow-x: auto; scrollbar-width: none; }
+      .quick-order::-webkit-scrollbar { display: none; }
+      .product-grid, .manual-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .status-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .top-inner { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+      .top-inner::-webkit-scrollbar { display: none; }
+      .brand { font-size: 22px; }
+      .search-key { display: none; }
+      .nav-inner { height: 44px; gap: 16px; }
+      .market-shell { padding: 12px 14px 42px; }
+      .hero-copy { padding: 18px; }
+      .hero-copy h1 { font-size: 38px; }
+      .hero-copy p { font-size: 13px; }
+      .quick-order { grid-template-columns: minmax(240px, 1fr); }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .product-grid,
+      .manual-grid,
+      .flow-grid { grid-template-columns: 1fr; }
+      .status-form { grid-template-columns: 1fr; }
+      .status-form button, .pill-link { width: 100%; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+<link rel="stylesheet" href="assets/kokorbx-theme.css?v=soft-purple-2">
+</head>
+<body>
+  <div class="page">
+    <div class="top-strip">
+      <div class="top-inner">
+        <span>Bantuan 24/7</span>
+        <span>ID - IDR</span>
+        <span>Roblox marketplace preview</span>
+      </div>
+    </div>
+
+    <header class="main-header">
+      <div class="header-inner">
+        <a href="marketplace-preview.html" class="brand" aria-label="KokoRBX">
+          <span class="brand-mark">
+            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <g transform="rotate(-12 10 10)">
+                <rect x="2" y="2" width="16" height="16" rx="4" stroke="white" stroke-width="2.2"/>
+                <rect x="7" y="7" width="6" height="6" rx="1.5" stroke="white" stroke-width="2"/>
+              </g>
+            </svg>
+          </span>
+          <span>Koko<em>RBX</em></span>
+        </a>
+        <label class="search-box">
+          <span>Cari</span>
+          <input id="product-search" type="search" placeholder="Robux, akun, gift gp, item, jasa..." autocomplete="off">
+          <span class="search-key">ENTER</span>
+        </label>
+        <div class="header-actions">
+          <a class="header-btn primary" href="robux5hari.html">Mulai Order</a>
+          <a class="header-btn" href="rbxstore_auth.html">Masuk</a>
+          <a class="header-btn" href="transaksi.html">Transaksi</a>
+          <a class="header-btn" href="admin.html">Admin</a>
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav-bar">
+      <div class="nav-inner">
+        <a href="#produk">Produk Utama</a>
+        <a href="robux5hari.html">Robux 5 Hari</a>
+        <a href="robuxvilog.html">VILOG</a>
+        <a href="robuxusername.html">Username</a>
+        <a href="giftgp.html">Gift GP</a>
+        <a href="akunroblox.html">Akun Roblox</a>
+        <a href="transaksi.html">Transaksi</a>
+        <a href="#status">Cek Order</a>
+      </div>
+    </nav>
+
+    <main class="market-shell">
+      <aside class="category-panel" id="kategori">
+        <div class="side-head">Kategori Roblox</div>
+        <div class="category-list">
+          <button class="category-item active" data-filter="all"><span class="cat-token">ALL</span> Semua</button>
+          <button class="category-item" data-filter="robux"><span class="cat-token">R$</span> Robux</button>
+          <button class="category-item" data-filter="akun"><span class="cat-token">ACC</span> Akun</button>
+          <button class="category-item" data-filter="gift"><span class="cat-token">GP</span> Gift GP</button>
+          <button class="category-item" data-filter="item"><span class="cat-token">LTD</span> Item Limited</button>
+          <button class="category-item" data-filter="jasa"><span class="cat-token">JOB</span> Jasa</button>
+          <button class="category-item" data-filter="custom"><span class="cat-token">REQ</span> Custom</button>
+          <button class="category-item" data-filter="status"><span class="cat-token">ID</span> Status</button>
+        </div>
+        <div class="side-card">
+          <strong>Preview Baru</strong>
+          <span>Produk lama KokoRBX tetap jadi etalase utama, produk manual jadi katalog Roblox.</span>
+        </div>
+      </aside>
+
+      <div class="content">
+        <section class="quick-panel" aria-label="Marketplace KokoRBX">
+          <div class="quick-panel-head">
+            <div>
+              <div class="quick-panel-title">Marketplace KokoRBX</div>
+              <div class="quick-panel-sub">Produk utama tetap cepat dibuka dari etalase KokoRBX.</div>
+            </div>
+            <a class="pill-link" href="#manual">Katalog Manual</a>
+          </div>
+          <div class="quick-order" aria-label="Produk cepat">
+            <a class="quick-tile" href="robux5hari.html" style="--tile-bg:linear-gradient(135deg,#1c3358,#0d1423);">
+              <img src="assets/logo-robux-5day.png" alt="Robux 5 Hari">
+              <strong>Robux 5 Hari</strong>
+              <span>Produk lama kamu, checkout tetap original.</span>
+            </a>
+            <a class="quick-tile" href="robuxvilog.html" style="--tile-bg:linear-gradient(135deg,#244d74,#101827);">
+              <img src="assets/logo-robux-vilog.png" alt="Robux VILOG">
+              <strong>Robux VILOG</strong>
+              <span>Rate A/B dari admin panel.</span>
+            </a>
+            <a class="quick-tile" href="robuxusername.html" style="--tile-bg:linear-gradient(135deg,#2b426d,#101827);">
+              <img src="assets/logo-robux-username.png" alt="Robux Username">
+              <strong>Username</strong>
+              <span>Order Robux tanpa login.</span>
+            </a>
+            <a class="quick-tile" href="giftgp.html" style="--tile-bg:linear-gradient(135deg,#305f8f,#101827);">
+              <img src="assets/logo-gift-gp.png" alt="Gift Gamepass">
+              <strong>Gift GP</strong>
+              <span>Gift gamepass ingame.</span>
+            </a>
+          </div>
+        </section>
+
+        <section class="section" id="produk">
+          <div class="section-head">
+            <div>
+              <div class="section-title">Produk Utama</div>
+              <div class="section-sub">Produk lama KokoRBX tampil sebagai kartu marketplace.</div>
+            </div>
+            <a class="pill-link" href="robux5hari.html">Mulai dari Robux</a>
+          </div>
+          <div class="product-grid" id="main-grid"></div>
+        </section>
+
+        <section class="section" id="manual">
+          <div class="section-head">
+            <div>
+              <div class="section-title">Katalog Manual</div>
+              <div class="section-sub">Akun Roblox, item limited, jasa, dan request masuk Panel Transaksi.</div>
+            </div>
+            <a class="pill-link" href="transaksi.html?new=custom&product=Custom%20Request&category=custom&priceText=Manual&image=assets%2Fmarketplace%2Fcustom-request.png&detail=Request%20produk%20Roblox%20custom%20di%20Panel%20Transaksi.">Buka Panel</a>
+          </div>
+          <div class="manual-grid" id="manual-grid"></div>
+        </section>
+
+        <section class="status-row" id="status">
+          <div class="status-panel">
+            <h3>Cek Status Order</h3>
+            <p>Masukkan ID order kamu untuk lanjut ke panel status KokoRBX.</p>
+            <form class="status-form" id="status-form">
+              <input id="order-id-input" type="text" placeholder="RBX-123456" autocomplete="off">
+              <button type="submit">Cek</button>
+            </form>
+          </div>
+          <div class="flow-panel">
+            <h3>Alur Belanja</h3>
+            <p>Produk otomatis tetap masuk halaman order asli, produk manual lanjut lewat Panel Transaksi website.</p>
+            <div class="flow-grid">
+              <div class="flow-item"><b>Pilih</b><span>Filter kategori atau cari produk.</span></div>
+              <div class="flow-item"><b>Keranjang</b><span>Simpan produk sebelum checkout.</span></div>
+              <div class="flow-item"><b>Order</b><span>Buka halaman checkout KokoRBX.</span></div>
+              <div class="flow-item"><b>Status</b><span>Pantau progres lewat ID order.</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand">KokoRBX Marketplace</div>
+          <p>Preview marketplace khusus Roblox dengan gaya KokoRBX 8-bit.</p>
+        </div>
+        <a class="header-btn primary" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Bantuan WhatsApp</a>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/cart-client.js"></script>
+  <script>
+    const products = [
+      {
+        title: 'Robux 5 Hari',
+        group: 'main',
+        category: 'robux',
+        image: 'assets/logo-robux-5day.png',
+        badges: ['Favorit', 'Gamepass'],
+        desc: 'Top up lewat gamepass, proses order otomatis seperti halaman lama kamu.',
+        price: 12000,
+        packageName: '100 R$',
+        robux: 100,
+        url: 'robux5hari.html'
+      },
+      {
+        title: 'Robux Via Login',
+        group: 'main',
+        category: 'robux',
+        image: 'assets/logo-robux-vilog.png',
+        badges: ['Instant', 'Rate A/B'],
+        desc: 'Paket VILOG dengan dua rate admin untuk nominal kecil dan besar.',
+        price: 16000,
+        packageName: '80 R$',
+        robux: 80,
+        url: 'robuxvilog.html'
+      },
+      {
+        title: 'Robux Username',
+        group: 'main',
+        category: 'robux',
+        image: 'assets/logo-robux-username.png',
+        badges: ['Username', 'Cepat'],
+        desc: 'Order Robux via username dengan form ringkas dan tanpa login.',
+        price: 70000,
+        packageName: '500 R$',
+        robux: 500,
+        url: 'robuxusername.html'
+      },
+      {
+        title: 'Gift GP Ingame',
+        group: 'main',
+        category: 'gift robux',
+        image: 'assets/logo-gift-gp.png',
+        badges: ['Gift GP', 'Custom'],
+        desc: 'Request gift gamepass ingame sesuai format produk yang sudah ada.',
+        price: 63000,
+        packageName: '450 R$',
+        robux: 450,
+        url: 'giftgp.html'
+      },
+      {
+        title: 'Akun Roblox',
+        group: 'manual',
+        category: 'akun',
+        image: 'assets/marketplace/account-showcase.png',
+        photo: true,
+        badges: ['Ready Check', 'Manual'],
+        desc: 'Katalog akun ready, avatar, progress game, dan request akun.',
+        priceText: 'Chat harga',
+        url: 'akunroblox.html'
+      },
+      {
+        title: 'Item Limited',
+        group: 'manual',
+        category: 'item',
+        image: 'assets/marketplace/item-bundle.png',
+        photo: true,
+        badges: ['Request', 'Manual'],
+        desc: 'Item limited, pet, currency, item event, dan kebutuhan game Roblox populer.',
+        priceText: 'By request',
+        panel: true
+      },
+      {
+        title: 'Jasa Farming',
+        group: 'manual',
+        category: 'jasa',
+        image: 'assets/marketplace/joki-service.png',
+        photo: true,
+        badges: ['Queue', 'Manual'],
+        desc: 'Joki, farming, leveling, quest, raid, dan progress game.',
+        priceText: 'Cek slot',
+        panel: true
+      },
+      {
+        title: 'Custom Request',
+        group: 'manual',
+        category: 'custom',
+        image: 'assets/marketplace/custom-request.png',
+        photo: true,
+        badges: ['Custom', 'Admin'],
+        desc: 'Produk Roblox yang belum ada bisa request lewat Panel Transaksi.',
+        priceText: 'Manual',
+        panel: true
+      }
+    ];
+
+    const mainGrid = document.getElementById('main-grid');
+    const manualGrid = document.getElementById('manual-grid');
+    const search = document.getElementById('product-search');
+
+    function formatRupiah(value) {
+      return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+    }
+
+    function transactionUrl(product) {
+      const params = new URLSearchParams({
+        new: product.category || 'custom',
+        product: product.title || 'Custom Roblox',
+        category: product.category || 'custom',
+        priceText: product.priceText || 'Menunggu admin',
+        image: product.image || '',
+        detail: product.desc || '',
+        source: 'marketplace-preview.html'
+      });
+      return 'transaksi.html?' + params.toString();
+    }
+
+    function productCard(product, index) {
+      const productUrl = product.panel ? transactionUrl(product) : product.url;
+      const media = '<img src="' + product.image + '" alt="' + product.title + '">';
+      const badges = product.badges.map((badge, badgeIndex) => {
+        const cls = badgeIndex === 0 ? 'badge hot' : 'badge ready';
+        return '<span class="' + cls + '">' + badge + '</span>';
+      }).join('');
+      const price = product.price ? formatRupiah(product.price) : product.priceText;
+      const cartButton = product.price
+        ? '<button class="mini-btn" type="button" data-cart-index="' + index + '">Keranjang</button>'
+        : '';
+      const actionText = product.price ? 'Buka' : (product.panel ? 'Order Panel' : 'Katalog');
+      const target = productUrl && productUrl.startsWith('http') ? ' target="_blank" rel="noopener"' : '';
+      return '<article class="product-card" data-category="' + product.category + '" data-name="' + (product.title + ' ' + product.desc + ' ' + product.badges.join(' ')).toLowerCase() + '">' +
+        '<a class="' + (product.photo ? 'product-media photo' : 'product-media') + '" href="' + productUrl + '"' + target + '>' + media + '</a>' +
+        '<div class="product-body">' +
+          '<div class="badges">' + badges + '</div>' +
+          '<div class="product-title">' + product.title + '</div>' +
+          '<div class="product-desc">' + product.desc + '</div>' +
+          '<div class="product-foot">' +
+            '<span class="price">' + price + '</span>' +
+            '<div class="product-actions">' + cartButton + '<a class="mini-btn primary" href="' + productUrl + '"' + target + '>' + actionText + '</a></div>' +
+          '</div>' +
+        '</div>' +
+      '</article>';
+    }
+
+    function bindCartButtons() {
+      document.querySelectorAll('[data-cart-index]').forEach(button => {
+        button.addEventListener('click', () => {
+          const product = products[Number(button.dataset.cartIndex)];
+          if (!window.KokoCart) return;
+          KokoCart.addItem({
+            product: product.title,
+            packageName: product.packageName,
+            robux: product.robux,
+            price: product.price,
+            detail: 'Preview marketplace',
+            url: product.url
+          });
+        });
+      });
+    }
+
+    function renderProducts() {
+      mainGrid.innerHTML = products
+        .map((product, index) => ({ product, index }))
+        .filter(item => item.product.group === 'main')
+        .map(item => productCard(item.product, item.index))
+        .join('');
+      manualGrid.innerHTML = products
+        .map((product, index) => ({ product, index }))
+        .filter(item => item.product.group === 'manual')
+        .map(item => productCard(item.product, item.index))
+        .join('');
+      bindCartButtons();
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const active = document.querySelector('.category-item.active')?.dataset.filter || 'all';
+      const query = String(search.value || '').toLowerCase().trim();
+      document.querySelectorAll('.product-card').forEach(card => {
+        const category = String(card.dataset.category || '');
+        const name = String(card.dataset.name || '');
+        const matchCategory = active === 'all' || category.split(/\s+/).includes(active);
+        const matchQuery = !query || name.includes(query);
+        card.classList.toggle('hidden', !(matchCategory && matchQuery));
+      });
+      if (active === 'status') {
+        document.getElementById('status').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    document.querySelectorAll('.category-item').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.category-item').forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        applyFilters();
+      });
+    });
+    search.addEventListener('input', applyFilters);
+
+    document.getElementById('status-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const id = String(document.getElementById('order-id-input').value || '').trim();
+      if (id) location.href = 'transaksi.html?order=' + encodeURIComponent(id);
+    });
+
+    renderProducts();
+  </script>
+</body>
+</html>

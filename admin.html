@@ -192,6 +192,7 @@
   .btn-modal-done { background: var(--green); color: #000; }
   .btn-modal-reject { background: var(--red); color: #fff; }
   .btn-modal-close { background: var(--surface2); color: var(--muted); border: 1px solid var(--border) !important; }
+  .btn-modal-chat { background: linear-gradient(135deg, #7eb4ff, #8f72ff); color: #07111f; }
 
   /* PROOF IMAGE */
   .proof-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
@@ -239,6 +240,47 @@
   .rate-preview-card p { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
   .rate-preview-card p:last-child { border-bottom: 0; }
   .rate-preview-card strong { color: var(--green); font-family: var(--mono); }
+
+  /* TRANSACTION PANEL */
+  .transaction-embed-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    overflow: hidden;
+    box-shadow: 0 22px 46px rgba(0,0,0,.22);
+  }
+  .transaction-embed-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(62,117,190,.16), rgba(124,106,255,.12));
+  }
+  .transaction-embed-toolbar strong {
+    display: block;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .transaction-embed-toolbar span {
+    display: block;
+    margin-top: 2px;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .transaction-embed-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .transaction-frame {
+    display: block;
+    width: 100%;
+    min-height: calc(100vh - 168px);
+    border: 0;
+    background: #080b13;
+  }
 
   /* EMAILJS SETTINGS */
   .emailjs-section { padding: 16px; border-top: 1px solid var(--border); margin-top: 8px; }
@@ -303,6 +345,10 @@
     /* Stats grid */
     .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
     .rate-settings-grid, .rate-preview-grid { grid-template-columns: 1fr; }
+    .transaction-embed-toolbar { align-items: stretch; flex-direction: column; }
+    .transaction-embed-actions { width: 100%; }
+    .transaction-embed-actions .btn-refresh { flex: 1; justify-content: center; }
+    .transaction-frame { min-height: calc(100vh - 230px); }
     .stat-card { padding: 13px 12px; }
     .stat-value { font-size: 17px; }
     .stat-icon { font-size: 16px; opacity: .2; }
@@ -485,6 +531,7 @@
   }
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
+<link rel="stylesheet" href="assets/kokorbx-theme.css?v=soft-purple-2">
 </head>
 <body>
 
@@ -520,6 +567,7 @@
     <span class="icon">&#9783;</span> Pending
     <span id="pending-badge" style="margin-left:auto;background:var(--yellow);color:#000;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;"></span>
   </div>
+  <div class="nav-item" onclick="showPage('panel', this)"><span class="icon">&#9993;</span> Panel Transaksi</div>
   <div class="nav-item" onclick="showPage('stats', this)"><span class="icon">&#9660;</span> Statistik</div>
   <div class="nav-item" onclick="showPage('rates', this)"><span class="icon">Rp</span> Rate Robux</div>
   <div class="emailjs-section">
@@ -602,6 +650,30 @@
         <table><thead><tr><th>Order ID</th><th>Username</th><th>Robux</th><th>Total</th><th>Metode</th><th>Bukti Transfer</th><th>Waktu</th><th>Aksi</th></tr></thead>
         <tbody id="pending-tbody"></tbody></table>
       </div>
+    </div>
+  </div>
+
+  <!-- PANEL TRANSAKSI -->
+  <div class="page" id="page-panel">
+    <div class="page-header">
+      <div><h2>Panel Transaksi</h2><span>Chat buyer dan seller gabung di admin panel.</span></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button class="btn-refresh" onclick="refreshPanelFrame()">Refresh Panel</button>
+        <a class="btn-refresh" href="transaksi.html?admin=1" style="text-decoration:none;">Buka Full</a>
+      </div>
+    </div>
+    <div class="transaction-embed-card">
+      <div class="transaction-embed-toolbar">
+        <div>
+          <strong>Chat per order</strong>
+          <span>Buyer bisa hubungi seller dari detail transaksi, admin balas dari panel ini.</span>
+        </div>
+        <div class="transaction-embed-actions">
+          <a class="btn-refresh" href="marketplace-preview.html" style="text-decoration:none;">Marketplace</a>
+          <a class="btn-refresh" href="transaksi.html?new=custom&product=Custom%20Request&category=custom&priceText=Manual&detail=Request%20manual%20dari%20admin." style="text-decoration:none;">Buat Order Manual</a>
+        </div>
+      </div>
+      <iframe class="transaction-frame" id="transaction-frame" src="transaksi.html?admin=1" title="Panel Transaksi KokoRBX"></iframe>
     </div>
   </div>
 
@@ -700,11 +772,15 @@
     <span>Pending</span>
     <span class="bnav-badge" id="bnav-badge" style="display:none"></span>
   </div>
-  <div class="bnav-item" id="bnav-stats" onclick="showPage('stats', document.querySelectorAll('.nav-item')[3]);mobileNavActivate('stats')">
+  <div class="bnav-item" id="bnav-panel" onclick="showPage('panel', document.querySelectorAll('.nav-item')[3]);mobileNavActivate('panel')">
+    <span class="bnav-icon">@</span>
+    <span>Panel</span>
+  </div>
+  <div class="bnav-item" id="bnav-stats" onclick="showPage('stats', document.querySelectorAll('.nav-item')[4]);mobileNavActivate('stats')">
     <span class="bnav-icon">◆</span>
     <span>Statistik</span>
   </div>
-  <div class="bnav-item" id="bnav-rates" onclick="showPage('rates', document.querySelectorAll('.nav-item')[4]);mobileNavActivate('rates')">
+  <div class="bnav-item" id="bnav-rates" onclick="showPage('rates', document.querySelectorAll('.nav-item')[5]);mobileNavActivate('rates')">
     <span class="bnav-icon">Rp</span>
     <span>Rate</span>
   </div>
@@ -999,6 +1075,8 @@
   // ── MERGE semua order dari rbx_orders_u_* ke rbx_orders ─────────
   const ORDER_MASTER_KEY = 'rbx_orders';
   const ORDER_USER_PREFIX = 'rbx_orders_u_';
+  const PANEL_ORDER_KEY = 'kokorbx_panel_orders_v1';
+  const PANEL_ACTIVE_KEY = 'kokorbx_panel_active_order';
 
   function readOrderArray(key) {
     try {
@@ -1140,6 +1218,91 @@
       return o;
     });
   }
+
+  function readPanelOrders() {
+    try {
+      const data = JSON.parse(localStorage.getItem(PANEL_ORDER_KEY) || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function adminOrderProduct(o) {
+    if (o.product) return o.product;
+    if (o.robux) return o.robux.toLocaleString('id') + ' Robux';
+    return 'Order KokoRBX';
+  }
+
+  function panelOrderFromAdmin(o) {
+    const createdAt = o.time || Date.now();
+    return {
+      id: o.id,
+      product: adminOrderProduct(o),
+      category: o.category || 'robux',
+      image: o.image || 'assets/marketplace/custom-request.png',
+      price: o.price || 0,
+      priceText: o.price ? 'Rp ' + o.price.toLocaleString('id') : 'Menunggu seller',
+      status: o.status === 'success' ? 'Selesai' : o.status === 'failed' ? 'Dibatalkan' : 'Menunggu seller',
+      buyer: o.username || 'Buyer KokoRBX',
+      username: o.username || '',
+      detail: 'Chat khusus untuk order ' + o.id + '. Semua komunikasi tetap di website.',
+      source: 'admin.html',
+      adminOrderId: o.id,
+      createdAt,
+      updatedAt: Date.now(),
+      messages: [
+        {
+          role: 'system',
+          text: 'Chat order dibuat dari Admin Panel KokoRBX. Seller bisa balas buyer di sini.',
+          time: createdAt,
+        },
+        {
+          role: 'buyer',
+          text: 'Halo seller, aku mau tanya order ' + o.id + '.',
+          time: createdAt + 1,
+        },
+      ],
+      timeline: [
+        { label: 'Order dibuat', time: createdAt, done: true },
+        { label: 'Diskusi seller', time: null, done: false },
+        { label: 'Pembayaran', time: o.hasProof ? Date.now() : null, done: !!o.hasProof },
+        { label: 'Selesai', time: o.sentAt || null, done: o.status === 'success' },
+      ],
+    };
+  }
+
+  function syncPanelOrderFromAdmin(o) {
+    const panelOrder = panelOrderFromAdmin(o);
+    const panelOrders = readPanelOrders();
+    const index = panelOrders.findIndex(item => item.id === panelOrder.id);
+    if (index >= 0) {
+      panelOrders[index] = Object.assign({}, panelOrders[index], panelOrder, {
+        messages: Array.isArray(panelOrders[index].messages) ? panelOrders[index].messages : panelOrder.messages,
+        timeline: Array.isArray(panelOrders[index].timeline) ? panelOrders[index].timeline : panelOrder.timeline,
+        updatedAt: Date.now(),
+      });
+    } else {
+      panelOrders.unshift(panelOrder);
+    }
+    localStorage.setItem(PANEL_ORDER_KEY, JSON.stringify(panelOrders));
+    localStorage.setItem(PANEL_ACTIVE_KEY, panelOrder.id);
+    return panelOrder;
+  }
+
+  function openPanelChatFromAdmin(id) {
+    const order = orders.find(item => item.id === id) || loadOrders().find(item => item.id === id);
+    if (!order) {
+      showToast('Order tidak ditemukan.', 'error');
+      return;
+    }
+    const panelOrder = syncPanelOrderFromAdmin(order);
+    closeModal();
+    const frame = document.getElementById('transaction-frame');
+    if (frame) frame.src = 'transaksi.html?order=' + encodeURIComponent(panelOrder.id) + '&admin=1&t=' + Date.now();
+    showPage('panel', document.querySelectorAll('.nav-item')[3]);
+    showToast('Chat order dibuka di Panel Transaksi.', 'success');
+  }
   // Sementara load dari localStorage, Supabase akan override di init()
   let orders = loadOrders();
   let currentFilter = 'all';
@@ -1240,7 +1403,10 @@
           ${hasProof ? `<button class="btn-proof" onclick="openLightbox('${o.id}')">🖼</button>` : ''}
         `;
       } else {
-        actionBtns = `<button class="btn-process" onclick="openDetail('${o.id}')">Detail</button>`;
+        actionBtns = `<button class="btn-process" onclick="openDetail('${o.id}')">Detail</button><button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>`;
+      }
+      if (!actionBtns.includes('openPanelChatFromAdmin')) {
+        actionBtns += `<button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>`;
       }
 
       return `
@@ -1365,8 +1531,17 @@
     document.getElementById('page-' + name).classList.add('active');
     if (el) el.classList.add('active');
     closeSidebar();
+    mobileNavActivate(name);
     if (name === 'rates') renderRatePreview();
     renderAll();
+  }
+
+  function refreshPanelFrame(showMessage = true) {
+    const frame = document.getElementById('transaction-frame');
+    if (!frame) return;
+    const base = 'transaksi.html?admin=1';
+    frame.src = base + '&t=' + Date.now();
+    if (showMessage) showToast('Panel transaksi dimuat ulang.', 'success');
   }
 
   function renderAll() {
@@ -1433,6 +1608,7 @@
         ${o.status === 'success' ? `<span style="color:var(--green);font-size:10px;font-weight:600;">&#10003; Selesai</span>` : ''}
         ${o.status === 'failed' ? `<span style="color:var(--red);font-size:10px;font-weight:600;">&#10007; Ditolak</span>` : ''}
         <button class="btn-process" onclick="openDetail('${o.id}')">Detail</button>
+        <button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>
         <button class="btn-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
       </div></td>
     </tr>`;
@@ -1455,6 +1631,7 @@
       <td><div class="action-btns">
         <button class="btn-confirm" onclick="openDetail('${o.id}')">&#10003; Konfirmasi</button>
         <button class="btn-reject" onclick="rejectOrder('${o.id}')">&#10007; Tolak</button>
+        <button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>
         <button class="btn-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
       </div></td>
     </tr>`;
@@ -1871,11 +2048,13 @@
           ✅ Selesai &amp; Kirim Robux
         </button>
         <button class="btn-modal-reject" onclick="rejectOrder('${o.id}')">&#10007; Tolak</button>
+        <button class="btn-modal-chat" onclick="openPanelChatFromAdmin('${o.id}')">Chat Order</button>
         <button class="btn-modal-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
         <button class="btn-modal-close" onclick="closeModal()">Tutup</button>
       `;
     } else {
       actions.innerHTML = `
+        <button class="btn-modal-chat" onclick="openPanelChatFromAdmin('${o.id}')">Chat Order</button>
         <button class="btn-modal-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus Order</button>
         <button class="btn-modal-close" style="flex:1" onclick="closeModal()">Tutup</button>
       `;

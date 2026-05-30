@@ -1,0 +1,229 @@
+:root {
+  --bg: #080d18 !important;
+  --s1: #101827 !important;
+  --s2: #152033 !important;
+  --s3: #1d2d47 !important;
+  --panel: #101827 !important;
+  --panel2: #152033 !important;
+  --panel3: #1d2d47 !important;
+  --surface: #101827 !important;
+  --surface2: #152033 !important;
+  --surface3: #1d2d47 !important;
+  --border: #263756 !important;
+  --border2: #38517c !important;
+  --line: #263756 !important;
+  --line2: #38517c !important;
+  --accent: #a78bfa !important;
+  --accent2: #7da2ff !important;
+  --accent3: #8cc2ff !important;
+  --accent-glow: rgba(167,139,250,.26) !important;
+  --green: #8cc2ff !important;
+  --cyan: #9fd8ff !important;
+  --gold: #c8ddff !important;
+  --text: #f3f8ff !important;
+  --text2: #c8d7ef !important;
+  --muted: #9fb3d3 !important;
+}
+
+body {
+  background:
+    linear-gradient(rgba(143,178,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143,178,255,.045) 1px, transparent 1px),
+    radial-gradient(circle at 13% 5%, rgba(167,139,250,.2), transparent 28%),
+    radial-gradient(circle at 86% 12%, rgba(159,216,255,.15), transparent 27%),
+    radial-gradient(circle at 72% 84%, rgba(125,162,255,.13), transparent 27%),
+    #080d18 !important;
+  color: #f3f8ff !important;
+}
+
+.bg-fx::before {
+  background: radial-gradient(ellipse, rgba(167,139,250,.1) 0%, transparent 65%) !important;
+}
+
+.bg-fx::after {
+  background: radial-gradient(ellipse, rgba(125,162,255,.08) 0%, transparent 65%) !important;
+}
+
+.grid-fx {
+  background-image:
+    linear-gradient(rgba(143,178,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(143,178,255,.045) 1px, transparent 1px) !important;
+}
+
+header,
+.main-header,
+.nav-bar,
+.top-strip,
+.site-footer,
+.category-panel,
+.quick-panel,
+.section,
+.status-panel,
+.flow-panel,
+.card,
+.summary,
+.modal,
+.auth-card,
+.panel,
+.product-card,
+.how-step,
+.pay-action-box,
+.order-box,
+.meta-box,
+.gp-input-box,
+.rbx-display,
+.tax-result-box,
+.tutorial-box,
+.flow-item,
+.koko-cart-drawer,
+.koko-cart-item,
+.koko-cart-empty {
+  border-color: rgba(80,112,168,.72) !important;
+}
+
+header,
+.main-header {
+  background: rgba(8,13,24,.92) !important;
+}
+
+.nav-bar,
+.top-strip,
+.site-footer {
+  background: rgba(10,16,29,.94) !important;
+}
+
+.card,
+.summary,
+.section,
+.quick-panel,
+.category-panel,
+.status-panel,
+.flow-panel,
+.modal,
+.auth-card,
+.panel,
+.product-card {
+  background: rgba(16,24,39,.94) !important;
+}
+
+.logo-gem,
+.brand-mark,
+.cat-token,
+.product-token,
+.header-btn.primary,
+.hero-action.primary,
+.mini-btn.primary,
+.status-form button,
+.btn-order,
+.btn-extract,
+.btn-copy,
+.submit-btn,
+.primary-btn,
+.auth-btn.primary,
+.koko-cart-count,
+.koko-cart-link {
+  background: linear-gradient(135deg, #a78bfa, #7da2ff) !important;
+  color: #fff !important;
+  box-shadow: 0 0 18px rgba(167,139,250,.18) !important;
+}
+
+.search-box {
+  border-color: rgba(167,139,250,.72) !important;
+  box-shadow: 0 0 0 4px rgba(167,139,250,.1), 0 16px 28px rgba(0,0,0,.24) !important;
+}
+
+.logo-text em,
+.brand em,
+.side-head,
+.side-card strong,
+.eyebrow,
+.price,
+.pkg-price,
+.pkg-bonus,
+.custom-rbx-rate,
+.custom-rbx-preview .p1,
+.sum-total .v,
+.footer-brand,
+.koko-cart-price,
+.koko-cart-total strong {
+  color: #cdbfff !important;
+}
+
+.hero h1 .g2,
+.hero-copy h1 span,
+.sum-total .v,
+.rbx-big,
+.order-id-val {
+  background: linear-gradient(90deg, #9fd8ff, #a78bfa, #7da2ff) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.hero-eyebrow,
+.badge,
+.pill-link,
+.live-badge,
+.gp-prev-badge,
+.tax-use-btn,
+.btn-view-orders,
+.koko-cart-button,
+.koko-cart-add,
+.pay-btn.selected,
+.pkg.selected {
+  border-color: rgba(167,139,250,.42) !important;
+  background: rgba(167,139,250,.12) !important;
+  color: #d7ccff !important;
+}
+
+.pkg:hover,
+.pay-btn:hover,
+.product-card:hover,
+.quick-tile:hover,
+.card:hover {
+  border-color: rgba(167,139,250,.5) !important;
+}
+
+.product-media,
+.quick-tile {
+  background:
+    radial-gradient(circle at 78% 18%, rgba(167,139,250,.2), transparent 42%),
+    linear-gradient(135deg, #1c3358, #101827) !important;
+}
+
+.custom-rbx-box,
+.gamepass-guide,
+.rbx-display::before,
+.modal-gp-box,
+.side-card {
+  background: linear-gradient(135deg, rgba(167,139,250,.1), rgba(143,178,255,.08)) !important;
+  border-color: rgba(167,139,250,.25) !important;
+}
+
+.btn-wa {
+  background: linear-gradient(135deg, #86bdff, #7da2ff) !important;
+  color: #07111d !important;
+}
+
+input,
+textarea,
+select,
+.input-wrap input,
+.gp-id-input,
+.gp-url-row input,
+.custom-rbx-row input,
+.status-form input {
+  background: #1d2d47 !important;
+  border-color: #38517c !important;
+  color: #f3f8ff !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.input-wrap input:focus,
+.gp-id-input:focus,
+.gp-url-row input:focus,
+.custom-rbx-row input:focus {
+  border-color: #a78bfa !important;
+  box-shadow: 0 0 0 3px rgba(167,139,250,.12) !important;
+}

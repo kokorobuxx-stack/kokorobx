@@ -1,0 +1,492 @@
+html body.koko-order-preview {
+  background:
+    linear-gradient(rgba(124,92,252,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124,92,252,.045) 1px, transparent 1px),
+    radial-gradient(circle at 12% 4%, rgba(124,92,252,.24), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgba(57,217,138,.14), transparent 24%),
+    radial-gradient(circle at 76% 86%, rgba(252,92,125,.12), transparent 25%),
+    #07070b !important;
+  background-size: 44px 44px, 44px 44px, auto, auto, auto, auto !important;
+  color: #f7f3ff !important;
+  font-family: "Pixelify Sans", monospace !important;
+  letter-spacing: 0 !important;
+}
+
+body.koko-order-preview::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+}
+
+body.koko-order-preview *:not(svg):not(path) {
+  font-family: "Pixelify Sans", monospace !important;
+  letter-spacing: 0 !important;
+}
+
+body.koko-order-preview .bg-fx::before,
+body.koko-order-preview .bg-fx::after {
+  opacity: .7;
+}
+
+body.koko-order-preview .wrapper,
+body.koko-order-preview .page {
+  position: relative;
+  z-index: 1;
+}
+
+body.koko-order-preview header {
+  min-height: 74px !important;
+  padding: 12px max(16px, calc((100vw - 1220px) / 2 + 16px)) !important;
+  border-bottom: 1px solid #2d2a3d !important;
+  background: rgba(9,9,15,.92) !important;
+  backdrop-filter: blur(18px) !important;
+}
+
+body.koko-order-preview .logo,
+body.koko-order-preview .brand {
+  font-size: 24px !important;
+  font-weight: 900 !important;
+}
+
+body.koko-order-preview .logo-gem,
+body.koko-order-preview .logo-svg-box,
+body.koko-order-preview .brand-mark {
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, rgba(124,92,252,.44), rgba(252,92,125,.28)) !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  box-shadow: 0 0 22px rgba(124,92,252,.3) !important;
+}
+
+body.koko-order-preview .logo-text em,
+body.koko-order-preview .brand em {
+  color: #39d98a !important;
+}
+
+body.koko-order-preview .header-right {
+  overflow: visible !important;
+}
+
+body.koko-order-preview .header-right a,
+body.koko-order-preview .header-btn,
+body.koko-order-preview .koko-market-link {
+  min-height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 8px !important;
+  background: rgba(255,255,255,.07) !important;
+  color: #f7f3ff !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+
+body.koko-order-preview .header-right a.primary,
+body.koko-order-preview .header-btn.primary {
+  border-color: rgba(124,92,252,.38) !important;
+  background: rgba(124,92,252,.16) !important;
+  color: #c9bcff !important;
+}
+
+body.koko-order-preview .live-badge {
+  border-radius: 8px !important;
+  border-color: rgba(57,217,138,.3) !important;
+  background: rgba(57,217,138,.1) !important;
+}
+
+.koko-product-tabs {
+  position: sticky;
+  top: 74px;
+  z-index: 80;
+  border-bottom: 1px solid #2d2a3d;
+  background: rgba(14,14,22,.96);
+}
+
+.koko-product-tabs-inner {
+  max-width: 1220px;
+  height: 46px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.koko-product-tabs-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.koko-product-tab {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #a59cbe;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 900;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.koko-product-tab.active,
+.koko-product-tab:hover {
+  border-color: rgba(57,217,138,.34);
+  background: rgba(57,217,138,.1);
+  color: #39d98a;
+}
+
+body.koko-order-preview .hero {
+  width: min(1220px, calc(100% - 32px)) !important;
+  max-width: 1220px !important;
+  min-height: 252px !important;
+  margin: 18px auto 14px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, .95fr) minmax(240px, .42fr) !important;
+  align-items: center !important;
+  gap: 14px !important;
+  border: 1px solid #2d2a3d !important;
+  border-radius: 8px !important;
+  background:
+    linear-gradient(135deg, rgba(124,92,252,.28), rgba(57,217,138,.08)),
+    rgba(16,16,24,.94) !important;
+  box-shadow: 0 18px 36px rgba(0,0,0,.22) !important;
+  padding: 22px !important;
+  overflow: hidden !important;
+  text-align: left !important;
+}
+
+body.koko-order-preview .hero-copy {
+  text-align: left !important;
+}
+
+body.koko-order-preview .hero h1,
+body.koko-order-preview h1 {
+  max-width: 720px !important;
+  color: #f7f3ff !important;
+  font-size: clamp(38px, 5vw, 62px) !important;
+  line-height: .96 !important;
+  font-weight: 900 !important;
+  margin-bottom: 12px !important;
+}
+
+body.koko-order-preview .hero h1 span,
+body.koko-order-preview .hero h1 .g1,
+body.koko-order-preview .hero h1 .g2,
+body.koko-order-preview h1 span {
+  background: linear-gradient(90deg, #39d98a, #35d7ff, #fc5c7d) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: #39d98a !important;
+}
+
+body.koko-order-preview .hero p,
+body.koko-order-preview .hero-copy p {
+  max-width: 640px !important;
+  color: #c0b8d4 !important;
+  font-size: 15px !important;
+  line-height: 1.55 !important;
+  margin: 0 !important;
+}
+
+body.koko-order-preview .hero-eyebrow,
+body.koko-order-preview .eyebrow {
+  width: fit-content !important;
+  border: 1px solid rgba(57,217,138,.34) !important;
+  border-radius: 999px !important;
+  background: rgba(57,217,138,.1) !important;
+  color: #39d98a !important;
+  padding: 6px 10px !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  margin-bottom: 12px !important;
+}
+
+body.koko-order-preview .logo-eyebrow {
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+body.koko-order-preview .hero-logo {
+  min-height: 190px !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  border-radius: 8px !important;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(124,92,252,.24), transparent 52%),
+    linear-gradient(135deg, #171328, #0b0b11) !important;
+}
+
+body.koko-order-preview .hero-logo img {
+  max-height: 138px !important;
+  filter: drop-shadow(0 13px 20px rgba(124,92,252,.26)) !important;
+}
+
+body.koko-order-preview .koko-order-hero-media {
+  min-height: 190px;
+  grid-column: 2;
+  grid-row: 1 / 4;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(124,92,252,.24), transparent 52%),
+    linear-gradient(135deg, #171328, #0b0b11);
+  overflow: hidden;
+}
+
+body.koko-order-preview .koko-order-hero-media img {
+  max-width: 88%;
+  max-height: 138px;
+  object-fit: contain;
+  filter: drop-shadow(0 13px 20px rgba(124,92,252,.26));
+}
+
+body.koko-order-preview .hero > .logo-eyebrow {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  justify-self: start;
+}
+
+body.koko-order-preview .hero > h1 {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: center;
+}
+
+body.koko-order-preview .hero > p {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+body.koko-order-preview .how-section,
+body.koko-order-preview main,
+body.koko-order-preview .main {
+  max-width: 1220px !important;
+  width: min(1220px, 100%) !important;
+}
+
+body.koko-order-preview main,
+body.koko-order-preview .main {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
+
+body.koko-order-preview .main {
+  grid-template-columns: minmax(0, 1fr) 330px !important;
+  gap: 14px !important;
+}
+
+body.koko-order-preview .order-layout {
+  grid-template-columns: minmax(0, 1fr) 360px !important;
+  gap: 14px !important;
+}
+
+body.koko-order-preview .card,
+body.koko-order-preview .summary,
+body.koko-order-preview .form-card,
+body.koko-order-preview .preview-panel,
+body.koko-order-preview .how-step,
+body.koko-order-preview .modal,
+body.koko-order-preview .order-card {
+  border: 1px solid #2d2a3d !important;
+  border-radius: 8px !important;
+  background: rgba(16,16,24,.94) !important;
+  box-shadow: 0 18px 36px rgba(0,0,0,.18) !important;
+}
+
+body.koko-order-preview .card-head-title,
+body.koko-order-preview .sum-head,
+body.koko-order-preview .form-head h2,
+body.koko-order-preview .preview-title,
+body.koko-order-preview .my-orders-title {
+  color: #f7f3ff !important;
+  font-size: 20px !important;
+  font-weight: 900 !important;
+}
+
+body.koko-order-preview .card-head-sub,
+body.koko-order-preview .how-desc,
+body.koko-order-preview .field label,
+body.koko-order-preview .sum-row .k,
+body.koko-order-preview .form-head p,
+body.koko-order-preview .preview-panel p {
+  color: #a59cbe !important;
+}
+
+body.koko-order-preview .pkg,
+body.koko-order-preview .pay-btn,
+body.koko-order-preview .input-wrap input,
+body.koko-order-preview .gp-url-row input,
+body.koko-order-preview .gp-id-input,
+body.koko-order-preview .custom-rbx-row input,
+body.koko-order-preview .format-preview,
+body.koko-order-preview .sum-item,
+body.koko-order-preview .rbx-display,
+body.koko-order-preview .gp-sum-box,
+body.koko-order-preview .tax-result-box,
+body.koko-order-preview .tutorial-box {
+  border-color: #2d2a3d !important;
+  border-radius: 8px !important;
+  background: rgba(23,23,36,.96) !important;
+  color: #f7f3ff !important;
+}
+
+body.koko-order-preview .pkg:hover,
+body.koko-order-preview .pay-btn:hover,
+body.koko-order-preview .pkg.selected,
+body.koko-order-preview .pay-btn.selected,
+body.koko-order-preview .input-wrap input:focus,
+body.koko-order-preview .gp-url-row input:focus,
+body.koko-order-preview .gp-id-input:focus {
+  border-color: rgba(57,217,138,.44) !important;
+  box-shadow: 0 0 0 3px rgba(57,217,138,.08) !important;
+}
+
+body.koko-order-preview .pkg-grid {
+  gap: 10px !important;
+}
+
+body.koko-order-preview .pkg-price,
+body.koko-order-preview .custom-rbx-rate,
+body.koko-order-preview .gp-guide-title,
+body.koko-order-preview .tax-use-btn {
+  color: #39d98a !important;
+}
+
+body.koko-order-preview .btn-order,
+body.koko-order-preview .btn-submit-bukti,
+body.koko-order-preview button:not(.koko-cart-button):not(.koko-cart-close):not(.koko-cart-clear):not(.koko-cart-remove) {
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #7c5cfc, #fc5c7d) !important;
+  color: #fff !important;
+  font-weight: 900 !important;
+}
+
+body.koko-order-preview .wa-link,
+body.koko-order-preview .btn-wa {
+  border-radius: 8px !important;
+  background: linear-gradient(135deg, #39d98a, #0ea5a5) !important;
+  color: #061511 !important;
+  font-weight: 900 !important;
+}
+
+body.koko-order-preview .summary,
+body.koko-order-preview .preview-panel {
+  position: sticky !important;
+  top: 132px !important;
+}
+
+body.koko-order-preview .trust-item {
+  border-color: #2d2a3d !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.045) !important;
+  color: #a59cbe !important;
+}
+
+body.koko-order-preview .site-footer,
+body.koko-order-preview footer {
+  border-top: 1px solid #2d2a3d !important;
+  background: rgba(7,7,11,.94) !important;
+}
+
+body.koko-order-preview .footer-brand {
+  color: #39d98a !important;
+}
+
+@media (max-width: 900px) {
+  .koko-product-tabs {
+    top: 0;
+    position: relative;
+  }
+
+  body.koko-order-preview header {
+    position: relative !important;
+    padding: 12px 14px !important;
+  }
+
+  body.koko-order-preview .hero {
+    width: calc(100% - 28px) !important;
+    grid-template-columns: 1fr !important;
+    padding: 18px !important;
+  }
+
+  body.koko-order-preview .hero-copy,
+  body.koko-order-preview .hero {
+    text-align: left !important;
+  }
+
+  body.koko-order-preview .hero h1,
+  body.koko-order-preview h1 {
+    font-size: 36px !important;
+  }
+
+  body.koko-order-preview .main,
+  body.koko-order-preview .order-layout,
+  body.koko-order-preview .form-grid,
+  body.koko-order-preview .actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  body.koko-order-preview .summary,
+  body.koko-order-preview .preview-panel {
+    position: static !important;
+  }
+}
+
+@media (max-width: 560px) {
+  body.koko-order-preview .header-right {
+    overflow-x: auto !important;
+    scrollbar-width: none;
+  }
+
+  body.koko-order-preview .header-right::-webkit-scrollbar {
+    display: none;
+  }
+
+  body.koko-order-preview .hero-logo {
+    min-height: 132px !important;
+  }
+
+  body.koko-order-preview .koko-order-hero-media {
+    min-height: 132px;
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  body.koko-order-preview .hero > .logo-eyebrow,
+  body.koko-order-preview .hero > h1,
+  body.koko-order-preview .hero > p {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  body.koko-order-preview .hero-logo img {
+    max-height: 96px !important;
+  }
+
+  body.koko-order-preview .koko-order-hero-media img {
+    max-height: 96px;
+  }
+
+  body.koko-order-preview .pkg-grid,
+  body.koko-order-preview .pay-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
