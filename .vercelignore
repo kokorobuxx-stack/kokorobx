@@ -1,0 +1,26 @@
+# Local backups and old preview experiments
+backup/
+cache/
+versions/
+libraries/
+deploy-web-koko-clean/
+deploy-web-koko-updated1/
+web-koko-updated/
+KOKORBX-UPLOAD-GITHUB/
+NexaCraft-live-local/
+NexaCraft-server-blueprint/
+NexaCraft-server-pack/
+*.zip
+
+# Design previews that are not part of the active site
+home-baru.html
+produk-baru.html
+marketplace-app-preview.html
+gamepass-rotation-preview.png
+assets/marketplace/koko-product-sheet.png
+assets/marketplace/kokorbx-home-started.png
+assets/marketplace/kokorbx-soft-blue-char.png
+assets/marketplace/kokorbx-starlight-hero.png
+
+# Hobby plan allows 12 Serverless Functions. This endpoint is unused by the active pages.
+api/public-stats.js
