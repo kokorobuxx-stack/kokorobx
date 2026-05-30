@@ -427,6 +427,10 @@
       object-fit: contain;
       filter: drop-shadow(0 8px 14px rgba(124,92,252,.18));
     }
+    .product-media img.marketplace-logo {
+      max-width: 100%;
+      max-height: 94px;
+    }
     .product-token {
       width: 70px;
       height: 70px;
@@ -681,14 +685,6 @@
 <link rel="stylesheet" href="assets/kokorbx-theme.css?v=soft-purple-2">
 </head>
 <body>
-  <div class="top-strip">
-    <div class="top-strip-inner">
-      <span>Bantuan 24/7</span>
-      <span>ID - IDR</span>
-      <span>Marketplace khusus Roblox</span>
-    </div>
-  </div>
-
   <header class="main-header">
     <div class="header-inner">
       <a href="index.html" class="brand" aria-label="KokoRBX">
@@ -719,7 +715,6 @@
       </div>
 
       <div class="header-actions">
-        <a class="header-btn sell" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20mulai%20order%20Roblox." target="_blank" rel="noopener">Mulai Order</a>
         <div id="user-bar">
           <span id="user-bar-name"></span>
           <button class="logout-btn" onclick="logoutStore()">Keluar</button>
@@ -732,7 +727,6 @@
 
   <nav class="nav-bar">
     <div class="nav-inner">
-      <a href="#kategori"><span>Grid</span> Kategori</a>
       <a href="robux5hari.html">Robux 5 Hari</a>
       <a href="robuxvilog.html">Robux Via Login</a>
       <a href="giftgp.html">Gift GP</a>
@@ -772,21 +766,6 @@
   </section>
 
   <main class="main">
-    <section class="category-strip" id="kategori">
-      <div class="category-grid">
-        <button class="category-item active" data-filter="all"><span class="cat-icon">ALL</span><span>Semua</span></button>
-        <button class="category-item" data-filter="robux"><span class="cat-icon">R$</span><span>Top Up</span></button>
-        <button class="category-item" data-filter="akun"><span class="cat-icon pink">ACC</span><span>Akun</span></button>
-        <button class="category-item" data-filter="gift"><span class="cat-icon orange">GP</span><span>Gift GP</span></button>
-        <button class="category-item" data-filter="item"><span class="cat-icon green">ITM</span><span>Item</span></button>
-        <button class="category-item" data-filter="jasa"><span class="cat-icon cyan">JOB</span><span>Joki</span></button>
-        <button class="category-item" data-filter="game"><span class="cat-icon">RBLX</span><span>Roblox Games</span></button>
-        <button class="category-item" data-filter="voucher"><span class="cat-icon orange">VCR</span><span>Voucher</span></button>
-        <button class="category-item" data-filter="custom"><span class="cat-icon green">REQ</span><span>Custom</span></button>
-        <button class="category-item" data-filter="status"><span class="cat-icon cyan">ID</span><span>Status</span></button>
-      </div>
-    </section>
-
     <section class="section" id="produk">
       <div class="section-head">
         <div>
@@ -848,7 +827,7 @@
       </div>
       <div class="product-grid">
         <a class="product-card" href="akunroblox.html" data-category="akun" data-name="akun roblox ready akun murah akun sultan">
-          <div class="product-media"><span class="product-token">ACC</span></div>
+          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-akun.png" alt="Akun Roblox"></div>
           <div class="product-body">
             <div class="badges"><span class="badge manual">Admin Review</span><span class="badge hot">New</span></div>
             <div class="product-title">Akun Roblox</div>
@@ -858,7 +837,7 @@
         </a>
 
         <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20order%20item%20game%20Roblox." target="_blank" rel="noopener" data-category="item game" data-name="item game roblox pet currency grow a garden blox fruits fisch">
-          <div class="product-media"><span class="product-token green">ITM</span></div>
+          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-item.png" alt="Item Limited"></div>
           <div class="product-body">
             <div class="badges"><span class="badge manual">Manual</span></div>
             <div class="product-title">Item Game</div>
@@ -868,7 +847,7 @@
         </a>
 
         <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20jasa%20farming%20atau%20joki%20Roblox." target="_blank" rel="noopener" data-category="jasa game" data-name="jasa farming joki leveling quest roblox">
-          <div class="product-media"><span class="product-token orange">JOB</span></div>
+          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-joki.png" alt="Joki Farming"></div>
           <div class="product-body">
             <div class="badges"><span class="badge manual">Queue</span></div>
             <div class="product-title">Jasa Farming</div>
@@ -878,7 +857,7 @@
         </a>
 
         <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20punya%20custom%20request%20Roblox." target="_blank" rel="noopener" data-category="custom voucher" data-name="custom request roblox voucher private server gamepass">
-          <div class="product-media"><span class="product-token pink">REQ</span></div>
+          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-custom.png" alt="Custom Request"></div>
           <div class="product-body">
             <div class="badges"><span class="badge manual">Custom</span></div>
             <div class="product-title">Custom Request</div>
