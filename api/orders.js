@@ -1,6 +1,6 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
-const { DEFAULT_RATES, isSettingsUsername, loadRateSettings } = require('./_lib/rates');
+const { DEFAULT_RATES, SETTINGS_USERNAME, isSettingsUsername, loadRateSettings } = require('./_lib/rates');
 
 function publicOrderPatch(patch) {
   const clean = {};
@@ -9,6 +9,56 @@ function publicOrderPatch(patch) {
   if (patch.has_proof === true) clean.has_proof = true;
   if (patch.proof_viewed === false) clean.proof_viewed = false;
   return clean;
+}
+
+function isActiveSale(order) {
+  const status = String(order.status || '').toLowerCase();
+  return status !== 'failed' && status !== 'cancelled' && status !== 'canceled';
+}
+
+function publicStats(rows) {
+  const orders = rows
+    .map(rowToOrder)
+    .filter(order => order.username && !isSettingsUsername(order.username));
+  const activeOrders = orders.filter(isActiveSale);
+  const totalOrders = activeOrders.length;
+  const totalRobux = activeOrders.reduce((sum, order) => sum + (Number(order.robux) || 0), 0);
+  const leaderboardMap = new Map();
+
+  activeOrders.forEach(order => {
+    const username = order.username || 'Customer';
+    const current = leaderboardMap.get(username) || {
+      username,
+      robux: 0,
+      orders: 0,
+      lastTime: 0,
+    };
+    current.robux += Number(order.robux) || 0;
+    current.orders += 1;
+    current.lastTime = Math.max(current.lastTime, Number(order.time) || 0);
+    leaderboardMap.set(username, current);
+  });
+
+  return {
+    totalOrders,
+    totalRobux,
+    leaderboard: Array.from(leaderboardMap.values())
+      .sort((a, b) => (b.robux - a.robux) || (b.orders - a.orders) || (b.lastTime - a.lastTime))
+      .slice(0, 5),
+    recentOrders: activeOrders
+      .slice()
+      .sort((a, b) => (Number(b.time) || 0) - (Number(a.time) || 0))
+      .slice(0, 5)
+      .map(order => ({
+        id: order.id,
+        username: order.username || 'Customer',
+        robux: Number(order.robux) || 0,
+        method: order.method || 'Robux',
+        status: order.status || 'pending',
+        time: Number(order.time) || Date.now(),
+      })),
+    generatedAt: new Date().toISOString(),
+  };
 }
 
 module.exports = async function handler(req, res) {
@@ -28,6 +78,15 @@ module.exports = async function handler(req, res) {
           updatedAt: null,
         });
       }
+    }
+
+    if (req.method === 'GET' && req.query && req.query.action === 'public-stats') {
+      const rows = await supabaseFetch(
+        '/rest/v1/orders?username=neq.' + encodeURIComponent(SETTINGS_USERNAME) +
+          '&select=id,username,gp_id,robux,price,method,status,created_at,has_proof,proof_url,proof_viewed,sent_at,email_sent,email_sent_at' +
+          '&order=created_at.desc&limit=1000'
+      );
+      return res.status(200).json(publicStats(rows));
     }
 
     if (req.method === 'GET') {

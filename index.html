@@ -288,20 +288,21 @@
     }
 
     .home-hero-wrap {
-      padding: 22px 18px 28px;
+      padding: 20px 18px 26px;
       background:
         radial-gradient(circle at 12% 16%, rgba(159,216,255,.24), transparent 24%),
         radial-gradient(circle at 92% 12%, rgba(167,139,250,.2), transparent 28%),
         linear-gradient(180deg, #0f1830 0%, #0b1220 100%);
     }
     .home-hero {
-      max-width: 1180px;
-      min-height: 420px;
+      max-width: 1120px;
+      min-height: 400px;
       margin: 0 auto;
       position: relative;
       overflow: hidden;
       border-radius: 8px;
       border: 1px solid rgba(194,215,255,.55);
+      transform: translateX(24px);
       background:
         linear-gradient(90deg, rgba(250,253,255,.98) 0%, rgba(248,252,255,.94) 48%, rgba(226,239,255,.82) 100%),
         #f6fbff;
@@ -312,23 +313,23 @@
       content: "";
       position: absolute;
       inset: 0 0 0 auto;
-      width: 48%;
+      width: 50%;
       background:
         linear-gradient(90deg, rgba(247,252,255,.92), rgba(247,252,255,.08) 34%, rgba(247,252,255,.02)),
-        url("assets/marketplace/kokorbx-home-visual.jpeg") center right / cover no-repeat;
+        url("assets/marketplace/kokorbx-home-visual.jpeg") right center / auto 106% no-repeat;
       opacity: .95;
       z-index: 0;
     }
     .home-hero-content {
-      width: min(760px, 68%);
-      min-height: 420px;
+      width: min(690px, 64%);
+      min-height: 400px;
       position: relative;
       z-index: 1;
-      padding: 36px 38px 34px;
+      padding: 32px 36px 30px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 22px;
+      gap: 18px;
     }
     .home-title-row {
       display: flex;
@@ -337,7 +338,7 @@
     }
     .home-title {
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(48px, 6vw, 72px);
+      font-size: clamp(46px, 5.6vw, 66px);
       line-height: .9;
       color: #5e80bd;
       letter-spacing: 0;
@@ -357,29 +358,29 @@
     .home-copy {
       width: min(440px, 100%);
       color: #7788a6;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.45;
     }
     .home-panels {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: 14px;
+      gap: 12px;
     }
     .home-panel {
-      min-height: 178px;
+      min-height: 170px;
       border: 1px solid rgba(197,213,240,.78);
       border-radius: 8px;
       background: rgba(255,255,255,.72);
       box-shadow: 0 12px 34px rgba(108,137,188,.14);
       backdrop-filter: blur(12px);
-      padding: 18px;
+      padding: 16px;
     }
     .home-panel-title {
       display: flex;
       align-items: center;
       gap: 9px;
       color: #334567;
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 900;
       margin-bottom: 4px;
     }
@@ -389,16 +390,18 @@
       margin-bottom: 14px;
     }
     .home-mini-icon {
-      width: 24px;
-      height: 24px;
+      width: 27px;
+      height: 27px;
       display: grid;
       place-items: center;
-      border-radius: 7px;
-      color: #6f8ed1;
-      background: #edf5ff;
-      border: 1px solid #dbe8ff;
-      font-size: 13px;
-      font-weight: 900;
+      overflow: hidden;
+      flex: 0 0 auto;
+    }
+    .home-icon-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
     .leader-row,
     .recent-row {
@@ -474,50 +477,45 @@
       font-size: 12px;
       font-weight: 900;
     }
+    .home-empty {
+      min-height: 90px;
+      display: grid;
+      place-items: center;
+      color: #8090a8;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      border: 1px dashed rgba(197,213,240,.82);
+      border-radius: 8px;
+      background: rgba(255,255,255,.5);
+    }
     .home-stats {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
+      gap: 9px;
     }
     .home-stat {
-      min-height: 86px;
+      min-height: 80px;
       display: grid;
-      grid-template-columns: 40px minmax(0, 1fr);
+      grid-template-columns: 46px minmax(0, 1fr);
       align-items: center;
       gap: 8px;
       border: 1px solid rgba(197,213,240,.72);
       border-radius: 8px;
       background: rgba(255,255,255,.74);
       box-shadow: 0 12px 30px rgba(108,137,188,.13);
-      padding: 10px;
+      padding: 8px;
     }
     .home-stat > span:last-child {
       min-width: 0;
       display: block;
     }
     .home-stat-icon {
-      width: 40px;
-      height: 40px;
+      width: 46px;
+      height: 46px;
       display: grid;
       place-items: center;
-      border-radius: 8px;
-      color: #5c79d4;
-      background: linear-gradient(135deg, #eef6ff, #e8edff);
-      box-shadow: 0 8px 18px rgba(93,124,201,.16);
-      font-size: 16px;
-      font-weight: 900;
-    }
-    .home-stat:nth-child(2) .home-stat-icon {
-      color: #2fa772;
-      background: linear-gradient(135deg, #e9fff4, #ddf7ea);
-    }
-    .home-stat:nth-child(3) .home-stat-icon {
-      color: #8c70db;
-      background: linear-gradient(135deg, #f3edff, #eee8ff);
-    }
-    .home-stat:nth-child(4) .home-stat-icon {
-      color: #4476c9;
-      background: linear-gradient(135deg, #ecf6ff, #e5f0ff);
+      overflow: hidden;
     }
     .home-stat-label {
       display: block;
@@ -528,7 +526,7 @@
     .home-stat-value {
       display: block;
       color: #253552;
-      font-size: 19px;
+      font-size: 18px;
       line-height: 1.1;
       font-weight: 900;
       margin-top: 4px;
@@ -910,6 +908,7 @@
       .header-actions::-webkit-scrollbar { display: none; }
       .suggestions { display: none; }
       .hero-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .home-hero { transform: none; }
       .home-hero-content { width: 100%; padding-right: 32px; }
       .home-hero::after { width: 100%; opacity: .18; }
       .home-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1024,46 +1023,55 @@
 
           <div class="home-panels">
             <article class="home-panel">
-              <div class="home-panel-title"><span class="home-mini-icon">T</span>Top Leaderboard</div>
+              <div class="home-panel-title"><span class="home-mini-icon"><img class="home-icon-img" src="assets/home-icons/leaderboard.png" alt=""></span>Top Leaderboard</div>
               <div class="home-panel-sub">Rangking pembelian Robux</div>
-              <div class="leader-row">
-                <span class="leader-rank">1</span>
-                <span class="home-avatar">NF</span>
-                <span class="leader-name">NightFrost</span>
-                <span class="leader-value">128.450 R$</span>
-              </div>
-              <div class="leader-row">
-                <span class="leader-rank">2</span>
-                <span class="home-avatar">BS</span>
-                <span class="leader-name">BlueSkyy</span>
-                <span class="leader-value">98.760 R$</span>
-              </div>
-              <div class="leader-row">
-                <span class="leader-rank">3</span>
-                <span class="home-avatar">SL</span>
-                <span class="leader-name">StarLuvv</span>
-                <span class="leader-value">76.320 R$</span>
+              <div id="home-leaderboard-list">
+                <div class="leader-row">
+                  <span class="leader-rank">1</span>
+                  <span class="home-avatar">NF</span>
+                  <span class="leader-name">NightFrost</span>
+                  <span class="leader-value">128.450 R$</span>
+                </div>
+                <div class="leader-row">
+                  <span class="leader-rank">2</span>
+                  <span class="home-avatar">BS</span>
+                  <span class="leader-name">BlueSkyy</span>
+                  <span class="leader-value">98.760 R$</span>
+                </div>
+                <div class="leader-row">
+                  <span class="leader-rank">3</span>
+                  <span class="home-avatar">SL</span>
+                  <span class="leader-name">StarLuvv</span>
+                  <span class="leader-value">76.320 R$</span>
+                </div>
               </div>
               <a class="home-panel-link" href="#produk">Lihat Peringkat &gt;</a>
             </article>
 
             <article class="home-panel">
-              <div class="home-panel-title"><span class="home-mini-icon">R$</span>Robux Baru Saja Dibeli</div>
+              <div class="home-panel-title"><span class="home-mini-icon"><img class="home-icon-img" src="assets/home-icons/recent.png" alt=""></span>Robux Baru Saja Dibeli</div>
               <div class="home-panel-sub">Transaksi terbaru pelanggan</div>
-              <div class="recent-row">
-                <span class="home-avatar">FX</span>
-                <span><span class="recent-name">frostbite_x</span><span class="recent-meta">Membeli 10.000 Robux</span></span>
-                <span class="recent-time">2 menit</span>
-              </div>
-              <div class="recent-row">
-                <span class="home-avatar">CV</span>
-                <span><span class="recent-name">cloudyy</span><span class="recent-meta">Membeli 4.500 Robux</span></span>
-                <span class="recent-time">5 menit</span>
-              </div>
-              <div class="recent-row">
-                <span class="home-avatar">ZX</span>
-                <span><span class="recent-name">ZyrenXD</span><span class="recent-meta">Membeli 2.200 Robux</span></span>
-                <span class="recent-time">9 menit</span>
+              <div id="home-recent-list">
+                <div class="recent-row">
+                  <span class="home-avatar">FX</span>
+                  <span><span class="recent-name">frostbite_x</span><span class="recent-meta">Membeli 10.000 Robux</span></span>
+                  <span class="recent-time">2 menit yang lalu</span>
+                </div>
+                <div class="recent-row">
+                  <span class="home-avatar">CV</span>
+                  <span><span class="recent-name">cloudyy</span><span class="recent-meta">Membeli 4.500 Robux</span></span>
+                  <span class="recent-time">5 menit yang lalu</span>
+                </div>
+                <div class="recent-row">
+                  <span class="home-avatar">ZX</span>
+                  <span><span class="recent-name">ZyrenXD</span><span class="recent-meta">Membeli 2.200 Robux</span></span>
+                  <span class="recent-time">9 menit yang lalu</span>
+                </div>
+                <div class="recent-row">
+                  <span class="home-avatar">MW</span>
+                  <span><span class="recent-name">mellowbee</span><span class="recent-meta">Membeli 800 Robux</span></span>
+                  <span class="recent-time">12 menit yang lalu</span>
+                </div>
               </div>
               <a class="home-panel-link" href="#status">Lihat Semua Transaksi &gt;</a>
             </article>
@@ -1071,20 +1079,20 @@
 
           <div class="home-stats">
             <div class="home-stat">
-              <span class="home-stat-icon">S</span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/stock.png" alt=""></span>
               <span><span class="home-stat-label">Stock Robux</span><span class="home-stat-value">1.250.000</span><span class="home-stat-note">Robux tersedia</span></span>
             </div>
             <div class="home-stat">
-              <span class="home-stat-icon">OK</span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/ready.png" alt=""></span>
               <span><span class="home-stat-label">Status Ready</span><span class="home-stat-value">100%</span><span class="home-stat-note">Layanan aktif</span></span>
             </div>
             <div class="home-stat">
-              <span class="home-stat-icon">R$</span>
-              <span><span class="home-stat-label">Robux Terjual</span><span class="home-stat-value">2.847.650</span><span class="home-stat-note">Total Robux</span></span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/sold.png" alt=""></span>
+              <span><span class="home-stat-label">Robux Terjual</span><span class="home-stat-value" id="home-stat-sold">2.847.650</span><span class="home-stat-note">Total Robux</span></span>
             </div>
             <div class="home-stat">
-              <span class="home-stat-icon">ID</span>
-              <span><span class="home-stat-label">Total Orderan</span><span class="home-stat-value">15.632</span><span class="home-stat-note">Pesanan selesai</span></span>
+              <span class="home-stat-icon"><img class="home-icon-img" src="assets/home-icons/orders.png" alt=""></span>
+              <span><span class="home-stat-label">Total Orderan</span><span class="home-stat-value" id="home-stat-orders">15.632</span><span class="home-stat-note">Pesanan selesai</span></span>
             </div>
           </div>
         </div>
@@ -1299,6 +1307,95 @@
       return map[status] || status || '-';
     }
 
+    function escapeHtml(value) {
+      return String(value || '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    function formatNumber(value) {
+      return Number(value || 0).toLocaleString('id-ID');
+    }
+
+    function buyerInitials(username) {
+      const clean = String(username || 'RBX').replace(/[^a-zA-Z0-9_ ]/g, '').trim();
+      if (!clean) return 'RB';
+      const parts = clean.split(/[\s_]+/).filter(Boolean);
+      if (parts.length > 1) return (parts[0][0] + parts[1][0]).toUpperCase();
+      return clean.slice(0, 2).toUpperCase();
+    }
+
+    function timeAgo(time) {
+      const stamp = Number(time || 0);
+      const diff = Math.max(0, Date.now() - (stamp || Date.now()));
+      const minutes = Math.max(1, Math.floor(diff / 60000));
+      if (minutes < 60) return minutes + ' menit yang lalu';
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return hours + ' jam yang lalu';
+      return Math.floor(hours / 24) + ' hari yang lalu';
+    }
+
+    function renderLeaderboard(rows) {
+      const target = document.getElementById('home-leaderboard-list');
+      if (!target) return;
+      const list = Array.isArray(rows) ? rows.slice(0, 3) : [];
+      if (!list.length) {
+        target.innerHTML = '<div class="home-empty">Belum ada pembelian Robux.</div>';
+        return;
+      }
+      target.innerHTML = list.map((item, index) => (
+        '<div class="leader-row">' +
+          '<span class="leader-rank">' + (index + 1) + '</span>' +
+          '<span class="home-avatar">' + escapeHtml(buyerInitials(item.username)) + '</span>' +
+          '<span class="leader-name">' + escapeHtml(item.username || 'Customer') + '</span>' +
+          '<span class="leader-value">' + formatNumber(item.robux) + ' R$</span>' +
+        '</div>'
+      )).join('');
+    }
+
+    function renderRecentOrders(rows) {
+      const target = document.getElementById('home-recent-list');
+      if (!target) return;
+      const list = Array.isArray(rows) ? rows.slice(0, 4) : [];
+      if (!list.length) {
+        target.innerHTML = '<div class="home-empty">Transaksi baru akan tampil di sini.</div>';
+        return;
+      }
+      target.innerHTML = list.map(item => {
+        const robux = Number(item.robux || 0);
+        const detail = robux ? 'Membeli ' + formatNumber(robux) + ' Robux' : 'Order ' + (item.method || 'Robux');
+        return '<div class="recent-row">' +
+          '<span class="home-avatar">' + escapeHtml(buyerInitials(item.username)) + '</span>' +
+          '<span><span class="recent-name">' + escapeHtml(item.username || 'Customer') + '</span><span class="recent-meta">' + escapeHtml(detail) + '</span></span>' +
+          '<span class="recent-time">' + escapeHtml(timeAgo(item.time)) + '</span>' +
+        '</div>';
+      }).join('');
+    }
+
+    function updateHomeStats(data) {
+      const sold = document.getElementById('home-stat-sold');
+      const orders = document.getElementById('home-stat-orders');
+      if (sold) sold.textContent = formatNumber(data && data.totalRobux);
+      if (orders) orders.textContent = formatNumber(data && data.totalOrders);
+      renderLeaderboard(data && data.leaderboard);
+      renderRecentOrders(data && data.recentOrders);
+    }
+
+    async function loadHomeStats() {
+      try {
+        const res = await fetch(API_BASE + '/api/orders?action=public-stats&ts=' + Date.now(), { cache: 'no-store' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Statistik belum bisa dimuat');
+        updateHomeStats(data);
+      } catch(e) {
+        console.warn('Home stats fallback:', e.message || e);
+      }
+    }
+
     function renderStatus(order) {
       return [
         ['Order ID', order.id],
@@ -1334,6 +1431,11 @@
     });
 
     updateUserBar();
+    loadHomeStats();
+    setInterval(loadHomeStats, 30000);
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) loadHomeStats();
+    });
   </script>
   <script src="assets/cart-client.js"></script>
 </body>
