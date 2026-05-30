@@ -203,7 +203,8 @@
     var btn = document.createElement('button');
     btn.className = 'koko-cart-button';
     btn.type = 'button';
-    btn.innerHTML = '<span class="koko-cart-button-text">Keranjang</span><span class="koko-cart-count">0</span>';
+    btn.setAttribute('aria-label', 'Buka keranjang');
+    btn.innerHTML = '<svg class="koko-cart-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.2 7h13.1l-1.2 7.2a2 2 0 0 1-2 1.7H9.4a2 2 0 0 1-2-1.6L6.2 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4 4h1.6l.6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9.4 20h.1M16.5 20h.1" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span class="koko-cart-button-text">Keranjang</span><span class="koko-cart-count">0</span>';
     btn.addEventListener('click', openDrawer);
     host.insertBefore(btn, host.firstChild);
     countEls.push(btn.querySelector('.koko-cart-count'));
