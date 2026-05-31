@@ -630,7 +630,7 @@
           <input id="account-search" type="search" placeholder="Starter, progress, avatar, sultan..." autocomplete="off">
         </label>
         <div class="header-actions">
-          <a class="header-btn primary" href="transaksi.html?new=akun&product=Akun%20Roblox&category=akun&priceText=Chat%20harga&image=assets%2Fmarketplace%2Faccount-showcase.png&detail=Cek%20stok%20akun%20Roblox%20di%20Panel%20Transaksi.">Panel Transaksi</a>
+          <a class="header-btn primary" href="transaksi-buyer.html?new=akun&product=Akun%20Roblox&category=akun&priceText=Chat%20harga&image=assets%2Fmarketplace%2Faccount-showcase.png&detail=Cek%20stok%20akun%20Roblox%20di%20Panel%20Transaksi.">Panel Transaksi</a>
           <a class="header-btn" href="admin.html">Admin</a>
         </div>
       </div>
@@ -652,7 +652,7 @@
         <div class="hero-copy">
           <div class="eyebrow">Akun Roblox</div>
           <h1>Katalog akun <span>ready check</span> dan request custom.</h1>
-          <p>Pilih tipe akun, lalu lanjut lewat Panel Transaksi. Chat buyer dan seller tetap di website.</p>
+          <p>Pilih tipe akun, lalu lanjut lewat Panel Transaksi. Chat buyer dan admin tetap di website.</p>
           <div class="hero-actions">
             <a class="hero-action primary" href="#katalog">Lihat Akun</a>
             <a class="hero-action" href="#request">Custom Request</a>
@@ -774,13 +774,13 @@
         new: input.category || 'akun',
         product: input.product || 'Akun Roblox',
         category: input.category || 'akun',
-        priceText: input.priceText || 'Menunggu seller',
+        priceText: input.priceText || 'Menunggu admin',
         image: input.image || 'assets/marketplace/account-showcase.png',
         detail: input.detail || 'Request akun Roblox.',
-        buyerMessage: input.buyerMessage || 'Halo seller, aku mau cek stok akun Roblox.',
+        buyerMessage: input.buyerMessage || 'Halo admin, aku mau cek stok akun Roblox.',
         source: 'akunroblox.html'
       });
-      return 'transaksi.html?' + params.toString();
+      return 'transaksi-buyer.html?' + params.toString();
     }
 
     function openPanel(input) {
@@ -812,13 +812,13 @@
         const card = btn.closest('.account-card');
         const image = card?.querySelector('img')?.getAttribute('src') || 'assets/marketplace/account-showcase.png';
         const detail = card?.querySelector('.account-desc')?.textContent.trim() || 'Request akun Roblox.';
-        const priceText = card?.querySelector('.price')?.textContent.trim() || 'Menunggu seller';
+        const priceText = card?.querySelector('.price')?.textContent.trim() || 'Menunggu admin';
         openPanel({
           product: btn.dataset.product,
           image,
           priceText,
           detail,
-          buyerMessage: 'Halo seller, aku mau tanya stok ' + btn.dataset.product + '. Bisa proses di panel ini?'
+          buyerMessage: 'Halo admin, aku mau tanya stok ' + btn.dataset.product + '. Bisa proses di panel ini?'
         });
       });
     });
@@ -841,7 +841,7 @@
         image: 'assets/marketplace/custom-request.png',
         priceText: budget === '-' ? 'Custom' : budget,
         detail: requestText,
-        buyerMessage: 'Halo seller, aku mau request akun Roblox.\n' + requestText
+        buyerMessage: 'Halo admin, aku mau request akun Roblox.\n' + requestText
       });
     });
   </script>

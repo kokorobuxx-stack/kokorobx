@@ -41,8 +41,8 @@
       category: input.category || 'custom',
       image: input.image || '',
       price: Number(input.price || 0),
-      priceText: input.priceText || (input.price ? 'Rp ' + Number(input.price).toLocaleString('id-ID') : 'Menunggu seller'),
-      status: input.status || 'Menunggu seller',
+      priceText: input.priceText || (input.price ? 'Rp ' + Number(input.price).toLocaleString('id-ID') : 'Menunggu admin'),
+      status: input.status || 'Menunggu admin',
       buyer: input.buyer || input.username || 'Buyer KokoRBX',
       username: input.username || '',
       detail: input.detail || '',
@@ -52,7 +52,7 @@
       messages: input.messages || [
         {
           role: 'system',
-          text: 'Transaksi dibuat di panel KokoRBX. Seller akan cek detail dan balas di chat ini.',
+          text: 'Transaksi dibuat di panel KokoRBX. Admin akan cek detail dan balas di chat ini.',
           time: now(),
         },
         {
@@ -63,7 +63,7 @@
       ],
       timeline: input.timeline || [
         { label: 'Order dibuat', time: now(), done: true },
-        { label: 'Diskusi seller', time: null, done: false },
+        { label: 'Diskusi admin', time: null, done: false },
         { label: 'Pembayaran', time: null, done: false },
         { label: 'Selesai', time: null, done: false },
       ],

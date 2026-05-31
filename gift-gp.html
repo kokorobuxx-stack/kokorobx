@@ -427,15 +427,15 @@
         category: 'gift',
         image: 'assets/logo-gift-gp.png',
         price,
-        priceText: price ? formatRupiah(price) : 'Menunggu seller',
+        priceText: price ? formatRupiah(price) : 'Menunggu admin',
         username: value('username'),
         detail,
-        buyerMessage: 'Halo seller, aku sudah isi format Gift GP.\n' + detail,
+        buyerMessage: 'Halo admin, aku sudah isi format Gift GP.\n' + detail,
         source: 'gift-gp.html'
       });
     }
     document.getElementById('notice').classList.add('show');
-    location.href = 'transaksi.html?order=' + encodeURIComponent(orderId);
+    location.href = 'transaksi-buyer.html?order=' + encodeURIComponent(orderId) + '&token=' + encodeURIComponent('buyer-' + orderId);
   });
 
   updatePreview();

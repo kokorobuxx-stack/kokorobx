@@ -595,7 +595,7 @@
       <form class="compose" id="chat-form">
         <div class="compose-box">
           <button class="icon-btn" type="button" id="attach-btn">+</button>
-          <textarea id="chat-input" placeholder="Tulis pesan ke seller/admin..."></textarea>
+          <textarea id="chat-input" placeholder="Tulis pesan ke admin..."></textarea>
           <button class="send-btn" type="submit">Kirim</button>
         </div>
       </form>
@@ -622,7 +622,6 @@
         <div class="order-box">
           <h3>Aksi Buyer</h3>
           <div class="kv">
-            <a class="side-btn" href="panel-transaksi-v2-preview.html?v=panel-v2-preview-20260531">Lihat Admin Preview</a>
             <button class="side-btn light" id="copy-id" type="button">Copy Order ID</button>
             <button class="side-btn light" id="reset-demo" type="button">Reset Chat Demo</button>
           </div>
@@ -648,11 +647,11 @@
     buyer: 'tamu_4745',
     image: 'assets/marketplace/item-bundle.png',
     total: 'Menunggu harga',
-    status: 'Menunggu seller',
+    status: 'Menunggu admin',
     messages: [
       { role: 'system', text: 'Transaksi dibuat di Kotak Pesan KokoRBX. Untuk keamanan, jangan lanjut chat atau pembayaran di luar website.', time: Date.now() - 1000 * 60 * 18 },
       { role: 'buyer', text: 'Halo kak, aku mau cari item limited yang warna ungu. Stoknya ada?', time: Date.now() - 1000 * 60 * 16 },
-      { role: 'seller', text: 'Ada kak, aku cek harga dan stok final dulu ya. Nanti aku kirim harga deal di sini.', time: Date.now() - 1000 * 60 * 9 },
+      { role: 'admin', text: 'Ada kak, aku cek harga dan stok final dulu ya. Nanti aku kirim harga deal di sini.', time: Date.now() - 1000 * 60 * 9 },
       { role: 'admin', text: 'Admin memantau transaksi ini. Pastikan semua bukti dan kesepakatan tetap di Kotak Pesan KokoRBX.', time: Date.now() - 1000 * 60 * 6 }
     ]
   };
@@ -687,7 +686,7 @@
   function initials(role) {
     if (role === 'buyer') return 'B';
     if (role === 'admin') return 'A';
-    if (role === 'seller') return 'S';
+    if (role === 'seller') return 'A';
     return 'K';
   }
 

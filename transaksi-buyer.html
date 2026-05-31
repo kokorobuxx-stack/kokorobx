@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kotak Pesan Transaksi - KokoRBX</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F8FAFF;
+    --sky: #EAF1FF;
+    --lav: #EDEBFF;
+    --blue-soft: #DCE8FF;
+    --purple: #8B7CFF;
+    --blue: #6F8DFF;
+    --mint: #62D8D4;
+    --green: #77DDA8;
+    --text: #1E2A55;
+    --muted: #7080A8;
+    --line: #DDE6F8;
+    --card: rgba(255,255,255,.88);
+    --card2: rgba(234,241,255,.72);
+    --shadow: 0 22px 60px rgba(111,141,255,.18);
+  }
+
+  body[data-theme="dark"] {
+    --paper: #0B1020;
+    --sky: #11182C;
+    --lav: #171E37;
+    --blue-soft: #1C2542;
+    --text: #F8FAFF;
+    --muted: #AAB8E4;
+    --line: rgba(164,180,255,.22);
+    --card: rgba(18,22,38,.92);
+    --card2: rgba(27,32,55,.78);
+    --shadow: 0 24px 72px rgba(2,6,23,.45);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at 8% 0%, rgba(139,124,255,.18), transparent 26%),
+      radial-gradient(circle at 92% 12%, rgba(98,216,212,.15), transparent 25%),
+      linear-gradient(135deg, var(--paper), var(--sky) 55%, var(--paper));
+  }
+  button, textarea, input { font: inherit; }
+  button { cursor: pointer; }
+  a { color: inherit; text-decoration: none; }
+
+  .app {
+    width: min(1180px, calc(100% - 28px));
+    min-height: 100vh;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 14px;
+    align-items: center;
+    padding: 18px 0;
+  }
+
+  .chat-shell,
+  .side-panel {
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    animation: fadeUp .32s ease both;
+  }
+
+  .chat-shell {
+    min-height: min(760px, calc(100vh - 36px));
+    display: grid;
+    grid-template-rows: auto 1fr auto auto;
+  }
+
+  .chat-top {
+    min-height: 76px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    background: rgba(248,250,255,.74);
+    padding: 13px 15px;
+  }
+  body[data-theme="dark"] .chat-top { background: rgba(18,22,38,.72); }
+
+  .brand-mark,
+  .avatar {
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    color: #fff;
+    background: linear-gradient(145deg, #171927, #070910);
+    box-shadow: 0 12px 24px rgba(9,12,28,.22);
+  }
+
+  .brand-mark {
+    position: relative;
+    width: 42px;
+    height: 42px;
+  }
+  .brand-mark::before {
+    content: "";
+    width: 17px;
+    height: 17px;
+    border: 3px solid #fff;
+    border-radius: 5px;
+    transform: rotate(-13deg);
+  }
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: #fff;
+  }
+
+  .top-title { min-width: 0; }
+  .top-title strong {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: "Outfit", sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+  }
+  .top-title span {
+    display: block;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .top-actions { display: flex; align-items: center; gap: 8px; }
+  .status-pill,
+  .theme-btn,
+  .side-btn,
+  .quick-btn,
+  .send-btn {
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid rgba(119,221,168,.42);
+    background: rgba(119,221,168,.16);
+    color: #2A9364;
+    padding: 8px 11px;
+  }
+  .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+  .theme-btn {
+    min-height: 38px;
+    border: 1px solid var(--line);
+    background: var(--card2);
+    color: var(--text);
+    padding: 0 12px;
+  }
+
+  .chat-log {
+    min-height: 0;
+    overflow: auto;
+    display: grid;
+    align-content: start;
+    gap: 12px;
+    padding: 16px;
+    background:
+      linear-gradient(rgba(111,141,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(111,141,255,.05) 1px, transparent 1px),
+      var(--card2);
+    background-size: 30px 30px, 30px 30px, auto;
+  }
+
+  .day-chip {
+    justify-self: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    color: var(--muted);
+    padding: 6px 11px;
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .bubble-row {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 8px;
+    align-items: end;
+    max-width: 76%;
+    animation: fadeUp .2s ease both;
+  }
+  .bubble-row.me {
+    justify-self: end;
+    grid-template-columns: minmax(0, 1fr) 34px;
+  }
+  .avatar {
+    width: 34px;
+    height: 34px;
+    font-size: 12px;
+    font-weight: 900;
+  }
+  .avatar.admin { background: linear-gradient(145deg, var(--mint), var(--blue)); }
+  .avatar.buyer { background: linear-gradient(145deg, var(--purple), var(--blue)); }
+
+  .bubble {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 16px 16px 16px 5px;
+    background: var(--card);
+    padding: 10px 12px;
+    box-shadow: 0 10px 22px rgba(111,141,255,.09);
+  }
+  .bubble-row.me .bubble {
+    border-color: rgba(139,124,255,.18);
+    border-radius: 16px 16px 5px 16px;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff;
+  }
+  .bubble.system {
+    justify-self: center;
+    width: min(100%, 620px);
+    border: 1px solid rgba(255,203,87,.42);
+    border-radius: 14px;
+    background: rgba(255,250,232,.92);
+    color: #584418;
+    padding: 12px 14px;
+  }
+  body[data-theme="dark"] .bubble.system {
+    background: rgba(255,203,87,.12);
+    color: #F6D894;
+  }
+  .bubble-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    opacity: .78;
+  }
+  .bubble-text {
+    font-size: 13px;
+    line-height: 1.5;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+  .bubble-time {
+    display: block;
+    margin-top: 6px;
+    font-size: 10px;
+    opacity: .62;
+    text-align: right;
+    font-weight: 800;
+  }
+
+  .quick-actions {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    border-top: 1px solid var(--line);
+    background: rgba(255,255,255,.62);
+    padding: 10px 12px;
+    scrollbar-width: none;
+  }
+  body[data-theme="dark"] .quick-actions { background: rgba(18,22,38,.72); }
+  .quick-actions::-webkit-scrollbar { display: none; }
+  .quick-btn,
+  .send-btn,
+  .side-btn {
+    border: 0;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff;
+  }
+  .quick-btn { min-height: 38px; padding: 0 12px; }
+  .quick-btn.light,
+  .side-btn.light {
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--text);
+  }
+
+  .compose {
+    border-top: 1px solid var(--line);
+    background: rgba(248,250,255,.82);
+    padding: 12px;
+  }
+  body[data-theme="dark"] .compose { background: rgba(18,22,38,.86); }
+  .compose-box {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    gap: 8px;
+    align-items: end;
+  }
+  .icon-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--card);
+    color: var(--purple);
+    font-weight: 900;
+  }
+  .compose textarea {
+    width: 100%;
+    min-height: 42px;
+    max-height: 126px;
+    resize: vertical;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card);
+    color: var(--text);
+    outline: 0;
+    padding: 11px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    font-weight: 700;
+  }
+  .compose textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 4px rgba(139,124,255,.13);
+  }
+  .send-btn { min-width: 76px; min-height: 42px; padding: 0 14px; }
+
+  .side-panel {
+    position: sticky;
+    top: 18px;
+    align-self: center;
+  }
+  .side-head {
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    border-bottom: 1px solid var(--line);
+    padding: 14px;
+  }
+  .side-title {
+    font-family: "Outfit", sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+  }
+  .side-sub {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .product-img {
+    width: 58px;
+    height: 58px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--sky);
+  }
+  .product-img img { width: 100%; height: 100%; object-fit: cover; }
+  .side-body {
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+  }
+  .order-box {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--card2);
+    padding: 12px;
+  }
+  .order-box h3 {
+    margin: 0 0 10px;
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+  }
+  .kv { display: grid; gap: 8px; }
+  .kv-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .kv-row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .kv-row strong { color: var(--text); text-align: right; overflow-wrap: anywhere; }
+  .side-btn {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+  }
+  .protect {
+    border: 1px solid rgba(255,203,87,.42);
+    border-radius: 14px;
+    background: rgba(255,250,232,.92);
+    padding: 12px;
+  }
+  body[data-theme="dark"] .protect {
+    background: rgba(255,203,87,.1);
+    color: #F6D894;
+  }
+  .protect strong { display: block; margin-bottom: 5px; font-size: 13px; }
+  .protect span {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.45;
+    font-weight: 700;
+  }
+
+  .empty-state {
+    display: grid;
+    place-items: center;
+    min-height: 260px;
+    padding: 24px;
+    color: var(--muted);
+    text-align: center;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 940px) {
+    .app {
+      width: min(100% - 20px, 740px);
+      grid-template-columns: 1fr;
+      align-items: stretch;
+      gap: 10px;
+      padding: 10px 0;
+    }
+    .side-panel {
+      position: static;
+      order: -1;
+      align-self: auto;
+    }
+    .side-body { grid-template-columns: 1fr 1fr; }
+    .chat-shell { min-height: calc(100vh - 20px); border-radius: 16px; }
+  }
+
+  @media (max-width: 620px) {
+    .app { width: 100%; padding: 0; gap: 0; }
+    .chat-shell { min-height: calc(100vh - 88px); height: calc(100vh - 88px); border-width: 0; border-radius: 0; box-shadow: none; }
+    .side-panel { border-width: 0 0 1px; border-radius: 0; box-shadow: none; }
+    .side-body { display: none; }
+    .chat-top { min-height: 66px; padding: 10px 11px; }
+    .brand-mark { width: 38px; height: 38px; border-radius: 12px; }
+    .top-title strong { font-size: 17px; }
+    .top-title span { font-size: 11px; }
+    .status-pill { display: none; }
+    .chat-log { padding: 12px 10px; }
+    .bubble-row { max-width: 92%; }
+    .bubble.system { width: 100%; }
+    .quick-actions { padding: 9px 10px; }
+    .compose { padding: 10px; }
+    .compose-box { grid-template-columns: 42px minmax(0, 1fr) 66px; }
+    .send-btn { min-width: 66px; padding: 0 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chat-shell,
+    .side-panel,
+    .bubble-row { animation: none; }
+  }
+</style>
+</head>
+<body data-theme="dark">
+  <main class="app">
+    <section class="chat-shell" aria-label="Kotak pesan transaksi">
+      <header class="chat-top">
+        <a class="brand-mark" href="index.html" aria-label="KokoRBX"></a>
+        <div class="top-title">
+          <strong id="top-product">Kotak Pesan KokoRBX</strong>
+          <span id="top-meta">Memuat order...</span>
+        </div>
+        <div class="top-actions">
+          <button class="theme-btn" id="theme-btn" type="button">Light</button>
+          <span class="status-pill"><span class="status-dot"></span><span id="top-status">Online</span></span>
+        </div>
+      </header>
+
+      <div class="chat-log" id="chat-log">
+        <span class="day-chip">Hari ini</span>
+      </div>
+
+      <div class="quick-actions">
+        <button class="quick-btn light" id="agree-price" type="button">Setuju Harga</button>
+        <button class="quick-btn" id="paid-btn" type="button">Saya Sudah Bayar</button>
+        <button class="quick-btn light" id="proof-btn" type="button">Upload Bukti</button>
+        <button class="quick-btn light" id="done-btn" type="button">Konfirmasi Selesai</button>
+      </div>
+
+      <form class="compose" id="chat-form">
+        <div class="compose-box">
+          <button class="icon-btn" type="button" id="attach-btn">+</button>
+          <textarea id="chat-input" placeholder="Tulis pesan ke admin..."></textarea>
+          <button class="send-btn" type="submit">Kirim</button>
+        </div>
+      </form>
+      <input type="file" id="proof-file" accept="image/*" hidden>
+    </section>
+
+    <aside class="side-panel">
+      <div class="side-head">
+        <div>
+          <div class="side-title">Detail Order</div>
+          <div class="side-sub" id="side-id">Order ID</div>
+        </div>
+        <div class="product-img"><img id="side-image" src="assets/marketplace/custom-request.png" alt="Produk"></div>
+      </div>
+      <div class="side-body">
+        <div class="order-box">
+          <h3 id="side-product">Order KokoRBX</h3>
+          <div class="kv">
+            <div class="kv-row"><span>Status</span><strong id="side-status">Menunggu</strong></div>
+            <div class="kv-row"><span>Total</span><strong id="side-total">Menunggu harga</strong></div>
+            <div class="kv-row"><span>Buyer</span><strong id="side-buyer">Buyer KokoRBX</strong></div>
+            <div class="kv-row"><span>Token</span><strong id="side-token">-</strong></div>
+          </div>
+        </div>
+        <div class="order-box">
+          <h3>Aksi Buyer</h3>
+          <div class="kv">
+            <button class="side-btn light" id="copy-id" type="button">Copy Order ID</button>
+            <a class="side-btn light" href="index.html">Kembali ke Store</a>
+          </div>
+        </div>
+        <div class="protect">
+          <strong>Chat di luar KokoRBX tidak tercatat admin</strong>
+          <span>Gunakan kotak pesan ini supaya harga, bukti bayar, dan status order tetap rapi.</span>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+<script src="assets/marketplace/panel-store.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const DEFAULT_IMAGE = 'assets/marketplace/custom-request.png';
+  const requestedOrder = params.get('order') || '';
+  let roomToken = params.get('token') || (requestedOrder ? 'buyer-' + requestedOrder : 'buyer-room');
+  let activeOrderId = requestedOrder;
+  let theme = localStorage.getItem('kokorbx_buyer_room_theme') || 'dark';
+
+  function toNumber(value) {
+    if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+    return Number(String(value || '').replace(/[^\d]/g, '')) || 0;
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[char]));
+  }
+
+  function cleanStatus(value) {
+    return String(value || 'Menunggu admin').replace(/seller/ig, 'admin');
+  }
+
+  function roleName(role) {
+    const clean = String(role || 'system').toLowerCase() === 'seller' ? 'admin' : String(role || 'system').toLowerCase();
+    if (clean === 'admin') return 'Admin KokoRBX';
+    if (clean === 'buyer') return 'Buyer';
+    return 'System';
+  }
+
+  function roleInitial(role) {
+    const clean = String(role || 'system').toLowerCase() === 'seller' ? 'admin' : String(role || 'system').toLowerCase();
+    if (clean === 'admin') return 'A';
+    if (clean === 'buyer') return 'B';
+    return 'K';
+  }
+
+  function timeShort(time) {
+    const diff = Math.max(0, Date.now() - Number(time || Date.now()));
+    const min = Math.max(1, Math.floor(diff / 60000));
+    if (min < 60) return min + ' menit lalu';
+    const hour = Math.floor(min / 60);
+    if (hour < 24) return hour + ' jam lalu';
+    return Math.floor(hour / 24) + ' hari lalu';
+  }
+
+  function money(order) {
+    const price = toNumber(order && order.price);
+    if (price) return 'Rp ' + price.toLocaleString('id-ID');
+    return cleanStatus((order && order.priceText) || 'Menunggu harga');
+  }
+
+  function normalizeOrder(order) {
+    const o = Object.assign({}, order || {});
+    o.id = String(o.id || '');
+    o.product = o.product || 'Order KokoRBX';
+    o.category = o.category || 'custom';
+    o.image = o.image || DEFAULT_IMAGE;
+    o.price = toNumber(o.price);
+    o.priceText = cleanStatus(o.priceText || '');
+    o.status = cleanStatus(o.status || 'Menunggu admin');
+    o.buyer = o.buyer || o.username || 'Buyer KokoRBX';
+    o.messages = Array.isArray(o.messages) ? o.messages.map(message => ({
+      role: String(message.role || 'system').toLowerCase() === 'seller' ? 'admin' : String(message.role || 'system').toLowerCase(),
+      text: String(message.text || '').replace(/seller/ig, 'admin'),
+      time: message.time || Date.now()
+    })) : [];
+    if (!o.messages.length) {
+      o.messages = [
+        { role: 'system', text: 'Order dibuat di Kotak Pesan KokoRBX. Semua komunikasi dan bukti bayar tetap di website.', time: Date.now() }
+      ];
+    }
+    return o;
+  }
+
+  function createFromUrl() {
+    if (!params.has('new')) return null;
+    const product = params.get('product') || 'Custom Request';
+    const price = toNumber(params.get('price') || params.get('amount'));
+    const order = KokoPanel.createOrder({
+      prefix: String(params.get('category') || params.get('new') || 'TRX').slice(0, 3).toUpperCase(),
+      product,
+      category: params.get('category') || params.get('new') || 'custom',
+      image: params.get('image') || DEFAULT_IMAGE,
+      price,
+      priceText: params.get('priceText') || (price ? 'Rp ' + price.toLocaleString('id-ID') : 'Menunggu admin'),
+      detail: params.get('detail') || 'Order dibuat dari website KokoRBX.',
+      buyerMessage: params.get('buyerMessage') || 'Halo admin, aku mau order ' + product + '.',
+      username: params.get('username') || '',
+      buyer: params.get('buyer') || params.get('username') || 'Buyer KokoRBX',
+      source: params.get('source') || 'store'
+    });
+    activeOrderId = order.id;
+    roomToken = 'buyer-' + order.id;
+    history.replaceState(null, '', 'transaksi-buyer.html?order=' + encodeURIComponent(order.id) + '&token=' + encodeURIComponent('buyer-' + order.id));
+    return normalizeOrder(order);
+  }
+
+  function findOrder() {
+    const orders = KokoPanel.readOrders().map(normalizeOrder);
+    if (!activeOrderId) activeOrderId = KokoPanel.getActiveId() || (orders[0] && orders[0].id) || '';
+    let order = orders.find(item => item.id === activeOrderId);
+    if (!order && activeOrderId) {
+      order = normalizeOrder(KokoPanel.createOrder({
+        id: activeOrderId,
+        product: params.get('product') || 'Order KokoRBX',
+        category: params.get('category') || 'custom',
+        image: params.get('image') || DEFAULT_IMAGE,
+        priceText: params.get('priceText') || 'Menunggu admin',
+        status: 'Menunggu admin',
+        buyer: params.get('buyer') || params.get('username') || 'Buyer KokoRBX',
+        buyerMessage: 'Halo admin, aku mau tanya order ' + activeOrderId + '.',
+        detail: params.get('detail') || 'Order dibuka dari link buyer room.'
+      }));
+    }
+    if (order) {
+      activeOrderId = order.id;
+      KokoPanel.setActive(order.id);
+    }
+    return order || null;
+  }
+
+  function saveOrder(order) {
+    KokoPanel.updateOrder(order.id, order);
+    activeOrderId = order.id;
+    KokoPanel.setActive(order.id);
+  }
+
+  function addMessage(role, text) {
+    const clean = String(text || '').trim();
+    if (!clean || !activeOrderId) return;
+    KokoPanel.addMessage(activeOrderId, role, clean);
+    renderRoom();
+  }
+
+  function updateOrder(patch, systemMessage) {
+    const order = findOrder();
+    if (!order) return;
+    const next = Object.assign({}, order, patch || {}, { updatedAt: Date.now() });
+    if (systemMessage) {
+      next.messages = Array.isArray(next.messages) ? next.messages.slice() : [];
+      next.messages.push({ role: 'system', text: systemMessage, time: Date.now() });
+    }
+    saveOrder(next);
+    renderRoom();
+  }
+
+  function renderRoom() {
+    const order = normalizeOrder(findOrder());
+    applyTheme();
+    if (!order || !order.id) {
+      document.getElementById('top-product').textContent = 'Kotak Pesan KokoRBX';
+      document.getElementById('top-meta').textContent = 'Order tidak ditemukan';
+      document.getElementById('chat-log').innerHTML = '<div class="empty-state">Order belum ada di browser ini. Buka dari tombol chat transaksi atau link buyer room dari admin panel.</div>';
+      return;
+    }
+
+    document.getElementById('top-product').textContent = order.product;
+    document.getElementById('top-meta').textContent = order.id + ' - ' + money(order);
+    document.getElementById('top-status').textContent = order.status;
+    document.getElementById('side-id').textContent = order.id;
+    document.getElementById('side-image').src = order.image || DEFAULT_IMAGE;
+    document.getElementById('side-product').textContent = order.product;
+    document.getElementById('side-status').textContent = order.status;
+    document.getElementById('side-total').textContent = money(order);
+    document.getElementById('side-buyer').textContent = order.buyer;
+    document.getElementById('side-token').textContent = roomToken;
+
+    const log = document.getElementById('chat-log');
+    log.innerHTML = '<span class="day-chip">Hari ini</span>' + order.messages.map(message => {
+      const role = String(message.role || 'system').toLowerCase() === 'seller' ? 'admin' : String(message.role || 'system').toLowerCase();
+      if (role === 'system') {
+        return '<div class="bubble system"><div class="bubble-name"><span>System</span><span>' + timeShort(message.time) + '</span></div><div class="bubble-text">' + escapeHtml(message.text) + '</div></div>';
+      }
+      const mine = role === 'buyer';
+      const avatar = '<div class="avatar ' + escapeHtml(role) + '">' + escapeHtml(roleInitial(role)) + '</div>';
+      const bubble = '<div class="bubble"><div class="bubble-name"><span>' + escapeHtml(roleName(role)) + '</span></div><div class="bubble-text">' + escapeHtml(message.text) + '</div><span class="bubble-time">' + timeShort(message.time) + '</span></div>';
+      return '<div class="bubble-row ' + (mine ? 'me' : '') + '">' + (mine ? bubble + avatar : avatar + bubble) + '</div>';
+    }).join('');
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function applyTheme() {
+    document.body.dataset.theme = theme;
+    document.getElementById('theme-btn').textContent = theme === 'dark' ? 'Light' : 'Dark';
+  }
+
+  createFromUrl();
+  renderRoom();
+
+  document.getElementById('theme-btn').addEventListener('click', () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('kokorbx_buyer_room_theme', theme);
+    renderRoom();
+  });
+
+  document.getElementById('chat-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const input = document.getElementById('chat-input');
+    addMessage('buyer', input.value);
+    input.value = '';
+  });
+
+  document.getElementById('agree-price').addEventListener('click', () => {
+    addMessage('buyer', 'Aku setuju dengan harga yang dikirim. Lanjut pembayaran ya.');
+    updateOrder({ status: 'Menunggu pembayaran' });
+  });
+
+  document.getElementById('paid-btn').addEventListener('click', () => {
+    addMessage('buyer', 'Aku sudah bayar. Tolong cek bukti pembayaran ya.');
+    updateOrder({ status: 'Pembayaran dicek' });
+  });
+
+  document.getElementById('proof-btn').addEventListener('click', () => {
+    document.getElementById('proof-file').click();
+  });
+
+  document.getElementById('proof-file').addEventListener('change', event => {
+    const file = event.target.files && event.target.files[0];
+    const label = file ? file.name : 'bukti pembayaran';
+    addMessage('buyer', 'Bukti pembayaran sudah aku upload: ' + label + '.');
+    updateOrder({ status: 'Bukti masuk', proofName: label }, 'Bukti pembayaran baru masuk dari buyer.');
+    event.target.value = '';
+  });
+
+  document.getElementById('done-btn').addEventListener('click', () => {
+    addMessage('buyer', 'Order sudah aku terima. Transaksi boleh diselesaikan.');
+    updateOrder({ status: 'Konfirmasi selesai' });
+  });
+
+  document.getElementById('attach-btn').addEventListener('click', () => {
+    document.getElementById('proof-file').click();
+  });
+
+  document.getElementById('copy-id').addEventListener('click', async () => {
+    const order = findOrder();
+    if (!order) return;
+    try {
+      await navigator.clipboard.writeText(order.id);
+      addMessage('system', 'Order ID disalin: ' + order.id);
+    } catch(e) {
+      addMessage('system', 'Order ID: ' + order.id);
+    }
+  });
+</script>
+</body>
+</html>

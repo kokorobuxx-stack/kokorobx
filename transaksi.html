@@ -412,7 +412,8 @@
       border-color: rgba(124,92,252,.38);
       background: rgba(124,92,252,.13);
     }
-    .message.seller {
+    .message.seller,
+    .message.admin {
       align-self: flex-start;
       border-color: rgba(57,217,138,.36);
       background: rgba(57,217,138,.1);
@@ -560,7 +561,7 @@
     <div class="top-strip">
       <div class="top-inner">
         <span>Panel transaksi website</span>
-        <span>Chat buyer seller</span>
+        <span>Chat buyer admin</span>
         <span>WA hanya bantuan</span>
       </div>
     </div>
@@ -612,7 +613,7 @@
           <div class="panel-head">
             <div>
               <div class="panel-title">Chat</div>
-              <div class="panel-sub">Buyer dan seller ngobrol di website.</div>
+              <div class="panel-sub">Buyer dan admin ngobrol di website.</div>
             </div>
           </div>
           <div class="chat-messages" id="chat-messages"></div>
@@ -620,7 +621,7 @@
             <div class="compose-top">
               <select id="chat-role">
                 <option value="buyer">Buyer</option>
-                <option value="seller">Seller</option>
+                <option value="admin">Admin</option>
               </select>
               <button class="send-btn" type="submit">Kirim</button>
             </div>
@@ -632,7 +633,7 @@
           <div class="panel-head">
             <div>
               <div class="panel-title">Seller Tools</div>
-              <div class="panel-sub">Preview aksi admin/seller.</div>
+              <div class="panel-sub">Preview aksi admin.</div>
             </div>
           </div>
           <div class="seller-tools">
@@ -677,7 +678,7 @@
 
     function formatMoney(value, fallback) {
       const number = Number(value || 0);
-      return number ? 'Rp ' + number.toLocaleString('id-ID') : (fallback || 'Menunggu seller');
+      return number ? 'Rp ' + number.toLocaleString('id-ID') : (fallback || 'Menunggu admin');
     }
 
     function escapeHtml(value) {
@@ -741,13 +742,13 @@
         category: adminOrder.category || 'robux',
         image: adminOrder.image || DEFAULT_IMAGE,
         price,
-        priceText: price ? 'Rp ' + price.toLocaleString('id-ID') : 'Menunggu seller',
-        status: adminOrder.status === 'success' ? 'Selesai' : adminOrder.status === 'failed' ? 'Dibatalkan' : 'Menunggu seller',
+        priceText: price ? 'Rp ' + price.toLocaleString('id-ID') : 'Menunggu admin',
+        status: adminOrder.status === 'success' ? 'Selesai' : adminOrder.status === 'failed' ? 'Dibatalkan' : 'Menunggu admin',
         buyer: adminOrder.username || adminOrder.robloxUsername || 'Buyer KokoRBX',
         username: adminOrder.username || adminOrder.robloxUsername || '',
-        detail: 'Chat khusus untuk order ' + adminOrder.id + '. Buyer bisa tanya seller sesuai transaksi ini.',
+        detail: 'Chat khusus untuk order ' + adminOrder.id + '. Buyer bisa tanya admin sesuai transaksi ini.',
         source: 'admin-panel',
-        buyerMessage: 'Halo seller, aku mau tanya order ' + adminOrder.id + '.',
+        buyerMessage: 'Halo admin, aku mau tanya order ' + adminOrder.id + '.',
       });
     }
 
@@ -759,9 +760,9 @@
         product,
         category: urlParams.get('category') || urlParams.get('new') || 'custom',
         image: urlParams.get('image') || DEFAULT_IMAGE,
-        priceText: urlParams.get('priceText') || 'Menunggu seller',
+        priceText: urlParams.get('priceText') || 'Menunggu admin',
         detail: urlParams.get('detail') || 'Aku mau cek stok dan lanjut transaksi di panel.',
-        buyerMessage: urlParams.get('buyerMessage') || 'Halo seller, aku mau order ' + product + '. Tolong cek stok/harga ya.',
+        buyerMessage: urlParams.get('buyerMessage') || 'Halo admin, aku mau order ' + product + '. Tolong cek stok/harga ya.',
         username: urlParams.get('username') || '',
         buyer: urlParams.get('buyer') || urlParams.get('username') || 'Buyer KokoRBX',
         source: urlParams.get('source') || 'index.html',
@@ -776,11 +777,11 @@
         product: 'Item Limited',
         category: 'item',
         image: 'assets/marketplace/item-bundle.png',
-        priceText: 'Menunggu seller',
+        priceText: 'Menunggu admin',
         detail: 'Request item limited, item event, dan currency game Roblox.',
-        buyerMessage: 'Halo seller, aku mau tanya item limited. Bisa cek stok dan harga?',
+        buyerMessage: 'Halo admin, aku mau tanya item limited. Bisa cek stok dan harga?',
       });
-      KokoPanel.addMessage(order.id, 'seller', 'Bisa. Kirim nama game, item yang dicari, dan budget kamu di chat ini.');
+      KokoPanel.addMessage(order.id, 'admin', 'Bisa. Kirim nama game, item yang dicari, dan budget kamu di chat ini.');
       activeId = order.id;
       render();
     }
@@ -861,8 +862,8 @@
         '<div class="timeline">' + timeline + '</div>' +
         '<div class="buyer-contact-box">' +
           '<div>' +
-            '<strong>Hubungi Penjual</strong>' +
-            '<span>Chat ini langsung nyambung ke seller untuk order ' + escapeHtml(order.id) + '.</span>' +
+            '<strong>Hubungi Admin</strong>' +
+            '<span>Chat ini langsung nyambung ke admin untuk order ' + escapeHtml(order.id) + '.</span>' +
           '</div>' +
           '<button class="contact-seller-btn" type="button" data-contact-seller="' + escapeHtml(order.id) + '">Buka Chat Order</button>' +
         '</div>';
@@ -874,7 +875,7 @@
           KokoPanel.setActive(order.id);
           chatRole.value = 'buyer';
           if (!chatInput.value.trim()) {
-            chatInput.value = 'Halo seller, aku mau tanya order ' + order.id + ' (' + order.product + ').';
+            chatInput.value = 'Halo admin, aku mau tanya order ' + order.id + ' (' + order.product + ').';
           }
           const chatPanel = chatMessages.closest('.chat-panel');
           if (chatPanel && chatPanel.scrollIntoView) chatPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -950,7 +951,7 @@
         priceText: price ? 'Rp ' + price.toLocaleString('id-ID') : order.priceText,
         status: 'Menunggu pembayaran',
       });
-      KokoPanel.addMessage(order.id, 'seller', text);
+      KokoPanel.addMessage(order.id, 'admin', text);
       if (updated) advanceTimeline(updated, 1, 'Menunggu pembayaran');
       render();
     });
@@ -967,7 +968,7 @@
       const order = getActiveOrder();
       if (!order) return;
       const updated = advanceTimeline(order, 3, 'Selesai');
-      KokoPanel.addMessage(order.id, 'seller', 'Transaksi selesai. Terima kasih sudah order di KokoRBX.');
+      KokoPanel.addMessage(order.id, 'admin', 'Transaksi selesai. Terima kasih sudah order di KokoRBX.');
       if (updated) render();
     });
   </script>
