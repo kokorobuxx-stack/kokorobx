@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview Panel Transaksi v2 - KokoRBX</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800;900&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F8FAFF;
+    --sky: #EAF1FF;
+    --lav: #EDEBFF;
+    --blue-soft: #DCE8FF;
+    --purple: #8B7CFF;
+    --blue: #6F8DFF;
+    --mint: #62D8D4;
+    --green: #77DDA8;
+    --text: #1E2A55;
+    --muted: #7080A8;
+    --line: #DDE6F8;
+    --white: rgba(255, 255, 255, .88);
+    --shadow: 0 18px 45px rgba(111, 141, 255, .16);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background:
+      linear-gradient(rgba(111, 141, 255, .05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(111, 141, 255, .05) 1px, transparent 1px),
+      linear-gradient(135deg, #F8FAFF 0%, #EEF4FF 48%, #F6FBFF 100%);
+    background-size: 44px 44px, 44px 44px, auto;
+  }
+
+  a { color: inherit; text-decoration: none; }
+  button, input, textarea, select { font: inherit; }
+  button { cursor: pointer; }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    border-bottom: 1px solid rgba(221, 230, 248, .86);
+    background: rgba(248, 250, 255, .86);
+    backdrop-filter: blur(18px);
+  }
+
+  .topbar-inner {
+    width: min(1360px, calc(100% - 32px));
+    min-height: 72px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Outfit", sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .brand-mark {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(145deg, #171927, #070910);
+    border: 1px solid rgba(255, 255, 255, .18);
+    box-shadow: 0 12px 24px rgba(9, 12, 28, .24);
+  }
+
+  .brand-mark::before {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border: 3px solid #fff;
+    border-radius: 5px;
+    transform: rotate(-13deg);
+  }
+
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: #fff;
+  }
+
+  .brand em { color: var(--purple); font-style: normal; }
+
+  .top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .top-nav::-webkit-scrollbar { display: none; }
+
+  .nav-pill {
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    color: var(--muted);
+    padding: 0 12px;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .nav-pill.active {
+    color: var(--purple);
+    border-color: rgba(139, 124, 255, .22);
+    background: rgba(237, 235, 255, .82);
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .mini-btn {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: #fff;
+    color: var(--text);
+    padding: 0 12px;
+    font-size: 12px;
+    font-weight: 900;
+    box-shadow: 0 10px 24px rgba(111, 141, 255, .10);
+    white-space: nowrap;
+  }
+
+  .mini-btn.primary {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff;
+  }
+
+  .shell {
+    width: min(1360px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 22px 0 44px;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 18px;
+    margin-bottom: 14px;
+  }
+
+  .kicker {
+    width: max-content;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(139, 124, 255, .2);
+    border-radius: 999px;
+    background: rgba(237, 235, 255, .62);
+    color: var(--purple);
+    padding: 7px 11px;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  h1 {
+    margin: 8px 0 4px;
+    font-family: "Outfit", sans-serif;
+    font-size: clamp(31px, 4.5vw, 56px);
+    line-height: .95;
+    letter-spacing: 0;
+  }
+
+  .hero p {
+    width: min(720px, 100%);
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+    font-weight: 600;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    gap: 8px;
+  }
+
+  .stat-mini {
+    min-width: 118px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .82);
+    padding: 10px 12px;
+    box-shadow: 0 12px 25px rgba(111, 141, 255, .10);
+  }
+
+  .stat-mini span {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  .stat-mini strong {
+    display: block;
+    margin-top: 3px;
+    font-family: "Outfit", sans-serif;
+    font-size: 19px;
+    line-height: 1;
+  }
+
+  .notice {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    border: 1px solid rgba(255, 203, 87, .42);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(255, 250, 232, .92), rgba(237, 235, 255, .78));
+    padding: 12px 14px;
+    margin: 16px 0;
+    box-shadow: 0 14px 30px rgba(111, 141, 255, .10);
+  }
+
+  .notice-icon,
+  .icon-box {
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    border-radius: 11px;
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--purple);
+    box-shadow: 0 10px 22px rgba(111, 141, 255, .12);
+  }
+
+  .notice strong {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 14px;
+  }
+
+  .notice span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+    font-weight: 700;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: 292px minmax(0, 1fr) 360px;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .panel {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--white);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+
+  .panel-head {
+    min-height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid var(--line);
+    padding: 14px;
+  }
+
+  .panel-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-family: "Outfit", sans-serif;
+    font-weight: 900;
+    font-size: 17px;
+  }
+
+  .panel-sub {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .search {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    padding: 0 10px;
+    margin: 12px;
+    min-height: 40px;
+  }
+
+  .search input {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .filters {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    padding: 0 12px 12px;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar { display: none; }
+
+  .filter-btn {
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--muted);
+    padding: 7px 10px;
+    font-size: 11px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .filter-btn.active {
+    background: var(--lav);
+    border-color: rgba(139, 124, 255, .26);
+    color: var(--purple);
+  }
+
+  .order-list {
+    display: grid;
+    gap: 9px;
+    max-height: 670px;
+    overflow: auto;
+    padding: 0 12px 12px;
+  }
+
+  .order-card {
+    display: grid;
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .78);
+    padding: 10px;
+    text-align: left;
+    color: inherit;
+    transition: border-color .16s, background .16s, transform .16s;
+  }
+
+  .order-card:hover,
+  .order-card.active {
+    border-color: rgba(139, 124, 255, .48);
+    background: #fff;
+    transform: translateY(-1px);
+  }
+
+  .thumb {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--sky), #fff);
+    overflow: hidden;
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .order-name {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .order-name strong {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(139, 124, 255, .22);
+    border-radius: 999px;
+    background: var(--lav);
+    color: var(--purple);
+    padding: 4px 7px;
+    font-size: 9px;
+    font-weight: 900;
+    white-space: nowrap;
+  }
+
+  .badge.green {
+    color: #2A9364;
+    background: rgba(119, 221, 168, .18);
+    border-color: rgba(119, 221, 168, .38);
+  }
+
+  .order-meta {
+    display: grid;
+    gap: 3px;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .detail-card {
+    min-height: 700px;
+  }
+
+  .detail-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 210px;
+    gap: 16px;
+    padding: 18px;
+    background:
+      radial-gradient(circle at 74% 16%, rgba(98, 216, 212, .18), transparent 34%),
+      linear-gradient(135deg, rgba(237, 235, 255, .78), rgba(248, 250, 255, .95));
+    border-bottom: 1px solid var(--line);
+  }
+
+  .detail-kicker {
+    width: max-content;
+    border-radius: 999px;
+    border: 1px solid rgba(119, 221, 168, .42);
+    background: rgba(119, 221, 168, .15);
+    color: #2A9364;
+    padding: 6px 9px;
+    font-size: 10px;
+    font-weight: 900;
+  }
+
+  .detail-hero h2 {
+    margin: 10px 0 8px;
+    font-family: "Outfit", sans-serif;
+    font-size: clamp(26px, 3.2vw, 42px);
+    line-height: 1.02;
+  }
+
+  .detail-hero h2 span {
+    color: var(--purple);
+  }
+
+  .detail-hero p {
+    max-width: 620px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.55;
+    font-weight: 700;
+  }
+
+  .product-preview {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .76);
+    overflow: hidden;
+    min-height: 154px;
+  }
+
+  .product-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 9px;
+    padding: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .fact {
+    min-height: 78px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .72);
+    padding: 11px;
+  }
+
+  .fact span {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .fact strong {
+    display: block;
+    margin-top: 7px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+  }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 9px;
+    padding: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .step {
+    position: relative;
+    min-height: 84px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .64);
+    padding: 12px;
+  }
+
+  .step.done {
+    border-color: rgba(119, 221, 168, .46);
+    background: rgba(119, 221, 168, .13);
+  }
+
+  .step.active {
+    border-color: rgba(139, 124, 255, .36);
+    background: rgba(237, 235, 255, .78);
+  }
+
+  .step-no {
+    position: absolute;
+    top: 9px;
+    right: 11px;
+    color: rgba(139, 124, 255, .30);
+    font-family: "Outfit", sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+  }
+
+  .step strong {
+    display: block;
+    margin-top: 16px;
+    font-size: 13px;
+  }
+
+  .step span {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  .detail-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .info-box {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, .66);
+    padding: 14px;
+  }
+
+  .info-box h3 {
+    margin: 0 0 10px;
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+  }
+
+  .kv {
+    display: grid;
+    gap: 8px;
+  }
+
+  .kv-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid rgba(221, 230, 248, .7);
+    padding-bottom: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .kv-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .kv-row strong {
+    color: var(--text);
+    text-align: right;
+  }
+
+  .chat-panel {
+    position: sticky;
+    top: 88px;
+  }
+
+  .chat-log {
+    display: grid;
+    align-content: start;
+    gap: 10px;
+    min-height: 360px;
+    max-height: 520px;
+    overflow: auto;
+    padding: 14px;
+    background:
+      linear-gradient(rgba(111, 141, 255, .035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(111, 141, 255, .035) 1px, transparent 1px),
+      rgba(248, 250, 255, .55);
+    background-size: 28px 28px, 28px 28px, auto;
+  }
+
+  .msg {
+    width: min(86%, 290px);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+    padding: 10px 11px;
+    box-shadow: 0 10px 22px rgba(111, 141, 255, .08);
+  }
+
+  .msg.system {
+    width: 100%;
+    background: rgba(255, 250, 232, .92);
+    border-color: rgba(255, 203, 87, .42);
+  }
+
+  .msg.buyer { justify-self: start; }
+  .msg.seller,
+  .msg.admin {
+    justify-self: end;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff;
+    border-color: transparent;
+  }
+
+  .msg-role {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+  }
+
+  .msg-time {
+    opacity: .64;
+    font-size: 9px;
+  }
+
+  .msg-text {
+    font-size: 12px;
+    line-height: 1.45;
+    font-weight: 700;
+  }
+
+  .chat-compose {
+    border-top: 1px solid var(--line);
+    padding: 12px;
+    background: rgba(255, 255, 255, .86);
+  }
+
+  .compose-grid {
+    display: grid;
+    grid-template-columns: 104px minmax(0, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .compose-grid select,
+  .tool-input,
+  .chat-compose textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text);
+    outline: 0;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .compose-grid select,
+  .tool-input {
+    min-height: 40px;
+    padding: 0 10px;
+  }
+
+  .chat-compose textarea {
+    min-height: 82px;
+    resize: vertical;
+    padding: 11px;
+    line-height: 1.45;
+  }
+
+  .send-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .send-row span {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+  }
+
+  .action-btn {
+    min-height: 39px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff;
+    padding: 0 14px;
+    font-size: 12px;
+    font-weight: 900;
+  }
+
+  .tool-panel {
+    margin-top: 14px;
+  }
+
+  .tool-body {
+    display: grid;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .tool-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .tool-btn {
+    min-height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--text);
+    padding: 0 10px;
+    font-size: 11px;
+    font-weight: 900;
+  }
+
+  .tool-btn.primary {
+    border-color: transparent;
+    background: linear-gradient(135deg, var(--purple), var(--blue));
+    color: #fff;
+  }
+
+  .tool-btn.green {
+    color: #257a56;
+    border-color: rgba(119, 221, 168, .45);
+    background: rgba(119, 221, 168, .16);
+  }
+
+  .tool-btn.warn {
+    color: #b86f00;
+    border-color: rgba(255, 203, 87, .45);
+    background: rgba(255, 250, 232, .9);
+  }
+
+  @media (max-width: 1180px) {
+    .workspace {
+      grid-template-columns: 280px minmax(0, 1fr);
+    }
+    .chat-panel {
+      position: static;
+      grid-column: 1 / -1;
+    }
+    .chat-log {
+      max-height: 420px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .topbar-inner {
+      width: min(100% - 20px, 720px);
+      grid-template-columns: auto auto;
+      min-height: 66px;
+    }
+    .top-nav {
+      grid-column: 1 / -1;
+      order: 3;
+      justify-content: flex-start;
+      padding-bottom: 10px;
+    }
+    .top-actions .mini-btn:not(.primary) { display: none; }
+    .shell {
+      width: min(100% - 20px, 720px);
+      padding-top: 14px;
+    }
+    .hero,
+    .notice,
+    .workspace,
+    .detail-hero,
+    .detail-body {
+      grid-template-columns: 1fr;
+    }
+    .hero-stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .stat-mini { min-width: 0; }
+    .order-list {
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(250px, 82vw);
+      overflow-x: auto;
+      max-height: none;
+    }
+    .facts,
+    .timeline {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .product-preview {
+      min-height: 170px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .brand { font-size: 21px; }
+    .brand-mark { width: 36px; height: 36px; }
+    .hero-stats,
+    .facts,
+    .timeline,
+    .tool-grid {
+      grid-template-columns: 1fr;
+    }
+    .notice { align-items: start; }
+    .detail-hero { padding: 14px; }
+    .panel-head { align-items: flex-start; flex-direction: column; }
+    .compose-grid { grid-template-columns: 1fr; }
+    .msg { width: 94%; }
+  }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" aria-label="KokoRBX">
+        <span class="brand-mark"></span>
+        <span>Koko<em>RBX</em></span>
+      </a>
+      <nav class="top-nav" aria-label="Preview tabs">
+        <span class="nav-pill active">Kotak Pesan</span>
+        <span class="nav-pill">Order Manual</span>
+        <span class="nav-pill">Seller Tools</span>
+        <span class="nav-pill">Riwayat</span>
+      </nav>
+      <div class="top-actions">
+        <a class="mini-btn" href="admin.html">Admin lama</a>
+        <button class="mini-btn primary" id="reset-demo">Reset demo</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="kicker">Preview Panel Transaksi v2</div>
+        <h1>Kotak Pesan Transaksi</h1>
+        <p>Preview ini nunjukin panel transaksi yang lebih resmi: chat pembeli, seller, harga deal, status, dan timeline semua tercatat di website.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-mini"><span>Order aktif</span><strong id="stat-active">0</strong></div>
+        <div class="stat-mini"><span>Butuh respon</span><strong id="stat-waiting">0</strong></div>
+        <div class="stat-mini"><span>Selesai</span><strong id="stat-done">0</strong></div>
+      </div>
+    </section>
+
+    <section class="notice" aria-label="Aturan kotak pesan">
+      <div class="notice-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 7.5A3.5 3.5 0 0 1 7.5 4h9A3.5 3.5 0 0 1 20 7.5v5A3.5 3.5 0 0 1 16.5 16H11l-4.2 3.2c-.7.5-1.8 0-1.8-.9V16A3.5 3.5 0 0 1 4 12.5v-5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M8 9h8M8 12h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div>
+        <strong>Komunikasi wajib lewat Kotak Pesan KokoRBX</strong>
+        <span>Untuk transaksi item Roblox, pembeli dan penjual wajib komunikasi di sini. Chat di luar website tidak masuk catatan dan perlindungan admin.</span>
+      </div>
+      <span class="badge green">Aman tercatat</span>
+    </section>
+
+    <section class="workspace">
+      <aside class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">
+              <span class="icon-box">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7 7h10M7 12h7M7 17h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="2"/>
+                </svg>
+              </span>
+              Transaksi
+            </div>
+            <div class="panel-sub">Pilih order buat dibalas admin.</div>
+          </div>
+        </div>
+        <label class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m21 21-4.2-4.2M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="search-order" type="search" placeholder="Cari ID, produk, buyer...">
+        </label>
+        <div class="filters" id="filters">
+          <button class="filter-btn active" data-filter="all">Semua</button>
+          <button class="filter-btn" data-filter="Menunggu seller">Menunggu</button>
+          <button class="filter-btn" data-filter="Harga dikirim">Harga</button>
+          <button class="filter-btn" data-filter="Selesai">Selesai</button>
+        </div>
+        <div class="order-list" id="order-list"></div>
+      </aside>
+
+      <section class="panel detail-card">
+        <div class="detail-hero">
+          <div>
+            <div class="detail-kicker" id="detail-status">Menunggu seller</div>
+            <h2 id="detail-title">Item Game <span>Roblox</span></h2>
+            <p id="detail-desc">Detail transaksi akan tampil di sini.</p>
+          </div>
+          <div class="product-preview">
+            <img id="detail-image" src="assets/marketplace/item-bundle.png" alt="Preview produk">
+          </div>
+        </div>
+
+        <div class="facts" id="facts"></div>
+        <div class="timeline" id="timeline"></div>
+
+        <div class="detail-body">
+          <article class="info-box">
+            <h3>Catatan Buyer</h3>
+            <div class="kv" id="buyer-note"></div>
+          </article>
+          <article class="info-box">
+            <h3>Proteksi Admin</h3>
+            <div class="kv">
+              <div class="kv-row"><span>Chat luar website</span><strong>Tidak disarankan</strong></div>
+              <div class="kv-row"><span>Bukti harga</span><strong>Tercatat</strong></div>
+              <div class="kv-row"><span>Status order</span><strong id="protect-status">Dipantau</strong></div>
+              <div class="kv-row"><span>Catatan admin</span><strong>Wajib jelas</strong></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside>
+        <section class="panel chat-panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">
+                <span class="icon-box">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M5 8.5A3.5 3.5 0 0 1 8.5 5h7A3.5 3.5 0 0 1 19 8.5v4A3.5 3.5 0 0 1 15.5 16H12l-4.2 3v-3A3.5 3.5 0 0 1 5 12.5v-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+                Kotak Pesan
+              </div>
+              <div class="panel-sub">Semua chat tersimpan di transaksi.</div>
+            </div>
+            <span class="badge" id="chat-badge">Live</span>
+          </div>
+          <div class="chat-log" id="chat-log"></div>
+          <form class="chat-compose" id="chat-form">
+            <div class="compose-grid">
+              <select id="chat-role" aria-label="Role pesan">
+                <option value="seller">Seller</option>
+                <option value="admin">Admin</option>
+                <option value="buyer">Buyer</option>
+              </select>
+              <input class="tool-input" id="quick-text" type="text" placeholder="Template singkat, opsional">
+            </div>
+            <textarea id="chat-message" placeholder="Tulis pesan transaksi..."></textarea>
+            <div class="send-row">
+              <span>Preview saja, belum mengganti panel lama.</span>
+              <button class="action-btn" type="submit">Kirim</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel tool-panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Seller Tools</div>
+              <div class="panel-sub">Aksi cepat untuk simulasi panel.</div>
+            </div>
+          </div>
+          <div class="tool-body">
+            <input class="tool-input" id="deal-price" type="text" inputmode="numeric" placeholder="Harga deal, contoh 185000">
+            <div class="tool-grid">
+              <button class="tool-btn primary" id="send-price">Kirim Harga</button>
+              <button class="tool-btn warn" id="mark-paid">Buyer Bayar</button>
+              <button class="tool-btn green" id="mark-done">Selesai</button>
+              <button class="tool-btn" id="reset-active">Reset Order</button>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+<script>
+  const STORAGE_KEY = 'kokorbx_panel_v2_preview';
+  const now = () => Date.now();
+  const sampleOrders = [
+    {
+      id: 'ITM-394711',
+      product: 'Item Limited',
+      category: 'Item Game',
+      buyer: 'tamu_4745',
+      image: 'assets/marketplace/item-bundle.png',
+      priceText: 'Menunggu harga',
+      status: 'Menunggu seller',
+      detail: 'Buyer cari item limited tema ungu, budget fleksibel, minta seller cek stok dulu.',
+      createdAt: now() - 1000 * 60 * 18,
+      messages: [
+        { role: 'system', text: 'Transaksi dibuat di Kotak Pesan KokoRBX. Seller dan buyer wajib komunikasi di sini.', time: now() - 1000 * 60 * 18 },
+        { role: 'buyer', text: 'Halo kak, aku mau cari item limited yang warna ungu. Stoknya ada?', time: now() - 1000 * 60 * 16 },
+        { role: 'seller', text: 'Ada kak, aku cek harga dan stok final dulu ya. Nanti aku kirim harga deal di sini.', time: now() - 1000 * 60 * 9 }
+      ],
+      timeline: [
+        { label: 'Order dibuat', state: 'done', note: '18 menit lalu' },
+        { label: 'Seller respon', state: 'active', note: 'Menunggu harga' },
+        { label: 'Pembayaran', state: '', note: 'Belum mulai' },
+        { label: 'Selesai', state: '', note: 'Belum selesai' }
+      ]
+    },
+    {
+      id: 'ACC-812904',
+      product: 'Akun Roblox',
+      category: 'Akun',
+      buyer: 'cloudyy',
+      image: 'assets/marketplace/account-showcase.png',
+      priceText: 'Rp 150.000',
+      status: 'Harga dikirim',
+      detail: 'Request akun siap pakai, umur akun aman, budget 150 ribu.',
+      createdAt: now() - 1000 * 60 * 46,
+      messages: [
+        { role: 'system', text: 'Harga sudah dikirim seller. Buyer diminta bayar sesuai nominal di kotak pesan.', time: now() - 1000 * 60 * 42 },
+        { role: 'buyer', text: 'Kalau akunnya email bisa diganti aman ya?', time: now() - 1000 * 60 * 40 },
+        { role: 'seller', text: 'Aman kak. Harga deal Rp 150.000, detail login dikirim setelah pembayaran masuk.', time: now() - 1000 * 60 * 36 }
+      ],
+      timeline: [
+        { label: 'Order dibuat', state: 'done', note: '46 menit lalu' },
+        { label: 'Seller respon', state: 'done', note: 'Harga dikirim' },
+        { label: 'Pembayaran', state: 'active', note: 'Menunggu buyer' },
+        { label: 'Selesai', state: '', note: 'Belum selesai' }
+      ]
+    },
+    {
+      id: 'JOK-118220',
+      product: 'Jasa Farming',
+      category: 'Jasa',
+      buyer: 'NightFrost',
+      image: 'assets/marketplace/joki-service.png',
+      priceText: 'Rp 90.000',
+      status: 'Selesai',
+      detail: 'Joki farming 2 jam, progress sudah selesai dan buyer konfirmasi aman.',
+      createdAt: now() - 1000 * 60 * 150,
+      messages: [
+        { role: 'system', text: 'Order selesai dan riwayat chat tetap tersimpan di Kotak Pesan KokoRBX.', time: now() - 1000 * 60 * 80 },
+        { role: 'buyer', text: 'Sudah masuk semua kak, makasih.', time: now() - 1000 * 60 * 78 },
+        { role: 'admin', text: 'Order ditandai selesai. Terima kasih sudah transaksi di KokoRBX.', time: now() - 1000 * 60 * 76 }
+      ],
+      timeline: [
+        { label: 'Order dibuat', state: 'done', note: '2 jam lalu' },
+        { label: 'Seller respon', state: 'done', note: 'Diproses' },
+        { label: 'Pembayaran', state: 'done', note: 'Sudah bayar' },
+        { label: 'Selesai', state: 'done', note: 'Terkonfirmasi' }
+      ]
+    }
+  ];
+
+  let orders = loadOrders();
+  let activeId = localStorage.getItem('kokorbx_panel_v2_active') || (orders[0] && orders[0].id);
+  let activeFilter = 'all';
+
+  function cloneSamples() {
+    return JSON.parse(JSON.stringify(sampleOrders));
+  }
+
+  function loadOrders() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      return Array.isArray(parsed) && parsed.length ? parsed : cloneSamples();
+    } catch(e) {
+      return cloneSamples();
+    }
+  }
+
+  function saveOrders() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
+    if (activeId) localStorage.setItem('kokorbx_panel_v2_active', activeId);
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[char]));
+  }
+
+  function timeShort(time) {
+    const diff = Math.max(0, Date.now() - Number(time || Date.now()));
+    const min = Math.max(1, Math.floor(diff / 60000));
+    if (min < 60) return min + ' menit';
+    const hour = Math.floor(min / 60);
+    return hour + ' jam';
+  }
+
+  function activeOrder() {
+    return orders.find(item => item.id === activeId) || orders[0];
+  }
+
+  function updateStats() {
+    document.getElementById('stat-active').textContent = orders.length;
+    document.getElementById('stat-waiting').textContent = orders.filter(item => item.status !== 'Selesai').length;
+    document.getElementById('stat-done').textContent = orders.filter(item => item.status === 'Selesai').length;
+  }
+
+  function filteredOrders() {
+    const query = document.getElementById('search-order').value.trim().toLowerCase();
+    return orders.filter(item => {
+      const statusOk = activeFilter === 'all' || item.status === activeFilter;
+      const text = [item.id, item.product, item.category, item.buyer, item.status].join(' ').toLowerCase();
+      return statusOk && (!query || text.includes(query));
+    });
+  }
+
+  function renderList() {
+    const list = document.getElementById('order-list');
+    const rows = filteredOrders();
+    list.innerHTML = rows.length ? rows.map(item => `
+      <button class="order-card${item.id === activeId ? ' active' : ''}" data-id="${escapeHtml(item.id)}">
+        <span class="thumb"><img src="${escapeHtml(item.image)}" alt=""></span>
+        <span>
+          <span class="order-name"><strong>${escapeHtml(item.product)}</strong><span class="badge">${escapeHtml(item.status)}</span></span>
+          <span class="order-meta">
+            <span>${escapeHtml(item.id)} • ${escapeHtml(item.buyer)}</span>
+            <span>${escapeHtml(item.priceText)} • ${timeShort(item.createdAt)} lalu</span>
+          </span>
+        </span>
+      </button>
+    `).join('') : '<div class="info-box">Order tidak ditemukan.</div>';
+
+    list.querySelectorAll('.order-card').forEach(card => {
+      card.addEventListener('click', () => {
+        activeId = card.dataset.id;
+        saveOrders();
+        renderAll();
+      });
+    });
+  }
+
+  function renderDetail() {
+    const order = activeOrder();
+    if (!order) return;
+    document.getElementById('detail-status').textContent = order.status;
+    document.getElementById('detail-title').innerHTML = escapeHtml(order.product) + ' <span>' + escapeHtml(order.category) + '</span>';
+    document.getElementById('detail-desc').textContent = order.detail || 'Detail transaksi belum diisi.';
+    document.getElementById('detail-image').src = order.image;
+    document.getElementById('protect-status').textContent = order.status === 'Selesai' ? 'Selesai' : 'Dipantau';
+    document.getElementById('chat-badge').textContent = order.status;
+
+    const facts = [
+      ['Order ID', order.id],
+      ['Buyer', order.buyer],
+      ['Produk', order.product],
+      ['Total', order.priceText]
+    ];
+    document.getElementById('facts').innerHTML = facts.map(row => `
+      <div class="fact"><span>${escapeHtml(row[0])}</span><strong>${escapeHtml(row[1])}</strong></div>
+    `).join('');
+
+    document.getElementById('timeline').innerHTML = order.timeline.map((step, index) => `
+      <div class="step ${escapeHtml(step.state || '')}">
+        <span class="step-no">${index + 1}</span>
+        <strong>${escapeHtml(step.label)}</strong>
+        <span>${escapeHtml(step.note || 'Menunggu')}</span>
+      </div>
+    `).join('');
+
+    document.getElementById('buyer-note').innerHTML = `
+      <div class="kv-row"><span>Kategori</span><strong>${escapeHtml(order.category)}</strong></div>
+      <div class="kv-row"><span>Detail</span><strong>${escapeHtml(order.detail)}</strong></div>
+      <div class="kv-row"><span>Dibuat</span><strong>${timeShort(order.createdAt)} lalu</strong></div>
+    `;
+  }
+
+  function renderChat() {
+    const order = activeOrder();
+    if (!order) return;
+    const log = document.getElementById('chat-log');
+    log.innerHTML = order.messages.map(message => `
+      <div class="msg ${escapeHtml(message.role)}">
+        <div class="msg-role">
+          <span>${escapeHtml(message.role)}</span>
+          <span class="msg-time">${timeShort(message.time)} lalu</span>
+        </div>
+        <div class="msg-text">${escapeHtml(message.text)}</div>
+      </div>
+    `).join('');
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function renderAll() {
+    updateStats();
+    renderList();
+    renderDetail();
+    renderChat();
+  }
+
+  function patchActive(patch) {
+    const index = orders.findIndex(item => item.id === activeId);
+    if (index < 0) return;
+    orders[index] = { ...orders[index], ...patch };
+    saveOrders();
+    renderAll();
+  }
+
+  function addMessage(role, text) {
+    const order = activeOrder();
+    if (!order || !String(text || '').trim()) return;
+    order.messages.push({ role, text: String(text).trim(), time: Date.now() });
+    saveOrders();
+    renderAll();
+  }
+
+  document.getElementById('chat-form').addEventListener('submit', event => {
+    event.preventDefault();
+    const role = document.getElementById('chat-role').value;
+    const quick = document.getElementById('quick-text').value.trim();
+    const message = document.getElementById('chat-message').value.trim();
+    addMessage(role, quick ? quick + ' ' + message : message);
+    document.getElementById('chat-message').value = '';
+    document.getElementById('quick-text').value = '';
+  });
+
+  document.getElementById('send-price').addEventListener('click', () => {
+    const raw = document.getElementById('deal-price').value.replace(/[^\d]/g, '');
+    if (!raw) return;
+    const price = 'Rp ' + Number(raw).toLocaleString('id-ID');
+    const order = activeOrder();
+    order.priceText = price;
+    order.status = 'Harga dikirim';
+    order.timeline[1] = { label: 'Seller respon', state: 'done', note: 'Harga dikirim' };
+    order.timeline[2] = { label: 'Pembayaran', state: 'active', note: 'Menunggu buyer' };
+    order.messages.push({ role: 'seller', text: 'Harga deal untuk order ini ' + price + '. Silakan lanjut pembayaran lewat website.', time: Date.now() });
+    document.getElementById('deal-price').value = '';
+    saveOrders();
+    renderAll();
+  });
+
+  document.getElementById('mark-paid').addEventListener('click', () => {
+    const order = activeOrder();
+    order.status = 'Pembayaran dicek';
+    order.timeline[2] = { label: 'Pembayaran', state: 'done', note: 'Buyer sudah bayar' };
+    order.timeline[3] = { label: 'Selesai', state: 'active', note: 'Menunggu seller' };
+    order.messages.push({ role: 'admin', text: 'Pembayaran buyer sudah masuk catatan. Seller boleh proses order.', time: Date.now() });
+    saveOrders();
+    renderAll();
+  });
+
+  document.getElementById('mark-done').addEventListener('click', () => {
+    const order = activeOrder();
+    order.status = 'Selesai';
+    order.timeline = order.timeline.map(step => ({ ...step, state: 'done' }));
+    order.timeline[3].note = 'Order selesai';
+    order.messages.push({ role: 'admin', text: 'Order ditandai selesai. Semua riwayat tetap tersimpan di Kotak Pesan KokoRBX.', time: Date.now() });
+    saveOrders();
+    renderAll();
+  });
+
+  document.getElementById('reset-active').addEventListener('click', () => {
+    const fresh = cloneSamples().find(item => item.id === activeId) || cloneSamples()[0];
+    const index = orders.findIndex(item => item.id === activeId);
+    if (index >= 0) orders[index] = fresh;
+    saveOrders();
+    renderAll();
+  });
+
+  document.getElementById('reset-demo').addEventListener('click', () => {
+    orders = cloneSamples();
+    activeId = orders[0].id;
+    saveOrders();
+    renderAll();
+  });
+
+  document.getElementById('search-order').addEventListener('input', renderList);
+  document.querySelectorAll('.filter-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(item => item.classList.remove('active'));
+      button.classList.add('active');
+      activeFilter = button.dataset.filter;
+      renderList();
+    });
+  });
+
+  saveOrders();
+  renderAll();
+</script>
+</body>
+</html>
