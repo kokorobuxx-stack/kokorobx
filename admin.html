@@ -240,6 +240,17 @@
   .rate-preview-card p { display: flex; justify-content: space-between; gap: 8px; font-size: 11px; color: var(--muted); padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
   .rate-preview-card p:last-child { border-bottom: 0; }
   .rate-preview-card strong { color: var(--green); font-family: var(--mono); }
+  .product-admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .product-admin-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 15px; display: grid; gap: 11px; }
+  .product-admin-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .product-admin-name { font-size: 14px; color: var(--text); font-weight: 800; }
+  .product-admin-group { color: var(--muted); font-size: 10px; margin-top: 2px; }
+  .product-state-dot { width: 10px; height: 10px; border-radius: 999px; background: var(--green); box-shadow: 0 0 0 5px rgba(0,229,160,.08); margin-top: 4px; }
+  .product-admin-card[data-status="habis"] .product-state-dot { background: var(--red); box-shadow: 0 0 0 5px rgba(255,77,109,.08); }
+  .product-admin-card[data-status="maintenance"] .product-state-dot { background: var(--yellow); box-shadow: 0 0 0 5px rgba(255,214,102,.12); }
+  .product-status-select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 10px; outline: none; font-size: 12px; }
+  .product-status-help { color: var(--muted); font-size: 11px; line-height: 1.5; }
+  .product-admin-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 
   /* TRANSACTION PANEL */
   .transaction-embed-card {
@@ -344,7 +355,7 @@
 
     /* Stats grid */
     .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-    .rate-settings-grid, .rate-preview-grid { grid-template-columns: 1fr; }
+    .rate-settings-grid, .rate-preview-grid, .product-admin-grid { grid-template-columns: 1fr; }
     .transaction-embed-toolbar { align-items: stretch; flex-direction: column; }
     .transaction-embed-actions { width: 100%; }
     .transaction-embed-actions .btn-refresh { flex: 1; justify-content: center; }
@@ -531,7 +542,7 @@
   }
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
-<link rel="stylesheet" href="assets/kokorbx-theme.css?v=icon-polish-20260531">
+<link rel="stylesheet" href="assets/kokorbx-theme.css?v=logo-maintenance-20260531">
 </head>
 <body>
 
@@ -570,6 +581,7 @@
   <div class="nav-item" onclick="showPage('panel', this)"><span class="icon">&#9993;</span> Panel Transaksi</div>
   <div class="nav-item" onclick="showPage('stats', this)"><span class="icon">&#9660;</span> Statistik</div>
   <div class="nav-item" onclick="showPage('rates', this)"><span class="icon">Rp</span> Rate Robux</div>
+  <div class="nav-item" onclick="showPage('products', this)"><span class="icon">&#9638;</span> Status Produk</div>
   <div class="emailjs-section">
     <h4>📧 EmailJS Config</h4>
     <div style="font-size:10px;color:var(--muted);line-height:1.5;margin-bottom:8px;">Utama: env Vercel. Form ini hanya fallback per browser.</div>
@@ -732,6 +744,20 @@
     <div class="rate-preview-grid" id="rate-preview"></div>
   </div>
 
+  <!-- PRODUCTS -->
+  <div class="page" id="page-products">
+    <div class="page-header">
+      <div><h2>Status Produk</h2><span>Atur produk ready, habis, atau maintenance dari satu tempat.</span></div>
+      <button class="btn-refresh" id="refresh-products" onclick="loadProductStatusSettings(true)"><span class="spin">&#8635;</span> Refresh</button>
+    </div>
+    <div class="product-admin-actions">
+      <button class="rate-save-btn" onclick="saveProductStatusSettings()">Simpan Status Produk</button>
+      <button class="btn-refresh" onclick="resetProductStatusSettings()">Reset Default</button>
+    </div>
+    <div class="rate-status" id="product-status-message"></div>
+    <div class="product-admin-grid" id="product-admin-grid"></div>
+  </div>
+
 </div>
 
 <!-- DETAIL MODAL -->
@@ -783,6 +809,10 @@
     <span class="bnav-icon">Rp</span>
     <span>Rate</span>
   </div>
+  <div class="bnav-item" id="bnav-products" onclick="showPage('products', document.querySelectorAll('.nav-item')[6]);mobileNavActivate('products')">
+    <span class="bnav-icon">&#9638;</span>
+    <span>Produk</span>
+  </div>
 </nav>
 
 <script>
@@ -792,6 +822,20 @@
   const ADMIN_TOKEN_KEY = 'kokorbx_admin_token';
   const DEFAULT_RATE_SETTINGS = { gamepass: 120, username: 140, vilogA: 160, vilogB: 160, giftgp: 140 };
   let rateSettings = { ...DEFAULT_RATE_SETTINGS };
+  const PRODUCT_STATUS_KEY = 'kokorbx_product_status';
+  const PRODUCT_STATUS_ITEMS = [
+    { id: 'robux5hari', name: 'Robux 5 Hari', group: 'Top Up Otomatis', defaultStatus: 'stok' },
+    { id: 'robuxvilog', name: 'Robux Via Login', group: 'Top Up Otomatis', defaultStatus: 'stok' },
+    { id: 'robuxusername', name: 'Robux Username', group: 'Top Up Otomatis', defaultStatus: 'stok' },
+    { id: 'giftgp', name: 'Gift GP Ingame', group: 'Top Up Otomatis', defaultStatus: 'stok' },
+    { id: 'marketplace', name: 'Roblox Marketplace', group: 'Etalase Manual', defaultStatus: 'maintenance' },
+    { id: 'akunroblox', name: 'Akun Roblox', group: 'Marketplace', defaultStatus: 'maintenance' },
+    { id: 'itemgame', name: 'Item Game', group: 'Marketplace', defaultStatus: 'maintenance' },
+    { id: 'jasafarming', name: 'Jasa Farming', group: 'Marketplace', defaultStatus: 'maintenance' },
+    { id: 'customrequest', name: 'Custom Request', group: 'Marketplace', defaultStatus: 'maintenance' },
+  ];
+  const PRODUCT_STATUS_LABELS = { stok: 'Stok ready', habis: 'Stok habis', maintenance: 'Maintenance' };
+  let productStatuses = productStatusDefaults();
 
   function getAdminToken() {
     return sessionStorage.getItem(ADMIN_TOKEN_KEY) || '';
@@ -922,6 +966,120 @@
     } catch(e) {
       setRateStatus('Gagal menyimpan rate: ' + e.message, 'err');
     }
+  }
+
+  function productStatusDefaults() {
+    return PRODUCT_STATUS_ITEMS.reduce((acc, item) => {
+      acc[item.id] = item.defaultStatus;
+      return acc;
+    }, {});
+  }
+
+  function normalizeProductStatus(value, fallback) {
+    const raw = String(value || '').trim().toLowerCase();
+    if (raw === 'stok' || raw === 'habis' || raw === 'maintenance') return raw;
+    return fallback || 'stok';
+  }
+
+  function mergeProductStatus(input) {
+    const source = input && typeof input === 'object' ? input : {};
+    const merged = productStatusDefaults();
+    PRODUCT_STATUS_ITEMS.forEach(item => {
+      merged[item.id] = normalizeProductStatus(source[item.id], item.defaultStatus);
+    });
+    return merged;
+  }
+
+  function productStatusLabel(status) {
+    return PRODUCT_STATUS_LABELS[status] || status || 'Stok ready';
+  }
+
+  function setProductStatusMessage(message, type) {
+    const el = document.getElementById('product-status-message');
+    if (!el) return;
+    el.textContent = message;
+    el.className = 'rate-status ' + (type || 'ok');
+  }
+
+  function cacheProductStatus() {
+    try {
+      localStorage.setItem(PRODUCT_STATUS_KEY, JSON.stringify(productStatuses));
+    } catch(e) {}
+  }
+
+  function renderProductAdmin() {
+    const grid = document.getElementById('product-admin-grid');
+    if (!grid) return;
+    grid.innerHTML = PRODUCT_STATUS_ITEMS.map(item => {
+      const status = normalizeProductStatus(productStatuses[item.id], item.defaultStatus);
+      return `
+        <div class="product-admin-card" data-status="${status}">
+          <div class="product-admin-top">
+            <div>
+              <div class="product-admin-name">${item.name}</div>
+              <div class="product-admin-group">${item.group} • ${productStatusLabel(status)}</div>
+            </div>
+            <span class="product-state-dot"></span>
+          </div>
+          <select class="product-status-select" onchange="updateProductStatusSetting('${item.id}', this.value)">
+            <option value="stok"${status === 'stok' ? ' selected' : ''}>Stok / Ready</option>
+            <option value="habis"${status === 'habis' ? ' selected' : ''}>Habis</option>
+            <option value="maintenance"${status === 'maintenance' ? ' selected' : ''}>Maintenance</option>
+          </select>
+          <div class="product-status-help">Stok bisa dibuka buyer. Habis dan maintenance akan dikunci dari kartu produk.</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function updateProductStatusSetting(id, value) {
+    const item = PRODUCT_STATUS_ITEMS.find(entry => entry.id === id);
+    if (!item) return;
+    productStatuses[id] = normalizeProductStatus(value, item.defaultStatus);
+    cacheProductStatus();
+    renderProductAdmin();
+  }
+
+  async function loadProductStatusSettings(showMessage) {
+    try {
+      const data = await sbFetch('/api/admin-orders?action=product-status');
+      productStatuses = mergeProductStatus(data.products);
+      cacheProductStatus();
+      renderProductAdmin();
+      if (showMessage) setProductStatusMessage('Status produk berhasil dimuat dari server.', 'ok');
+    } catch(e) {
+      try {
+        productStatuses = mergeProductStatus(JSON.parse(localStorage.getItem(PRODUCT_STATUS_KEY) || '{}'));
+      } catch(err) {
+        productStatuses = productStatusDefaults();
+      }
+      renderProductAdmin();
+      if (showMessage) setProductStatusMessage('Gagal memuat dari server, pakai cache lokal: ' + e.message, 'err');
+    }
+  }
+
+  async function saveProductStatusSettings() {
+    productStatuses = mergeProductStatus(productStatuses);
+    cacheProductStatus();
+    renderProductAdmin();
+    try {
+      await sbFetch('/api/admin-orders?action=product-status', {
+        method: 'POST',
+        body: JSON.stringify({ products: productStatuses })
+      });
+      setProductStatusMessage('Status produk tersimpan. Home akan ikut update otomatis.', 'ok');
+      showToast('Status produk berhasil disimpan.', 'success');
+    } catch(e) {
+      setProductStatusMessage('Gagal menyimpan status produk: ' + e.message, 'err');
+      showToast('Gagal menyimpan status produk.', 'error');
+    }
+  }
+
+  function resetProductStatusSettings() {
+    productStatuses = productStatusDefaults();
+    cacheProductStatus();
+    renderProductAdmin();
+    setProductStatusMessage('Default dipasang. Klik Simpan Status Produk supaya masuk server.', 'ok');
   }
 
   // Ambil semua order dari Supabase (dipakai admin)
@@ -1495,6 +1653,7 @@
   async function init() {
     loadEmailJSConfig();
     await loadRateSettings(false);
+    await loadProductStatusSettings(false);
     updateClock();
     setInterval(updateClock, 1000);
     cleanupLocalStorageImages();
@@ -1532,6 +1691,7 @@
     closeSidebar();
     mobileNavActivate(name);
     if (name === 'rates') renderRatePreview();
+    if (name === 'products') renderProductAdmin();
     renderAll();
   }
 

@@ -486,3 +486,90 @@ button:not(.koko-cart-button):not(.koko-cart-close):not(.koko-cart-clear):not(.k
     text-align: left !important;
   }
 }
+
+/* Final logo treatment: black K mark + navy/purple wordmark. */
+.brand-mark,
+.logo-svg-box,
+.logo-gem {
+  background: linear-gradient(145deg, #171927 0%, #070910 100%) !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+  color: #fff !important;
+  box-shadow:
+    0 12px 24px rgba(9, 12, 28, .26),
+    inset 0 1px 0 rgba(255, 255, 255, .14) !important;
+}
+
+.brand-mark::before {
+  content: "" !important;
+  width: 16px !important;
+  height: 16px !important;
+  border: 3px solid #fff !important;
+  border-radius: 5px !important;
+  box-sizing: border-box !important;
+  transform: rotate(-13deg) !important;
+  color: transparent !important;
+}
+
+.brand-mark {
+  position: relative !important;
+}
+
+.brand-mark::after {
+  content: "" !important;
+  position: absolute !important;
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 999px !important;
+  background: #fff !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) rotate(-13deg) !important;
+}
+
+.logo-svg-box svg rect,
+.brand-mark svg rect {
+  stroke: #fff !important;
+}
+
+.logo-text,
+.brand > span {
+  color: var(--text) !important;
+}
+
+.logo-text em,
+.brand em {
+  color: var(--accent) !important;
+}
+
+/* Order pages now keep the service logo only, so the top block should not feel empty. */
+body:has(.how-section) .hero {
+  padding: 24px 16px 8px !important;
+  min-height: auto !important;
+}
+
+body:has(.how-section) .hero .logo-eyebrow {
+  margin-bottom: 0 !important;
+}
+
+body:has(.how-section) .hero .logo-eyebrow img {
+  height: 39px !important;
+}
+
+.custom-rbx-preview {
+  background: rgba(248, 250, 255, .96) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+  box-shadow:
+    0 8px 18px rgba(111, 141, 255, .10),
+    inset 0 1px 0 rgba(255, 255, 255, .92) !important;
+}
+
+.custom-rbx-preview .p1 {
+  background: none !important;
+  color: var(--accent) !important;
+  -webkit-text-fill-color: var(--accent) !important;
+}
+
+.custom-rbx-preview .p2 {
+  color: var(--muted) !important;
+}

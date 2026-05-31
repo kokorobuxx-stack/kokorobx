@@ -814,6 +814,89 @@
       font-weight: 900;
       white-space: nowrap;
     }
+    .stock-chip {
+      display: none;
+      align-self: flex-start;
+      border-radius: 999px;
+      border: 1px solid #ffd6df;
+      background: #fff3f6;
+      color: #d94063;
+      padding: 4px 8px;
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .product-card.is-out,
+    .product-card.is-maintenance {
+      opacity: .72;
+      cursor: not-allowed;
+    }
+    .product-card.is-out:hover,
+    .product-card.is-maintenance:hover {
+      transform: none;
+      box-shadow: 0 12px 24px rgba(111,141,255,.1);
+    }
+    .product-card.is-out .stock-chip,
+    .product-card.is-maintenance .stock-chip {
+      display: inline-flex;
+    }
+    .product-card.is-maintenance .stock-chip {
+      border-color: #dedcff;
+      background: #f2f0ff;
+      color: var(--purple);
+    }
+    .product-card.is-out .order-btn {
+      background: #d9e2f5;
+      color: #64759d;
+    }
+    .product-card.is-maintenance .order-btn {
+      background: linear-gradient(135deg, #a9b9ff, #8B7CFF);
+      color: #fff;
+    }
+    .maintenance-panel {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      min-height: 126px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 90% 20%, rgba(139,124,255,.16), transparent 34%),
+        linear-gradient(135deg, rgba(248,250,255,.94), rgba(234,241,255,.86));
+      box-shadow: 0 12px 24px rgba(111,141,255,.1);
+      padding: 18px;
+    }
+    .maintenance-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #171927, #070910);
+      color: #fff;
+      box-shadow: 0 12px 22px rgba(9,12,28,.2);
+      font-weight: 900;
+      font-size: 18px;
+    }
+    .maintenance-panel h3 {
+      margin: 0 0 4px;
+      font-size: 18px;
+      color: var(--text);
+    }
+    .maintenance-panel p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .maintenance-pill {
+      pointer-events: none;
+      color: var(--purple);
+      background: #f2f0ff;
+      border-color: #dedcff;
+    }
 
     .split-layout {
       display: grid;
@@ -1065,13 +1148,17 @@
       .product-foot { gap: 6px; margin-top: 0; }
       .price { font-size: 10px; }
       .order-btn { height: 26px; min-width: 46px; padding: 0 8px; font-size: 10px; }
+      .maintenance-panel { grid-template-columns: 1fr; min-height: 0; padding: 13px; gap: 9px; }
+      .maintenance-icon { width: 42px; height: 42px; border-radius: 12px; font-size: 15px; }
+      .maintenance-panel h3 { font-size: 15px; }
+      .maintenance-panel p { font-size: 10px; }
       .status-form { grid-template-columns: 1fr; }
       .info-list { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
       .wa-footer { width: 100%; }
     }
   </style>
-<link rel="stylesheet" href="assets/kokorbx-theme.css?v=icon-polish-20260531">
+<link rel="stylesheet" href="assets/kokorbx-theme.css?v=logo-maintenance-20260531">
 </head>
 <body>
   <header class="main-header">
@@ -1234,7 +1321,7 @@
         <a class="see-all" href="#produk">Lihat Semua</a>
       </div>
       <div class="product-grid" id="product-grid">
-        <a class="product-card" href="robux5hari.html" data-category="robux" data-name="robux 5 hari gamepass top up">
+        <a class="product-card" href="robux5hari.html" data-product-id="robux5hari" data-category="robux" data-name="robux 5 hari gamepass top up">
           <div class="product-media"><img src="assets/logo-robux-5day.png" alt="Robux 5 Hari"></div>
           <div class="product-body">
             <div class="badges"><span class="badge hot">Best Seller</span><span class="badge">Gamepass</span></div>
@@ -1244,7 +1331,7 @@
           </div>
         </a>
 
-        <a class="product-card" href="robuxvilog.html" data-category="robux" data-name="robux vilog via login instant">
+        <a class="product-card" href="robuxvilog.html" data-product-id="robuxvilog" data-category="robux" data-name="robux vilog via login instant">
           <div class="product-media"><img src="assets/logo-robux-vilog.png" alt="Robux VILOG"></div>
           <div class="product-body">
             <div class="badges"><span class="badge hot">Instant</span><span class="badge manual">Rate A/B</span></div>
@@ -1254,7 +1341,7 @@
           </div>
         </a>
 
-        <a class="product-card" href="robuxusername.html" data-category="robux" data-name="robux username no gamepass">
+        <a class="product-card" href="robuxusername.html" data-product-id="robuxusername" data-category="robux" data-name="robux username no gamepass">
           <div class="product-media"><img src="assets/logo-robux-username.png" alt="Robux Username"></div>
           <div class="product-body">
             <div class="badges"><span class="badge">Username</span></div>
@@ -1264,7 +1351,7 @@
           </div>
         </a>
 
-        <a class="product-card" href="giftgp.html" data-category="gift robux" data-name="gift gp ingame robux gift gamepass">
+        <a class="product-card" href="giftgp.html" data-product-id="giftgp" data-category="gift robux" data-name="gift gp ingame robux gift gamepass">
           <div class="product-media"><img src="assets/logo-gift-gp.png" alt="Gift GP Ingame"></div>
           <div class="product-body">
             <div class="badges"><span class="badge manual">Custom R$</span></div>
@@ -1276,54 +1363,20 @@
       </div>
     </section>
 
-    <section class="section">
+    <section class="section marketplace-section" data-maintenance-section="marketplace">
       <div class="section-head">
         <div>
           <div class="section-title">Roblox Marketplace</div>
-          <div class="section-sub">Etalase manual untuk akun, item game, jasa, dan custom request.</div>
+          <div class="section-sub">Etalase manual sedang dirapihin sebelum dibuka public.</div>
         </div>
-        <a class="see-all" href="akunroblox.html">Akun Roblox</a>
+        <span class="see-all maintenance-pill" data-maintenance-pill>Maintenance</span>
       </div>
-      <div class="product-grid">
-        <a class="product-card" href="akunroblox.html" data-category="akun" data-name="akun roblox ready akun murah akun sultan">
-          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-akun.png" alt="Akun Roblox"></div>
-          <div class="product-body">
-            <div class="badges"><span class="badge manual">Admin Review</span><span class="badge hot">New</span></div>
-            <div class="product-title">Akun Roblox</div>
-            <div class="product-desc">Katalog akun ready dan request akun tertentu lewat admin.</div>
-            <div class="product-foot"><span class="price">Chat harga</span><span class="order-btn">Lihat</span></div>
-          </div>
-        </a>
-
-        <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20order%20item%20game%20Roblox." target="_blank" rel="noopener" data-category="item game" data-name="item game roblox pet currency grow a garden blox fruits fisch">
-          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-item.png" alt="Item Limited"></div>
-          <div class="product-body">
-            <div class="badges"><span class="badge manual">Manual</span></div>
-            <div class="product-title">Item Game</div>
-            <div class="product-desc">Pet, currency, item event, dan kebutuhan game populer.</div>
-            <div class="product-foot"><span class="price">By request</span><span class="order-btn">Chat</span></div>
-          </div>
-        </a>
-
-        <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20jasa%20farming%20atau%20joki%20Roblox." target="_blank" rel="noopener" data-category="jasa game" data-name="jasa farming joki leveling quest roblox">
-          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-joki.png" alt="Joki Farming"></div>
-          <div class="product-body">
-            <div class="badges"><span class="badge manual">Queue</span></div>
-            <div class="product-title">Jasa Farming</div>
-            <div class="product-desc">Bantu leveling, grinding, quest, raid, atau progress game.</div>
-            <div class="product-foot"><span class="price">Cek slot</span><span class="order-btn">Chat</span></div>
-          </div>
-        </a>
-
-        <a class="product-card" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20punya%20custom%20request%20Roblox." target="_blank" rel="noopener" data-category="custom voucher" data-name="custom request roblox voucher private server gamepass">
-          <div class="product-media"><img class="marketplace-logo" src="assets/marketplace/logo-market-custom.png" alt="Custom Request"></div>
-          <div class="product-body">
-            <div class="badges"><span class="badge manual">Custom</span></div>
-            <div class="product-title">Custom Request</div>
-            <div class="product-desc">Kalau produk belum ada, kirim detail kebutuhanmu ke admin.</div>
-            <div class="product-foot"><span class="price">Manual</span><span class="order-btn">Chat</span></div>
-          </div>
-        </a>
+      <div class="maintenance-panel">
+        <div class="maintenance-icon">K</div>
+        <div>
+          <h3>Marketplace Lagi Maintenance</h3>
+          <p>Akun Roblox, item game, jasa farming, dan custom request disembunyikan dulu supaya belum kebuka ke pembeli sebelum siap.</p>
+        </div>
       </div>
     </section>
 
@@ -1364,6 +1417,96 @@
     const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
       ? 'https://koko-rbx.vercel.app'
       : '';
+    const PRODUCT_STATUS_KEY = 'kokorbx_product_status';
+    const DEFAULT_PRODUCT_STATUS = {
+      robux5hari: 'stok',
+      robuxvilog: 'stok',
+      robuxusername: 'stok',
+      giftgp: 'stok',
+      marketplace: 'maintenance'
+    };
+    const PRODUCT_STATUS_LABELS = {
+      stok: 'Stok ready',
+      habis: 'Stok habis',
+      maintenance: 'Maintenance'
+    };
+
+    function normalizeProductStatus(value, fallback = 'stok') {
+      const raw = String(value || '').trim().toLowerCase();
+      if (raw === 'stok' || raw === 'habis' || raw === 'maintenance') return raw;
+      return fallback;
+    }
+
+    function mergeProductStatus(input) {
+      const source = input && typeof input === 'object' ? input : {};
+      const merged = { ...DEFAULT_PRODUCT_STATUS };
+      Object.keys(merged).forEach(key => {
+        merged[key] = normalizeProductStatus(source[key], merged[key]);
+      });
+      return merged;
+    }
+
+    function productStatusLabel(status) {
+      return PRODUCT_STATUS_LABELS[status] || status || 'Stok ready';
+    }
+
+    function readCachedProductStatus() {
+      try {
+        return mergeProductStatus(JSON.parse(localStorage.getItem(PRODUCT_STATUS_KEY) || '{}'));
+      } catch(e) {
+        return mergeProductStatus();
+      }
+    }
+
+    function applyProductStatuses(statuses) {
+      const map = mergeProductStatus(statuses || readCachedProductStatus());
+      document.querySelectorAll('[data-product-id]').forEach(card => {
+        const id = card.dataset.productId;
+        const status = normalizeProductStatus(map[id], DEFAULT_PRODUCT_STATUS[id] || 'stok');
+        card.classList.toggle('is-out', status === 'habis');
+        card.classList.toggle('is-maintenance', status === 'maintenance');
+        card.dataset.productStatus = status;
+
+        let chip = card.querySelector('.stock-chip');
+        if (!chip) {
+          chip = document.createElement('span');
+          chip.className = 'stock-chip';
+          card.querySelector('.product-body')?.prepend(chip);
+        }
+        chip.textContent = productStatusLabel(status);
+
+        const button = card.querySelector('.order-btn');
+        if (button) {
+          if (!button.dataset.defaultText) button.dataset.defaultText = button.textContent.trim();
+          button.textContent = status === 'habis'
+            ? 'Habis'
+            : status === 'maintenance'
+              ? 'Maintenance'
+              : button.dataset.defaultText;
+        }
+      });
+
+      const marketplace = document.querySelector('[data-maintenance-section="marketplace"]');
+      if (marketplace) {
+        const status = normalizeProductStatus(map.marketplace, 'maintenance');
+        marketplace.dataset.productStatus = status;
+        const pill = marketplace.querySelector('[data-maintenance-pill]');
+        if (pill) pill.textContent = productStatusLabel(status);
+      }
+    }
+
+    async function loadProductStatuses() {
+      try {
+        const res = await fetch(API_BASE + '/api/orders?action=product-status&ts=' + Date.now(), { cache: 'no-store' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Status produk belum bisa dimuat');
+        const merged = mergeProductStatus(data.products);
+        localStorage.setItem(PRODUCT_STATUS_KEY, JSON.stringify(merged));
+        applyProductStatuses(merged);
+      } catch(e) {
+        applyProductStatuses(readCachedProductStatus());
+      }
+    }
 
     function getSession() {
       try { return JSON.parse(localStorage.getItem('rbx_session') || 'null'); } catch(e) { return null; }
@@ -1413,6 +1556,14 @@
     });
 
     document.getElementById('product-search')?.addEventListener('input', applyProductFilters);
+    document.addEventListener('click', event => {
+      const disabled = event.target.closest('.product-card.is-out, .product-card.is-maintenance');
+      if (!disabled) return;
+      event.preventDefault();
+    });
+    window.addEventListener('storage', event => {
+      if (event.key === PRODUCT_STATUS_KEY) applyProductStatuses(readCachedProductStatus());
+    });
 
     function rupiah(value) {
       return 'Rp ' + Number(value || 0).toLocaleString('id-ID');
@@ -1555,10 +1706,15 @@
     });
 
     updateUserBar();
+    loadProductStatuses();
     loadHomeStats();
+    setInterval(loadProductStatuses, 60000);
     setInterval(loadHomeStats, 30000);
     document.addEventListener('visibilitychange', () => {
-      if (!document.hidden) loadHomeStats();
+      if (!document.hidden) {
+        loadProductStatuses();
+        loadHomeStats();
+      }
     });
   </script>
   <script src="assets/cart-client.js?v=icon-cart-mobile-20260531"></script>

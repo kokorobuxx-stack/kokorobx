@@ -1,6 +1,13 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
-const { DEFAULT_RATES, SETTINGS_USERNAME, isSettingsUsername, loadRateSettings } = require('./_lib/rates');
+const {
+  DEFAULT_PRODUCT_STATUS,
+  DEFAULT_RATES,
+  SETTINGS_USERNAME,
+  isSettingsUsername,
+  loadProductStatus,
+  loadRateSettings,
+} = require('./_lib/rates');
 
 function publicOrderPatch(patch) {
   const clean = {};
@@ -73,6 +80,20 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({
           rates: DEFAULT_RATES,
           defaults: DEFAULT_RATES,
+          source: 'default',
+          warning: err.message,
+          updatedAt: null,
+        });
+      }
+    }
+
+    if (req.method === 'GET' && req.query && req.query.action === 'product-status') {
+      try {
+        return res.status(200).json(await loadProductStatus());
+      } catch (err) {
+        return res.status(200).json({
+          products: DEFAULT_PRODUCT_STATUS,
+          defaults: DEFAULT_PRODUCT_STATUS,
           source: 'default',
           warning: err.message,
           updatedAt: null,

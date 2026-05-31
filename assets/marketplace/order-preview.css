@@ -57,14 +57,14 @@ body.koko-order-preview .brand-mark {
   width: 38px !important;
   height: 38px !important;
   border-radius: 8px !important;
-  background: linear-gradient(135deg, rgba(124,92,252,.44), rgba(252,92,125,.28)) !important;
+  background: linear-gradient(145deg, #171927, #070910) !important;
   border: 1px solid rgba(255,255,255,.18) !important;
-  box-shadow: 0 0 22px rgba(124,92,252,.3) !important;
+  box-shadow: 0 12px 24px rgba(9,12,28,.28) !important;
 }
 
 body.koko-order-preview .logo-text em,
 body.koko-order-preview .brand em {
-  color: #39d98a !important;
+  color: #8B7CFF !important;
 }
 
 body.koko-order-preview .header-right {
