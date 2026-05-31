@@ -145,8 +145,6 @@ p,
 .cat-token,
 .product-token,
 .card-head-icon,
-.home-mini-icon,
-.home-stat-icon,
 .koko-cart-count,
 .koko-cart-link {
   background: linear-gradient(135deg, #8B7CFF, #6F8DFF) !important;
@@ -192,6 +190,48 @@ p,
   background: rgba(255, 255, 255, .84) !important;
   border-color: var(--border) !important;
   box-shadow: var(--soft-shadow) !important;
+}
+
+.home-mini-icon,
+.home-stat-icon {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: var(--accent) !important;
+  overflow: visible !important;
+}
+
+.home-mini-icon .home-icon-img,
+.home-stat-icon .home-icon-img {
+  filter: drop-shadow(0 8px 15px rgba(111, 141, 255, .16));
+}
+
+.how-icon.koko-step-icon {
+  width: 38px !important;
+  height: 38px !important;
+  margin: 0 auto 7px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid rgba(221, 230, 248, .95) !important;
+  border-radius: 12px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, .96), rgba(237, 235, 255, .84)) !important;
+  color: var(--accent) !important;
+  box-shadow:
+    0 10px 22px rgba(139, 124, 255, .13),
+    inset 0 1px 0 rgba(255, 255, 255, .95) !important;
+}
+
+.how-icon.koko-step-icon svg {
+  width: 25px;
+  height: 25px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 5px 8px rgba(139, 124, 255, .18));
 }
 
 .pkg,
