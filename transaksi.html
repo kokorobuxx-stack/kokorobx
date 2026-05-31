@@ -3,974 +3,168 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel Transaksi - KokoRBX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/cart-client.css?v=icon-cart-mobile-20260531">
+  <title>Mengalihkan Transaksi - KokoRBX</title>
   <style>
     :root {
-      --bg: #07070b;
-      --panel: #101018;
-      --panel2: #171724;
-      --line: #2d2a3d;
-      --line2: #3d3559;
-      --text: #f7f3ff;
-      --muted: #a59cbe;
-      --purple: #7c5cfc;
-      --pink: #fc5c7d;
-      --green: #39d98a;
-      --cyan: #35d7ff;
-      --gold: #ffc857;
-      --font: "Pixelify Sans", monospace;
+      --bg: #f8faff;
+      --panel: rgba(255, 255, 255, .84);
+      --line: #dde6f8;
+      --text: #1e2a55;
+      --muted: #6f7da7;
+      --purple: #8b7cff;
+      --blue: #6f8dff;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
+
     body {
       min-height: 100vh;
-      background:
-        linear-gradient(rgba(124,92,252,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124,92,252,.045) 1px, transparent 1px),
-        radial-gradient(circle at 12% 4%, rgba(124,92,252,.24), transparent 28%),
-        radial-gradient(circle at 88% 18%, rgba(57,217,138,.14), transparent 24%),
-        radial-gradient(circle at 76% 86%, rgba(252,92,125,.12), transparent 25%),
-        var(--bg);
-      background-size: 44px 44px, 44px 44px, auto, auto, auto, auto;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
       color: var(--text);
-      font-family: var(--font);
-      overflow-x: hidden;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(139, 124, 255, .18), transparent 30%),
+        radial-gradient(circle at 82% 22%, rgba(98, 216, 212, .18), transparent 30%),
+        linear-gradient(135deg, #f8faff 0%, #eaf1ff 52%, #edebff 100%);
     }
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
-      background: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
-    }
-    a { color: inherit; text-decoration: none; }
-    button, input, textarea, select { font: inherit; }
-    img { display: block; }
-    .page { position: relative; z-index: 1; }
 
-    .top-strip {
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background: rgba(7,7,11,.9);
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .top-inner {
-      max-width: 1220px;
-      height: 30px;
-      margin: 0 auto;
-      padding: 0 16px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 16px;
-      white-space: nowrap;
-    }
-    .main-header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      border-bottom: 1px solid var(--line);
-      background: rgba(9,9,15,.92);
+    .card {
+      width: min(440px, 100%);
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: 0 24px 70px rgba(111, 141, 255, .18);
+      text-align: center;
       backdrop-filter: blur(18px);
     }
-    .header-inner {
-      max-width: 1220px;
-      min-height: 74px;
-      margin: 0 auto;
-      padding: 12px 16px;
-      display: grid;
-      grid-template-columns: auto minmax(260px, 1fr) auto;
-      align-items: center;
-      gap: 14px;
-    }
+
     .brand {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      font-size: 24px;
+      gap: 12px;
+      margin-bottom: 18px;
       font-weight: 900;
-      white-space: nowrap;
+      font-size: 26px;
+      letter-spacing: 0;
     }
-    .brand-mark {
-      width: 38px;
-      height: 38px;
-      border: 1px solid rgba(255,255,255,.18);
-      border-radius: 8px;
+
+    .brand-icon {
+      width: 46px;
+      height: 46px;
       display: grid;
       place-items: center;
-      background: linear-gradient(135deg, rgba(124,92,252,.44), rgba(252,92,125,.28));
-      box-shadow: 0 0 22px rgba(124,92,252,.3);
+      border-radius: 14px;
+      background: #11131d;
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(30, 42, 85, .22);
     }
-    .brand-mark svg { width: 22px; height: 22px; }
-    .brand em { color: var(--green); font-style: normal; }
-    .search-box {
-      height: 48px;
-      min-width: 0;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
-      align-items: center;
-      gap: 10px;
-      border: 2px solid var(--green);
-      border-radius: 8px;
-      background: #fff;
-      color: #544c6d;
-      padding: 0 12px;
-      box-shadow: 0 0 0 4px rgba(57,217,138,.08), 0 16px 28px rgba(0,0,0,.24);
+
+    .brand em {
+      color: var(--purple);
+      font-style: normal;
     }
-    .search-box input {
-      min-width: 0;
-      border: 0;
-      outline: 0;
-      color: #171322;
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 0 auto 22px;
+      max-width: 32ch;
+      color: var(--muted);
       font-size: 14px;
+      line-height: 1.7;
     }
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      overflow: visible;
+
+    .spinner {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 20px;
+      border: 4px solid rgba(139, 124, 255, .18);
+      border-top-color: var(--purple);
+      border-radius: 999px;
+      animation: spin .85s linear infinite;
     }
-    .header-btn {
-      min-height: 38px;
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    a {
+      min-height: 44px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255,255,255,.14);
-      border-radius: 8px;
-      background: rgba(255,255,255,.07);
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
       color: var(--text);
-      padding: 0 12px;
-      font-size: 12px;
-      font-weight: 900;
-      white-space: nowrap;
-    }
-    .header-btn.primary {
-      border: 0;
-      background: linear-gradient(135deg, var(--green), #08a6a6);
-      color: #041411;
+      font-weight: 800;
+      font-size: 13px;
+      text-decoration: none;
+      background: rgba(255, 255, 255, .78);
     }
 
-    .panel-shell {
-      max-width: 1220px;
-      margin: 0 auto;
-      padding: 18px 16px 56px;
-      display: grid;
-      grid-template-columns: 310px minmax(0, 1fr) 300px;
-      gap: 14px;
-      align-items: start;
-    }
-    .panel-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(16,16,24,.94);
-      box-shadow: 0 18px 36px rgba(0,0,0,.22);
-    }
-    .panel-head {
-      min-height: 62px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      border-bottom: 1px solid var(--line);
-      padding: 14px;
-    }
-    .panel-title {
-      color: var(--text);
-      font-size: 21px;
-      font-weight: 900;
-    }
-    .panel-sub {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-      margin-top: 3px;
-    }
-    .order-list {
-      display: grid;
-      gap: 8px;
-      padding: 12px;
-      max-height: calc(100vh - 210px);
-      overflow: auto;
-    }
-    .order-item {
-      width: 100%;
-      min-height: 98px;
-      display: grid;
-      grid-template-columns: 58px minmax(0, 1fr);
-      gap: 10px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255,255,255,.035);
-      color: var(--text);
-      padding: 9px;
-      text-align: left;
-      cursor: pointer;
-    }
-    .order-item.active,
-    .order-item:hover {
-      border-color: rgba(57,217,138,.42);
-      background: rgba(57,217,138,.08);
-    }
-    .order-thumb {
-      width: 58px;
-      height: 58px;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(124,92,252,.24), rgba(252,92,125,.1));
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      color: var(--green);
-      font-size: 13px;
-      font-weight: 900;
-    }
-    .order-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .order-name {
-      font-size: 15px;
-      font-weight: 900;
-      line-height: 1.15;
-      margin-bottom: 5px;
-    }
-    .order-meta {
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.45;
-    }
-    .status-pill {
-      width: fit-content;
-      min-height: 22px;
-      display: inline-flex;
-      align-items: center;
-      border: 1px solid rgba(57,217,138,.34);
-      border-radius: 999px;
-      background: rgba(57,217,138,.1);
-      color: var(--green);
-      padding: 0 8px;
-      font-size: 10px;
-      font-weight: 900;
-      margin-top: 6px;
-    }
-    .detail-card {
-      overflow: hidden;
-    }
-    .detail-hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 220px;
-      gap: 14px;
-      padding: 16px;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(135deg, rgba(124,92,252,.18), rgba(57,217,138,.06));
-    }
-    .detail-hero h1 {
-      font-size: 38px;
-      line-height: .98;
-      font-weight: 900;
-      margin-bottom: 10px;
-    }
-    .detail-hero h1 span {
-      background: linear-gradient(90deg, var(--green), var(--cyan), var(--pink));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .detail-copy {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-    .detail-image {
-      min-height: 148px;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 8px;
-      background: #0b0b11;
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      color: var(--green);
-      font-weight: 900;
-    }
-    .detail-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-      padding: 14px;
-      border-bottom: 1px solid var(--line);
-    }
-    .mini-stat {
-      min-height: 74px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255,255,255,.035);
-      padding: 10px;
-    }
-    .mini-stat span {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      text-transform: uppercase;
-      margin-bottom: 7px;
-    }
-    .mini-stat strong {
-      display: block;
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.25;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .timeline {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-      padding: 14px;
-      border-bottom: 1px solid var(--line);
-    }
-    .timeline-step {
-      min-height: 70px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255,255,255,.035);
-      padding: 10px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .timeline-step.done {
-      border-color: rgba(57,217,138,.36);
-      background: rgba(57,217,138,.08);
-      color: var(--green);
-    }
-    .buyer-contact-box {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin: 14px;
-      padding: 13px;
-      border: 1px solid rgba(124,92,252,.35);
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(62,117,190,.16), rgba(134,93,255,.13));
-    }
-    .buyer-contact-box strong {
-      display: block;
-      color: var(--text);
-      font-size: 14px;
-      margin-bottom: 4px;
-    }
-    .buyer-contact-box span {
-      display: block;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
-    }
-    .contact-seller-btn {
-      min-height: 38px;
-      border: 0;
-      border-radius: 8px;
-      background: linear-gradient(135deg, #7eb4ff, #8f72ff);
-      color: #08111f;
-      padding: 0 14px;
-      font-size: 12px;
-      font-weight: 900;
-      cursor: pointer;
-      white-space: nowrap;
-      box-shadow: 0 14px 28px rgba(80,132,255,.2);
-    }
-    .chat-panel {
-      min-height: 520px;
-      display: grid;
-      grid-template-rows: auto minmax(0, 1fr) auto;
-    }
-    .chat-messages {
-      min-height: 340px;
-      max-height: calc(100vh - 335px);
-      overflow: auto;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .message {
-      max-width: 86%;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255,255,255,.045);
-      padding: 10px;
-    }
-    .message.buyer {
-      align-self: flex-end;
-      border-color: rgba(124,92,252,.38);
-      background: rgba(124,92,252,.13);
-    }
-    .message.seller,
-    .message.admin {
-      align-self: flex-start;
-      border-color: rgba(57,217,138,.36);
-      background: rgba(57,217,138,.1);
-    }
-    .message.system {
-      align-self: center;
-      max-width: 94%;
-      border-style: dashed;
-      color: var(--muted);
-      background: rgba(255,255,255,.035);
-    }
-    .message-role {
-      color: var(--green);
-      font-size: 10px;
-      font-weight: 900;
-      text-transform: uppercase;
-      margin-bottom: 5px;
-    }
-    .message.buyer .message-role { color: #c8bcff; }
-    .message.system .message-role { color: var(--gold); }
-    .message-text {
-      color: var(--text);
-      font-size: 13px;
-      line-height: 1.45;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .message-time {
-      color: var(--muted);
-      font-size: 10px;
-      margin-top: 7px;
-    }
-    .chat-compose {
-      border-top: 1px solid var(--line);
-      padding: 12px;
-      display: grid;
-      gap: 8px;
-    }
-    .compose-top {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .compose-top select,
-    .seller-tools input,
-    .chat-compose textarea {
-      width: 100%;
-      border: 1px solid var(--line2);
-      border-radius: 8px;
-      background: var(--panel2);
-      color: var(--text);
-      outline: none;
-    }
-    .compose-top select {
-      max-width: 154px;
-      height: 38px;
-      padding: 0 10px;
-    }
-    .chat-compose textarea {
-      min-height: 82px;
-      resize: vertical;
-      padding: 10px;
-      line-height: 1.5;
-    }
-    .send-btn,
-    .tool-btn {
-      min-height: 38px;
-      border: 0;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--green), #0ea5a5);
-      color: #061511;
-      padding: 0 12px;
-      font-size: 12px;
-      font-weight: 900;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .side-tools {
-      display: grid;
-      gap: 14px;
-    }
-    .seller-tools {
-      display: grid;
-      gap: 10px;
-      padding: 14px;
-    }
-    .seller-tools label {
-      display: grid;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-    .seller-tools input {
-      height: 40px;
-      padding: 0 10px;
-      text-transform: none;
-    }
-    .tool-btn.alt {
-      border: 1px solid rgba(255,255,255,.13);
-      background: rgba(255,255,255,.07);
-      color: var(--text);
-    }
-    .tool-btn.danger {
-      background: rgba(252,92,125,.14);
-      border: 1px solid rgba(252,92,125,.36);
-      color: #ff9bb1;
-    }
-    .empty-state {
-      padding: 22px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-    .empty-state a {
-      color: var(--green);
-      font-weight: 900;
+    a.primary {
+      border-color: transparent;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
     }
 
-    @media (max-width: 1120px) {
-      .header-inner { grid-template-columns: 1fr; }
-      .header-actions { overflow-x: auto; scrollbar-width: none; }
-      .header-actions::-webkit-scrollbar { display: none; }
-      .panel-shell { grid-template-columns: 280px minmax(0, 1fr); }
-      .side-tools { grid-column: 1 / -1; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .detail-hero { grid-template-columns: 1fr; }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
-    @media (max-width: 760px) {
-      .top-inner { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
-      .top-inner::-webkit-scrollbar { display: none; }
-      .panel-shell { grid-template-columns: 1fr; padding: 12px 14px 42px; }
-      .order-list { max-height: none; }
-      .detail-grid, .timeline, .side-tools { grid-template-columns: 1fr; }
-      .buyer-contact-box { align-items: stretch; flex-direction: column; }
-      .contact-seller-btn { width: 100%; }
-      .detail-hero h1 { font-size: 34px; }
-      .chat-messages { max-height: none; }
+
+    @media (max-width: 520px) {
+      body { padding: 18px; }
+      .card { padding: 22px; border-radius: 20px; }
+      .actions { grid-template-columns: 1fr; }
     }
   </style>
-<link rel="stylesheet" href="assets/kokorbx-theme.css?v=logo-maintenance-20260531">
 </head>
 <body>
-  <div class="page">
-    <div class="top-strip">
-      <div class="top-inner">
-        <span>Panel transaksi website</span>
-        <span>Chat buyer admin</span>
-        <span>WA hanya bantuan</span>
-      </div>
+  <main class="card">
+    <div class="brand" aria-label="KokoRBX">
+      <span class="brand-icon" aria-hidden="true">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+          <rect x="4" y="4" width="16" height="16" rx="4" stroke="currentColor" stroke-width="2"/>
+          <rect x="9" y="9" width="6" height="6" rx="1.5" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </span>
+      <span>Koko<em>RBX</em></span>
     </div>
+    <div class="spinner" aria-hidden="true"></div>
+    <h1>Mengalihkan ke versi terbaru</h1>
+    <p>Panel transaksi lama sudah ditutup. Kamu akan dibawa ke kotak pesan transaksi terbaru.</p>
+    <div class="actions">
+      <a class="primary" id="buyer-link" href="transaksi-buyer.html">Kotak Pesan</a>
+      <a id="admin-link" href="admin.html#panel">Admin Panel</a>
+    </div>
+  </main>
 
-    <header class="main-header">
-      <div class="header-inner">
-        <a href="index.html" class="brand" aria-label="KokoRBX">
-          <span class="brand-mark">
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <g transform="rotate(-12 10 10)">
-                <rect x="2" y="2" width="16" height="16" rx="4" stroke="white" stroke-width="2.2"/>
-                <rect x="7" y="7" width="6" height="6" rx="1.5" stroke="white" stroke-width="2"/>
-              </g>
-            </svg>
-          </span>
-          <span>Koko<em>RBX</em></span>
-        </a>
-        <label class="search-box">
-          <span>Cari</span>
-          <input id="order-search" type="search" placeholder="Cari ID, produk, buyer..." autocomplete="off">
-        </label>
-        <div class="header-actions">
-          <a class="header-btn" href="admin.html">Admin</a>
-          <a class="header-btn" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Bantuan WA</a>
-        </div>
-      </div>
-    </header>
-
-    <main class="panel-shell">
-      <aside class="panel-card">
-        <div class="panel-head">
-          <div>
-            <div class="panel-title">Transaksi</div>
-            <div class="panel-sub">Semua order masuk sini.</div>
-          </div>
-          <button class="tool-btn alt" id="demo-btn" type="button">Demo</button>
-        </div>
-        <div class="order-list" id="order-list"></div>
-      </aside>
-
-      <section class="panel-card detail-card" id="detail-card">
-        <div class="empty-state">
-          Belum ada transaksi yang dipilih. Pilih produk dari <a href="index.html#produk">halaman utama</a>, atau tekan Demo.
-        </div>
-      </section>
-
-      <aside class="side-tools">
-        <section class="panel-card chat-panel">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">Chat</div>
-              <div class="panel-sub">Buyer dan admin ngobrol di website.</div>
-            </div>
-          </div>
-          <div class="chat-messages" id="chat-messages"></div>
-          <form class="chat-compose" id="chat-form">
-            <div class="compose-top">
-              <select id="chat-role">
-                <option value="buyer">Buyer</option>
-                <option value="admin">Admin</option>
-              </select>
-              <button class="send-btn" type="submit">Kirim</button>
-            </div>
-            <textarea id="chat-input" placeholder="Tulis pesan transaksi..."></textarea>
-          </form>
-        </section>
-
-        <section class="panel-card">
-          <div class="panel-head">
-            <div>
-              <div class="panel-title">Seller Tools</div>
-              <div class="panel-sub">Preview aksi admin.</div>
-            </div>
-          </div>
-          <div class="seller-tools">
-            <label>
-              Harga Deal
-              <input id="deal-price" inputmode="numeric" placeholder="Contoh: 75000">
-            </label>
-            <button class="tool-btn" id="quote-btn" type="button">Kirim Harga</button>
-            <button class="tool-btn alt" id="paid-btn" type="button">Buyer Sudah Bayar</button>
-            <button class="tool-btn alt" id="done-btn" type="button">Selesai</button>
-            <button class="tool-btn danger" id="clear-btn" type="button">Reset Preview</button>
-          </div>
-        </section>
-      </aside>
-    </main>
-  </div>
-
-  <script src="assets/marketplace/panel-store.js"></script>
-  <script src="assets/cart-client.js?v=icon-cart-mobile-20260531"></script>
   <script>
-    const DEFAULT_IMAGE = 'assets/marketplace/custom-request.png';
-    const urlParams = new URLSearchParams(location.search);
-    let activeId = '';
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var isAdmin = params.get('admin') === '1' || params.get('view') === 'admin' || window.location.hash === '#admin';
+      var target = isAdmin
+        ? 'admin.html#panel'
+        : 'transaksi-buyer.html' + window.location.search + (window.location.hash && window.location.hash !== '#admin' ? window.location.hash : '');
 
-    const orderList = document.getElementById('order-list');
-    const detailCard = document.getElementById('detail-card');
-    const chatMessages = document.getElementById('chat-messages');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
-    const chatRole = document.getElementById('chat-role');
-    const dealPrice = document.getElementById('deal-price');
-
-    function formatDate(time) {
-      if (!time) return '-';
-      return new Date(time).toLocaleString('id-ID', {
-        day: '2-digit',
-        month: 'short',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    }
-
-    function formatMoney(value, fallback) {
-      const number = Number(value || 0);
-      return number ? 'Rp ' + number.toLocaleString('id-ID') : (fallback || 'Menunggu admin');
-    }
-
-    function escapeHtml(value) {
-      return String(value || '').replace(/[&<>"']/g, ch => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;',
-      })[ch]);
-    }
-
-    function imageHtml(order) {
-      if (order.image) return '<img src="' + escapeHtml(order.image) + '" alt="' + escapeHtml(order.product) + '">';
-      return '<span>' + escapeHtml(String(order.category || 'TRX').slice(0, 3).toUpperCase()) + '</span>';
-    }
-
-    const ADMIN_ORDER_KEY = 'rbx_orders';
-    const ADMIN_ORDER_PREFIX = 'rbx_orders_u_';
-
-    function readJsonArray(key) {
-      try {
-        const data = JSON.parse(localStorage.getItem(key) || '[]');
-        return Array.isArray(data) ? data : [];
-      } catch (error) {
-        return [];
-      }
-    }
-
-    function adminOrders() {
-      const keys = new Set([ADMIN_ORDER_KEY]);
-      for (let i = 0; i < localStorage.length; i += 1) {
-        const key = localStorage.key(i);
-        if (key === ADMIN_ORDER_KEY || (key && key.startsWith(ADMIN_ORDER_PREFIX))) keys.add(key);
-      }
-      const byId = {};
-      keys.forEach(key => {
-        readJsonArray(key).forEach(order => {
-          const id = String(order.id || order.orderId || order.order_id || '');
-          if (!id) return;
-          byId[id] = Object.assign({}, byId[id] || {}, order, { id });
-        });
-      });
-      return Object.values(byId);
-    }
-
-    function numberOnly(value) {
-      if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
-      return Number(String(value || '').replace(/[^\d]/g, '')) || 0;
-    }
-
-    function ensurePanelFromAdmin(orderId) {
-      const adminOrder = adminOrders().find(order => String(order.id) === String(orderId));
-      if (!adminOrder) return null;
-      const robux = numberOnly(adminOrder.robux);
-      const price = numberOnly(adminOrder.price || adminOrder.total || adminOrder.amount);
-      const product = adminOrder.product || (robux ? robux.toLocaleString('id-ID') + ' Robux' : 'Order KokoRBX');
-      return KokoPanel.createOrder({
-        id: String(adminOrder.id),
-        product,
-        category: adminOrder.category || 'robux',
-        image: adminOrder.image || DEFAULT_IMAGE,
-        price,
-        priceText: price ? 'Rp ' + price.toLocaleString('id-ID') : 'Menunggu admin',
-        status: adminOrder.status === 'success' ? 'Selesai' : adminOrder.status === 'failed' ? 'Dibatalkan' : 'Menunggu admin',
-        buyer: adminOrder.username || adminOrder.robloxUsername || 'Buyer KokoRBX',
-        username: adminOrder.username || adminOrder.robloxUsername || '',
-        detail: 'Chat khusus untuk order ' + adminOrder.id + '. Buyer bisa tanya admin sesuai transaksi ini.',
-        source: 'admin-panel',
-        buyerMessage: 'Halo admin, aku mau tanya order ' + adminOrder.id + '.',
-      });
-    }
-
-    function createFromUrl() {
-      if (!urlParams.has('new')) return;
-      const product = urlParams.get('product') || 'Custom Roblox';
-      const order = KokoPanel.createOrder({
-        prefix: 'PNL',
-        product,
-        category: urlParams.get('category') || urlParams.get('new') || 'custom',
-        image: urlParams.get('image') || DEFAULT_IMAGE,
-        priceText: urlParams.get('priceText') || 'Menunggu admin',
-        detail: urlParams.get('detail') || 'Aku mau cek stok dan lanjut transaksi di panel.',
-        buyerMessage: urlParams.get('buyerMessage') || 'Halo admin, aku mau order ' + product + '. Tolong cek stok/harga ya.',
-        username: urlParams.get('username') || '',
-        buyer: urlParams.get('buyer') || urlParams.get('username') || 'Buyer KokoRBX',
-        source: urlParams.get('source') || 'index.html',
-      });
-      history.replaceState(null, '', 'transaksi.html?order=' + encodeURIComponent(order.id));
-      activeId = order.id;
-    }
-
-    function ensureDemo() {
-      const order = KokoPanel.createOrder({
-        prefix: 'PNL',
-        product: 'Item Limited',
-        category: 'item',
-        image: 'assets/marketplace/item-bundle.png',
-        priceText: 'Menunggu admin',
-        detail: 'Request item limited, item event, dan currency game Roblox.',
-        buyerMessage: 'Halo admin, aku mau tanya item limited. Bisa cek stok dan harga?',
-      });
-      KokoPanel.addMessage(order.id, 'admin', 'Bisa. Kirim nama game, item yang dicari, dan budget kamu di chat ini.');
-      activeId = order.id;
-      render();
-    }
-
-    function getFilteredOrders() {
-      const query = String(document.getElementById('order-search').value || '').toLowerCase().trim();
-      return KokoPanel.readOrders().filter(order => {
-        const haystack = [order.id, order.product, order.buyer, order.username, order.status, order.detail].join(' ').toLowerCase();
-        return !query || haystack.includes(query);
-      });
-    }
-
-    function getActiveOrder() {
-      let orders = KokoPanel.readOrders();
-      if (!activeId) activeId = urlParams.get('order') || KokoPanel.getActiveId() || (orders[0] && orders[0].id) || '';
-      let order = orders.find(item => item.id === activeId);
-      if (!order && activeId) {
-        const synced = ensurePanelFromAdmin(activeId);
-        if (synced) {
-          orders = KokoPanel.readOrders();
-          order = orders.find(item => item.id === synced.id);
-        }
-      }
-      return order || orders[0] || null;
-    }
-
-    function renderList(activeOrder) {
-      const orders = getFilteredOrders();
-      if (!orders.length) {
-        orderList.innerHTML = '<div class="empty-state">Belum ada order panel. Klik produk manual di marketplace atau tekan Demo.</div>';
-        return;
-      }
-      orderList.innerHTML = orders.map(order => (
-        '<button class="order-item' + (activeOrder && order.id === activeOrder.id ? ' active' : '') + '" type="button" data-id="' + escapeHtml(order.id) + '">' +
-          '<div class="order-thumb">' + imageHtml(order) + '</div>' +
-          '<div>' +
-            '<div class="order-name">' + escapeHtml(order.product) + '</div>' +
-            '<div class="order-meta">' + escapeHtml(order.id) + '<br>' + escapeHtml(formatMoney(order.price, order.priceText)) + '</div>' +
-            '<div class="status-pill">' + escapeHtml(order.status) + '</div>' +
-          '</div>' +
-        '</button>'
-      )).join('');
-      orderList.querySelectorAll('[data-id]').forEach(button => {
-        button.addEventListener('click', () => {
-          activeId = button.dataset.id;
-          KokoPanel.setActive(activeId);
-          render();
-        });
-      });
-    }
-
-    function renderDetail(order) {
-      if (!order) {
-        detailCard.innerHTML = '<div class="empty-state">Belum ada transaksi yang dipilih. Pilih produk dari <a href="index.html#produk">halaman utama</a>, atau tekan Demo.</div>';
-        return;
-      }
-      const timeline = (order.timeline || []).map(step => (
-        '<div class="timeline-step' + (step.done ? ' done' : '') + '">' +
-          '<strong>' + escapeHtml(step.label) + '</strong><br>' +
-          '<span>' + escapeHtml(step.time ? formatDate(step.time) : 'Menunggu') + '</span>' +
-        '</div>'
-      )).join('');
-      detailCard.innerHTML =
-        '<div class="detail-hero">' +
-          '<div>' +
-            '<div class="status-pill">' + escapeHtml(order.status) + '</div>' +
-            '<h1>Panel <span>Transaksi</span></h1>' +
-            '<div class="detail-copy">' + escapeHtml(order.detail || 'Detail transaksi akan dibahas di chat website.') + '</div>' +
-          '</div>' +
-          '<div class="detail-image">' + imageHtml(order) + '</div>' +
-        '</div>' +
-        '<div class="detail-grid">' +
-          '<div class="mini-stat"><span>ID</span><strong>' + escapeHtml(order.id) + '</strong></div>' +
-          '<div class="mini-stat"><span>Produk</span><strong>' + escapeHtml(order.product) + '</strong></div>' +
-          '<div class="mini-stat"><span>Buyer</span><strong>' + escapeHtml(order.buyer || '-') + '</strong></div>' +
-          '<div class="mini-stat"><span>Total</span><strong>' + escapeHtml(formatMoney(order.price, order.priceText)) + '</strong></div>' +
-        '</div>' +
-        '<div class="timeline">' + timeline + '</div>' +
-        '<div class="buyer-contact-box">' +
-          '<div>' +
-            '<strong>Hubungi Admin</strong>' +
-            '<span>Chat ini langsung nyambung ke admin untuk order ' + escapeHtml(order.id) + '.</span>' +
-          '</div>' +
-          '<button class="contact-seller-btn" type="button" data-contact-seller="' + escapeHtml(order.id) + '">Buka Chat Order</button>' +
-        '</div>';
-
-      const contactButton = detailCard.querySelector('[data-contact-seller]');
-      if (contactButton) {
-        contactButton.addEventListener('click', () => {
-          activeId = order.id;
-          KokoPanel.setActive(order.id);
-          chatRole.value = 'buyer';
-          if (!chatInput.value.trim()) {
-            chatInput.value = 'Halo admin, aku mau tanya order ' + order.id + ' (' + order.product + ').';
-          }
-          const chatPanel = chatMessages.closest('.chat-panel');
-          if (chatPanel && chatPanel.scrollIntoView) chatPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          chatInput.focus();
-        });
-      }
-    }
-
-    function renderChat(order) {
-      if (!order) {
-        chatMessages.innerHTML = '<div class="empty-state">Pilih order untuk membuka chat.</div>';
-        return;
-      }
-      const messages = Array.isArray(order.messages) ? order.messages : [];
-      chatMessages.innerHTML = messages.map(message => (
-        '<div class="message ' + escapeHtml(message.role || 'system') + '">' +
-          '<div class="message-role">' + escapeHtml(message.role || 'system') + '</div>' +
-          '<div class="message-text">' + escapeHtml(message.text) + '</div>' +
-          '<div class="message-time">' + escapeHtml(formatDate(message.time)) + '</div>' +
-        '</div>'
-      )).join('');
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function render() {
-      const order = getActiveOrder();
-      activeId = order ? order.id : '';
-      if (activeId) KokoPanel.setActive(activeId);
-      renderList(order);
-      renderDetail(order);
-      renderChat(order);
-    }
-
-    function advanceTimeline(order, index, status) {
-      const timeline = (order.timeline || []).map((step, stepIndex) => {
-        if (stepIndex <= index) return Object.assign({}, step, { done: true, time: step.time || Date.now() });
-        return step;
-      });
-      return KokoPanel.updateOrder(order.id, { timeline, status });
-    }
-
-    createFromUrl();
-    render();
-
-    document.getElementById('order-search').addEventListener('input', render);
-    document.getElementById('demo-btn').addEventListener('click', ensureDemo);
-    document.getElementById('clear-btn').addEventListener('click', () => {
-      KokoPanel.clearAll();
-      activeId = '';
-      render();
-    });
-
-    chatForm.addEventListener('submit', event => {
-      event.preventDefault();
-      const order = getActiveOrder();
-      if (!order) return;
-      const text = chatInput.value.trim();
-      if (!text) return;
-      KokoPanel.addMessage(order.id, chatRole.value, text);
-      chatInput.value = '';
-      render();
-    });
-
-    document.getElementById('quote-btn').addEventListener('click', () => {
-      const order = getActiveOrder();
-      if (!order) return;
-      const price = Number(String(dealPrice.value || '').replace(/[^\d]/g, ''));
-      const text = price
-        ? 'Harga deal untuk ' + order.product + ': Rp ' + price.toLocaleString('id-ID') + '. Kalau cocok, buyer bisa lanjut pembayaran di panel.'
-        : 'Seller sudah cek request. Silakan lanjut diskusi harga di chat panel.';
-      const updated = KokoPanel.updateOrder(order.id, {
-        price: price || order.price,
-        priceText: price ? 'Rp ' + price.toLocaleString('id-ID') : order.priceText,
-        status: 'Menunggu pembayaran',
-      });
-      KokoPanel.addMessage(order.id, 'admin', text);
-      if (updated) advanceTimeline(updated, 1, 'Menunggu pembayaran');
-      render();
-    });
-
-    document.getElementById('paid-btn').addEventListener('click', () => {
-      const order = getActiveOrder();
-      if (!order) return;
-      const updated = advanceTimeline(order, 2, 'Pembayaran dicek');
-      KokoPanel.addMessage(order.id, 'buyer', 'Aku sudah bayar. Mohon dicek di panel.');
-      if (updated) render();
-    });
-
-    document.getElementById('done-btn').addEventListener('click', () => {
-      const order = getActiveOrder();
-      if (!order) return;
-      const updated = advanceTimeline(order, 3, 'Selesai');
-      KokoPanel.addMessage(order.id, 'admin', 'Transaksi selesai. Terima kasih sudah order di KokoRBX.');
-      if (updated) render();
-    });
+      document.getElementById('buyer-link').href = 'transaksi-buyer.html' + window.location.search;
+      document.getElementById('admin-link').href = 'admin.html#panel';
+      window.setTimeout(function() {
+        window.location.replace(target);
+      }, 450);
+    })();
   </script>
 </body>
 </html>

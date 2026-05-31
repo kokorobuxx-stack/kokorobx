@@ -2511,6 +2511,9 @@
     }
 
     renderAll();
+    if (location.hash === '#panel') {
+      showPage('panel', document.querySelectorAll('.nav-item')[3]);
+    }
     setupRealtimeListener();
     startSupabasePolling(); // polling Supabase tiap 4 detik
   }
