@@ -300,7 +300,7 @@ select:focus,
 .submit-btn,
 .primary-btn,
 .auth-btn.primary,
-button:not(.koko-cart-button):not(.koko-cart-close):not(.koko-cart-clear):not(.koko-cart-remove) {
+button:not(.koko-cart-button):not(.koko-cart-close):not(.koko-cart-clear):not(.koko-cart-remove):not(.koko-theme-toggle) {
   background: linear-gradient(135deg, #8B7CFF, #6F8DFF) !important;
   color: #fff !important;
   border-color: transparent !important;
@@ -572,4 +572,256 @@ body:has(.how-section) .hero .logo-eyebrow img {
 
 .custom-rbx-preview .p2 {
   color: var(--muted) !important;
+}
+
+.theme-pill,
+.koko-theme-toggle {
+  height: 38px;
+  min-width: 92px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--border) !important;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .78) !important;
+  color: var(--text) !important;
+  padding: 0 12px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 12px 26px rgba(111, 141, 255, .12) !important;
+  transition:
+    transform .18s ease,
+    background .22s ease,
+    border-color .22s ease,
+    color .22s ease,
+    box-shadow .22s ease;
+}
+
+.theme-pill:hover,
+.koko-theme-toggle:hover {
+  transform: translateY(-1px);
+  border-color: rgba(139, 124, 255, .52) !important;
+  box-shadow: 0 16px 30px rgba(111, 141, 255, .16) !important;
+}
+
+.theme-icon {
+  width: 17px;
+  height: 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+
+.theme-icon svg {
+  width: 17px;
+  height: 17px;
+  display: block;
+}
+
+@media (min-width: 1021px) {
+  .main-header .search-wrap {
+    width: 300px !important;
+    max-width: 300px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .theme-pill,
+  .koko-theme-toggle {
+    width: 38px;
+    min-width: 38px;
+    padding: 0;
+  }
+
+  .theme-label {
+    display: none;
+  }
+}
+
+html[data-koko-theme="dark"] {
+  --bg: #0D1224 !important;
+  --s1: rgba(20, 25, 46, .88) !important;
+  --s2: #111A34 !important;
+  --s3: #171634 !important;
+  --panel: rgba(18, 24, 44, .86) !important;
+  --panel2: #121A32 !important;
+  --panel3: #171D38 !important;
+  --surface: rgba(18, 24, 44, .88) !important;
+  --surface2: #121A32 !important;
+  --surface3: #171D38 !important;
+  --border: rgba(151, 168, 255, .24) !important;
+  --border2: rgba(151, 168, 255, .34) !important;
+  --line: rgba(151, 168, 255, .24) !important;
+  --line2: rgba(151, 168, 255, .34) !important;
+  --accent: #9B8DFF !important;
+  --accent2: #78A1FF !important;
+  --accent3: #62D8D4 !important;
+  --accent-glow: rgba(139, 124, 255, .28) !important;
+  --green: #77DDA8 !important;
+  --cyan: #62D8D4 !important;
+  --gold: #F4C96A !important;
+  --text: #F5F7FF !important;
+  --text2: #D6DDF8 !important;
+  --muted: #AEBBE3 !important;
+  --soft-shadow: 0 22px 54px rgba(0, 0, 0, .28) !important;
+}
+
+html[data-koko-theme="dark"] body {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(139, 124, 255, .26), transparent 30%),
+    radial-gradient(circle at 88% 16%, rgba(98, 216, 212, .15), transparent 30%),
+    radial-gradient(circle at 50% 92%, rgba(111, 141, 255, .13), transparent 36%),
+    linear-gradient(180deg, #090D1B 0%, #0D1224 52%, #111A34 100%) !important;
+  color: var(--text) !important;
+}
+
+html[data-koko-theme="dark"] .grid-fx {
+  background-image:
+    linear-gradient(rgba(151, 168, 255, .08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(151, 168, 255, .08) 1px, transparent 1px) !important;
+}
+
+html[data-koko-theme="dark"] .bg-fx::before {
+  background: radial-gradient(ellipse, rgba(139, 124, 255, .2) 0%, transparent 68%) !important;
+}
+
+html[data-koko-theme="dark"] .bg-fx::after {
+  background: radial-gradient(ellipse, rgba(98, 216, 212, .15) 0%, transparent 68%) !important;
+}
+
+html[data-koko-theme="dark"] header,
+html[data-koko-theme="dark"] .main-header,
+html[data-koko-theme="dark"] .nav-bar,
+html[data-koko-theme="dark"] .top-strip,
+html[data-koko-theme="dark"] .site-footer {
+  background: rgba(13, 18, 36, .88) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .28) !important;
+  backdrop-filter: blur(18px);
+}
+
+html[data-koko-theme="dark"] .top-strip,
+html[data-koko-theme="dark"] .top-strip-inner {
+  color: #DCE8FF !important;
+}
+
+html[data-koko-theme="dark"] .logo-svg-box,
+html[data-koko-theme="dark"] .brand-mark {
+  background: #0A0D18 !important;
+  border-color: rgba(255, 255, 255, .16) !important;
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, .36),
+    inset 0 1px 0 rgba(255, 255, 255, .12) !important;
+}
+
+html[data-koko-theme="dark"] .card,
+html[data-koko-theme="dark"] .summary,
+html[data-koko-theme="dark"] .form-card,
+html[data-koko-theme="dark"] .preview-panel,
+html[data-koko-theme="dark"] .how-step,
+html[data-koko-theme="dark"] .modal,
+html[data-koko-theme="dark"] .auth-card,
+html[data-koko-theme="dark"] .panel,
+html[data-koko-theme="dark"] .product-card,
+html[data-koko-theme="dark"] .section,
+html[data-koko-theme="dark"] .quick-panel,
+html[data-koko-theme="dark"] .category-panel,
+html[data-koko-theme="dark"] .status-panel,
+html[data-koko-theme="dark"] .flow-panel,
+html[data-koko-theme="dark"] .home-panel,
+html[data-koko-theme="dark"] .home-stat,
+html[data-koko-theme="dark"] .sum-item,
+html[data-koko-theme="dark"] .rbx-display,
+html[data-koko-theme="dark"] .gp-sum-box,
+html[data-koko-theme="dark"] .tax-result-box,
+html[data-koko-theme="dark"] .tutorial-box,
+html[data-koko-theme="dark"] .format-preview,
+html[data-koko-theme="dark"] .custom-rbx-box,
+html[data-koko-theme="dark"] .custom-rbx-preview,
+html[data-koko-theme="dark"] .gamepass-guide,
+html[data-koko-theme="dark"] .gp-input-box,
+html[data-koko-theme="dark"] .modal-gp-box,
+html[data-koko-theme="dark"] .side-card,
+html[data-koko-theme="dark"] .koko-cart-drawer,
+html[data-koko-theme="dark"] .koko-cart-item,
+html[data-koko-theme="dark"] .koko-cart-empty,
+html[data-koko-theme="dark"] .home-hero,
+html[data-koko-theme="dark"] .promo-card {
+  background: rgba(18, 24, 44, .84) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--soft-shadow) !important;
+}
+
+html[data-koko-theme="dark"] .home-hero {
+  background:
+    linear-gradient(90deg, rgba(18, 24, 44, .94) 0%, rgba(18, 24, 44, .72) 54%, rgba(18, 24, 44, .2) 100%),
+    var(--home-hero-bg, none) !important;
+}
+
+html[data-koko-theme="dark"] .hero-eyebrow,
+html[data-koko-theme="dark"] .eyebrow,
+html[data-koko-theme="dark"] .logo-eyebrow,
+html[data-koko-theme="dark"] .badge,
+html[data-koko-theme="dark"] .pill-link,
+html[data-koko-theme="dark"] .live-badge,
+html[data-koko-theme="dark"] .gp-prev-badge,
+html[data-koko-theme="dark"] .tax-use-btn,
+html[data-koko-theme="dark"] .btn-view-orders,
+html[data-koko-theme="dark"] .header-btn,
+html[data-koko-theme="dark"] .header-right a,
+html[data-koko-theme="dark"] .koko-market-link,
+html[data-koko-theme="dark"] .koko-cart-button,
+html[data-koko-theme="dark"] .koko-cart-add,
+html[data-koko-theme="dark"] .category-item,
+html[data-koko-theme="dark"] .quick-tile,
+html[data-koko-theme="dark"] .pay-action-box,
+html[data-koko-theme="dark"] .theme-pill,
+html[data-koko-theme="dark"] .koko-theme-toggle {
+  background: rgba(22, 29, 52, .82) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+html[data-koko-theme="dark"] .theme-pill,
+html[data-koko-theme="dark"] .koko-theme-toggle {
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, .26),
+    inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+}
+
+html[data-koko-theme="dark"] .search-box,
+html[data-koko-theme="dark"] input,
+html[data-koko-theme="dark"] textarea,
+html[data-koko-theme="dark"] select,
+html[data-koko-theme="dark"] .input-wrap input,
+html[data-koko-theme="dark"] .gp-id-input,
+html[data-koko-theme="dark"] .gp-url-row input,
+html[data-koko-theme="dark"] .custom-rbx-row input,
+html[data-koko-theme="dark"] .status-form input {
+  background: rgba(14, 19, 37, .9) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+html[data-koko-theme="dark"] input::placeholder,
+html[data-koko-theme="dark"] textarea::placeholder {
+  color: rgba(174, 187, 227, .72) !important;
+}
+
+html[data-koko-theme="dark"] .search-key {
+  background: rgba(139, 124, 255, .12) !important;
+  border-color: rgba(139, 124, 255, .28) !important;
+  color: #CFC8FF !important;
+}
+
+html[data-koko-theme="dark"] .mobile-order-bar {
+  background: rgba(13, 18, 36, .92) !important;
+  border-color: var(--border) !important;
+  box-shadow: 0 -16px 32px rgba(0, 0, 0, .3) !important;
 }
