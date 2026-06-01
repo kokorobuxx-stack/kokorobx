@@ -21,7 +21,7 @@ module.exports = async function handler(req, res) {
     const totalRobux = Number(String(body.totalRobux || body.robux || '0').replace(/[^\d]/g, ''));
     let rate = normalizeRate(body.rate, DEFAULT_RATES.giftgp);
 
-    if (!username || !game || !gamepass || !totalRobux) {
+    if (!username || !game || !gamepass) {
       return res.status(400).json({ error: 'Data request Gift GP belum lengkap' });
     }
 
@@ -31,7 +31,7 @@ module.exports = async function handler(req, res) {
     } catch (err) {
       rate = normalizeRate(body.rate, DEFAULT_RATES.giftgp);
     }
-    const price = totalRobux * rate;
+    const price = totalRobux ? totalRobux * rate : 0;
 
     const detail = [
       'Format Ingame Gifting',
@@ -39,8 +39,8 @@ module.exports = async function handler(req, res) {
       `Display name: ${displayName || '-'}`,
       `Nama game: ${game}`,
       `Nama gamepass: ${gamepass}`,
-      `Total robux: ${totalRobux.toLocaleString('id-ID')}`,
-      `Total bayar: Rp ${price.toLocaleString('id-ID')}`,
+      `Total robux: ${totalRobux ? totalRobux.toLocaleString('id-ID') : 'Manual - tanya admin'}`,
+      `Total bayar: ${price ? 'Rp ' + price.toLocaleString('id-ID') : 'Menunggu admin'}`,
       'Note: Pastikan format yang kamu isi sudah sesuai!',
     ].join(' | ');
 

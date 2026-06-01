@@ -138,11 +138,8 @@
     background: var(--s2); color: var(--text); padding: 0 13px; outline: none;
   }
   .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,.12); }
-  .game-tabs,
   .category-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
-  .game-tabs::-webkit-scrollbar,
   .category-tabs::-webkit-scrollbar { display: none; }
-  .game-tabs { margin-bottom: 12px; }
   .category-tabs { justify-content: flex-end; }
   .tab-btn {
     min-height: 38px; border: 1px solid var(--border2); border-radius: 10px;
@@ -156,6 +153,59 @@
   }
   .catalog-grid {
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+  }
+  .detail-only[hidden],
+  .games-only[hidden] { display: none !important; }
+  .game-card {
+    border: 1px solid var(--border2); border-radius: 14px; overflow: hidden;
+    background: rgba(20,20,30,.92); min-height: 250px; display: flex; flex-direction: column;
+    color: var(--text); text-decoration: none; box-shadow: 0 16px 30px rgba(0,0,0,.16);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .game-card:hover {
+    transform: translateY(-3px); border-color: rgba(124,92,252,.62);
+    box-shadow: 0 20px 38px rgba(124,92,252,.2);
+  }
+  .game-cover {
+    min-height: 145px; position: relative; overflow: hidden; isolation: isolate;
+    background:
+      radial-gradient(circle at 72% 18%, rgba(255,255,255,.68), transparent 12%),
+      radial-gradient(circle at 15% 78%, rgba(98,216,212,.38), transparent 24%),
+      linear-gradient(135deg, var(--cover-a, #4277ff), var(--cover-b, #825cff));
+  }
+  .game-cover::before {
+    content: ""; position: absolute; inset: -32px;
+    background:
+      linear-gradient(115deg, transparent 0 44%, rgba(255,255,255,.55) 45% 48%, transparent 49%),
+      radial-gradient(circle at 35% 32%, rgba(255,255,255,.35), transparent 16%),
+      repeating-linear-gradient(35deg, rgba(255,255,255,.12) 0 2px, transparent 2px 18px);
+    opacity: .82; transform: rotate(-4deg); z-index: -1;
+  }
+  .game-cover::after {
+    content: attr(data-monogram); position: absolute; right: 16px; bottom: 12px;
+    width: 68px; height: 68px; border-radius: 18px; display: grid; place-items: center;
+    color: #fff; font-weight: 900; font-size: 1.45rem; font-family: var(--mono);
+    background: rgba(6,12,34,.28); border: 1px solid rgba(255,255,255,.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.36), 0 14px 28px rgba(8,14,44,.18);
+    text-shadow: 0 3px 12px rgba(0,0,0,.32);
+  }
+  .game-badge {
+    position: absolute; left: 14px; bottom: 13px; min-height: 28px; border-radius: 999px;
+    padding: 0 12px; display: inline-flex; align-items: center; color: #07112d;
+    background: #ffd74a; font-size: .62rem; font-weight: 900; box-shadow: 0 8px 20px rgba(0,0,0,.16);
+  }
+  .game-name-art {
+    position: absolute; left: 14px; top: 13px; right: 14px; color: #fff;
+    font-size: 1.08rem; font-weight: 900; line-height: 1.05; text-shadow: 0 3px 14px rgba(0,0,0,.34);
+  }
+  .game-body { padding: 13px; display: grid; gap: 7px; flex: 1; }
+  .game-title { font-size: 1rem; line-height: 1.2; font-weight: 900; color: var(--text); }
+  .game-desc { color: var(--muted); font-size: .72rem; line-height: 1.45; }
+  .game-meta { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--accent); font-size: .68rem; font-weight: 900; }
+  .back-link {
+    display: inline-flex; align-items: center; min-height: 36px; border-radius: 10px; padding: 0 12px;
+    border: 1px solid var(--border2); color: var(--accent); background: var(--s2);
+    text-decoration: none; font-weight: 900; font-size: .72rem;
   }
   .gift-card {
     border: 1px solid var(--border2); border-radius: 12px; overflow: hidden;
@@ -291,6 +341,14 @@
     .catalog-panel,
     .form-card,
     .preview-panel { padding: 12px; border-radius: 12px; }
+    .game-card { min-height: 216px; border-radius: 11px; }
+    .game-cover { min-height: 118px; }
+    .game-cover::after { width: 54px; height: 54px; border-radius: 14px; font-size: 1.05rem; right: 10px; bottom: 10px; }
+    .game-name-art { font-size: .9rem; left: 10px; top: 10px; }
+    .game-badge { left: 10px; bottom: 10px; min-height: 24px; padding: 0 9px; font-size: .54rem; }
+    .game-body { padding: 10px; gap: 5px; }
+    .game-title { font-size: .88rem; }
+    .game-desc { font-size: .62rem; }
     .gift-card { min-height: 224px; border-radius: 10px; }
     .gift-cover { height: 92px; padding: 9px; }
     .cover-main { font-size: .88rem; }
@@ -310,35 +368,39 @@
 <link rel="stylesheet" href="assets/kokorbx-theme.css?v=contrast-theme-20260601">
 <style>
   html[data-koko-theme] .catalog-panel,
-  html[data-koko-theme] .gift-card {
+  html[data-koko-theme] .gift-card,
+  html[data-koko-theme] .game-card {
     background: rgba(14, 14, 22, .94) !important;
     color: #F5F7FF !important;
   }
   html[data-koko-theme] .panel-title,
   html[data-koko-theme] .gift-name,
+  html[data-koko-theme] .game-title,
   html[data-koko-theme] .cover-main {
     color: #F5F7FF !important;
     -webkit-text-fill-color: #F5F7FF !important;
   }
   html[data-koko-theme] .panel-head p,
-  html[data-koko-theme] .gift-desc {
+  html[data-koko-theme] .gift-desc,
+  html[data-koko-theme] .game-desc {
     color: #B8C4EA !important;
   }
   html[data-koko-theme] .gift-price {
     color: #FFC857 !important;
   }
   @media (max-width: 720px) {
-    header { padding: 10px 10px; gap: 6px; }
-    .logo { font-size: 1rem; gap: 7px; }
-    .header-right { flex: 1; justify-content: flex-end; gap: 6px; min-width: 0; overflow: visible; }
+    header { padding: 10px 8px; gap: 5px; }
+    .logo { font-size: .98rem; gap: 6px; }
+    .logo-svg-box { width: 28px; height: 28px; border-radius: 8px; }
+    .header-right { flex: 1; justify-content: flex-end; gap: 5px; min-width: 0; overflow: visible; }
     .header-right::-webkit-scrollbar { display: none; }
     .header-right a[href="admin.html"] { display: none !important; }
     .header-right a.primary {
       height: 38px;
       display: inline-flex;
       align-items: center;
-      padding: 0 12px;
-      font-size: 12px;
+      padding: 0 10px;
+      font-size: 11px;
     }
   }
 </style>
@@ -381,19 +443,19 @@
     <section class="catalog-panel" aria-label="Katalog Gift GP">
       <div class="panel-head">
         <div>
-          <div class="panel-title">Pilih Game dan Item</div>
-          <p>Buyer cukup klik item. Nama game, item, dan total Robux otomatis masuk ke format order.</p>
+          <div class="panel-title" id="catalog-title">Pilih Game Populer</div>
+          <p id="catalog-subtitle">Pilih game dulu. Setelah itu baru muncul gamepass, permanent item, atau request khusus untuk game tersebut.</p>
         </div>
+        <a class="back-link detail-only" id="back-to-games" href="giftgp.html" hidden>Kembali ke daftar game</a>
       </div>
-      <div class="game-tabs" id="game-tabs"></div>
-      <div class="catalog-tools">
+      <div class="catalog-tools detail-only" id="catalog-tools" hidden>
         <input class="search-input" id="catalog-search" type="search" placeholder="Cari item, gamepass, permanent fruit..." autocomplete="off">
         <div class="category-tabs" id="category-tabs"></div>
       </div>
       <div class="catalog-grid" id="catalog-grid"></div>
     </section>
 
-    <section class="order-layout">
+    <section class="order-layout detail-only" id="order-layout" hidden>
       <form class="form-card" id="gift-form">
         <div class="form-head">
           <h2>Data Penerima Gift</h2>
@@ -472,15 +534,32 @@
   const RATE_KEY = 'giftgp';
   let PRICE_PER_ROBUX = 140;
 
+  const PAGE_GAME = new URLSearchParams(location.search).get('game') || '';
   const GAMES = [
-    { id: 'blox-fruits', name: 'Blox Fruits', subtitle: 'Gamepass dan permanent fruit' },
-    { id: 'custom-game', name: 'Game Lain', subtitle: 'Request gift manual' }
+    { id: 'blox-fruits', name: 'Blox Fruits', subtitle: 'Gamepass, permanent fruit, dan service populer.', monogram: 'BF', colors: ['#2875ff', '#ff7a2f'], tags: 'Gamepass + Perm Fruit' },
+    { id: 'grow-a-garden', name: 'Grow a Garden', subtitle: 'Gift item, pack, dan request event.', monogram: 'GG', colors: ['#22c77b', '#7c5cff'], tags: 'Pet + Pack' },
+    { id: 'blue-lock-rivals', name: 'Blue Lock: Rivals', subtitle: 'Spin, style, flow, dan pack request.', monogram: 'BL', colors: ['#2188ff', '#182a7a'], tags: 'Anime Sport' },
+    { id: 'fisch', name: 'Fisch', subtitle: 'Gamepass dan kebutuhan fishing.', monogram: 'FS', colors: ['#18b5e8', '#756cff'], tags: 'Fishing' },
+    { id: 'blade-ball', name: 'Blade Ball', subtitle: 'Bundle, wheel, dan pass populer.', monogram: 'BB', colors: ['#7d5cff', '#17c6e8'], tags: 'Battle' },
+    { id: 'pet-simulator-99', name: 'Pet Simulator 99', subtitle: 'Pass, boost, dan request item.', monogram: 'P99', colors: ['#6f8dff', '#f07aff'], tags: 'Pet' },
+    { id: 'sols-rng', name: "Sol's RNG", subtitle: 'Pass dan item event pilihan.', monogram: 'SR', colors: ['#f7b34f', '#7c5cff'], tags: 'RNG' },
+    { id: 'drag-drive-simulator', name: 'Drag Drive Simulator', subtitle: 'Gamepass dan request racing item.', monogram: 'DDS', colors: ['#ff4f6d', '#7c5cff'], tags: 'Racing' },
+    { id: 'car-driving-indonesia', name: 'Car Driving Indonesia', subtitle: 'Top up game regional Indonesia.', monogram: 'CDI', colors: ['#1fa7ff', '#62d8d4'], tags: 'Regional ID' },
+    { id: 'volleyball-legends', name: 'Volleyball Legends', subtitle: 'Spin dan pack sport populer.', monogram: 'VL', colors: ['#ff8c3a', '#2875ff'], tags: 'Sport' },
+    { id: 'basketball-zero', name: 'Basketball Zero', subtitle: 'Spin, style, dan pass sport anime.', monogram: 'BZ', colors: ['#ffb12f', '#2177ff'], tags: 'Sport' },
+    { id: 'dress-to-impress', name: 'Dress To Impress', subtitle: 'VIP, custom makeup, dan item fashion.', monogram: 'DTI', colors: ['#f06cff', '#6f8dff'], tags: 'Fashion' },
+    { id: 'anime-vanguards', name: 'Anime Vanguards', subtitle: 'Pass, bundle, dan request unit.', monogram: 'AV', colors: ['#935cff', '#ff586b'], tags: 'Anime' },
+    { id: 'king-legacy', name: 'King Legacy', subtitle: 'Gamepass dan item pilihan.', monogram: 'KL', colors: ['#2e73ff', '#f1bb4d'], tags: 'Adventure' },
+    { id: 'jujutsu-infinite', name: 'Jujutsu Infinite', subtitle: 'Spin, pass, dan kebutuhan anime.', monogram: 'JI', colors: ['#6f8dff', '#1a2f7a'], tags: 'Anime' },
+    { id: 'the-strongest-battlegrounds', name: 'The Strongest Battlegrounds', subtitle: 'Pass dan cosmetic request.', monogram: 'SB', colors: ['#ec4b64', '#7c5cff'], tags: 'Fighting' }
   ];
   const CATEGORIES = [
     { id: 'all', label: 'Semua' },
     { id: 'gamepass', label: 'Gamepass' },
     { id: 'permanent-fruit', label: 'Permanent Fruit' },
-    { id: 'service', label: 'Service' }
+    { id: 'service', label: 'Service' },
+    { id: 'event', label: 'Event' },
+    { id: 'custom', label: 'Custom' }
   ];
   const CATALOG = [
     { id: 'bf-fruit-storage', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Fruit Storage', robux: 400, code: 'FS', desc: 'Tambah slot penyimpanan fruit.', badge: 'Popular' },
@@ -498,7 +577,37 @@
     { id: 'bf-perm-leopard', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Leopard', robux: 3000, code: 'LP', desc: 'Permanent fruit Leopard.', badge: 'Permanent' },
     { id: 'bf-perm-kitsune', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Kitsune', robux: 4000, code: 'PK', desc: 'Permanent fruit Kitsune.', badge: 'Permanent' },
     { id: 'bf-perm-dragon', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Dragon', robux: 5000, code: 'DR', desc: 'Permanent fruit Dragon.', badge: 'Permanent' },
-    { id: 'custom-gift', gameId: 'custom-game', game: 'Game Lain', category: 'service', title: 'Custom Gift GP', robux: 0, code: 'CG', desc: 'Pilih ini kalau item belum ada di katalog.', badge: 'Manual' }
+    { id: 'gg-custom-pack', gameId: 'grow-a-garden', game: 'Grow a Garden', category: 'custom', title: 'Gift Pack Pilihan', robux: 0, code: 'GG', desc: 'Request pack/item Grow a Garden sesuai event yang sedang tersedia.', badge: 'Manual' },
+    { id: 'gg-event-item', gameId: 'grow-a-garden', game: 'Grow a Garden', category: 'event', title: 'Event Item Request', robux: 0, code: 'EV', desc: 'Untuk item event, admin cek stok dan harga dulu.', badge: 'Event' },
+    { id: 'gg-pet-request', gameId: 'grow-a-garden', game: 'Grow a Garden', category: 'custom', title: 'Pet / Seed Request', robux: 0, code: 'PET', desc: 'Pilih kalau mau request pet, seed, atau kebutuhan garden.', badge: 'Request' },
+    { id: 'bl-spin-pack', gameId: 'blue-lock-rivals', game: 'Blue Lock: Rivals', category: 'gamepass', title: 'Spin Pack', robux: 0, code: 'SP', desc: 'Request spin/style/flow Blue Lock: Rivals.', badge: 'Popular' },
+    { id: 'bl-custom-pass', gameId: 'blue-lock-rivals', game: 'Blue Lock: Rivals', category: 'custom', title: 'Custom Pass Blue Lock', robux: 0, code: 'BL', desc: 'Pilih gamepass yang kamu mau, admin konfirmasi harga.', badge: 'Manual' },
+    { id: 'fisch-gamepass', gameId: 'fisch', game: 'Fisch', category: 'gamepass', title: 'Gamepass Fisch', robux: 0, code: 'FG', desc: 'Request gamepass Fisch yang tersedia di toko game.', badge: 'Gamepass' },
+    { id: 'fisch-event', gameId: 'fisch', game: 'Fisch', category: 'event', title: 'Event / Fishing Item', robux: 0, code: 'FI', desc: 'Untuk kebutuhan event atau item fishing tertentu.', badge: 'Event' },
+    { id: 'bb-gamepass', gameId: 'blade-ball', game: 'Blade Ball', category: 'gamepass', title: 'Blade Ball Gamepass', robux: 0, code: 'BB', desc: 'Request pass, bundle, atau wheel Blade Ball.', badge: 'Gamepass' },
+    { id: 'bb-event', gameId: 'blade-ball', game: 'Blade Ball', category: 'event', title: 'Bundle / Event Request', robux: 0, code: 'BE', desc: 'Admin cek item event yang sedang aktif.', badge: 'Event' },
+    { id: 'ps99-gamepass', gameId: 'pet-simulator-99', game: 'Pet Simulator 99', category: 'gamepass', title: 'Pet Simulator Gamepass', robux: 0, code: 'P99', desc: 'Request gamepass atau boost Pet Simulator 99.', badge: 'Gamepass' },
+    { id: 'ps99-item', gameId: 'pet-simulator-99', game: 'Pet Simulator 99', category: 'custom', title: 'Pet / Item Request', robux: 0, code: 'PI', desc: 'Request pet atau item tertentu, admin cek dulu.', badge: 'Request' },
+    { id: 'sols-gamepass', gameId: 'sols-rng', game: "Sol's RNG", category: 'gamepass', title: "Sol's RNG Gamepass", robux: 0, code: 'SR', desc: 'Request pass atau fitur pilihan Sols RNG.', badge: 'Gamepass' },
+    { id: 'sols-event', gameId: 'sols-rng', game: "Sol's RNG", category: 'event', title: 'Aura / Event Request', robux: 0, code: 'AU', desc: 'Untuk request event atau kebutuhan aura tertentu.', badge: 'Event' },
+    { id: 'dds-gamepass', gameId: 'drag-drive-simulator', game: 'Drag Drive Simulator', category: 'gamepass', title: 'Racing Gamepass', robux: 0, code: 'DDS', desc: 'Request gamepass Drag Drive Simulator.', badge: 'Racing' },
+    { id: 'dds-custom', gameId: 'drag-drive-simulator', game: 'Drag Drive Simulator', category: 'custom', title: 'Car / Event Request', robux: 0, code: 'CAR', desc: 'Request mobil, wheel, atau item event yang aktif.', badge: 'Request' },
+    { id: 'cdi-gamepass', gameId: 'car-driving-indonesia', game: 'Car Driving Indonesia', category: 'gamepass', title: 'CDID Gamepass', robux: 0, code: 'CDI', desc: 'Top up game regional Indonesia, admin konfirmasi harga.', badge: 'Regional ID' },
+    { id: 'cdi-custom', gameId: 'car-driving-indonesia', game: 'Car Driving Indonesia', category: 'custom', title: 'Custom CDI Request', robux: 0, code: 'ID', desc: 'Request item atau pass CDI yang belum ada di katalog.', badge: 'Manual' },
+    { id: 'vl-spin', gameId: 'volleyball-legends', game: 'Volleyball Legends', category: 'gamepass', title: 'Spin / Lucky Pack', robux: 0, code: 'VL', desc: 'Request spin atau pack Volleyball Legends.', badge: 'Sport' },
+    { id: 'vl-custom', gameId: 'volleyball-legends', game: 'Volleyball Legends', category: 'custom', title: 'Custom Volleyball Request', robux: 0, code: 'VC', desc: 'Untuk item atau pass lain yang perlu dicek admin.', badge: 'Manual' },
+    { id: 'bz-spin', gameId: 'basketball-zero', game: 'Basketball Zero', category: 'gamepass', title: 'Spin / Style Pack', robux: 0, code: 'BZ', desc: 'Request spin, style, atau pack Basketball Zero.', badge: 'Sport' },
+    { id: 'bz-custom', gameId: 'basketball-zero', game: 'Basketball Zero', category: 'custom', title: 'Custom Basketball Request', robux: 0, code: 'BC', desc: 'Untuk kebutuhan lain yang perlu dicek admin.', badge: 'Manual' },
+    { id: 'dti-vip', gameId: 'dress-to-impress', game: 'Dress To Impress', category: 'gamepass', title: 'VIP / Makeup Pass', robux: 0, code: 'VIP', desc: 'Request VIP, custom makeup, atau item fashion.', badge: 'Fashion' },
+    { id: 'dti-custom', gameId: 'dress-to-impress', game: 'Dress To Impress', category: 'custom', title: 'Custom Fashion Request', robux: 0, code: 'DTI', desc: 'Admin cek item yang kamu minta sebelum proses.', badge: 'Manual' },
+    { id: 'av-gamepass', gameId: 'anime-vanguards', game: 'Anime Vanguards', category: 'gamepass', title: 'Anime Vanguards Gamepass', robux: 0, code: 'AV', desc: 'Request pass atau bundle Anime Vanguards.', badge: 'Anime' },
+    { id: 'av-unit-request', gameId: 'anime-vanguards', game: 'Anime Vanguards', category: 'custom', title: 'Unit / Bundle Request', robux: 0, code: 'UR', desc: 'Admin cek kebutuhan unit, bundle, dan event.', badge: 'Request' },
+    { id: 'kl-gamepass', gameId: 'king-legacy', game: 'King Legacy', category: 'gamepass', title: 'King Legacy Gamepass', robux: 0, code: 'KL', desc: 'Request pass atau kebutuhan King Legacy.', badge: 'Gamepass' },
+    { id: 'kl-fruit-request', gameId: 'king-legacy', game: 'King Legacy', category: 'custom', title: 'Fruit / Item Request', robux: 0, code: 'FR', desc: 'Pilih kalau mau request fruit atau item tertentu.', badge: 'Request' },
+    { id: 'ji-spin', gameId: 'jujutsu-infinite', game: 'Jujutsu Infinite', category: 'gamepass', title: 'Spin / Gamepass Request', robux: 0, code: 'JI', desc: 'Request spin, pass, atau item Jujutsu Infinite.', badge: 'Anime' },
+    { id: 'ji-custom', gameId: 'jujutsu-infinite', game: 'Jujutsu Infinite', category: 'custom', title: 'Custom Jujutsu Request', robux: 0, code: 'JC', desc: 'Untuk kebutuhan lain yang harus dicek admin.', badge: 'Manual' },
+    { id: 'sb-gamepass', gameId: 'the-strongest-battlegrounds', game: 'The Strongest Battlegrounds', category: 'gamepass', title: 'Battlegrounds Gamepass', robux: 0, code: 'SB', desc: 'Request pass atau cosmetic fighting.', badge: 'Gamepass' },
+    { id: 'sb-custom', gameId: 'the-strongest-battlegrounds', game: 'The Strongest Battlegrounds', category: 'custom', title: 'Custom Battlegrounds Request', robux: 0, code: 'SC', desc: 'Untuk kebutuhan lain yang harus dicek admin.', badge: 'Manual' }
   ];
 
   const form = document.getElementById('gift-form');
@@ -510,9 +619,9 @@
     gamepass: document.getElementById('gamepass'),
     totalRobux: document.getElementById('totalRobux'),
   };
-  let activeGame = 'blox-fruits';
+  let activeGame = GAMES.some(game => game.id === PAGE_GAME) ? PAGE_GAME : '';
   let activeCategory = 'all';
-  let selectedId = 'bf-fruit-storage';
+  let selectedId = activeGame ? ((CATALOG.find(item => item.gameId === activeGame) || {}).id || '') : '';
 
   function cleanRobux(raw) {
     return String(raw || '').replace(/[^\d]/g, '');
@@ -552,12 +661,23 @@
     }[ch]));
   }
 
+  function currentGame() {
+    return GAMES.find(game => game.id === activeGame) || null;
+  }
+
+  function setModeUI() {
+    const detailMode = Boolean(activeGame);
+    document.body.dataset.giftMode = detailMode ? 'detail' : 'games';
+    document.querySelectorAll('.detail-only').forEach(el => { el.hidden = !detailMode; });
+    document.querySelectorAll('.games-only').forEach(el => { el.hidden = detailMode; });
+    const game = currentGame();
+    document.getElementById('catalog-title').textContent = detailMode ? (game ? game.name + ' - Gift GP' : 'Gift GP') : 'Pilih Game Populer';
+    document.getElementById('catalog-subtitle').textContent = detailMode
+      ? 'Pilih item untuk ' + (game ? game.name : 'game ini') + '. Username dan display name wajib diisi supaya admin bisa cocokkan profil.'
+      : 'Pilih game dulu. Setelah itu baru muncul gamepass, permanent item, atau request khusus untuk game tersebut.';
+  }
+
   function renderTabs() {
-    document.getElementById('game-tabs').innerHTML = GAMES.map(game => (
-      '<button class="tab-btn ' + (game.id === activeGame ? 'active' : '') + '" type="button" data-game="' + game.id + '">' +
-        escapeHtml(game.name) +
-      '</button>'
-    )).join('');
     document.getElementById('category-tabs').innerHTML = CATEGORIES.map(cat => (
       '<button class="tab-btn ' + (cat.id === activeCategory ? 'active' : '') + '" type="button" data-category="' + cat.id + '">' +
         escapeHtml(cat.label) +
@@ -565,12 +685,40 @@
     )).join('');
   }
 
+  function gameCardStyle(game) {
+    const colors = game.colors || ['#6f8dff', '#8b7cff'];
+    return '--cover-a:' + colors[0] + ';--cover-b:' + colors[1] + ';';
+  }
+
+  function renderGameCards() {
+    const grid = document.getElementById('catalog-grid');
+    grid.innerHTML = GAMES.map(game => (
+      '<a class="game-card" href="giftgp.html?game=' + encodeURIComponent(game.id) + '" style="' + gameCardStyle(game) + '">' +
+        '<div class="game-cover" data-monogram="' + escapeHtml(game.monogram) + '">' +
+          '<div class="game-name-art">' + escapeHtml(game.name) + '</div>' +
+          '<span class="game-badge">TOP UP GAME</span>' +
+        '</div>' +
+        '<div class="game-body">' +
+          '<div class="game-title">' + escapeHtml(game.name) + '</div>' +
+          '<div class="game-desc">' + escapeHtml(game.subtitle) + '</div>' +
+          '<div class="game-meta"><span>' + escapeHtml(game.tags) + '</span><span>Lihat item</span></div>' +
+        '</div>' +
+      '</a>'
+    )).join('');
+  }
+
   function renderGrid() {
+    setModeUI();
+    renderTabs();
+    if (!activeGame) {
+      renderGameCards();
+      return;
+    }
     const query = document.getElementById('catalog-search').value.trim().toLowerCase();
     const items = CATALOG.filter(item => {
       const gameMatch = item.gameId === activeGame;
       const categoryMatch = activeCategory === 'all' || item.category === activeCategory;
-      const text = (item.title + ' ' + item.game + ' ' + item.category + ' ' + item.desc).toLowerCase();
+      const text = (item.title + ' ' + item.game + ' ' + item.category + ' ' + item.desc + ' ' + item.badge).toLowerCase();
       return gameMatch && categoryMatch && (!query || text.includes(query));
     });
     const grid = document.getElementById('catalog-grid');
@@ -692,17 +840,6 @@
   }
 
   document.addEventListener('click', event => {
-    const gameBtn = event.target.closest('[data-game]');
-    if (gameBtn) {
-      activeGame = gameBtn.dataset.game;
-      activeCategory = 'all';
-      const first = CATALOG.find(item => item.gameId === activeGame);
-      if (first) selectedId = first.id;
-      renderTabs();
-      renderGrid();
-      selectItem(selectedId, false);
-      return;
-    }
     const catBtn = event.target.closest('[data-category]');
     if (catBtn) {
       activeCategory = catBtn.dataset.category;
@@ -724,10 +861,6 @@
     const item = selectedItem();
     if (!item) {
       alert('Pilih item Gift GP dulu.');
-      return;
-    }
-    if (!item.robux) {
-      alert('Item custom belum punya harga otomatis. Chat admin dulu untuk konfirmasi.');
       return;
     }
     if (!form.reportValidity()) return;
