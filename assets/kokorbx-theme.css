@@ -778,6 +778,17 @@ html[data-koko-theme="dark"] .home-hero {
     var(--home-hero-bg, none) !important;
 }
 
+@media (max-width: 640px) {
+  html[data-koko-theme="dark"] .home-hero::after {
+    display: block !important;
+    width: 82% !important;
+    background:
+      linear-gradient(90deg, rgba(18, 24, 44, .86), rgba(18, 24, 44, .28) 38%, rgba(18, 24, 44, .02)),
+      url("../assets/marketplace/kokorbx-home-visual.jpeg") right bottom / auto 100% no-repeat !important;
+    opacity: .68 !important;
+  }
+}
+
 html[data-koko-theme="dark"] .hero-eyebrow,
 html[data-koko-theme="dark"] .eyebrow,
 html[data-koko-theme="dark"] .logo-eyebrow,

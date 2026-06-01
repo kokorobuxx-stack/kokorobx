@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel — RBX Store</title>
+<title>Admin Control Center - KokoRBX</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -79,6 +79,10 @@
   .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
   .page-header h2 { font-family: var(--mono); font-size: 17px; color: var(--text); }
   .page-header span { color: var(--muted); font-size: 12px; margin-top: 2px; display: block; }
+  .admin-flow-strip { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+  .admin-flow-step { background: linear-gradient(135deg, rgba(124,106,255,.13), rgba(0,229,160,.05)); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+  .admin-flow-step b { display: block; font-family: var(--mono); font-size: 11px; color: var(--text); margin-bottom: 5px; }
+  .admin-flow-step span { display: block; color: var(--muted); font-size: 11px; line-height: 1.5; }
 
   /* STATS */
   .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -714,7 +718,7 @@
     .page-header > div[style*="flex"] { flex-direction: column; width: 100%; }
 
     /* Stats grid */
-    .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .stats-grid, .admin-flow-strip { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
     .rate-settings-grid, .rate-preview-grid, .product-admin-grid { grid-template-columns: 1fr; }
     .transaction-embed-toolbar { align-items: stretch; flex-direction: column; }
     .transaction-embed-actions { width: 100%; }
@@ -887,7 +891,7 @@
   }
 
   @media (max-width: 480px) {
-    .stats-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stats-grid, .admin-flow-strip { grid-template-columns: 1fr; gap: 8px; }
     .stat-card { padding: 11px 10px; }
     .stat-value { font-size: 15px; }
     .stat-label { font-size: 9px; }
@@ -935,7 +939,7 @@
   <div class="nav-item active" onclick="showPage('dashboard', this)"><span class="icon">&#9672;</span> Dashboard</div>
   <div class="nav-item" onclick="showPage('orders', this)"><span class="icon">&#9643;</span> Semua Order</div>
   <div class="nav-item" onclick="showPage('pending', this)">
-    <span class="icon">&#9783;</span> Pending
+    <span class="icon">&#9783;</span> Order Pending
     <span id="pending-badge" style="margin-left:auto;background:var(--yellow);color:#000;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;"></span>
   </div>
   <div class="nav-item" onclick="showPage('panel', this)"><span class="icon">&#9993;</span> Panel Transaksi</div>
@@ -968,6 +972,12 @@
         <button class="btn-refresh" id="refresh-dashboard" onclick="refreshData('refresh-dashboard')"><span class="spin">&#8635;</span> Refresh</button>
         <button class="filter-btn" onclick="addDummyOrder()" style="border-color:var(--accent);color:var(--accent)">+ Simulasi Order</button>
       </div>
+    </div>
+    <div class="admin-flow-strip" aria-label="Alur kerja admin">
+      <div class="admin-flow-step"><b>1. Cek Order</b><span>Semua order masuk dari produk utama dan buyer room.</span></div>
+      <div class="admin-flow-step"><b>2. Balas Buyer</b><span>Gunakan Panel Transaksi untuk chat dan bukti bayar.</span></div>
+      <div class="admin-flow-step"><b>3. Proses</b><span>Ubah status order, rate, dan stok dari admin panel.</span></div>
+      <div class="admin-flow-step"><b>4. Selesai</b><span>Tandai selesai agar statistik home ikut rapi.</span></div>
     </div>
     <div class="stats-grid">
       <div class="stat-card purple"><div class="stat-icon">&#128176;</div><div class="stat-label">Total Pendapatan</div><div class="stat-value" id="stat-revenue">Rp 0</div><div class="stat-sub" id="stat-rev-sub">0 transaksi sukses</div></div>

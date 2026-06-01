@@ -5,9 +5,7 @@
     { href: 'robux5hari.html', label: 'Robux 5 Hari' },
     { href: 'robuxvilog.html', label: 'VILOG' },
     { href: 'robuxusername.html', label: 'Username' },
-    { href: 'giftgp.html', label: 'Gift GP' },
-    { href: 'akunroblox.html', label: 'Akun Roblox' },
-    { href: 'transaksi-buyer.html', label: 'Transaksi' }
+    { href: 'giftgp.html', label: 'Gift GP' }
   ];
 
   function currentFile() {

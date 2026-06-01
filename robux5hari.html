@@ -215,6 +215,8 @@
   .btn-wa:hover { background: #1db857; transform: translateY(-1px); }
   .btn-view-orders { width: 100%; background: rgba(124,92,252,.14); border: 1px solid rgba(124,92,252,.36); border-radius: 8px; padding: 11px; color: var(--text); font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 800; cursor: pointer; margin-bottom: 8px; transition: all .2s; }
   .btn-view-orders:hover { background: rgba(124,92,252,.22); transform: translateY(-1px); }
+  .btn-room { width: 100%; background: linear-gradient(135deg, var(--accent), var(--accent2)); border: 0; border-radius: 8px; padding: 12px; color: #fff; font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 900; cursor: pointer; margin-bottom: 8px; transition: all .2s; }
+  .btn-room:hover { opacity: .92; transform: translateY(-1px); }
   .btn-close { width: 100%; background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 10px; color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: all 0.2s; }
   .btn-close:hover { border-color: var(--border2); color: var(--text); }
   .pay-action-box { background: var(--s2); border: 1px solid var(--border2); border-radius: 9px; padding: 12px; margin-bottom: 12px; text-align: center; }
@@ -942,7 +944,7 @@
     <h2>Order Diterima!</h2>
     <div class="status-chip"><div class="live-dot"></div>PENDING — Diproses</div>
     <div class="modal-progress"><div class="modal-progress-fill"></div></div>
-    <p class="modal-desc">Pesanan kamu sedang <strong>diverifikasi</strong>. Setelah bayar, upload bukti di bawah supaya admin bisa cepat membeli gamepass kamu.</p>
+    <p class="modal-desc">Pesanan kamu sedang <strong>diverifikasi</strong>. Setelah bayar, buka kotak pesan transaksi untuk upload bukti dan chat admin dari satu tempat.</p>
     <div class="order-box">
       <div class="order-box-label">Nomor Order</div>
       <div class="order-id-val" id="modal-oid">RBX-000000</div>
@@ -963,12 +965,13 @@
       <div class="meta-box"><div class="ml">Pembayaran</div><div class="mv" id="modal-pay">—</div></div>
     </div>
     <div id="pay-action-area"></div>
+    <button class="btn-room" onclick="openTransactionRoom()">Buka Kotak Pesan Transaksi</button>
     <div class="modal-proof-cta">
       <div class="modal-proof-title">Sudah bayar?</div>
-      <div class="modal-proof-text">Upload bukti pembayaran langsung dari sini supaya admin cepat verifikasi.</div>
+      <div class="modal-proof-text">Kalau ingin tetap di halaman ini, bukti juga bisa dikirim dari sini.</div>
       <button class="btn-submit-bukti" onclick="openBuktiFromOrderModal(event)">📤 Kirim Bukti Pembayaran</button>
     </div>
-    <button class="btn-view-orders" onclick="scrollToMyOrders()">📦 Cek Pesanan / Batalkan</button>
+    <button class="btn-view-orders" onclick="scrollToMyOrders()">Riwayat Lokal / Batalkan</button>
     <button class="btn-close" onclick="closeModal()">Tutup</button>
 
   </div>
@@ -1518,6 +1521,30 @@
   }
 
   let _currentOrder = {};
+
+  function transactionRoomUrl(oid) {
+    const orderId = String(oid || '').trim();
+    const username = (document.getElementById('username')?.value || document.getElementById('modal-user')?.textContent || '').trim();
+    const params = new URLSearchParams({
+      order: orderId,
+      token: 'buyer-' + orderId,
+      product: 'Robux 5 Hari',
+      category: 'robux',
+      price: String(_price || 0),
+      priceText: _price ? 'Rp ' + _price.toLocaleString('id-ID') : 'Menunggu admin',
+      image: 'assets/logo-robux-5day.png',
+      username: username,
+      buyer: username || 'Buyer KokoRBX',
+      detail: 'Order Robux 5 Hari ' + (_rbx ? _rbx.toLocaleString('id-ID') + ' Robux' : '')
+    });
+    return 'transaksi-buyer.html?' + params.toString();
+  }
+
+  function openTransactionRoom(oid) {
+    const orderId = String(oid || document.getElementById('modal-oid')?.textContent || '').trim();
+    if (!orderId) return;
+    window.location.href = transactionRoomUrl(orderId);
+  }
 
   async function kirimTelegram(oid, user, gpId, payMethod) {
     const now = new Date().toLocaleString('id-ID', { timeZone:'Asia/Jakarta', day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' }) + ' WIB';
@@ -2489,6 +2516,7 @@
     </div>
   </footer>
 
+<script src="assets/product-status-client.js?v=flow-cleanup-20260601"></script>
 <script src="assets/cart-client.js?v=icon-cart-mobile-20260531"></script>
 </body>
 </html>

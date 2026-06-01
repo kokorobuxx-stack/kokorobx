@@ -512,6 +512,7 @@
     .recent-name {
       color: #334567;
       font-weight: 800;
+      min-width: 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -527,10 +528,12 @@
       color: #9aa8bd;
       font-size: 11px;
       margin-top: 1px;
+      min-width: 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .recent-row > span:nth-child(2) { min-width: 0; }
     .home-panel-link {
       height: 28px;
       display: inline-flex;
@@ -1098,8 +1101,21 @@
       .promo-card { min-height: 190px; }
       .promo-title { font-size: 24px; }
       .home-hero-wrap { padding: 8px 10px 12px; }
-      .home-hero { width: 100%; min-height: auto; }
-      .home-hero::after { display: none; }
+      .home-hero {
+        width: 100%;
+        min-height: auto;
+        background:
+          linear-gradient(90deg, rgba(250,253,255,.98) 0%, rgba(248,252,255,.9) 58%, rgba(226,239,255,.46) 100%),
+          #f6fbff;
+      }
+      .home-hero::after {
+        display: block;
+        width: 82%;
+        background:
+          linear-gradient(90deg, rgba(247,252,255,.84), rgba(247,252,255,.24) 34%, rgba(247,252,255,.04)),
+          url("assets/marketplace/kokorbx-home-visual.jpeg") right bottom / auto 100% no-repeat;
+        opacity: .72;
+      }
       .home-hero-content { width: 100%; max-width: 100%; min-height: auto; padding: 14px 12px; gap: 10px; }
       .home-title-row { gap: 9px; }
       .home-title { font-size: 32px; }
@@ -1117,9 +1133,10 @@
       }
       .home-panels::-webkit-scrollbar { display: none; }
       .home-panel {
-        flex: 0 0 min(72vw, 280px);
-        min-height: 150px;
+        flex: 0 0 min(76vw, 304px);
+        min-height: 168px;
         padding: 10px;
+        overflow: hidden;
         scroll-snap-align: start;
       }
       .home-panel-title { font-size: 13px; gap: 7px; }
@@ -1127,12 +1144,14 @@
       .home-mini-icon { width: 23px; height: 23px; }
       .leader-row,
       .recent-row { min-height: 24px; gap: 7px; font-size: 11px; }
-      .leader-row { grid-template-columns: 20px 24px minmax(0, 1fr) auto; }
+      .leader-row {
+        grid-template-columns: 20px 24px minmax(0, 1fr) 58px;
+      }
       .leader-rank { width: 19px; height: 19px; font-size: 10px; }
       .home-avatar { width: 24px; height: 24px; font-size: 10px; }
-      .leader-value { font-size: 10px; }
-      .recent-row { grid-template-columns: 24px minmax(0, 1fr) auto; column-gap: 7px; }
-      .recent-time { font-size: 10px; max-width: 54px; overflow: hidden; text-overflow: ellipsis; }
+      .leader-value { min-width: 0; font-size: 10px; text-align: right; overflow: hidden; text-overflow: ellipsis; }
+      .recent-row { grid-template-columns: 24px minmax(0, 1fr) 54px; column-gap: 7px; }
+      .recent-time { min-width: 0; font-size: 10px; max-width: 54px; overflow: hidden; text-overflow: ellipsis; text-align: right; }
       .recent-meta { font-size: 9px; }
       #home-recent-list .recent-row:nth-child(n+4) { display: none; }
       .home-panel-link { height: 22px; margin-top: 5px; font-size: 10px; }
@@ -1174,6 +1193,16 @@
       .footer-inner { flex-direction: column; align-items: flex-start; }
       .wa-footer { width: 100%; }
     }
+    @media (max-width: 430px) {
+      .header-nav { gap: 12px; }
+      .header-nav a { font-size: 11px; }
+      .product-grid { gap: 7px; }
+      .product-card { min-height: 164px; }
+      .product-media { height: 66px; }
+      .product-media img { max-height: 46px; }
+      .product-body { padding: 7px; }
+      .order-btn { min-width: 42px; }
+    }
   </style>
 <script src="assets/kokorbx-theme-toggle.js?v=dark-toggle-20260601"></script>
 <link rel="stylesheet" href="assets/kokorbx-theme.css?v=contrast-theme-20260601">
@@ -1196,7 +1225,7 @@
       <div class="search-wrap">
         <label class="search-box">
           <span aria-hidden="true">Search</span>
-          <input id="product-search" type="search" placeholder="Cari Robux, akun, item, jasa Roblox..." autocomplete="off">
+          <input id="product-search" type="search" placeholder="Cari Robux, Gift GP, atau cek order..." autocomplete="off">
           <span class="search-key">ENTER</span>
         </label>
       </div>
@@ -1205,9 +1234,8 @@
         <a href="robux5hari.html">Robux 5 Hari</a>
         <a href="robuxvilog.html">VILOG</a>
         <a href="robuxusername.html">Username</a>
-        <a href="giftgp.html">Gift Card</a>
-        <a href="akunroblox.html">Akun Roblox</a>
-        <a href="transaksi-buyer.html">Transaksi</a>
+        <a href="giftgp.html">Gift GP</a>
+        <a href="#status">Cek Order</a>
       </nav>
 
       <div class="header-actions">
@@ -1230,9 +1258,8 @@
     <div class="nav-inner">
       <a href="robux5hari.html">Robux 5 Hari</a>
       <a href="robuxvilog.html">Robux Via Login</a>
+      <a href="robuxusername.html">Username</a>
       <a href="giftgp.html">Gift GP</a>
-      <a href="akunroblox.html">Akun Roblox</a>
-      <a href="#produk">Item Game</a>
       <a href="#status">Cek Order</a>
     </div>
   </nav>
@@ -1334,7 +1361,7 @@
       <div class="section-head">
         <div>
           <div class="section-title">Top Up Roblox</div>
-          <div class="section-sub">Produk utama yang sudah punya halaman order otomatis.</div>
+          <div class="section-sub">4 produk utama dengan alur order resmi KokoRBX.</div>
         </div>
         <a class="see-all" href="#produk">Lihat Semua</a>
       </div>
@@ -1410,12 +1437,12 @@
       </div>
       <div class="panel">
         <h3>Kenapa KokoRBX?</h3>
-        <p>Satu tempat untuk kebutuhan Roblox, dari top up otomatis sampai produk manual lewat admin.</p>
+        <p>Satu alur order dari produk, pembayaran, sampai kotak pesan transaksi.</p>
         <div class="info-list">
-          <div class="info-item"><span class="info-dot"></span><span><b>Order jelas</b>Status bisa dicek pakai ID order.</span></div>
-          <div class="info-item"><span class="info-dot blue"></span><span><b>Rate fleksibel</b>Harga bisa diatur dari admin panel.</span></div>
-          <div class="info-item"><span class="info-dot orange"></span><span><b>Produk manual</b>Akun, item, dan jasa lewat admin.</span></div>
-          <div class="info-item"><span class="info-dot purple"></span><span><b>Katalog Roblox</b>Fokus hanya kebutuhan Roblox.</span></div>
+          <div class="info-item"><span class="info-dot"></span><span><b>Alur jelas</b>Pilih produk, isi form, bayar, lalu pantau status.</span></div>
+          <div class="info-item"><span class="info-dot blue"></span><span><b>Kotak pesan</b>Bukti bayar dan chat admin tetap di website.</span></div>
+          <div class="info-item"><span class="info-dot orange"></span><span><b>Rate fleksibel</b>Harga bisa diatur dari admin panel.</span></div>
+          <div class="info-item"><span class="info-dot purple"></span><span><b>Public rapi</b>Produk manual diparkir sampai benar-benar siap.</span></div>
         </div>
       </div>
     </section>
@@ -1424,8 +1451,8 @@
   <footer class="footer">
     <div class="footer-inner">
       <div>
-        <div class="footer-brand">KokoRBX Marketplace</div>
-        <p>Robux, gamepass, item game, jasa, akun Roblox, dan custom request.</p>
+        <div class="footer-brand">KokoRBX Top Up Roblox</div>
+        <p>Robux 5 Hari, VILOG, Username, Gift GP, dan cek status order.</p>
       </div>
       <a class="wa-footer" href="https://wa.me/6281996112019?text=Halo%20KokoRBX%2C%20aku%20mau%20tanya%20produk%20Roblox." target="_blank" rel="noopener">Chat WhatsApp</a>
     </div>

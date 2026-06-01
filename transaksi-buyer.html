@@ -477,7 +477,10 @@
     .top-title span { font-size: 11px; }
     .status-pill { display: none; }
     .chat-log { padding: 12px 10px; }
-    .bubble-row { max-width: 92%; }
+    .bubble-row { width: 100%; max-width: 100%; grid-template-columns: 30px minmax(0, 1fr); }
+    .bubble-row.me { grid-template-columns: minmax(0, 1fr) 30px; }
+    .bubble { min-width: 0; }
+    .avatar { width: 30px; height: 30px; font-size: 11px; }
     .bubble.system { width: 100%; }
     .quick-actions { padding: 9px 10px; }
     .compose { padding: 10px; }
