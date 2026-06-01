@@ -58,7 +58,8 @@ header,
 .main-header,
 .nav-bar,
 .top-strip,
-.site-footer {
+.site-footer,
+.footer {
   background: rgba(248, 250, 255, .9) !important;
   border-color: var(--border) !important;
   box-shadow: 0 10px 32px rgba(111, 141, 255, .1) !important;
@@ -184,6 +185,9 @@ p,
 .gp-input-box,
 .modal-gp-box,
 .side-card,
+.maintenance-panel,
+.status-result,
+.info-item,
 .koko-cart-drawer,
 .koko-cart-item,
 .koko-cart-empty {
@@ -699,7 +703,8 @@ html[data-koko-theme="dark"] header,
 html[data-koko-theme="dark"] .main-header,
 html[data-koko-theme="dark"] .nav-bar,
 html[data-koko-theme="dark"] .top-strip,
-html[data-koko-theme="dark"] .site-footer {
+html[data-koko-theme="dark"] .site-footer,
+html[data-koko-theme="dark"] .footer {
   background: rgba(13, 18, 36, .88) !important;
   border-color: var(--border) !important;
   box-shadow: 0 14px 40px rgba(0, 0, 0, .28) !important;
@@ -725,6 +730,8 @@ html[data-koko-theme="dark"] .summary,
 html[data-koko-theme="dark"] .form-card,
 html[data-koko-theme="dark"] .preview-panel,
 html[data-koko-theme="dark"] .how-step,
+html[data-koko-theme="dark"] .pkg,
+html[data-koko-theme="dark"] .pay-btn,
 html[data-koko-theme="dark"] .modal,
 html[data-koko-theme="dark"] .auth-card,
 html[data-koko-theme="dark"] .panel,
@@ -747,6 +754,13 @@ html[data-koko-theme="dark"] .custom-rbx-preview,
 html[data-koko-theme="dark"] .gamepass-guide,
 html[data-koko-theme="dark"] .gp-input-box,
 html[data-koko-theme="dark"] .modal-gp-box,
+html[data-koko-theme="dark"] .order-card,
+html[data-koko-theme="dark"] .order-detail,
+html[data-koko-theme="dark"] .od-box,
+html[data-koko-theme="dark"] .my-orders-empty,
+html[data-koko-theme="dark"] .maintenance-panel,
+html[data-koko-theme="dark"] .status-result,
+html[data-koko-theme="dark"] .info-item,
 html[data-koko-theme="dark"] .side-card,
 html[data-koko-theme="dark"] .koko-cart-drawer,
 html[data-koko-theme="dark"] .koko-cart-item,
@@ -824,4 +838,219 @@ html[data-koko-theme="dark"] .mobile-order-bar {
   background: rgba(13, 18, 36, .92) !important;
   border-color: var(--border) !important;
   box-shadow: 0 -16px 32px rgba(0, 0, 0, .3) !important;
+}
+
+/* Theme contrast guard: light mode prioritizes dark readable text, dark mode prioritizes white readable text. */
+html[data-koko-theme="light"] .footer,
+html[data-koko-theme="light"] .site-footer {
+  background: rgba(255, 255, 255, .94) !important;
+  color: #40527F !important;
+}
+
+html[data-koko-theme="light"] :where(
+  .card,
+  .summary,
+  .form-card,
+  .preview-panel,
+  .how-step,
+  .pkg,
+  .pay-btn,
+  .panel,
+  .product-card,
+  .section,
+  .quick-panel,
+  .category-panel,
+  .status-panel,
+  .flow-panel,
+  .home-panel,
+  .home-stat,
+  .sum-item,
+  .rbx-display,
+  .gp-sum-box,
+  .tax-result-box,
+  .tutorial-box,
+  .format-preview,
+  .custom-rbx-box,
+  .custom-rbx-preview,
+  .gamepass-guide,
+  .gp-input-box,
+  .modal-gp-box,
+  .order-card,
+  .order-detail,
+  .od-box,
+  .my-orders-empty,
+  .maintenance-panel,
+  .status-result,
+  .info-item,
+  .side-card,
+  .footer,
+  .site-footer
+) {
+  color: #1E2A55 !important;
+}
+
+html[data-koko-theme="light"] :where(
+  .pkg-amount,
+  .pkg-emoji,
+  .pay-name,
+  .card-head-title,
+  .sum-head,
+  .sum-row .v,
+  .sum-total .k,
+  .order-card-main,
+  .order-card-price,
+  .od-val,
+  .field strong,
+  .product-title,
+  .home-panel-title,
+  .home-stat-value,
+  .section-title,
+  .my-orders-title,
+  .quick-title,
+  .side-card strong,
+  .maintenance-panel h3,
+  .info-item b,
+  .footer-brand,
+  .logo-text,
+  .brand > span
+) {
+  color: #1E2A55 !important;
+  -webkit-text-fill-color: #1E2A55 !important;
+}
+
+html[data-koko-theme="light"] :where(
+  p,
+  .muted,
+  .card-head-sub,
+  .field label,
+  .sum-row .k,
+  .product-desc,
+  .footer-tagline,
+  .home-copy,
+  .home-panel-sub,
+  .home-stat-label,
+  .home-stat-note,
+  .recent-meta,
+  .input-hint,
+  .pay-name,
+  .side-card,
+  .section-sub,
+  .quick-sub,
+  .maintenance-panel p,
+  .info-item,
+  .footer p
+) {
+  color: #60709A !important;
+}
+
+html[data-koko-theme="dark"] :where(
+  .card,
+  .summary,
+  .form-card,
+  .preview-panel,
+  .how-step,
+  .pkg,
+  .pay-btn,
+  .panel,
+  .product-card,
+  .section,
+  .quick-panel,
+  .category-panel,
+  .status-panel,
+  .flow-panel,
+  .home-panel,
+  .home-stat,
+  .sum-item,
+  .rbx-display,
+  .gp-sum-box,
+  .tax-result-box,
+  .tutorial-box,
+  .format-preview,
+  .custom-rbx-box,
+  .custom-rbx-preview,
+  .gamepass-guide,
+  .gp-input-box,
+  .modal-gp-box,
+  .order-card,
+  .order-detail,
+  .od-box,
+  .my-orders-empty,
+  .maintenance-panel,
+  .status-result,
+  .info-item,
+  .side-card,
+  .footer,
+  .site-footer
+) {
+  color: #F5F7FF !important;
+}
+
+html[data-koko-theme="dark"] :where(
+  .pkg-amount,
+  .pkg-emoji,
+  .pay-name,
+  .card-head-title,
+  .sum-head,
+  .sum-row .v,
+  .sum-total .k,
+  .order-card-main,
+  .order-card-price,
+  .od-val,
+  .field strong,
+  .product-title,
+  .home-panel-title,
+  .home-stat-value,
+  .section-title,
+  .my-orders-title,
+  .quick-title,
+  .side-card strong,
+  .maintenance-panel h3,
+  .info-item b,
+  .footer-brand,
+  .logo-text,
+  .brand > span
+) {
+  color: #F5F7FF !important;
+  -webkit-text-fill-color: #F5F7FF !important;
+}
+
+html[data-koko-theme="dark"] :where(
+  p,
+  .muted,
+  .card-head-sub,
+  .field label,
+  .sum-row .k,
+  .product-desc,
+  .footer-tagline,
+  .home-copy,
+  .home-panel-sub,
+  .home-stat-label,
+  .home-stat-note,
+  .recent-meta,
+  .input-hint,
+  .side-card,
+  .section-sub,
+  .quick-sub,
+  .maintenance-panel p,
+  .info-item,
+  .footer p
+) {
+  color: #B8C4EA !important;
+}
+
+html[data-koko-theme="dark"] .pkg-price,
+html[data-koko-theme="dark"] .pkg-bonus,
+html[data-koko-theme="dark"] .price,
+html[data-koko-theme="dark"] .sum-total .v,
+html[data-koko-theme="dark"] .order-id-val,
+html[data-koko-theme="dark"] .my-orders-count {
+  color: #AFA6FF !important;
+  -webkit-text-fill-color: #AFA6FF !important;
+}
+
+html[data-koko-theme="dark"] .pay-btn.selected,
+html[data-koko-theme="dark"] .pkg.selected,
+html[data-koko-theme="dark"] .category-item.active {
+  background: linear-gradient(135deg, rgba(155, 141, 255, .26), rgba(98, 216, 212, .12)) !important;
+  border-color: rgba(175, 166, 255, .62) !important;
 }
