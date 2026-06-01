@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KokoRBX - Gift GP Ingame</title>
-<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/cart-client.css?v=icon-cart-mobile-20260531">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZyIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNhODU1ZjciLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjM2NmYxIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSI4IiB5PSI4IiB3aWR0aD0iODQiIGhlaWdodD0iODQiIHJ4PSIxNCIgcnk9IjE0IiBmaWxsPSJ1cmwoI2cpIiB0cmFuc2Zvcm09InJvdGF0ZSgxMCA1MCA1MCkiLz4KICA8dGV4dCB4PSI1MCIgeT0iNzIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayxzYW5zLXNlcmlmIiBmb250LXNpemU9IjY0IiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+SzwvdGV4dD4KPC9zdmc+">
 <style>
@@ -16,11 +16,13 @@
     --border: #252535;
     --border2: #2e2e45;
     --accent: #7c5cfc;
-    --accent2: #fc5c7d;
+    --accent2: #6F8DFF;
     --green: #39d98a;
     --gold: #ffc857;
     --text: #eeeef5;
-    --muted: #636380;
+    --muted: #8b95bc;
+    --sans: "Outfit", sans-serif;
+    --mono: "JetBrains Mono", monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -28,24 +30,27 @@
     overflow-x: hidden;
     background: var(--bg);
     color: var(--text);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--sans);
   }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; }
   .bg-fx { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
   .bg-fx::before {
-    content: ''; position: absolute; top: -30%; left: -20%; width: 70%; height: 70%;
-    background: radial-gradient(ellipse, rgba(124,92,252,.08) 0%, transparent 65%);
+    content: ""; position: absolute; top: -24%; left: -20%; width: 70%; height: 70%;
+    background: radial-gradient(ellipse, rgba(124,92,252,.1) 0%, transparent 65%);
     animation: bgFloat 8s ease-in-out infinite alternate;
   }
   .bg-fx::after {
-    content: ''; position: absolute; bottom: -20%; right: -10%; width: 60%; height: 60%;
-    background: radial-gradient(ellipse, rgba(252,92,125,.06) 0%, transparent 65%);
+    content: ""; position: absolute; bottom: -18%; right: -10%; width: 62%; height: 62%;
+    background: radial-gradient(ellipse, rgba(98,216,212,.08) 0%, transparent 65%);
     animation: bgFloat 10s ease-in-out infinite alternate-reverse;
   }
   @keyframes bgFloat { from { transform: translate(0,0); } to { transform: translate(3%,4%); } }
   .grid-fx {
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    background-image: linear-gradient(rgba(124,92,252,.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124,92,252,.04) 1px, transparent 1px);
+    background-image:
+      linear-gradient(rgba(124,92,252,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124,92,252,.045) 1px, transparent 1px);
     background-size: 50px 50px;
   }
   .wrapper { position: relative; z-index: 1; }
@@ -55,7 +60,7 @@
     background: rgba(6,6,8,.9); backdrop-filter: blur(20px);
     position: sticky; top: 0; z-index: 100; gap: 8px;
   }
-  .logo { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .logo { font-weight: 900; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   .logo-svg-box {
     background: #1a1a2a; border-radius: 9px; width: 30px; height: 30px;
     box-shadow: 0 2px 8px rgba(0,0,0,.6); flex-shrink: 0;
@@ -67,7 +72,7 @@
   .header-right a {
     background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
     border-radius: 7px; padding: 5px 10px; color: #aaa; font-size: 11px;
-    font-weight: 600; text-decoration: none; white-space: nowrap;
+    font-weight: 800; white-space: nowrap;
   }
   .header-right a.primary {
     background: rgba(124,92,252,.15); border-color: rgba(124,92,252,.4); color: var(--accent);
@@ -76,94 +81,181 @@
     display: flex; align-items: center; gap: 6px;
     background: rgba(57,217,138,.08); border: 1px solid rgba(57,217,138,.2);
     border-radius: 20px; padding: 5px 10px; font-size: .65rem; color: var(--green); white-space: nowrap;
+    font-weight: 800;
   }
   .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
   @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.4; transform:scale(.8); } }
-  main { width: min(1080px, 100%); margin: 0 auto; padding: 34px 16px 40px; }
+  main { width: min(1180px, 100%); margin: 0 auto; padding: 30px 16px 42px; }
   .hero {
-    display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 20px; align-items: center;
-    margin-bottom: 22px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 20px; align-items: center;
+    margin-bottom: 18px;
   }
-  .hero-copy { text-align: left; }
-  .eyebrow {
-    display: inline-flex; align-items: center; gap: 7px; color: var(--accent);
-    font-size: .65rem; letter-spacing: 2px; text-transform: uppercase;
-    border: 1px solid rgba(124,92,252,.3); background: rgba(124,92,252,.06);
-    padding: 6px 13px; border-radius: 20px; margin-bottom: 12px;
+  .eyebrow.logo-eyebrow {
+    display: inline-flex; align-items: center; margin-bottom: 12px;
+    filter: drop-shadow(0 8px 18px rgba(124,92,252,.32));
   }
-  .eyebrow.logo-eyebrow { border: 0; background: transparent; padding: 0; border-radius: 0; filter: drop-shadow(0 8px 18px rgba(124,92,252,0.32)); }
-  .eyebrow.logo-eyebrow img { width: auto; height: 32px; max-width: min(210px, 70vw); object-fit: contain; display: block; }
+  .eyebrow.logo-eyebrow img { width: auto; height: 32px; max-width: min(220px, 70vw); object-fit: contain; display: block; }
   h1 {
-    font-family: 'Outfit', sans-serif; font-weight: 900;
-    font-size: clamp(2rem, 6vw, 3.8rem); line-height: 1.05; margin-bottom: 10px;
+    font-weight: 900; font-size: clamp(2.2rem, 6vw, 4.2rem);
+    line-height: 1.02; margin-bottom: 10px; letter-spacing: 0;
   }
   h1 span {
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    background: linear-gradient(90deg, var(--accent), #6F8DFF, #62D8D4);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
-  .hero-copy p { color: var(--muted); line-height: 1.7; max-width: 580px; font-size: .82rem; }
+  .hero-copy p { color: var(--muted); line-height: 1.7; max-width: 660px; font-size: .92rem; }
   .hero-logo {
-    min-height: 160px; display: flex; align-items: center; justify-content: center;
+    min-height: 170px; display: flex; align-items: center; justify-content: center;
     border: 1px solid rgba(124,92,252,.16); border-radius: 16px;
     background: rgba(15,15,30,.78); box-shadow: 0 0 34px rgba(124,92,252,.1);
   }
-  .hero-logo img { width: 92%; max-height: 130px; object-fit: contain; filter: drop-shadow(0 10px 22px rgba(124,92,252,.32)); }
-  .order-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
+  .hero-logo img { width: 92%; max-height: 138px; object-fit: contain; filter: drop-shadow(0 10px 22px rgba(124,92,252,.32)); }
+  .catalog-panel,
   .form-card,
   .preview-panel {
     border: 1px solid var(--border);
     background: rgba(14,14,20,.92);
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 18px;
   }
+  .catalog-panel { margin-bottom: 16px; }
+  .panel-head {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 14px;
+    margin-bottom: 14px;
+  }
+  .panel-title {
+    font-size: 1.25rem; font-weight: 900; color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .panel-title::before {
+    content: ""; width: 8px; height: 28px; border-radius: 999px;
+    background: linear-gradient(180deg, var(--accent), #62D8D4);
+  }
+  .panel-head p { color: var(--muted); font-size: .78rem; margin-top: 3px; line-height: 1.5; }
+  .catalog-tools { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; margin-bottom: 13px; }
+  .search-input {
+    width: 100%; height: 44px; border-radius: 10px; border: 1px solid var(--border2);
+    background: var(--s2); color: var(--text); padding: 0 13px; outline: none;
+  }
+  .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,.12); }
+  .game-tabs,
+  .category-tabs { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+  .game-tabs::-webkit-scrollbar,
+  .category-tabs::-webkit-scrollbar { display: none; }
+  .game-tabs { margin-bottom: 12px; }
+  .category-tabs { justify-content: flex-end; }
+  .tab-btn {
+    min-height: 38px; border: 1px solid var(--border2); border-radius: 10px;
+    background: var(--s2); color: var(--muted); padding: 0 13px;
+    font-weight: 900; white-space: nowrap; cursor: pointer;
+  }
+  .tab-btn.active {
+    color: #fff; border-color: rgba(124,92,252,.65);
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 12px 26px rgba(124,92,252,.22);
+  }
+  .catalog-grid {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
+  }
+  .gift-card {
+    border: 1px solid var(--border2); border-radius: 12px; overflow: hidden;
+    background: rgba(20,20,30,.92); min-height: 256px;
+    display: flex; flex-direction: column; box-shadow: 0 16px 30px rgba(0,0,0,.18);
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+  }
+  .gift-card:hover { transform: translateY(-2px); border-color: rgba(124,92,252,.56); }
+  .gift-card.selected { border-color: rgba(57,217,138,.72); box-shadow: 0 0 0 3px rgba(57,217,138,.12), 0 18px 34px rgba(0,0,0,.22); }
+  .gift-cover {
+    height: 116px; padding: 14px; display: flex; align-items: flex-end;
+    background:
+      radial-gradient(circle at 78% 18%, rgba(98,216,212,.34), transparent 30%),
+      radial-gradient(circle at 18% 16%, rgba(139,124,255,.38), transparent 30%),
+      linear-gradient(135deg, #1d3769, #27306f 54%, #11162d);
+  }
+  .cover-label {
+    width: 100%; min-height: 74px; border-radius: 10px; display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 10px; color: #fff; background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(0,0,0,.22));
+    border: 1px solid rgba(255,255,255,.18);
+  }
+  .cover-kicker { font-family: var(--mono); font-size: .62rem; color: rgba(255,255,255,.74); text-transform: uppercase; letter-spacing: .9px; }
+  .cover-main { font-size: 1.05rem; line-height: 1.05; font-weight: 900; text-shadow: 0 3px 12px rgba(0,0,0,.35); }
+  .gift-body { padding: 13px; display: grid; gap: 8px; flex: 1; }
+  .gift-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .gift-tag {
+    min-height: 18px; display: inline-flex; align-items: center; border: 1px solid rgba(124,92,252,.36);
+    border-radius: 999px; padding: 0 7px; color: var(--accent); font-size: .58rem; font-weight: 900;
+    background: rgba(124,92,252,.08);
+  }
+  .gift-name { font-weight: 900; font-size: 1rem; line-height: 1.2; color: var(--text); }
+  .gift-desc { color: var(--muted); font-size: .72rem; line-height: 1.45; min-height: 32px; }
+  .gift-foot { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-top: auto; }
+  .gift-price { color: var(--gold); font-weight: 900; font-size: .9rem; }
+  .select-btn {
+    height: 34px; border: 0; border-radius: 8px; padding: 0 12px;
+    color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent2));
+    font-weight: 900; cursor: pointer;
+  }
+  .empty-state {
+    grid-column: 1 / -1; min-height: 130px; display: grid; place-items: center;
+    color: var(--muted); border: 1px dashed var(--border2); border-radius: 12px;
+  }
+  .order-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 16px; align-items: start; }
   .form-head { margin-bottom: 16px; }
   .form-head h2,
-  .preview-title {
-    font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.15rem; margin-bottom: 5px;
-  }
+  .preview-title { font-weight: 900; font-size: 1.15rem; margin-bottom: 5px; }
   .form-head p,
   .preview-panel p { color: var(--muted); font-size: .72rem; line-height: 1.6; }
+  .selected-box {
+    border: 1px solid var(--border2); border-radius: 12px; padding: 12px; margin-bottom: 14px;
+    background: linear-gradient(135deg, rgba(124,92,252,.12), rgba(98,216,212,.05));
+    display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 12px; align-items: center;
+  }
+  .selected-icon {
+    width: 58px; height: 58px; border-radius: 14px; display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff;
+    font-weight: 900; font-family: var(--mono);
+  }
+  .selected-box span { display: block; color: var(--muted); font-size: .65rem; margin-bottom: 3px; }
+  .selected-box strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .field { display: grid; gap: 7px; }
   .field.full { grid-column: 1 / -1; }
   .field label {
     display: flex; align-items: center; gap: 5px; font-size: .64rem; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 1.2px;
+    text-transform: uppercase; letter-spacing: 1.2px; font-weight: 800;
   }
-  .req { color: var(--accent2); }
-  .input-wrap { position: relative; width: 100%; }
+  .req { color: #ff6f91; }
   .input-wrap input {
     width: 100%; background: var(--s2); border: 1px solid var(--border); border-radius: 8px;
-    padding: 12px; color: var(--text); font-family: 'JetBrains Mono', monospace;
+    padding: 12px; color: var(--text); font-family: var(--mono);
     font-size: .82rem; outline: none; transition: border-color .2s, box-shadow .2s;
   }
   .input-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(124,92,252,.1); }
-  .input-wrap input::placeholder { color: rgba(100,100,128,.64); }
+  .input-wrap input::placeholder { color: rgba(120,130,166,.68); }
   .note-box {
     grid-column: 1 / -1; border: 1px dashed rgba(255,200,87,.34);
     background: rgba(255,200,87,.07); border-radius: 10px; padding: 12px;
     color: var(--gold); font-size: .72rem; line-height: 1.6;
   }
   .actions { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr auto; gap: 10px; margin-top: 4px; }
-  button,
+  .actions button,
   .wa-link {
     border: 0; border-radius: 9px; padding: 13px 16px;
-    font-family: 'Outfit', sans-serif; font-weight: 800; font-size: .86rem;
-    cursor: pointer; text-decoration: none; text-align: center; white-space: nowrap;
+    font-weight: 900; font-size: .86rem; cursor: pointer; text-align: center; white-space: nowrap;
   }
-  button { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
-  button:hover,
+  .actions button { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  .actions button:hover,
   .wa-link:hover { transform: translateY(-1px); }
   .wa-link { color: #07180e; background: var(--green); }
   .format-preview {
     margin-top: 14px; background: var(--s2); border: 1px solid var(--border2);
-    border-radius: 10px; padding: 14px; min-height: 172px; white-space: pre-wrap;
-    color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: .78rem; line-height: 1.7;
+    border-radius: 10px; padding: 14px; min-height: 210px; white-space: pre-wrap;
+    color: var(--text); font-family: var(--mono); font-size: .78rem; line-height: 1.7;
   }
   .summary-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
   .sum-item { background: var(--s3); border: 1px solid var(--border); border-radius: 9px; padding: 10px; min-width: 0; }
   .sum-item span { display: block; color: var(--muted); font-size: .58rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .sum-item strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: 'Outfit', sans-serif; font-size: .9rem; }
+  .sum-item strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .9rem; }
   .sum-item .gold { color: var(--gold); }
   .notice {
     display: none; margin-top: 12px; border: 1px solid rgba(57,217,138,.25);
@@ -175,35 +267,88 @@
   .trust-track { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
   .trust-item {
     flex: 0 0 auto; background: rgba(255,255,255,.04); border: 1px solid var(--border);
-    border-radius: 20px; padding: 8px 14px; font-size: .68rem; color: var(--muted); font-weight: 700;
+    border-radius: 20px; padding: 8px 14px; font-size: .68rem; color: var(--muted); font-weight: 800;
   }
   .site-footer { border-top: 1px solid var(--border); background: rgba(6,6,8,.95); padding: 24px 20px 28px; text-align: center; position: relative; z-index: 1; }
-  .footer-brand { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1rem; color: var(--accent); }
+  .footer-brand { font-weight: 900; font-size: 1rem; color: var(--accent); }
   .footer-tagline { font-size: .65rem; color: var(--muted); margin-top: 3px; }
-  @media (max-width: 820px) {
+  @media (max-width: 980px) {
+    .catalog-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .order-layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
     header { padding: 12px 14px; }
     .live-badge { display: none; }
-    .hero,
-    .order-layout,
+    main { padding: 22px 12px 34px; }
+    .hero { grid-template-columns: 1fr; gap: 12px; text-align: center; }
+    .hero-copy p { margin: 0 auto; }
+    .hero-logo { min-height: 128px; }
+    .hero-logo img { max-height: 104px; }
+    .panel-head { align-items: flex-start; flex-direction: column; }
+    .catalog-tools { grid-template-columns: 1fr; }
+    .category-tabs { justify-content: flex-start; }
+    .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .catalog-panel,
+    .form-card,
+    .preview-panel { padding: 12px; border-radius: 12px; }
+    .gift-card { min-height: 224px; border-radius: 10px; }
+    .gift-cover { height: 92px; padding: 9px; }
+    .cover-main { font-size: .88rem; }
+    .cover-kicker { font-size: .54rem; }
+    .gift-body { padding: 9px; gap: 6px; }
+    .gift-name { font-size: .86rem; }
+    .gift-desc { font-size: .64rem; min-height: 34px; }
+    .gift-foot { grid-template-columns: 1fr; }
+    .select-btn { width: 100%; }
     .form-grid,
     .actions { grid-template-columns: 1fr; }
-    .hero { text-align: center; gap: 14px; }
-    .hero-copy { text-align: center; }
-    .hero-copy p { margin: 0 auto; }
-    .hero-logo { min-height: 130px; }
-    .hero-logo img { max-height: 105px; }
-    main { padding-top: 24px; }
+    .selected-box { grid-template-columns: 48px minmax(0, 1fr); }
+    .selected-icon { width: 48px; height: 48px; }
   }
 </style>
 <script src="assets/kokorbx-theme-toggle.js?v=dark-toggle-20260601"></script>
 <link rel="stylesheet" href="assets/kokorbx-theme.css?v=contrast-theme-20260601">
+<style>
+  html[data-koko-theme] .catalog-panel,
+  html[data-koko-theme] .gift-card {
+    background: rgba(14, 14, 22, .94) !important;
+    color: #F5F7FF !important;
+  }
+  html[data-koko-theme] .panel-title,
+  html[data-koko-theme] .gift-name,
+  html[data-koko-theme] .cover-main {
+    color: #F5F7FF !important;
+    -webkit-text-fill-color: #F5F7FF !important;
+  }
+  html[data-koko-theme] .panel-head p,
+  html[data-koko-theme] .gift-desc {
+    color: #B8C4EA !important;
+  }
+  html[data-koko-theme] .gift-price {
+    color: #FFC857 !important;
+  }
+  @media (max-width: 720px) {
+    header { padding: 10px 10px; gap: 6px; }
+    .logo { font-size: 1rem; gap: 7px; }
+    .header-right { flex: 1; justify-content: flex-end; gap: 6px; min-width: 0; overflow: visible; }
+    .header-right::-webkit-scrollbar { display: none; }
+    .header-right a[href="admin.html"] { display: none !important; }
+    .header-right a.primary {
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+  }
+</style>
 </head>
 <body>
 <div class="bg-fx"></div>
 <div class="grid-fx"></div>
 <div class="wrapper">
   <header>
-    <a class="logo" href="index.html" style="text-decoration:none;">
+    <a class="logo" href="index.html">
       <div class="logo-svg-box">
         <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g transform="rotate(-12 10 10)">
@@ -215,8 +360,8 @@
       <div class="logo-text">Koko<em>RBX</em></div>
     </a>
     <div class="header-right">
-      <a class="primary" href="rbxstore_auth.html">🔑 Masuk</a>
-      <a href="admin.html">⚙ Admin</a>
+      <a class="primary" href="rbxstore_auth.html">Masuk</a>
+      <a href="admin.html">Admin</a>
       <div class="live-badge"><div class="live-dot"></div>Online 24/7</div>
     </div>
   </header>
@@ -225,52 +370,76 @@
     <section class="hero">
       <div class="hero-copy">
         <div class="eyebrow logo-eyebrow"><img src="assets/logo-service-giftgp.png" alt="Gift GP Ingame"></div>
-        <h1>Request <span>Gift Gamepass</span></h1>
-        <p>Isi format gifting sesuai data Roblox kamu, lalu transaksi dan chat lanjut di Panel Transaksi website.</p>
+        <h1>Gift GP <span>Ingame</span></h1>
+        <p>Pilih game, pilih gamepass atau permanent fruit, lalu isi username dan display name. Data ini dipakai admin untuk mencocokkan profil sebelum gift dikirim.</p>
       </div>
       <div class="hero-logo">
         <img src="assets/logo-gift-gp.png" alt="Gift GP Ingame">
       </div>
     </section>
 
+    <section class="catalog-panel" aria-label="Katalog Gift GP">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title">Pilih Game dan Item</div>
+          <p>Buyer cukup klik item. Nama game, item, dan total Robux otomatis masuk ke format order.</p>
+        </div>
+      </div>
+      <div class="game-tabs" id="game-tabs"></div>
+      <div class="catalog-tools">
+        <input class="search-input" id="catalog-search" type="search" placeholder="Cari item, gamepass, permanent fruit..." autocomplete="off">
+        <div class="category-tabs" id="category-tabs"></div>
+      </div>
+      <div class="catalog-grid" id="catalog-grid"></div>
+    </section>
+
     <section class="order-layout">
       <form class="form-card" id="gift-form">
         <div class="form-head">
-          <h2>Format Ingame Gifting</h2>
-          <p>Pastikan nama game dan nama gamepass ditulis persis seperti di Roblox.</p>
+          <h2>Data Penerima Gift</h2>
+          <p>Isi username dan display name supaya admin bisa cek apakah profilnya cocok.</p>
         </div>
+        <div class="selected-box">
+          <div class="selected-icon" id="selected-code">GP</div>
+          <div>
+            <span>Item dipilih</span>
+            <strong id="selected-title">Belum pilih item</strong>
+          </div>
+        </div>
+        <input type="hidden" id="game" name="game" required>
+        <input type="hidden" id="gamepass" name="gamepass" required>
+        <input type="hidden" id="totalRobux" name="totalRobux" required>
         <div class="form-grid">
           <div class="field">
-            <label for="username">Username <span class="req">*</span></label>
-            <div class="input-wrap"><input id="username" name="username" autocomplete="username" placeholder="Username Roblox" required></div>
+            <label for="username">Username Roblox <span class="req">*</span></label>
+            <div class="input-wrap"><input id="username" name="username" autocomplete="username" placeholder="Contoh: tama_6505" required></div>
           </div>
           <div class="field">
-            <label for="game">Nama Game <span class="req">*</span></label>
-            <div class="input-wrap"><input id="game" name="game" placeholder="Contoh: Blox Fruits" required></div>
+            <label for="displayName">Display Name <span class="req">*</span></label>
+            <div class="input-wrap"><input id="displayName" name="displayName" placeholder="Contoh: Tama" required></div>
           </div>
-          <div class="field">
-            <label for="gamepass">Nama Gamepass <span class="req">*</span></label>
-            <div class="input-wrap"><input id="gamepass" name="gamepass" placeholder="Contoh: 2x Money" required></div>
+          <div class="field full">
+            <label for="contact">Kontak opsional</label>
+            <div class="input-wrap"><input id="contact" name="contact" placeholder="Nomor WA atau catatan singkat kalau perlu"></div>
           </div>
-          <div class="field">
-            <label for="totalRobux">Total Robux <span class="req">*</span></label>
-            <div class="input-wrap"><input id="totalRobux" name="totalRobux" inputmode="numeric" placeholder="Contoh: 450" required></div>
-          </div>
-          <div class="note-box">Note: Pastikan format yang kamu isi sudah sesuai!</div>
+          <div class="note-box">Pastikan username bukan display name. Admin akan cocokkan username dan display name dulu sebelum proses gift.</div>
           <div class="actions">
             <button type="submit">Buat Transaksi Panel</button>
             <a class="wa-link" id="wa-link" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Bantuan Admin</a>
           </div>
         </div>
-        <div class="notice" id="notice">Format sudah dibuat. Kamu akan diarahkan ke Panel Transaksi.</div>
+        <div class="notice" id="notice">Order dibuat. Kamu akan diarahkan ke kotak pesan transaksi.</div>
       </form>
 
       <aside class="preview-panel">
-        <div class="preview-title">Preview Format</div>
-        <p>Ini yang akan masuk ke Panel Transaksi.</p>
+        <div class="preview-title">Ringkasan Order</div>
+        <p>Ini data yang akan masuk ke Panel Transaksi.</p>
         <pre class="format-preview" id="format-preview"></pre>
         <div class="summary-grid">
           <div class="sum-item"><span>User</span><strong id="sum-user">-</strong></div>
+          <div class="sum-item"><span>Display</span><strong id="sum-display">-</strong></div>
+          <div class="sum-item"><span>Game</span><strong id="sum-game">-</strong></div>
+          <div class="sum-item"><span>Item</span><strong id="sum-item">-</strong></div>
           <div class="sum-item"><span>Total</span><strong class="gold" id="sum-total">-</strong></div>
           <div class="sum-item"><span>Rate</span><strong id="sum-rate">Rp 140 / R$</strong></div>
           <div class="sum-item"><span>Total Bayar</span><strong class="gold" id="sum-price">Rp -</strong></div>
@@ -280,39 +449,70 @@
 
     <div class="trust">
       <div class="trust-track">
-        <div class="trust-item">✅ Format Simple</div>
-        <div class="trust-item">⚡ Fast Response</div>
-        <div class="trust-item">🎁 Gift Ingame</div>
-        <div class="trust-item">🕐 24/7 Online</div>
+        <div class="trust-item">Klik item langsung</div>
+        <div class="trust-item">User + display dicek</div>
+        <div class="trust-item">Gift ingame</div>
+        <div class="trust-item">Chat transaksi website</div>
       </div>
     </div>
   </main>
 </div>
 
 <footer class="site-footer">
-  <div class="footer-brand">✦ KokoRBX</div>
-  <div class="footer-tagline">Gift GP Ingame · Cepat & Aman</div>
+  <div class="footer-brand">KokoRBX</div>
+  <div class="footer-tagline">Gift GP Ingame - Cepat & Aman</div>
 </footer>
 
 <script src="assets/rate-client.js"></script>
 <script src="assets/marketplace/panel-store.js"></script>
 <script>
   const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'https://chisatobobaaaa.vercel.app'
+    ? 'https://koko-rbx.vercel.app'
     : '';
-  let PRICE_PER_ROBUX = 140;
   const RATE_KEY = 'giftgp';
+  let PRICE_PER_ROBUX = 140;
+
+  const GAMES = [
+    { id: 'blox-fruits', name: 'Blox Fruits', subtitle: 'Gamepass dan permanent fruit' },
+    { id: 'custom-game', name: 'Game Lain', subtitle: 'Request gift manual' }
+  ];
+  const CATEGORIES = [
+    { id: 'all', label: 'Semua' },
+    { id: 'gamepass', label: 'Gamepass' },
+    { id: 'permanent-fruit', label: 'Permanent Fruit' },
+    { id: 'service', label: 'Service' }
+  ];
+  const CATALOG = [
+    { id: 'bf-fruit-storage', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Fruit Storage', robux: 400, code: 'FS', desc: 'Tambah slot penyimpanan fruit.', badge: 'Popular' },
+    { id: 'bf-2x-mastery', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: '2x Mastery', robux: 450, code: '2M', desc: 'Bantu leveling mastery lebih cepat.', badge: 'Gamepass' },
+    { id: 'bf-2x-money', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: '2x Money', robux: 450, code: '2$', desc: 'Tambah income Beli saat farming.', badge: 'Gamepass' },
+    { id: 'bf-fast-boats', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Fast Boats', robux: 350, code: 'FB', desc: 'Akses boat cepat di Blox Fruits.', badge: 'Gamepass' },
+    { id: 'bf-dark-blade', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Dark Blade', robux: 1200, code: 'DB', desc: 'Gamepass sword premium.', badge: 'Premium' },
+    { id: 'bf-fruit-notifier', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Fruit Notifier', robux: 2700, code: 'FN', desc: 'Notifikasi spawn fruit.', badge: 'Premium' },
+    { id: 'bf-refund-stats', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'service', title: 'Refund Stats', robux: 75, code: 'RS', desc: 'Reset point stat karakter.', badge: 'Service' },
+    { id: 'bf-race-reroll', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'service', title: 'Race Reroll', robux: 90, code: 'RR', desc: 'Reroll race karakter.', badge: 'Service' },
+    { id: 'bf-perm-light', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Light', robux: 1100, code: 'PL', desc: 'Permanent fruit Light.', badge: 'Permanent' },
+    { id: 'bf-perm-buddha', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Buddha', robux: 1650, code: 'PB', desc: 'Permanent fruit Buddha.', badge: 'Popular' },
+    { id: 'bf-perm-portal', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Portal', robux: 2000, code: 'PP', desc: 'Permanent fruit Portal.', badge: 'Permanent' },
+    { id: 'bf-perm-dough', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Dough', robux: 2400, code: 'PD', desc: 'Permanent fruit Dough.', badge: 'Permanent' },
+    { id: 'bf-perm-leopard', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Leopard', robux: 3000, code: 'LP', desc: 'Permanent fruit Leopard.', badge: 'Permanent' },
+    { id: 'bf-perm-kitsune', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Kitsune', robux: 4000, code: 'PK', desc: 'Permanent fruit Kitsune.', badge: 'Permanent' },
+    { id: 'bf-perm-dragon', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Dragon', robux: 5000, code: 'DR', desc: 'Permanent fruit Dragon.', badge: 'Permanent' },
+    { id: 'custom-gift', gameId: 'custom-game', game: 'Game Lain', category: 'service', title: 'Custom Gift GP', robux: 0, code: 'CG', desc: 'Pilih ini kalau item belum ada di katalog.', badge: 'Manual' }
+  ];
+
   const form = document.getElementById('gift-form');
   const fields = {
     username: document.getElementById('username'),
+    displayName: document.getElementById('displayName'),
+    contact: document.getElementById('contact'),
     game: document.getElementById('game'),
     gamepass: document.getElementById('gamepass'),
     totalRobux: document.getElementById('totalRobux'),
   };
-
-  function value(id) {
-    return (fields[id].value || '').trim();
-  }
+  let activeGame = 'blox-fruits';
+  let activeCategory = 'all';
+  let selectedId = 'bf-fruit-storage';
 
   function cleanRobux(raw) {
     return String(raw || '').replace(/[^\d]/g, '');
@@ -320,21 +520,92 @@
 
   function displayRobux(raw) {
     const cleaned = cleanRobux(raw);
-    return cleaned ? Number(cleaned).toLocaleString('id-ID') : '-';
-  }
-
-  function calcGiftPrice(raw) {
-    const total = Number(cleanRobux(raw) || 0);
-    if (window.KokoRates && KokoRates.calcPrice) {
-      return KokoRates.calcPrice(total, PRICE_PER_ROBUX);
-    }
-    return total * PRICE_PER_ROBUX;
+    return cleaned ? Number(cleaned).toLocaleString('id-ID') + ' R$' : 'Manual';
   }
 
   function formatRupiah(value) {
     return window.KokoRates && KokoRates.formatRupiah
       ? KokoRates.formatRupiah(value)
       : 'Rp ' + Number(value || 0).toLocaleString('id-ID');
+  }
+
+  function calcGiftPrice(raw) {
+    const total = Number(cleanRobux(raw) || 0);
+    if (!total) return 0;
+    if (window.KokoRates && KokoRates.calcPrice) {
+      return KokoRates.calcPrice(total, PRICE_PER_ROBUX);
+    }
+    return total * PRICE_PER_ROBUX;
+  }
+
+  function selectedItem() {
+    return CATALOG.find(item => item.id === selectedId) || null;
+  }
+
+  function value(id) {
+    return (fields[id].value || '').trim();
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+  }
+
+  function renderTabs() {
+    document.getElementById('game-tabs').innerHTML = GAMES.map(game => (
+      '<button class="tab-btn ' + (game.id === activeGame ? 'active' : '') + '" type="button" data-game="' + game.id + '">' +
+        escapeHtml(game.name) +
+      '</button>'
+    )).join('');
+    document.getElementById('category-tabs').innerHTML = CATEGORIES.map(cat => (
+      '<button class="tab-btn ' + (cat.id === activeCategory ? 'active' : '') + '" type="button" data-category="' + cat.id + '">' +
+        escapeHtml(cat.label) +
+      '</button>'
+    )).join('');
+  }
+
+  function renderGrid() {
+    const query = document.getElementById('catalog-search').value.trim().toLowerCase();
+    const items = CATALOG.filter(item => {
+      const gameMatch = item.gameId === activeGame;
+      const categoryMatch = activeCategory === 'all' || item.category === activeCategory;
+      const text = (item.title + ' ' + item.game + ' ' + item.category + ' ' + item.desc).toLowerCase();
+      return gameMatch && categoryMatch && (!query || text.includes(query));
+    });
+    const grid = document.getElementById('catalog-grid');
+    if (!items.length) {
+      grid.innerHTML = '<div class="empty-state">Item tidak ditemukan.</div>';
+      return;
+    }
+    grid.innerHTML = items.map(item => {
+      const selected = item.id === selectedId;
+      return '<article class="gift-card ' + (selected ? 'selected' : '') + '" data-id="' + item.id + '">' +
+        '<div class="gift-cover"><div class="cover-label"><span class="cover-kicker">' + escapeHtml(item.game) + '</span><span class="cover-main">' + escapeHtml(item.title) + '</span></div></div>' +
+        '<div class="gift-body">' +
+          '<div class="gift-tags"><span class="gift-tag">' + escapeHtml(item.badge) + '</span><span class="gift-tag">' + escapeHtml(item.category.replace('-', ' ')) + '</span></div>' +
+          '<div class="gift-name">' + escapeHtml(item.title) + '</div>' +
+          '<div class="gift-desc">' + escapeHtml(item.desc) + '</div>' +
+          '<div class="gift-foot"><span class="gift-price">' + displayRobux(item.robux) + '</span><button class="select-btn" type="button" data-select="' + item.id + '">' + (selected ? 'Dipilih' : 'Pilih') + '</button></div>' +
+        '</div>' +
+      '</article>';
+    }).join('');
+  }
+
+  function selectItem(id, scrollToForm) {
+    const item = CATALOG.find(entry => entry.id === id);
+    if (!item) return;
+    selectedId = id;
+    fields.game.value = item.game;
+    fields.gamepass.value = item.title;
+    fields.totalRobux.value = item.robux ? String(item.robux) : '';
+    document.getElementById('selected-code').textContent = item.code;
+    document.getElementById('selected-title').textContent = item.title + ' - ' + item.game;
+    renderGrid();
+    updatePreview();
+    if (scrollToForm) {
+      document.getElementById('gift-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   async function loadGiftRate() {
@@ -351,36 +622,51 @@
   }
 
   function buildFormat() {
-    const price = calcGiftPrice(value('totalRobux'));
+    const item = selectedItem();
+    const total = item ? item.robux : 0;
+    const price = calcGiftPrice(total);
     return [
-      'Format Ingame Gifting',
+      'Format Gift GP Ingame',
       'Username: ' + (value('username') || '-'),
-      'Nama game: ' + (value('game') || '-'),
-      'Nama gamepass: ' + (value('gamepass') || '-'),
-      'Total robux: ' + (displayRobux(value('totalRobux')) || '-'),
-      'Total bayar: ' + (price ? formatRupiah(price) : '-'),
-      'Note: Pastikan format yang kamu isi sudah sesuai!'
+      'Display name: ' + (value('displayName') || '-'),
+      'Game: ' + (item ? item.game : '-'),
+      'Item: ' + (item ? item.title : '-'),
+      'Kategori: ' + (item ? item.category.replace('-', ' ') : '-'),
+      'Total robux: ' + (item && item.robux ? displayRobux(item.robux) : 'Manual - tanya admin'),
+      'Total bayar: ' + (price ? formatRupiah(price) : 'Menunggu admin'),
+      'Kontak/catatan: ' + (value('contact') || '-'),
+      'Note: cocokkan username dan display name sebelum proses gift.'
     ].join('\n');
   }
 
   function updatePreview() {
+    const item = selectedItem();
+    const price = item ? calcGiftPrice(item.robux) : 0;
     document.getElementById('format-preview').textContent = buildFormat();
     document.getElementById('sum-user').textContent = value('username') || '-';
-    document.getElementById('sum-total').textContent = displayRobux(value('totalRobux'));
+    document.getElementById('sum-display').textContent = value('displayName') || '-';
+    document.getElementById('sum-game').textContent = item ? item.game : '-';
+    document.getElementById('sum-item').textContent = item ? item.title : '-';
+    document.getElementById('sum-total').textContent = item ? displayRobux(item.robux) : '-';
     document.getElementById('sum-rate').textContent = formatRupiah(PRICE_PER_ROBUX) + ' / R$';
-    const price = calcGiftPrice(value('totalRobux'));
-    document.getElementById('sum-price').textContent = price ? formatRupiah(price) : 'Rp -';
+    document.getElementById('sum-price').textContent = price ? formatRupiah(price) : 'Menunggu admin';
+    const waText = encodeURIComponent('Halo KokoRBX, aku mau tanya Gift GP.\n\n' + buildFormat());
+    document.getElementById('wa-link').href = 'https://wa.me/6281996112019?text=' + waText;
   }
 
   async function saveRequest(orderId) {
-    const total = cleanRobux(value('totalRobux'));
+    const item = selectedItem();
+    const total = item ? cleanRobux(item.robux) : '';
     const request = {
       id: orderId,
       type: 'giftgp',
-      package: 'Gift GP Ingame',
+      package: item ? item.title : 'Gift GP Ingame',
       username: value('username'),
-      game: value('game'),
-      gamepass: value('gamepass'),
+      displayName: value('displayName'),
+      contact: value('contact'),
+      game: item ? item.game : '',
+      gamepass: item ? item.title : '',
+      category: item ? item.category : 'gift',
       totalRobux: total,
       robux: Number(total || 0),
       rate: PRICE_PER_ROBUX,
@@ -388,7 +674,7 @@
       method: 'Gift GP Ingame',
       status: 'request',
       time: Date.now(),
-      note: 'Pastikan format yang kamu isi sudah sesuai!',
+      note: 'Cek username dan display name sebelum proses gift.',
     };
     const orders = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
     orders.unshift(request);
@@ -405,13 +691,43 @@
     }
   }
 
-  Object.values(fields).forEach(input => input.addEventListener('input', updatePreview));
+  document.addEventListener('click', event => {
+    const gameBtn = event.target.closest('[data-game]');
+    if (gameBtn) {
+      activeGame = gameBtn.dataset.game;
+      activeCategory = 'all';
+      const first = CATALOG.find(item => item.gameId === activeGame);
+      if (first) selectedId = first.id;
+      renderTabs();
+      renderGrid();
+      selectItem(selectedId, false);
+      return;
+    }
+    const catBtn = event.target.closest('[data-category]');
+    if (catBtn) {
+      activeCategory = catBtn.dataset.category;
+      renderTabs();
+      renderGrid();
+      return;
+    }
+    const selectBtn = event.target.closest('[data-select]');
+    if (selectBtn) {
+      selectItem(selectBtn.dataset.select, true);
+    }
+  });
+
+  document.getElementById('catalog-search').addEventListener('input', renderGrid);
+  [fields.username, fields.displayName, fields.contact].forEach(input => input.addEventListener('input', updatePreview));
+
   form.addEventListener('submit', async event => {
     event.preventDefault();
-    if (!cleanRobux(value('totalRobux'))) {
-      fields.totalRobux.setCustomValidity('Isi total robux dengan angka.');
-      form.reportValidity();
-      fields.totalRobux.setCustomValidity('');
+    const item = selectedItem();
+    if (!item) {
+      alert('Pilih item Gift GP dulu.');
+      return;
+    }
+    if (!item.robux) {
+      alert('Item custom belum punya harga otomatis. Chat admin dulu untuk konfirmasi.');
       return;
     }
     if (!form.reportValidity()) return;
@@ -419,30 +735,45 @@
     const orderId = 'GGP-' + Math.floor(100000 + Math.random() * 900000);
     await saveRequest(orderId);
 
-    const price = calcGiftPrice(value('totalRobux'));
+    const price = calcGiftPrice(item.robux);
     const detail = buildFormat();
     if (window.KokoPanel) {
       KokoPanel.createOrder({
         id: orderId,
-        product: 'Gift GP Ingame',
+        product: 'Gift GP - ' + item.title,
         category: 'gift',
         image: 'assets/logo-gift-gp.png',
         price,
         priceText: price ? formatRupiah(price) : 'Menunggu admin',
         username: value('username'),
+        buyer: value('username'),
         detail,
-        buyerMessage: 'Halo admin, aku sudah isi format Gift GP.\n' + detail,
+        buyerMessage: 'Halo admin, aku mau order Gift GP.\n' + detail,
         source: 'giftgp.html'
       });
     }
     document.getElementById('notice').classList.add('show');
-    location.href = 'transaksi-buyer.html?order=' + encodeURIComponent(orderId) + '&token=' + encodeURIComponent('buyer-' + orderId);
+    const params = new URLSearchParams({
+      order: orderId,
+      token: 'buyer-' + orderId,
+      product: 'Gift GP - ' + item.title,
+      category: 'gift',
+      price: String(price || 0),
+      priceText: price ? formatRupiah(price) : 'Menunggu admin',
+      image: 'assets/logo-gift-gp.png',
+      username: value('username'),
+      buyer: value('username'),
+      detail: detail
+    });
+    location.href = 'transaksi-buyer.html?' + params.toString();
   });
 
-  updatePreview();
+  renderTabs();
+  renderGrid();
+  selectItem(selectedId, false);
   loadGiftRate();
 </script>
-<script src="assets/product-status-client.js?v=flow-cleanup-20260601"></script>
+<script src="assets/product-status-client.js?v=gift-catalog-20260601"></script>
 <script src="assets/cart-client.js?v=icon-cart-mobile-20260531"></script>
 </body>
 </html>

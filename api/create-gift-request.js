@@ -14,6 +14,7 @@ module.exports = async function handler(req, res) {
     const body = readJsonBody(req);
     const orderId = body.id || 'GGP-' + Math.floor(100000 + Math.random() * 900000);
     const username = String(body.username || '').trim();
+    const displayName = String(body.displayName || body.display_name || '').trim();
     const contact = String(body.contact || '').trim();
     const game = String(body.game || '').trim();
     const gamepass = String(body.gamepass || '').trim();
@@ -35,6 +36,7 @@ module.exports = async function handler(req, res) {
     const detail = [
       'Format Ingame Gifting',
       `Username: ${username}`,
+      `Display name: ${displayName || '-'}`,
       `Nama game: ${game}`,
       `Nama gamepass: ${gamepass}`,
       `Total robux: ${totalRobux.toLocaleString('id-ID')}`,

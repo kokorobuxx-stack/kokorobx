@@ -9,7 +9,7 @@
 
   const CACHE_KEY = 'kokorbx_rate_settings_v1';
   const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
-    ? 'https://chisatobobaaaa.vercel.app'
+    ? 'https://koko-rbx.vercel.app'
     : '';
 
   function normalizeRate(value, fallback) {

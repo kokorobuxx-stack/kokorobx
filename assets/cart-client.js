@@ -63,14 +63,17 @@
     if (giftPriceEl) {
       var giftRobux = parseNumber(readText('#sum-total'));
       var giftPrice = parseNumber(readText('#sum-price'));
+      var giftItem = cleanDash(readText('#sum-item'));
+      var giftGame = cleanDash(readText('#sum-game'));
+      var giftDisplay = cleanDash(readText('#sum-display'));
       return {
         id: Date.now() + '-' + Math.random().toString(16).slice(2),
-        product: product,
+        product: giftItem ? product + ' - ' + giftItem : product,
         packageName: giftRobux ? giftRobux.toLocaleString('id-ID') + ' R$' : '',
         robux: giftRobux,
         price: giftPrice,
         username: cleanDash(readText('#sum-user')),
-        detail: [readValue('#game'), readValue('#gamepass')].filter(Boolean).join(' / '),
+        detail: [giftGame, giftDisplay ? 'Display: ' + giftDisplay : '', readValue('#gamepass')].filter(Boolean).join(' / '),
         url: location.pathname.split('/').pop() || 'giftgp.html',
         time: Date.now()
       };
