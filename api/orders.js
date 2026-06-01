@@ -1,4 +1,5 @@
 const { readJsonBody, setCors } = require('./_lib/http');
+const { lookupRobloxProfiles, maskUsername, profileForUsername } = require('./_lib/roblox-public');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
 const {
   DEFAULT_PRODUCT_STATUS,
@@ -23,7 +24,7 @@ function isActiveSale(order) {
   return status !== 'failed' && status !== 'cancelled' && status !== 'canceled';
 }
 
-function publicStats(rows) {
+async function publicStats(rows) {
   const orders = rows
     .map(rowToOrder)
     .filter(order => order.username && !isSettingsUsername(order.username));
@@ -46,24 +47,55 @@ function publicStats(rows) {
     leaderboardMap.set(username, current);
   });
 
+  const leaderboard = Array.from(leaderboardMap.values())
+    .sort((a, b) => (b.robux - a.robux) || (b.orders - a.orders) || (b.lastTime - a.lastTime))
+    .slice(0, 5);
+  const recentOrders = activeOrders
+    .slice()
+    .sort((a, b) => (Number(b.time) || 0) - (Number(a.time) || 0))
+    .slice(0, 5)
+    .map(order => ({
+      id: order.id,
+      username: order.username || 'Customer',
+      robux: Number(order.robux) || 0,
+      method: order.method || 'Robux',
+      status: order.status || 'pending',
+      time: Number(order.time) || Date.now(),
+    }));
+
+  const profiles = await lookupRobloxProfiles([
+    ...leaderboard.map(item => item.username),
+    ...recentOrders.map(item => item.username),
+  ]);
+
+  function publicBuyer(item) {
+    const profile = profileForUsername(item.username, profiles);
+    return {
+      username: profile.maskedUsername || maskUsername(item.username),
+      publicName: profile.maskedUsername || maskUsername(item.username),
+      avatarUrl: profile.avatarUrl || '',
+      profileUrl: profile.profileUrl || '',
+      robloxUserId: profile.robloxUserId || null,
+    };
+  }
+
   return {
     totalOrders,
     totalRobux,
-    leaderboard: Array.from(leaderboardMap.values())
-      .sort((a, b) => (b.robux - a.robux) || (b.orders - a.orders) || (b.lastTime - a.lastTime))
-      .slice(0, 5),
-    recentOrders: activeOrders
-      .slice()
-      .sort((a, b) => (Number(b.time) || 0) - (Number(a.time) || 0))
-      .slice(0, 5)
-      .map(order => ({
-        id: order.id,
-        username: order.username || 'Customer',
-        robux: Number(order.robux) || 0,
-        method: order.method || 'Robux',
-        status: order.status || 'pending',
-        time: Number(order.time) || Date.now(),
-      })),
+    leaderboard: leaderboard.map(item => ({
+      ...publicBuyer(item),
+      robux: item.robux,
+      orders: item.orders,
+      lastTime: item.lastTime,
+    })),
+    recentOrders: recentOrders.map(item => ({
+      ...publicBuyer(item),
+      id: item.id,
+      robux: item.robux,
+      method: item.method,
+      status: item.status,
+      time: item.time,
+    })),
     generatedAt: new Date().toISOString(),
   };
 }
@@ -107,7 +139,7 @@ module.exports = async function handler(req, res) {
           '&select=id,username,gp_id,robux,price,method,status,created_at,has_proof,proof_url,proof_viewed,sent_at,email_sent,email_sent_at' +
           '&order=created_at.desc&limit=1000'
       );
-      return res.status(200).json(publicStats(rows));
+      return res.status(200).json(await publicStats(rows));
     }
 
     if (req.method === 'GET') {
