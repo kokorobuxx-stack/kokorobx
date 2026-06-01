@@ -1,5 +1,6 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { lookupRobloxProfiles, maskUsername, profileForUsername } = require('./_lib/roblox-public');
+const robloxGiftCatalog = require('./_lib/roblox-gift-catalog');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
 const {
   DEFAULT_PRODUCT_STATUS,
@@ -140,6 +141,10 @@ module.exports = async function handler(req, res) {
           '&order=created_at.desc&limit=1000'
       );
       return res.status(200).json(await publicStats(rows));
+    }
+
+    if (req.method === 'GET' && req.query && req.query.action === 'roblox-gift-catalog') {
+      return robloxGiftCatalog(req, res);
     }
 
     if (req.method === 'GET') {

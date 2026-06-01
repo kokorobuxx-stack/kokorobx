@@ -1,4 +1,4 @@
-const { setCors } = require('./_lib/http');
+const { setCors } = require('./http');
 
 const ROBLOX_TIMEOUT_MS = 4500;
 

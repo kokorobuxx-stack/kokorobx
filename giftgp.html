@@ -837,7 +837,7 @@
 
   async function loadRobloxGiftCatalog() {
     try {
-      const url = API_BASE + '/api/roblox-gift-catalog' + (activeGame ? '?game=' + encodeURIComponent(activeGame) : '');
+      const url = API_BASE + '/api/orders?action=roblox-gift-catalog' + (activeGame ? '&game=' + encodeURIComponent(activeGame) : '');
       const res = await fetch(url, { cache: 'no-store' });
       if (!res.ok) throw new Error('catalog api ' + res.status);
       const data = await res.json();
