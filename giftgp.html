@@ -173,6 +173,11 @@
       radial-gradient(circle at 15% 78%, rgba(98,216,212,.38), transparent 24%),
       linear-gradient(135deg, var(--cover-a, #4277ff), var(--cover-b, #825cff));
   }
+  .game-cover.has-live-image {
+    background-image: linear-gradient(180deg, rgba(5,8,18,.08), rgba(5,8,18,.82)), var(--game-image);
+    background-size: cover, cover;
+    background-position: center, center;
+  }
   .game-cover::before {
     content: ""; position: absolute; inset: -32px;
     background:
@@ -181,6 +186,7 @@
       repeating-linear-gradient(35deg, rgba(255,255,255,.12) 0 2px, transparent 2px 18px);
     opacity: .82; transform: rotate(-4deg); z-index: -1;
   }
+  .game-cover.has-live-image::before { inset: 0; opacity: .42; transform: none; z-index: 0; }
   .game-cover::after {
     content: attr(data-monogram); position: absolute; right: 16px; bottom: 12px;
     width: 68px; height: 68px; border-radius: 18px; display: grid; place-items: center;
@@ -198,6 +204,10 @@
     position: absolute; left: 14px; top: 13px; right: 14px; color: #fff;
     font-size: 1.08rem; font-weight: 900; line-height: 1.05; text-shadow: 0 3px 14px rgba(0,0,0,.34);
   }
+  .game-cover.has-live-image::after,
+  .game-cover.has-live-image .game-badge,
+  .game-cover.has-live-image .game-name-art { z-index: 1; }
+  .game-live-meta { display: inline-flex; align-items: center; gap: 5px; color: var(--green); font-size: .63rem; font-weight: 900; }
   .game-body { padding: 13px; display: grid; gap: 7px; flex: 1; }
   .game-title { font-size: 1rem; line-height: 1.2; font-weight: 900; color: var(--text); }
   .game-desc { color: var(--muted); font-size: .72rem; line-height: 1.45; }
@@ -222,11 +232,17 @@
       radial-gradient(circle at 18% 16%, rgba(139,124,255,.38), transparent 30%),
       linear-gradient(135deg, #1d3769, #27306f 54%, #11162d);
   }
+  .gift-cover.has-live-image {
+    background-image: linear-gradient(180deg, rgba(5,8,18,.08), rgba(5,8,18,.84)), var(--gift-image);
+    background-size: cover, cover;
+    background-position: center, center;
+  }
   .cover-label {
     width: 100%; min-height: 74px; border-radius: 10px; display: flex; flex-direction: column; justify-content: flex-end;
     padding: 10px; color: #fff; background: linear-gradient(180deg, rgba(255,255,255,.1), rgba(0,0,0,.22));
     border: 1px solid rgba(255,255,255,.18);
   }
+  .gift-cover.has-live-image .cover-label { background: linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.58)); border-color: rgba(255,255,255,.24); }
   .cover-kicker { font-family: var(--mono); font-size: .62rem; color: rgba(255,255,255,.74); text-transform: uppercase; letter-spacing: .9px; }
   .cover-main { font-size: 1.05rem; line-height: 1.05; font-weight: 900; text-shadow: 0 3px 12px rgba(0,0,0,.35); }
   .gift-body { padding: 13px; display: grid; gap: 8px; flex: 1; }
@@ -528,7 +544,7 @@
 <script src="assets/rate-client.js"></script>
 <script src="assets/marketplace/panel-store.js"></script>
 <script>
-  const API_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  const API_BASE = (location.protocol === 'file:')
     ? 'https://koko-rbx.vercel.app'
     : '';
   const RATE_KEY = 'giftgp';
@@ -622,6 +638,9 @@
   let activeGame = GAMES.some(game => game.id === PAGE_GAME) ? PAGE_GAME : '';
   let activeCategory = 'all';
   let selectedId = activeGame ? ((CATALOG.find(item => item.gameId === activeGame) || {}).id || '') : '';
+  let liveGiftGames = {};
+  let liveGiftItems = [];
+  let liveGiftLoadedFor = '';
 
   function cleanRobux(raw) {
     return String(raw || '').replace(/[^\d]/g, '');
@@ -648,7 +667,7 @@
   }
 
   function selectedItem() {
-    return CATALOG.find(item => item.id === selectedId) || null;
+    return catalogItemsForActiveGame().find(item => item.id === selectedId) || null;
   }
 
   function value(id) {
@@ -659,6 +678,44 @@
     return String(value || '').replace(/[&<>"']/g, ch => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
     }[ch]));
+  }
+
+  function cleanCssUrl(value) {
+    return String(value || '').replace(/["\\\n\r]/g, '');
+  }
+
+  function styleImageVar(name, url) {
+    return url ? name + ':url("' + cleanCssUrl(url) + '");' : '';
+  }
+
+  function liveGame(gameId) {
+    return liveGiftGames[gameId] || null;
+  }
+
+  function formatPlayers(value) {
+    const num = Number(value || 0);
+    if (!num) return '';
+    if (num >= 1000000) return (num / 1000000).toFixed(1).replace('.0', '') + 'M online';
+    if (num >= 1000) return Math.round(num / 1000).toLocaleString('id-ID') + 'K online';
+    return num.toLocaleString('id-ID') + ' online';
+  }
+
+  function itemInitials(title) {
+    return String(title || 'GP')
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(part => part[0])
+      .join('')
+      .toUpperCase() || 'GP';
+  }
+
+  function catalogItemsForActiveGame() {
+    if (!activeGame) return [];
+    const localItems = CATALOG.filter(item => item.gameId === activeGame);
+    if (liveGiftLoadedFor !== activeGame || !liveGiftItems.length) return localItems;
+    const manualItems = localItems.filter(item => item.category !== 'gamepass');
+    return liveGiftItems.concat(manualItems);
   }
 
   function currentGame() {
@@ -692,19 +749,23 @@
 
   function renderGameCards() {
     const grid = document.getElementById('catalog-grid');
-    grid.innerHTML = GAMES.map(game => (
-      '<a class="game-card" href="giftgp.html?game=' + encodeURIComponent(game.id) + '" style="' + gameCardStyle(game) + '">' +
-        '<div class="game-cover" data-monogram="' + escapeHtml(game.monogram) + '">' +
+    grid.innerHTML = GAMES.map(game => {
+      const live = liveGame(game.id);
+      const liveImage = live && live.imageUrl ? live.imageUrl : '';
+      const livePlayers = live ? formatPlayers(live.playerCount) : '';
+      const cardStyle = gameCardStyle(game) + styleImageVar('--game-image', liveImage);
+      return '<a class="game-card" href="giftgp.html?game=' + encodeURIComponent(game.id) + '" style="' + cardStyle + '">' +
+        '<div class="game-cover ' + (liveImage ? 'has-live-image' : '') + '" data-monogram="' + escapeHtml(game.monogram) + '">' +
           '<div class="game-name-art">' + escapeHtml(game.name) + '</div>' +
-          '<span class="game-badge">TOP UP GAME</span>' +
+          '<span class="game-badge">' + (liveImage ? 'FOTO ROBLOX' : 'TOP UP GAME') + '</span>' +
         '</div>' +
         '<div class="game-body">' +
-          '<div class="game-title">' + escapeHtml(game.name) + '</div>' +
+          '<div class="game-title">' + escapeHtml((live && live.name) || game.name) + '</div>' +
           '<div class="game-desc">' + escapeHtml(game.subtitle) + '</div>' +
-          '<div class="game-meta"><span>' + escapeHtml(game.tags) + '</span><span>Lihat item</span></div>' +
+          '<div class="game-meta"><span>' + escapeHtml(game.tags) + '</span><span>' + (livePlayers ? '<span class="game-live-meta">' + escapeHtml(livePlayers) + '</span>' : 'Lihat item') + '</span></div>' +
         '</div>' +
-      '</a>'
-    )).join('');
+      '</a>';
+    }).join('');
   }
 
   function renderGrid() {
@@ -715,7 +776,7 @@
       return;
     }
     const query = document.getElementById('catalog-search').value.trim().toLowerCase();
-    const items = CATALOG.filter(item => {
+    const items = catalogItemsForActiveGame().filter(item => {
       const gameMatch = item.gameId === activeGame;
       const categoryMatch = activeCategory === 'all' || item.category === activeCategory;
       const text = (item.title + ' ' + item.game + ' ' + item.category + ' ' + item.desc + ' ' + item.badge).toLowerCase();
@@ -728,8 +789,8 @@
     }
     grid.innerHTML = items.map(item => {
       const selected = item.id === selectedId;
-      return '<article class="gift-card ' + (selected ? 'selected' : '') + '" data-id="' + item.id + '">' +
-        '<div class="gift-cover"><div class="cover-label"><span class="cover-kicker">' + escapeHtml(item.game) + '</span><span class="cover-main">' + escapeHtml(item.title) + '</span></div></div>' +
+      return '<article class="gift-card ' + (selected ? 'selected' : '') + '" data-id="' + item.id + '" style="' + styleImageVar('--gift-image', item.imageUrl) + '">' +
+        '<div class="gift-cover ' + (item.imageUrl ? 'has-live-image' : '') + '"><div class="cover-label"><span class="cover-kicker">' + escapeHtml(item.source === 'roblox' ? 'Live Roblox' : item.game) + '</span><span class="cover-main">' + escapeHtml(item.title) + '</span></div></div>' +
         '<div class="gift-body">' +
           '<div class="gift-tags"><span class="gift-tag">' + escapeHtml(item.badge) + '</span><span class="gift-tag">' + escapeHtml(item.category.replace('-', ' ')) + '</span></div>' +
           '<div class="gift-name">' + escapeHtml(item.title) + '</div>' +
@@ -741,18 +802,64 @@
   }
 
   function selectItem(id, scrollToForm) {
-    const item = CATALOG.find(entry => entry.id === id);
+    const item = catalogItemsForActiveGame().find(entry => entry.id === id);
     if (!item) return;
     selectedId = id;
     fields.game.value = item.game;
     fields.gamepass.value = item.title;
     fields.totalRobux.value = item.robux ? String(item.robux) : '';
-    document.getElementById('selected-code').textContent = item.code;
+    document.getElementById('selected-code').textContent = item.code || itemInitials(item.title);
     document.getElementById('selected-title').textContent = item.title + ' - ' + item.game;
     renderGrid();
     updatePreview();
     if (scrollToForm) {
       document.getElementById('gift-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function mapLivePass(pass, game) {
+    const title = pass.title || pass.name || 'Gamepass Roblox';
+    return {
+      id: pass.id || ('live-' + pass.passId),
+      gameId: game.id,
+      game: game.requestedName || game.name || 'Roblox',
+      category: 'gamepass',
+      title,
+      robux: Number(pass.robux || pass.price || 0),
+      code: itemInitials(title),
+      desc: pass.desc || 'Gamepass aktif dari halaman Roblox game ini.',
+      badge: pass.badge || 'Live Roblox',
+      imageUrl: pass.imageUrl || '',
+      passId: pass.passId || null,
+      source: 'roblox',
+    };
+  }
+
+  async function loadRobloxGiftCatalog() {
+    try {
+      const url = API_BASE + '/api/roblox-gift-catalog' + (activeGame ? '?game=' + encodeURIComponent(activeGame) : '');
+      const res = await fetch(url, { cache: 'no-store' });
+      if (!res.ok) throw new Error('catalog api ' + res.status);
+      const data = await res.json();
+      (data.games || []).forEach(game => {
+        if (game && game.id) liveGiftGames[game.id] = game;
+      });
+      if (data.activeGame && data.activeGame.id) liveGiftGames[data.activeGame.id] = data.activeGame;
+
+      if (activeGame) {
+        const game = liveGiftGames[activeGame] || currentGame() || { id: activeGame, name: fields.game.value || 'Roblox' };
+        liveGiftItems = Array.isArray(data.passes) ? data.passes.map(pass => mapLivePass(pass, game)) : [];
+        liveGiftLoadedFor = activeGame;
+        const items = catalogItemsForActiveGame();
+        if (items.length && !items.some(item => item.id === selectedId)) selectedId = items[0].id;
+        renderGrid();
+        if (selectedId) selectItem(selectedId, false);
+        else updatePreview();
+      } else {
+        renderGameCards();
+      }
+    } catch(e) {
+      console.warn('[Gift GP] gagal load live Roblox catalog:', e);
     }
   }
 
@@ -779,6 +886,7 @@
       'Display name: ' + (value('displayName') || '-'),
       'Game: ' + (item ? item.game : '-'),
       'Item: ' + (item ? item.title : '-'),
+      'ID gamepass Roblox: ' + (item && item.passId ? item.passId : '-'),
       'Kategori: ' + (item ? item.category.replace('-', ' ') : '-'),
       'Total robux: ' + (item && item.robux ? displayRobux(item.robux) : 'Manual - tanya admin'),
       'Total bayar: ' + (price ? formatRupiah(price) : 'Menunggu admin'),
@@ -814,11 +922,13 @@
       contact: value('contact'),
       game: item ? item.game : '',
       gamepass: item ? item.title : '',
+      passId: item && item.passId ? item.passId : '',
       category: item ? item.category : 'gift',
       totalRobux: total,
       robux: Number(total || 0),
       rate: PRICE_PER_ROBUX,
       price: calcGiftPrice(total),
+      image: item && item.imageUrl ? item.imageUrl : 'assets/logo-gift-gp.png',
       method: 'Gift GP Ingame',
       status: 'request',
       time: Date.now(),
@@ -875,7 +985,7 @@
         id: orderId,
         product: 'Gift GP - ' + item.title,
         category: 'gift',
-        image: 'assets/logo-gift-gp.png',
+        image: item.imageUrl || 'assets/logo-gift-gp.png',
         price,
         priceText: price ? formatRupiah(price) : 'Menunggu admin',
         username: value('username'),
@@ -893,7 +1003,7 @@
       category: 'gift',
       price: String(price || 0),
       priceText: price ? formatRupiah(price) : 'Menunggu admin',
-      image: 'assets/logo-gift-gp.png',
+      image: item.imageUrl || 'assets/logo-gift-gp.png',
       username: value('username'),
       buyer: value('username'),
       detail: detail
@@ -905,6 +1015,7 @@
   renderGrid();
   selectItem(selectedId, false);
   loadGiftRate();
+  loadRobloxGiftCatalog();
 </script>
 <script src="assets/product-status-client.js?v=gift-catalog-20260601"></script>
 <script src="assets/cart-client.js?v=icon-cart-mobile-20260531"></script>

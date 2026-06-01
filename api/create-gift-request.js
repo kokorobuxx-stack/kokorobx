@@ -18,6 +18,7 @@ module.exports = async function handler(req, res) {
     const contact = String(body.contact || '').trim();
     const game = String(body.game || '').trim();
     const gamepass = String(body.gamepass || '').trim();
+    const passId = String(body.passId || body.pass_id || '').trim();
     const totalRobux = Number(String(body.totalRobux || body.robux || '0').replace(/[^\d]/g, ''));
     let rate = normalizeRate(body.rate, DEFAULT_RATES.giftgp);
 
@@ -39,6 +40,7 @@ module.exports = async function handler(req, res) {
       `Display name: ${displayName || '-'}`,
       `Nama game: ${game}`,
       `Nama gamepass: ${gamepass}`,
+      `ID gamepass Roblox: ${passId || '-'}`,
       `Total robux: ${totalRobux ? totalRobux.toLocaleString('id-ID') : 'Manual - tanya admin'}`,
       `Total bayar: ${price ? 'Rp ' + price.toLocaleString('id-ID') : 'Menunggu admin'}`,
       'Note: Pastikan format yang kamu isi sudah sesuai!',

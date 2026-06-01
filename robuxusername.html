@@ -195,6 +195,16 @@
   .pay-action-box { background: var(--s2); border: 1px solid var(--border2); border-radius: 9px; padding: 12px; margin-bottom: 12px; text-align: center; }
   .pay-action-label { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 7px; }
   .pay-number { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 1.15rem; color: var(--text); letter-spacing: 1.5px; margin-bottom: 7px; }
+  .payment-direct-card { background: linear-gradient(180deg, rgba(124,92,252,.13), rgba(20,20,30,.96)); border: 1px solid rgba(124,92,252,.42); border-radius: 12px; padding: 12px; margin-bottom: 12px; text-align: left; box-shadow: 0 16px 32px rgba(0,0,0,.22); }
+  .payment-direct-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
+  .payment-direct-title { font-family: 'Outfit', sans-serif; font-size: .82rem; font-weight: 900; color: var(--text); }
+  .payment-direct-sub { font-size: .64rem; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+  .payment-direct-amount { color: var(--green); font-family: 'JetBrains Mono', monospace; font-size: .78rem; font-weight: 900; white-space: nowrap; }
+  .payment-direct-qris { background: #fff; border-radius: 10px; padding: 10px; text-align: center; }
+  .payment-direct-qris img { width: 100%; max-width: 230px; aspect-ratio: 1 / 1; object-fit: contain; display: block; margin: 0 auto; border-radius: 8px; }
+  .payment-direct-placeholder { min-height: 170px; border: 2px dashed rgba(124,92,252,.35); border-radius: 10px; display: grid; place-items: center; color: var(--muted); text-align: center; padding: 14px; background: rgba(255,255,255,.03); font-size: .72rem; }
+  .payment-reopen-note { margin-top: 9px; color: var(--muted); font-size: .66rem; line-height: 1.45; text-align: center; }
+  .payment-order-box { margin: 10px 0 12px; }
   .btn-copy { background: var(--accent); border: none; border-radius: 6px; padding: 7px 16px; color: #fff; font-size: 0.72rem; font-weight: 700; cursor: pointer; transition: all 0.2s; width: 100%; }
   .btn-copy:hover { opacity: 0.85; }
   .btn-copy.copied { background: var(--green); }
@@ -1249,6 +1259,57 @@
   }
   // ─────────────────────────────────────────────────────────────
 
+  function escapePaymentText(value) {
+    return String(value || '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+  }
+
+  function normalizePaymentMethod(method) {
+    const raw = String(method || '').trim();
+    const key = raw.toLowerCase().replace(/[\s_-]+/g, '');
+    if (key.includes('qris')) return 'QRIS';
+    if (key.includes('dana')) return 'DANA';
+    if (key.includes('gopay') || key.includes('gopaywallet')) return 'GoPay';
+    return raw || '-';
+  }
+
+  function renderPaymentDirect(payMethod, price, options) {
+    const opts = options || {};
+    const method = normalizePaymentMethod(payMethod);
+    const amount = Number(price || 0);
+    const amountText = amount ? 'Rp ' + amount.toLocaleString('id') : 'Rp -';
+    const note = opts.note ? '<div class="payment-reopen-note">' + escapePaymentText(opts.note) + '</div>' : '';
+    const extraClass = opts.compact ? ' payment-order-box' : '';
+    const num = PAYMENT_NUMBERS[method];
+    let body = '';
+
+    if (method === 'QRIS') {
+      body = QRIS_URL && QRIS_URL.trim()
+        ? '<div class="payment-direct-qris"><img src="' + escapePaymentText(QRIS_URL) + '" alt="QRIS untuk bayar" onerror="this.outerHTML=\'<div class=&quot;payment-direct-placeholder&quot;>Gambar QRIS gagal dimuat. Hubungi admin untuk kirim ulang QRIS.</div>\'"></div>'
+        : '<div class="payment-direct-placeholder">QRIS belum diset. Hubungi admin untuk kirim QRIS.</div>';
+    } else if (num) {
+      body =
+        '<div class="pay-action-box" style="margin-bottom:0;">' +
+          '<div class="pay-action-label">Nomor ' + escapePaymentText(method) + '</div>' +
+          '<div class="pay-number" title="Ketuk untuk salin" style="cursor:pointer" onclick="tapSalinNomor(\'' + num + '\', this)">' + num + '</div>' +
+          '<div style="font-size:10px;color:#888;text-align:center;margin-top:4px;">Ketuk nomor untuk menyalin</div>' +
+        '</div>';
+    } else {
+      body = '<div class="payment-direct-placeholder">Metode bayar sudah tersimpan. Buka kotak pesan transaksi jika butuh bantuan admin.</div>';
+    }
+
+    return '<div class="payment-direct-card' + extraClass + '">' +
+      '<div class="payment-direct-head">' +
+        '<div><div class="payment-direct-title">Detail Pembayaran</div>' +
+        '<div class="payment-direct-sub">' + escapePaymentText(method) + ' tampil langsung. Screenshot atau salin sebelum upload bukti.</div></div>' +
+        '<div class="payment-direct-amount">' + amountText + '</div>' +
+      '</div>' +
+      body +
+      note +
+    '</div>';
+  }
+
   async function placeOrder() {
     const oid = 'RBX-' + Math.floor(100000 + Math.random() * 900000);
     const user = document.getElementById('username').value.trim();
@@ -1269,7 +1330,7 @@
         onSuccess: r => showOrderModal(oid, user, gpId, r.payment_type || _pay),
         onPending: r => showOrderModal(oid, user, gpId, r.payment_type || _pay),
         onError: r => alert('❌ Pembayaran gagal: ' + (r.status_message || 'Coba lagi.')),
-        onClose: () => {}
+        onClose: () => showOrderModal(oid, user, gpId, _pay)
       });
     } catch(err) {
       console.warn('[Midtrans] Fallback mode:', err.message);
@@ -1325,6 +1386,7 @@
   }
 
   function showOrderModal(oid, user, gpId, payMethod) {
+    payMethod = normalizePaymentMethod(payMethod);
     document.getElementById('modal-oid').textContent   = oid;
     document.getElementById('modal-rbx').textContent   = _rbx.toLocaleString('id') + ' R$';
     document.getElementById('modal-total').textContent = 'Rp ' + _price.toLocaleString('id');
@@ -1357,6 +1419,10 @@
     } else {
       area.innerHTML = '';
     }
+
+    area.innerHTML = renderPaymentDirect(payMethod, _price, {
+      note: 'Kalau halaman tertutup, buka halaman ini lagi lalu cek Riwayat Lokal untuk melihat QRIS atau nomor bayar.'
+    });
 
     // Simpan order ke localStorage — per user + global untuk admin
     const contact = (document.getElementById('contact')?.value || '').trim();
@@ -1676,6 +1742,7 @@
                 <div class="od-val" style="font-size:0.68rem">${tgl}</div>
               </div>
             </div>
+            ${!isFinished ? renderPaymentDirect(o.method, o.price, { compact: true, note: 'Detail bayar ini tetap bisa dibuka lagi dari Riwayat Lokal jika tab sempat tertutup.' }) : ''}
             <div class="order-bukti-section" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">
               ${buktiSection}
               ${normStatus === 'failed' ? `
