@@ -745,7 +745,6 @@
       custom: 25000,
     }, prices || {});
     const lower = gameName.toLowerCase();
-    let gamepassName = gameName + ' Gamepass';
     let itemName = 'Item Pilihan ' + gameName;
     let eventName = 'Paket Event ' + gameName;
     let customName = 'Custom Request ' + gameName;
@@ -753,84 +752,72 @@
     let eventDesc = 'Produk event yang sedang aktif di ' + gameName + '.';
 
     if (lower.includes('grow a garden')) {
-      gamepassName = 'Gamepass Grow a Garden';
       itemName = 'Pet / Seed Request';
       eventName = 'Event Pack Grow a Garden';
       customName = 'Custom Garden Request';
       itemDesc = 'Request pet, seed, crop, atau kebutuhan garden.';
       eventDesc = 'Pack event Grow a Garden yang sedang tersedia.';
     } else if (lower.includes('blue lock') || lower.includes('basketball') || lower.includes('volleyball')) {
-      gamepassName = 'Gamepass / VIP ' + gameName;
       itemName = 'Spin / Style Pack';
       eventName = 'Lucky Spin Event';
       customName = 'Custom Sport Request';
       itemDesc = 'Request spin, style, flow, atau pack sport.';
       eventDesc = 'Paket event sport/anime yang sedang aktif.';
     } else if (lower.includes('fisch')) {
-      gamepassName = 'Fisch Gamepass';
       itemName = 'Rod / Boat Item';
       eventName = 'Fishing Event Pack';
       customName = 'Custom Fisch Request';
       itemDesc = 'Request rod, boat, bait, atau item fishing.';
       eventDesc = 'Kebutuhan event fishing yang sedang aktif.';
     } else if (lower.includes('pet simulator') || lower.includes('adopt me')) {
-      gamepassName = gameName + ' Gamepass';
       itemName = 'Pet / Egg Request';
       eventName = 'Pet Event Pack';
       customName = 'Custom Pet Request';
       itemDesc = 'Request pet, egg, item, atau boost.';
       eventDesc = 'Paket event pet yang sedang tersedia.';
     } else if (lower.includes('anime') || lower.includes('jujutsu')) {
-      gamepassName = gameName + ' Gamepass';
       itemName = 'Unit / Trait Request';
       eventName = 'Anime Event Bundle';
       customName = 'Custom Anime Request';
       itemDesc = 'Request unit, trait, spin, atau bundle anime.';
       eventDesc = 'Bundle event anime yang sedang aktif.';
     } else if (lower.includes('driving') || lower.includes('drive') || lower.includes('jailbreak')) {
-      gamepassName = 'Vehicle Gamepass';
       itemName = 'Vehicle / Car Request';
       eventName = 'Racing Event Pack';
       customName = 'Custom Vehicle Request';
       itemDesc = 'Request mobil, vehicle, wheel, atau item racing.';
       eventDesc = 'Paket event vehicle yang sedang aktif.';
     } else if (lower.includes('dress')) {
-      gamepassName = 'VIP / Makeup Pass';
       itemName = 'Fashion Item Request';
       eventName = 'Fashion Event Pack';
       customName = 'Custom Fashion Request';
       itemDesc = 'Request VIP, custom makeup, atau item fashion.';
       eventDesc = 'Paket event fashion yang sedang tersedia.';
     } else if (lower.includes('sol')) {
-      gamepassName = "Sol's RNG Gamepass";
       itemName = 'Aura / Item Request';
       eventName = 'RNG Event Pack';
       customName = 'Custom RNG Request';
       itemDesc = 'Request aura, item, atau kebutuhan RNG.';
       eventDesc = 'Paket event RNG yang sedang aktif.';
     } else if (lower.includes('murder')) {
-      gamepassName = 'MM2 Gamepass';
       itemName = 'Weapon / Item Request';
       eventName = 'MM2 Event Pack';
       customName = 'Custom MM2 Request';
       itemDesc = 'Request weapon, effect, atau item MM2.';
       eventDesc = 'Paket event MM2 yang sedang tersedia.';
     } else if (lower.includes('bedwars')) {
-      gamepassName = 'BedWars Gamepass';
       itemName = 'Kit / Battle Pass Request';
       eventName = 'BedWars Event Pack';
       customName = 'Custom BedWars Request';
       itemDesc = 'Request kit, battle pass, atau item BedWars.';
       eventDesc = 'Paket event BedWars yang sedang aktif.';
     } else if (lower.includes('doors')) {
-      gamepassName = 'DOORS Gamepass';
       itemName = 'Revive / Item Request';
       eventName = 'DOORS Event Pack';
       customName = 'Custom DOORS Request';
       itemDesc = 'Request revive, knob, atau item DOORS.';
       eventDesc = 'Paket event DOORS yang sedang aktif.';
     } else if (lower.includes('toilet')) {
-      gamepassName = 'Toilet Tower Defense Gamepass';
       itemName = 'Unit / Crate Request';
       eventName = 'TTD Event Pack';
       customName = 'Custom TTD Request';
@@ -838,7 +825,6 @@
       eventDesc = 'Paket event TTD yang sedang aktif.';
     }
     return [
-      makeProduct(gameId, 'gamepass', gamepassName, 'Gamepass', p.gamepass, 'Pilihan gamepass populer untuk ' + gameName + '.', 250),
       makeProduct(gameId, 'item', itemName, 'Item', p.item, itemDesc, 0),
       makeProduct(gameId, 'event', eventName, 'Event', p.event, eventDesc, 0),
       makeProduct(gameId, 'custom', customName, 'Custom', p.custom, 'Request khusus sesuai kebutuhan kamu. Admin konfirmasi sebelum proses.', 0),
@@ -1062,11 +1048,12 @@
     if (liveGiftLoadedFor !== activeGame || !liveGiftItems.length) return localItems;
     const localIds = new Set(localItems.map(item => item.id));
     const localKeys = new Set(localItems.map(catalogKey));
-    return localItems.concat(liveGiftItems.filter(item => {
+    const liveItems = liveGiftItems.filter(item => {
       if (localIds.has(item.id)) return false;
       if (localKeys.has(catalogKey(item))) return false;
       return true;
-    }));
+    });
+    return liveItems.concat(localItems);
   }
 
   function currentGame() {
@@ -1244,7 +1231,11 @@
         liveGiftItems = Array.isArray(data.passes) ? data.passes.map(pass => mapLivePass(pass, game)) : [];
         liveGiftLoadedFor = activeGame;
         const items = catalogItemsForActiveGame();
-        if (items.length && !items.some(item => item.id === selectedId)) selectedId = items[0].id;
+        if (liveGiftItems.length && !liveGiftItems.some(item => item.id === selectedId)) {
+          selectedId = liveGiftItems[0].id;
+        } else if (items.length && !items.some(item => item.id === selectedId)) {
+          selectedId = items[0].id;
+        }
         renderGrid();
         if (selectedId) selectItem(selectedId, false);
         else updatePreview();
