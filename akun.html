@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akun Saya - KokoRBX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/cart-client.css?v=icon-cart-mobile-20260531">
+  <link rel="stylesheet" href="assets/kokorbx-theme.css?v=contrast-theme-20260601">
+  <link rel="stylesheet" href="assets/roblox-profile.css?v=roblox-profile-20260602">
+  <script src="assets/kokorbx-theme-toggle.js?v=dark-toggle-20260601"></script>
+  <script defer src="assets/roblox-profile.js?v=roblox-profile-20260602"></script>
+  <style>
+    :root {
+      --soft: #f8faff;
+      --blue2: #eaf1ff;
+      --line: #dde6f8;
+      --text: #1e2a55;
+      --muted: #6c789b;
+      --purple: #8b7cff;
+      --blue: #6f8dff;
+      --mint: #62d8d4;
+      --green: #77dda8;
+      --sans: "Outfit", system-ui, sans-serif;
+      --mono: "JetBrains Mono", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 10%, rgba(139, 124, 255, .15), transparent 28%),
+        radial-gradient(circle at 86% 12%, rgba(98, 216, 212, .16), transparent 30%),
+        linear-gradient(180deg, #fff 0%, var(--soft) 44%, var(--blue2) 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+
+    .main-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, .9);
+      border-bottom: 1px solid rgba(221, 230, 248, .9);
+      box-shadow: 0 12px 34px rgba(111, 141, 255, .12);
+      backdrop-filter: blur(16px);
+    }
+    .header-inner {
+      max-width: 1180px;
+      min-height: 72px;
+      margin: 0 auto;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 24px;
+      font-weight: 900;
+    }
+    .brand-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #101219;
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(8, 11, 24, .28);
+    }
+    .brand-mark svg { width: 19px; height: 19px; }
+    .brand em { color: var(--purple); font-style: normal; }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 0;
+    }
+    .theme-pill {
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, .78);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 11px;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .theme-icon svg { width: 16px; height: 16px; display: block; }
+    .online-pill {
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid rgba(119, 221, 168, .42);
+      background: rgba(119, 221, 168, .14);
+      color: #268a6b;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 11px;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .online-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(119, 221, 168, .16);
+    }
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      min-height: calc(100vh - 72px);
+      background: rgba(255, 255, 255, .66);
+      border-left: 1px solid rgba(221, 230, 248, .72);
+      border-right: 1px solid rgba(221, 230, 248, .72);
+    }
+    .profile-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 26px 74px;
+      color: #fff;
+      background:
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,.34), transparent 24%),
+        linear-gradient(135deg, #315fbd 0%, #6f8dff 56%, #8b7cff 100%);
+    }
+    .profile-hero::after {
+      content: "";
+      position: absolute;
+      left: 34px;
+      right: 34px;
+      bottom: 38px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+    }
+    .profile-top {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: 16px;
+      align-items: center;
+    }
+    .profile-avatar-shell .koko-profile-avatar {
+      width: 72px;
+      height: 72px;
+      border: 3px solid rgba(255,255,255,.92);
+      box-shadow: 0 16px 28px rgba(20, 40, 100, .28);
+    }
+    .profile-name {
+      font-size: 26px;
+      font-weight: 900;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .profile-username {
+      margin-top: 5px;
+      color: rgba(255,255,255,.84);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .profile-meta {
+      margin-top: 13px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .profile-chip {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 10px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.24);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .wallet-strip {
+      width: calc(100% - 48px);
+      margin: -38px auto 0;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(221, 230, 248, .88);
+      box-shadow: 0 16px 36px rgba(111, 141, 255, .18);
+    }
+    .wallet-item {
+      min-height: 86px;
+      display: grid;
+      place-items: center;
+      gap: 4px;
+      padding: 13px;
+      text-align: center;
+      border-right: 1px solid rgba(221, 230, 248, .9);
+    }
+    .wallet-item:last-child { border-right: 0; }
+    .wallet-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .wallet-value {
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 900;
+    }
+    .content {
+      padding: 20px 24px 96px;
+      display: grid;
+      gap: 14px;
+    }
+    .account-action {
+      width: 100%;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(111, 141, 255, .66);
+      background: rgba(255,255,255,.72);
+      color: var(--blue);
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .panel {
+      border-radius: 16px;
+      border: 1px solid rgba(221, 230, 248, .9);
+      background: rgba(255,255,255,.74);
+      box-shadow: 0 16px 34px rgba(111, 141, 255, .11);
+      overflow: hidden;
+    }
+    .panel-head {
+      padding: 18px 18px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-weight: 900;
+      font-size: 18px;
+    }
+    .panel-body { padding: 0 18px 18px; }
+    .status-box {
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 12px;
+      background: rgba(234, 241, 255, .68);
+      border: 1px solid rgba(221, 230, 248, .9);
+    }
+    .status-row strong { color: var(--text); }
+    .verify-badge {
+      color: #a46521;
+      background: rgba(255, 208, 105, .22);
+      border: 1px solid rgba(255, 208, 105, .54);
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      overflow: hidden;
+      border: 1px solid rgba(221, 230, 248, .9);
+      border-radius: 12px;
+      background: rgba(221, 230, 248, .9);
+    }
+    .activity-item {
+      min-height: 92px;
+      background: rgba(255,255,255,.86);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 12px 8px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .activity-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      font: 900 11px/1 var(--mono);
+    }
+    .help-list {
+      display: grid;
+    }
+    .help-link {
+      min-height: 54px;
+      border-top: 1px solid rgba(221, 230, 248, .82);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--text);
+      font-weight: 800;
+    }
+    .help-link:first-child { border-top: 0; }
+    .danger-btn {
+      border-color: rgba(255, 111, 145, .42);
+      color: #d94f70;
+    }
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: min(760px, 100%);
+      min-height: 66px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(221, 230, 248, .9);
+      border-bottom: 0;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -14px 38px rgba(30, 42, 85, .12);
+      z-index: 90;
+      overflow: hidden;
+    }
+    .bottom-nav a {
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 4px;
+      color: #68748f;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .bottom-nav a.active { color: var(--blue); }
+    .nav-dot {
+      width: 21px;
+      height: 21px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: currentColor;
+      opacity: .88;
+    }
+
+    html[data-koko-theme="dark"] body {
+      color: #f8faff;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(139, 124, 255, .22), transparent 28%),
+        linear-gradient(180deg, #0b1022 0%, #101632 52%, #111827 100%);
+    }
+    html[data-koko-theme="dark"] .main-header,
+    html[data-koko-theme="dark"] .page,
+    html[data-koko-theme="dark"] .wallet-strip,
+    html[data-koko-theme="dark"] .panel,
+    html[data-koko-theme="dark"] .account-action,
+    html[data-koko-theme="dark"] .bottom-nav {
+      background: rgba(14, 20, 43, .9);
+      border-color: rgba(124, 140, 205, .34);
+      color: #f8faff;
+    }
+    html[data-koko-theme="dark"] .wallet-value,
+    html[data-koko-theme="dark"] .status-row strong,
+    html[data-koko-theme="dark"] .help-link {
+      color: #f8faff;
+    }
+    html[data-koko-theme="dark"] .wallet-label,
+    html[data-koko-theme="dark"] .status-box,
+    html[data-koko-theme="dark"] .activity-item,
+    html[data-koko-theme="dark"] .profile-username {
+      color: #c5d3f4;
+    }
+    html[data-koko-theme="dark"] .wallet-item,
+    html[data-koko-theme="dark"] .status-row,
+    html[data-koko-theme="dark"] .activity-item {
+      background: rgba(16, 22, 47, .72);
+      border-color: rgba(124, 140, 205, .3);
+    }
+
+    @media (max-width: 680px) {
+      .header-inner { min-height: 84px; align-items: flex-start; padding-top: 10px; }
+      .brand { font-size: 22px; }
+      .online-pill { display: none; }
+      .page { border: 0; }
+      .profile-hero { padding: 28px 20px 70px; }
+      .profile-name { font-size: 23px; }
+      .wallet-strip { width: calc(100% - 32px); grid-template-columns: 1fr; }
+      .wallet-item { min-height: 70px; border-right: 0; border-bottom: 1px solid rgba(221, 230, 248, .9); }
+      .wallet-item:last-child { border-bottom: 0; }
+      .content { padding: 18px 16px 92px; }
+      .activity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .theme-label { display: none; }
+    }
+  </style>
+</head>
+<body data-koko-account-page>
+  <header class="main-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="KokoRBX">
+        <span class="brand-mark">
+          <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <g transform="rotate(-12 10 10)">
+              <rect x="2" y="2" width="16" height="16" rx="4" stroke="white" stroke-width="2.2"/>
+              <rect x="6.5" y="6.5" width="7" height="7" rx="2" stroke="white" stroke-width="2"/>
+            </g>
+          </svg>
+        </span>
+        <span>Koko<em>RBX</em></span>
+      </a>
+      <div class="header-actions">
+        <button class="theme-pill koko-theme-toggle" type="button" aria-label="Ganti tema"></button>
+        <a class="header-btn btn-admin" href="admin.html" style="display:none">Admin</a>
+        <span class="online-pill"><span class="online-dot"></span>Online 24/7</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="profile-hero">
+      <div class="profile-top">
+        <div class="profile-avatar-shell" data-profile-avatar></div>
+        <div>
+          <div class="profile-name" data-profile-display>Belum terhubung</div>
+          <div class="profile-username" data-profile-username>Hubungkan username Roblox dulu</div>
+          <div class="profile-meta">
+            <span class="profile-chip" data-profile-status>Belum Terhubung</span>
+            <span class="profile-chip" data-profile-verify>Belum Aktif</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wallet-strip" aria-label="Ringkasan akun">
+      <div class="wallet-item">
+        <div class="wallet-label">Total Order</div>
+        <div class="wallet-value" data-profile-total-orders>0</div>
+      </div>
+      <div class="wallet-item">
+        <div class="wallet-label">Total Robux Dibeli</div>
+        <div class="wallet-value" data-profile-total-robux>0 R$</div>
+      </div>
+      <div class="wallet-item">
+        <div class="wallet-label">Bonus Member</div>
+        <div class="wallet-value">Nanti</div>
+      </div>
+    </section>
+
+    <section class="content">
+      <button class="account-action" type="button" data-connect-profile>
+        <span>Hubungkan Roblox</span><span aria-hidden="true">&gt;</span>
+      </button>
+
+      <article class="panel">
+        <div class="panel-head">
+          <span>Status Akun</span>
+          <span class="verify-badge" data-profile-verify>Belum Terverifikasi</span>
+        </div>
+        <div class="panel-body">
+          <div class="status-box">
+            <div class="status-row"><span>Roblox</span><strong data-profile-username>Belum terhubung</strong></div>
+            <div class="status-row"><span>User ID</span><strong data-profile-userid>User ID belum tersedia</strong></div>
+            <p>Username Roblox hanya digunakan untuk avatar dan pengisian form order. Ini belum menjadi bukti kepemilikan akun Roblox.</p>
+            <p>KokoRBX tidak pernah meminta password, cookie, kode 2FA, atau kode backup Roblox kamu.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <span>Riwayat Aktivitas</span>
+          <a href="robux5hari.html#my-orders-section">Lihat Semua</a>
+        </div>
+        <div class="panel-body">
+          <div class="activity-grid">
+            <div class="activity-item"><span class="activity-icon">1</span><span>Menunggu Pembayaran</span></div>
+            <div class="activity-item"><span class="activity-icon">2</span><span>Diproses Admin</span></div>
+            <div class="activity-item"><span class="activity-icon">3</span><span>Robux Dikirim</span></div>
+            <div class="activity-item"><span class="activity-icon">4</span><span>Selesai</span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><span>Bantuan</span></div>
+        <div class="panel-body help-list">
+          <a class="help-link" href="index.html#status"><span>Cek Pesanan</span><span aria-hidden="true">&gt;</span></a>
+          <a class="help-link" href="https://wa.me/6281996112019" target="_blank" rel="noopener"><span>Bantuan WhatsApp</span><span aria-hidden="true">&gt;</span></a>
+          <button class="help-link" type="button" data-verify-profile><span>Verifikasi Kepemilikan</span><span aria-hidden="true">&gt;</span></button>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><span>Pengaturan Akun</span></div>
+        <div class="panel-body help-list">
+          <button class="help-link" type="button" data-connect-profile><span>Ganti Username Roblox</span><span aria-hidden="true">&gt;</span></button>
+          <button class="help-link danger-btn" type="button" data-remove-profile><span>Hapus Akun Terhubung</span><span aria-hidden="true">&gt;</span></button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Navigasi akun">
+    <a href="index.html"><span class="nav-dot"></span><span>Home</span></a>
+    <a href="index.html#produk"><span class="nav-dot"></span><span>Produk</span></a>
+    <a href="index.html#status"><span class="nav-dot"></span><span>Cek</span></a>
+    <a href="transaksi-buyer.html"><span class="nav-dot"></span><span>Transaksi</span></a>
+    <a class="active" href="akun.html"><span class="nav-dot"></span><span>Akun</span></a>
+  </nav>
+
+  <script src="assets/cart-client.js?v=icon-cart-mobile-20260531"></script>
+</body>
+</html>

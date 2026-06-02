@@ -1,5 +1,6 @@
 const { readJsonBody, setCors } = require('./_lib/http');
 const { lookupRobloxProfiles, maskUsername, profileForUsername } = require('./_lib/roblox-public');
+const { getRobloxAvatar, lookupRobloxUser } = require('./_lib/roblox-profile');
 const robloxGiftCatalog = require('./_lib/roblox-gift-catalog');
 const { rowToOrder, supabaseFetch } = require('./_lib/supabase');
 const {
@@ -130,6 +131,41 @@ module.exports = async function handler(req, res) {
           source: 'default',
           warning: err.message,
           updatedAt: null,
+        });
+      }
+    }
+
+    if (req.method === 'GET' && req.query && req.query.action === 'roblox-user') {
+      try {
+        const profile = await lookupRobloxUser(req.query.username);
+        return res.status(200).json({ ok: true, profile });
+      } catch (err) {
+        return res.status(err.statusCode || 500).json({
+          ok: false,
+          error: err.message || 'Profil Roblox belum bisa dicek.',
+        });
+      }
+    }
+
+    if (req.method === 'GET' && req.query && req.query.action === 'roblox-avatar') {
+      try {
+        let base = {};
+        if (req.query.username) {
+          const profile = await lookupRobloxUser(req.query.username);
+          base = {
+            userId: profile.userId,
+            username: profile.username,
+            displayName: profile.displayName,
+          };
+        } else {
+          base = { userId: Number(req.query.userId || req.query.id) };
+        }
+        const avatar = await getRobloxAvatar(base.userId);
+        return res.status(200).json({ ok: true, avatar: { ...base, ...avatar } });
+      } catch (err) {
+        return res.status(err.statusCode || 500).json({
+          ok: false,
+          error: err.message || 'Avatar Roblox belum bisa dimuat.',
         });
       }
     }

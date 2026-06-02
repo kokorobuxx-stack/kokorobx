@@ -1,3 +1,13 @@
 {
-  "version": 2
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/roblox-user",
+      "destination": "/api/orders?action=roblox-user"
+    },
+    {
+      "source": "/api/roblox-avatar",
+      "destination": "/api/orders?action=roblox-avatar"
+    }
+  ]
 }
