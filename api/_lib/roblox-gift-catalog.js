@@ -49,6 +49,15 @@ function normalize(value) {
   return String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
+function isGenericPassTitle(title, gameName) {
+  const cleanTitle = normalize(title);
+  const cleanGame = normalize(gameName);
+  if (!cleanTitle || cleanTitle === 'gamepass' || cleanTitle === 'gamepasses' || cleanTitle === 'gamepassroblox') return true;
+  if (cleanGame && (cleanTitle === cleanGame + 'gamepass' || cleanTitle === cleanGame + 'gamepasses')) return true;
+  if (cleanGame && (cleanTitle === 'gamepass' + cleanGame || cleanTitle === 'gamepasses' + cleanGame)) return true;
+  return false;
+}
+
 function pickBestGame(results, wantedName) {
   const target = normalize(wantedName);
   const games = [];
@@ -178,7 +187,7 @@ async function loadPassIcons(assetIds) {
   }
 }
 
-async function loadGamePasses(universeId) {
+async function loadGamePasses(universeId, gameName) {
   if (!universeId) return [];
   const data = await fetchJson('https://apis.roblox.com/game-passes/v1/universes/' + encodeURIComponent(universeId) + '/game-passes?limit=100&passView=Full');
   const passes = (data.gamePasses || []).filter(pass => pass && pass.isForSale !== false);
@@ -201,6 +210,8 @@ async function loadGamePasses(universeId) {
       iconAssetId,
       source: 'roblox',
     };
+  }).filter(pass => {
+    return pass.robux > 0 && !isGenericPassTitle(pass.title, gameName);
   }).sort((a, b) => {
     if (!a.robux && b.robux) return 1;
     if (a.robux && !b.robux) return -1;
@@ -223,7 +234,10 @@ module.exports = async function handler(req, res) {
     let passes = [];
     if (activeGame && activeGame.universeId) {
       try {
-        passes = await loadGamePasses(activeGame.universeId);
+        passes = await loadGamePasses(activeGame.universeId, activeGame.name || activeGame.requestedName);
+        passes = passes.map(pass => Object.assign({}, pass, {
+          imageUrl: pass.imageUrl || activeGame.imageUrl || activeGame.iconUrl || '',
+        }));
       } catch (err) {
         passes = [];
       }

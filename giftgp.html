@@ -1080,9 +1080,32 @@
     )).join('');
   }
 
-  function gameCardStyle(game) {
+  function gameThumbnail(game) {
+    const live = liveGame(game && game.id);
+    return (live && live.imageUrl) || (game && game.image) || PLACEHOLDER_IMAGE;
+  }
+
+  function isGeneratedProductImage(url) {
+    return /^assets\/products\//.test(String(url || ''));
+  }
+
+  function productThumbnail(item, game) {
+    const live = liveGame(item && item.gameId);
+    const gameThumb = (live && live.imageUrl) || item.gameImage || (game && game.image) || PLACEHOLDER_IMAGE;
+    const productImage = item && item.imageUrl && !isGeneratedProductImage(item.imageUrl) ? item.imageUrl : '';
+    const image = item && item.source === 'roblox'
+      ? (item.imageUrl || gameThumb)
+      : (productImage || gameThumb);
+    return { image, fallback: gameThumb };
+  }
+
+  function liveImageClass(image) {
+    return image && image !== PLACEHOLDER_IMAGE ? ' has-live-image' : '';
+  }
+
+  function gameCardStyle(game, image) {
     const colors = game.colors || ['#6f8dff', '#8b7cff'];
-    return '--cover-a:' + colors[0] + ';--cover-b:' + colors[1] + ';';
+    return '--cover-a:' + colors[0] + ';--cover-b:' + colors[1] + ';' + styleImageVar('--game-image', image);
   }
 
   function renderGameCards() {
@@ -1106,11 +1129,11 @@
     }
     grid.innerHTML = games.map(game => {
       const live = liveGame(game.id);
-      const image = game.image || (live && live.imageUrl) || PLACEHOLDER_IMAGE;
+      const image = gameThumbnail(game);
       const livePlayers = live ? formatPlayers(live.playerCount) : '';
-      const cardStyle = gameCardStyle(game);
+      const cardStyle = gameCardStyle(game, image);
       return '<article class="game-card" style="' + cardStyle + '" data-game-card="' + escapeHtml(game.id) + '">' +
-        '<div class="game-cover has-image" data-monogram="' + escapeHtml(game.monogram) + '">' +
+        '<div class="game-cover has-image' + liveImageClass(image) + '" data-monogram="' + escapeHtml(game.monogram) + '">' +
           '<img ' + imageAttrs(image, PLACEHOLDER_IMAGE, game.name) + '>' +
           '<div class="game-name-art">' + escapeHtml(game.name) + '</div>' +
           '<span class="game-badge">TOP UP GAME</span>' +
@@ -1148,10 +1171,9 @@
     }
     grid.innerHTML = items.map(item => {
       const selected = item.id === selectedId;
-      const image = item.imageUrl || (game && game.image) || PLACEHOLDER_IMAGE;
-      const fallback = item.gameImage || (game && game.image) || PLACEHOLDER_IMAGE;
-      return '<article class="gift-card ' + (selected ? 'selected' : '') + '" data-id="' + item.id + '" style="' + styleImageVar('--gift-image', item.imageUrl) + '">' +
-        '<div class="gift-cover has-image"><img ' + imageAttrs(image, fallback, item.title) + '><div class="cover-label"><span class="cover-kicker">' + escapeHtml(item.type || typeLabel(item.category)) + '</span><span class="cover-main">' + escapeHtml(item.title) + '</span></div></div>' +
+      const thumb = productThumbnail(item, game);
+      return '<article class="gift-card ' + (selected ? 'selected' : '') + '" data-id="' + item.id + '" style="' + styleImageVar('--gift-image', thumb.image) + '">' +
+        '<div class="gift-cover has-image' + liveImageClass(thumb.image) + '"><img ' + imageAttrs(thumb.image, thumb.fallback, item.title) + '><div class="cover-label"><span class="cover-kicker">' + escapeHtml(item.type || typeLabel(item.category)) + '</span><span class="cover-main">' + escapeHtml(item.title) + '</span></div></div>' +
         '<div class="gift-body">' +
           '<div class="gift-tags"><span class="gift-tag">' + escapeHtml(item.type || typeLabel(item.category)) + '</span><span class="gift-tag">Region ' + escapeHtml(STORE_REGION) + '</span></div>' +
           '<div class="gift-name">' + escapeHtml(item.title) + '</div>' +
@@ -1208,8 +1230,8 @@
       desc: pass.desc || 'Gamepass aktif dari halaman Roblox game ini.',
       description: pass.desc || 'Gamepass aktif dari halaman Roblox game ini.',
       badge: pass.badge || 'Live Roblox',
-      imageUrl: game.image || pass.imageUrl || '',
-      gameImage: game.image || '',
+      imageUrl: pass.imageUrl || game.imageUrl || game.image || '',
+      gameImage: game.imageUrl || game.image || '',
       passId: pass.passId || null,
       source: 'roblox',
     };
