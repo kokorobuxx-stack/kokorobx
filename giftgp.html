@@ -404,6 +404,97 @@
   html[data-koko-theme] .gift-price {
     color: #FFC857 !important;
   }
+  .hero {
+    position: relative;
+    border: 1px solid rgba(124,92,252,.22);
+    border-radius: 18px;
+    padding: 22px;
+    background:
+      linear-gradient(135deg, rgba(124,92,252,.15), rgba(98,216,212,.07) 48%, rgba(255,200,87,.06)),
+      rgba(10,12,22,.78);
+    box-shadow: 0 24px 70px rgba(0,0,0,.24);
+    overflow: hidden;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(115deg, transparent 0 57%, rgba(255,255,255,.09) 57.5% 58.5%, transparent 59%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 1px, transparent 1px 18px);
+    opacity: .58;
+  }
+  .hero > * {
+    position: relative;
+    z-index: 1;
+  }
+  .eyebrow.logo-eyebrow {
+    margin-bottom: 14px;
+    padding: 9px 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+    background: rgba(255,255,255,.06);
+  }
+  .eyebrow.logo-eyebrow img {
+    height: 40px;
+    max-width: min(360px, 78vw);
+  }
+  .hero-logo {
+    min-height: 205px;
+    border-radius: 18px;
+    border-color: rgba(98,216,212,.24);
+    background:
+      linear-gradient(135deg, rgba(98,216,212,.1), rgba(124,92,252,.12)),
+      rgba(9,12,24,.82);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 18px 42px rgba(0,0,0,.22);
+  }
+  .hero-logo img {
+    width: 94%;
+    max-height: 172px;
+  }
+  .hero-points {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .hero-point {
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+    padding: 0 10px;
+    background: rgba(255,255,255,.06);
+    color: #DCE5FF;
+    font-size: .7rem;
+    font-weight: 900;
+  }
+  .catalog-panel,
+  .form-card,
+  .preview-panel {
+    border-radius: 16px;
+    box-shadow: 0 22px 55px rgba(0,0,0,.18);
+  }
+  .game-card,
+  .gift-card {
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(26,30,48,.96), rgba(12,14,22,.96)) !important;
+  }
+  .game-cover,
+  .gift-cover {
+    border-bottom: 1px solid rgba(255,255,255,.1);
+  }
+  .game-badge {
+    background: #FFE06A;
+    color: #14121f;
+  }
+  .select-btn,
+  .actions button {
+    border-radius: 10px;
+    box-shadow: 0 10px 24px rgba(124,92,252,.22);
+  }
   @media (max-width: 720px) {
     header { padding: 10px 8px; gap: 5px; }
     .logo { font-size: .98rem; gap: 6px; }
@@ -418,6 +509,10 @@
       padding: 0 10px;
       font-size: 11px;
     }
+    .hero { padding: 16px; }
+    .eyebrow.logo-eyebrow img { height: 32px; }
+    .hero-logo { min-height: 132px; }
+    .hero-logo img { max-height: 108px; }
   }
 </style>
 </head>
@@ -450,6 +545,11 @@
         <div class="eyebrow logo-eyebrow"><img src="assets/logo-service-giftgp.png" alt="Gift GP Ingame"></div>
         <h1>Gift GP <span>Ingame</span></h1>
         <p>Pilih game, pilih gamepass atau permanent fruit, lalu isi username dan display name. Data ini dipakai admin untuk mencocokkan profil sebelum gift dikirim.</p>
+        <div class="hero-points">
+          <span class="hero-point">Foto game real-time</span>
+          <span class="hero-point">Item Roblox live</span>
+          <span class="hero-point">Bayar di payment page</span>
+        </div>
       </div>
       <div class="hero-logo">
         <img src="assets/logo-gift-gp.png" alt="Gift GP Ingame">

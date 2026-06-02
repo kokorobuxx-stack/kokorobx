@@ -7,20 +7,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800;900&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #070914;
-    --panel: #101425;
-    --panel2: #151a31;
-    --panel3: #1c2240;
-    --line: #2d345c;
-    --line2: #46508a;
+    --bg: #070a12;
+    --panel: #101421;
+    --panel2: #151b2c;
+    --panel3: #1a2238;
+    --line: rgba(132,150,214,.24);
+    --line2: rgba(132,150,214,.42);
     --text: #f7f8ff;
-    --muted: #a9b4df;
+    --muted: #aeb9dc;
     --accent: #7c5cfc;
     --accent2: #62d8d4;
     --green: #39d98a;
     --gold: #ffc857;
     --red: #fc5c7d;
-    --shadow: 0 24px 70px rgba(0,0,0,.38);
+    --shadow: 0 24px 70px rgba(0,0,0,.34);
     --mono: "JetBrains Mono", monospace;
   }
 
@@ -31,12 +31,10 @@
     color: var(--text);
     font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background:
-      linear-gradient(rgba(124,92,252,.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(98,216,212,.05) 1px, transparent 1px),
-      radial-gradient(circle at 12% 0%, rgba(124,92,252,.28), transparent 34%),
-      radial-gradient(circle at 92% 8%, rgba(98,216,212,.2), transparent 30%),
-      var(--bg);
-    background-size: 36px 36px, 36px 36px, auto, auto, auto;
+      linear-gradient(rgba(124,92,252,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(98,216,212,.04) 1px, transparent 1px),
+      linear-gradient(135deg, #070a12 0%, #0c1020 46%, #071923 100%);
+    background-size: 42px 42px, 42px 42px, auto;
   }
   a { color: inherit; text-decoration: none; }
   button, input { font: inherit; }
@@ -52,8 +50,8 @@
     gap: 12px;
     min-height: 64px;
     padding: 12px 20px;
-    border-bottom: 1px solid rgba(255,255,255,.08);
-    background: rgba(7,9,20,.86);
+    border-bottom: 1px solid rgba(255,255,255,.09);
+    background: rgba(7,10,18,.88);
     backdrop-filter: blur(20px);
   }
   .brand {
@@ -62,17 +60,43 @@
     gap: 10px;
     font-family: "Outfit", sans-serif;
     font-weight: 900;
+    letter-spacing: 0;
   }
   .brand-mark {
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
+    position: relative;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
     display: grid;
     place-items: center;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    background: linear-gradient(145deg, #181d2b, #05070c);
     color: #fff;
     font-family: var(--mono);
-    font-size: .74rem;
+    font-size: .78rem;
+    box-shadow: 0 10px 22px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12);
+    isolation: isolate;
+  }
+  .brand-mark::before {
+    content: "";
+    position: absolute;
+    inset: 9px;
+    border: 2px solid #fff;
+    border-radius: 5px;
+    transform: rotate(-13deg);
+    opacity: .94;
+  }
+  .brand-mark::after {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: #fff;
+    position: absolute;
+  }
+  .brand-mark span { position: absolute; width: 1px; height: 1px; overflow: hidden; }
+  .brand-text em {
+    color: #9d8fff;
+    font-style: normal;
   }
   .header-actions { display: flex; gap: 8px; align-items: center; }
   .pill {
@@ -101,11 +125,34 @@
     padding: 28px 0 38px;
   }
   .top {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 16px;
-    align-items: end;
+    align-items: center;
     margin-bottom: 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 20px;
+    background:
+      linear-gradient(135deg, rgba(124,92,252,.17), rgba(98,216,212,.08) 45%, rgba(255,200,87,.06)),
+      rgba(16,20,33,.88);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .top::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(115deg, transparent 0 56%, rgba(255,255,255,.09) 56.5% 57.5%, transparent 58%),
+      repeating-linear-gradient(135deg, rgba(255,255,255,.04) 0 1px, transparent 1px 18px);
+    opacity: .55;
+  }
+  .top > * {
+    position: relative;
+    z-index: 1;
   }
   .eyebrow {
     display: inline-flex;
@@ -124,9 +171,14 @@
   h1 {
     margin: 10px 0 7px;
     font-family: "Outfit", sans-serif;
-    font-size: clamp(2rem, 5vw, 3.8rem);
+    font-size: clamp(2.15rem, 5vw, 4rem);
     line-height: .92;
     letter-spacing: 0;
+  }
+  h1 span {
+    background: linear-gradient(90deg, #fff, #b9e9ff 46%, #ffe5a3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
   .top p {
     margin: 0;
@@ -135,13 +187,31 @@
     font-size: .93rem;
     line-height: 1.7;
   }
+  .trust-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+  .trust-pill {
+    min-height: 30px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 999px;
+    padding: 0 10px;
+    background: rgba(255,255,255,.06);
+    color: #d9e2ff;
+    font-size: .7rem;
+    font-weight: 900;
+  }
   .order-chip {
     min-width: 220px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 12px 14px;
-    background: rgba(16,20,37,.82);
-    box-shadow: var(--shadow);
+    border: 1px solid rgba(98,216,212,.32);
+    border-radius: 14px;
+    padding: 14px 15px;
+    background: rgba(7,10,18,.62);
+    box-shadow: 0 18px 40px rgba(0,0,0,.26);
   }
   .order-chip span {
     display: block;
@@ -167,8 +237,8 @@
   }
   .panel {
     border: 1px solid var(--line);
-    border-radius: 14px;
-    background: rgba(16,20,37,.94);
+    border-radius: 16px;
+    background: rgba(16,20,33,.94);
     box-shadow: var(--shadow);
     overflow: hidden;
   }
@@ -180,7 +250,7 @@
     gap: 12px;
     padding: 14px 16px;
     border-bottom: 1px solid var(--line);
-    background: rgba(255,255,255,.025);
+    background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.018));
   }
   .panel-title {
     font-family: "Outfit", sans-serif;
@@ -231,8 +301,8 @@
   }
   .summary-box {
     min-width: 0;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 12px;
     background: var(--panel2);
     padding: 12px;
   }
@@ -256,10 +326,26 @@
   .summary-box .purple { color: #a89bff; }
 
   .pay-method {
-    border: 1px solid rgba(124,92,252,.38);
-    border-radius: 13px;
-    background: linear-gradient(180deg, rgba(124,92,252,.12), rgba(21,26,49,.94));
-    padding: 14px;
+    position: relative;
+    border: 1px solid rgba(98,216,212,.34);
+    border-radius: 16px;
+    background:
+      linear-gradient(135deg, rgba(124,92,252,.16), rgba(98,216,212,.08) 54%, rgba(255,200,87,.06)),
+      rgba(21,26,49,.96);
+    padding: 16px;
+    overflow: hidden;
+  }
+  .pay-method::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(255,255,255,.1), transparent 35% 70%, rgba(98,216,212,.08));
+    opacity: .45;
+  }
+  .pay-method > * {
+    position: relative;
+    z-index: 1;
   }
   .pay-head {
     display: flex;
@@ -280,33 +366,47 @@
     display: block;
     margin-top: 4px;
     font-family: "Outfit", sans-serif;
-    font-size: 1.25rem;
+    font-size: 1.35rem;
   }
   .pay-amount {
     color: var(--green);
     font-family: var(--mono);
     font-weight: 900;
     white-space: nowrap;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(57,217,138,.3);
+    border-radius: 999px;
+    padding: 0 12px;
+    background: rgba(57,217,138,.08);
   }
   .qris-frame {
     background: #fff;
-    border-radius: 12px;
-    padding: 12px;
+    border-radius: 18px;
+    padding: 14px;
     text-align: center;
+    box-shadow: 0 20px 42px rgba(0,0,0,.28);
   }
   .qris-frame img {
-    width: min(100%, 310px);
+    width: min(100%, 330px);
     aspect-ratio: 1 / 1;
     object-fit: contain;
     display: block;
     margin: 0 auto;
-    border-radius: 8px;
+    border-radius: 12px;
+  }
+  .qris-note {
+    margin-top: 11px;
+    color: #172033;
+    font-size: .72rem;
+    font-weight: 900;
   }
   .number-box {
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 12px;
-    background: var(--panel3);
-    padding: 14px;
+    border: 1px solid rgba(98,216,212,.3);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(26,34,56,.96), rgba(16,20,33,.96));
+    padding: 16px;
     text-align: center;
   }
   .number-label {
@@ -317,9 +417,9 @@
     letter-spacing: 1px;
   }
   .number-value {
-    margin: 8px 0 10px;
+    margin: 9px 0 12px;
     font-family: var(--mono);
-    font-size: clamp(1.45rem, 5vw, 2.2rem);
+    font-size: clamp(1.6rem, 5vw, 2.35rem);
     color: var(--gold);
     overflow-wrap: anywhere;
   }
@@ -362,13 +462,15 @@
   }
 
   .upload-zone {
-    border: 2px dashed rgba(124,92,252,.42);
-    border-radius: 13px;
+    border: 2px dashed rgba(98,216,212,.38);
+    border-radius: 16px;
     min-height: 180px;
     display: grid;
     place-items: center;
     padding: 18px;
-    background: rgba(124,92,252,.06);
+    background:
+      linear-gradient(135deg, rgba(124,92,252,.08), rgba(98,216,212,.05)),
+      rgba(21,26,49,.78);
     text-align: center;
     transition: border-color .18s ease, background .18s ease;
   }
@@ -380,6 +482,19 @@
     font-weight: 900;
     font-family: "Outfit", sans-serif;
     font-size: 1rem;
+  }
+  .upload-icon {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(98,216,212,.28);
+    background: rgba(98,216,212,.1);
+    color: var(--accent2);
+    font-family: var(--mono);
+    font-weight: 900;
   }
   .upload-sub {
     color: var(--muted);
@@ -417,7 +532,7 @@
     justify-content: center;
     gap: 8px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     padding: 0 14px;
     color: #fff;
     background: linear-gradient(135deg, var(--accent), #5f49e8);
@@ -429,7 +544,7 @@
   .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
   .btn.secondary {
     border: 1px solid var(--line2);
-    background: var(--panel2);
+    background: rgba(21,27,44,.94);
     color: var(--text);
   }
   .btn.green {
@@ -451,6 +566,28 @@
     padding: 12px;
     font-size: .76rem;
     line-height: 1.6;
+  }
+  .payment-brand-card {
+    border: 1px solid rgba(98,216,212,.22);
+    border-radius: 16px;
+    background:
+      linear-gradient(135deg, rgba(98,216,212,.1), rgba(124,92,252,.08)),
+      rgba(16,20,33,.92);
+    padding: 15px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .payment-brand-card strong {
+    display: block;
+    font-family: "Outfit", sans-serif;
+    font-size: 1.05rem;
+    margin-bottom: 5px;
+  }
+  .payment-brand-card span {
+    display: block;
+    color: var(--muted);
+    font-size: .74rem;
+    line-height: 1.55;
   }
   .mini-list {
     display: grid;
@@ -516,18 +653,20 @@
     header { padding: 10px 12px; }
     .pill { display: none; }
     main { width: min(100% - 18px, 1120px); padding-top: 18px; }
-    h1 { font-size: 2.1rem; }
+    .top { padding: 16px; border-radius: 16px; }
+    h1 { font-size: 2.15rem; }
     .summary-grid,
     .actions { grid-template-columns: 1fr; }
     .panel-head { align-items: flex-start; flex-direction: column; }
     .pay-head { display: block; }
-    .pay-amount { display: block; margin-top: 8px; }
+    .pay-amount { display: inline-flex; margin-top: 8px; }
+    .qris-frame img { width: min(100%, 280px); }
   }
 </style>
 </head>
 <body>
 <header>
-  <a class="brand" href="index.html"><span class="brand-mark">K</span><span>KokoRBX</span></a>
+  <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><span>K</span></span><span class="brand-text">Koko<em>RBX</em></span></a>
   <div class="header-actions">
     <span class="pill"><span class="pill-dot"></span><span>Pembayaran Aman</span></span>
     <a class="btn secondary" href="index.html">Store</a>
@@ -538,8 +677,13 @@
   <section class="top">
     <div>
       <span class="eyebrow">Payment Center</span>
-      <h1>Bayar Order</h1>
+      <h1>Bayar <span>Order</span></h1>
       <p>Detail pembayaran dipisahkan dari halaman order. Kalau tab tertutup, buka lagi link payment ini untuk melihat QRIS, nomor DANA/GoPay, dan upload bukti pembayaran.</p>
+      <div class="trust-strip" aria-label="Keunggulan pembayaran">
+        <span class="trust-pill">QRIS langsung tampil</span>
+        <span class="trust-pill">Upload bukti di sini</span>
+        <span class="trust-pill">Status tersimpan</span>
+      </div>
     </div>
     <div class="order-chip">
       <span>Nomor Order</span>
@@ -611,6 +755,7 @@
         <div class="panel-body">
           <div id="upload-zone" class="upload-zone">
             <div>
+              <div class="upload-icon">SS</div>
               <div class="upload-title">Pilih atau tarik foto bukti pembayaran</div>
               <div class="upload-sub">Format gambar JPG/PNG/WebP. File akan dikompres sebelum dikirim.</div>
               <div class="actions">
@@ -626,6 +771,10 @@
     </div>
 
     <aside class="side">
+      <div class="payment-brand-card">
+        <strong>KokoRBX Checkout</strong>
+        <span>Halaman ini bisa dibuka ulang selama ID order masih ada. Pembeli tidak perlu kembali ke halaman produk untuk melihat QRIS atau nomor bayar.</span>
+      </div>
       <section class="panel">
         <div class="panel-head">
           <div>
@@ -824,12 +973,12 @@
     }
     if (method === 'QRIS') {
       if (!QRIS_URL) return '<div class="placeholder">QRIS belum diset. Hubungi admin untuk kirim QRIS.</div>';
-      return '<div class="qris-frame"><img src="' + escapeHtml(QRIS_URL) + '" alt="QRIS pembayaran"></div>' +
+      return '<div class="qris-frame"><img src="' + escapeHtml(QRIS_URL) + '" alt="QRIS pembayaran"><div class="qris-note">Scan QRIS ini, lalu bayar sesuai nominal yang tampil.</div></div>' +
         '<div class="actions"><a class="btn secondary" href="' + escapeHtml(QRIS_URL) + '" download="qris-kokorbx.jpg">Download QRIS</a><button class="btn secondary" type="button" data-copy="' + escapeHtml(amount) + '">Salin Nominal</button></div>';
     }
     const number = PAYMENT_NUMBERS[method];
     if (number) {
-      return '<div class="number-box"><div class="number-label">Nomor ' + escapeHtml(method) + '</div><div class="number-value">' + escapeHtml(number) + '</div><button class="btn green full" type="button" data-copy="' + escapeHtml(number) + '">Salin Nomor</button></div>';
+      return '<div class="number-box"><div class="number-label">Transfer ke ' + escapeHtml(method) + '</div><div class="number-value">' + escapeHtml(number) + '</div><button class="btn green full" type="button" data-copy="' + escapeHtml(number) + '">Salin Nomor ' + escapeHtml(method) + '</button></div>';
     }
     return '<div class="placeholder">Metode pembayaran tersimpan. Hubungi admin kalau detail bayar belum muncul.</div>';
   }
