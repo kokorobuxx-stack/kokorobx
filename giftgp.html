@@ -154,6 +154,9 @@
   .catalog-grid {
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px;
   }
+  .catalog-grid.games-view {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
   .detail-only[hidden],
   .games-only[hidden] { display: none !important; }
   .game-card {
@@ -172,6 +175,27 @@
       radial-gradient(circle at 72% 18%, rgba(255,255,255,.68), transparent 12%),
       radial-gradient(circle at 15% 78%, rgba(98,216,212,.38), transparent 24%),
       linear-gradient(135deg, var(--cover-a, #4277ff), var(--cover-b, #825cff));
+  }
+  .game-cover img,
+  .gift-cover img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+  }
+  .game-cover.has-image,
+  .gift-cover.has-image {
+    background: #111827;
+  }
+  .game-cover.has-image::before,
+  .gift-cover.has-image::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(5,8,18,.1), rgba(5,8,18,.86));
+    z-index: 0;
   }
   .game-cover.has-live-image {
     background-image: linear-gradient(180deg, rgba(5,8,18,.08), rgba(5,8,18,.82)), var(--game-image);
@@ -212,6 +236,19 @@
   .game-title { font-size: 1rem; line-height: 1.2; font-weight: 900; color: var(--text); }
   .game-desc { color: var(--muted); font-size: .72rem; line-height: 1.45; }
   .game-meta { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--accent); font-size: .68rem; font-weight: 900; }
+  .game-actions {
+    margin-top: 9px;
+    display: grid;
+  }
+  .open-products {
+    min-height: 36px;
+    border: 1px solid rgba(124,92,252,.48);
+    border-radius: 10px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    font-weight: 900;
+    cursor: pointer;
+  }
   .back-link {
     display: inline-flex; align-items: center; min-height: 36px; border-radius: 10px; padding: 0 12px;
     border: 1px solid var(--border2); color: var(--accent); background: var(--s2);
@@ -227,6 +264,7 @@
   .gift-card.selected { border-color: rgba(57,217,138,.72); box-shadow: 0 0 0 3px rgba(57,217,138,.12), 0 18px 34px rgba(0,0,0,.22); }
   .gift-cover {
     height: 116px; padding: 14px; display: flex; align-items: flex-end;
+    position: relative; overflow: hidden; isolation: isolate;
     background:
       radial-gradient(circle at 78% 18%, rgba(98,216,212,.34), transparent 30%),
       radial-gradient(circle at 18% 16%, rgba(139,124,255,.38), transparent 30%),
@@ -256,6 +294,21 @@
   .gift-desc { color: var(--muted); font-size: .72rem; line-height: 1.45; min-height: 32px; }
   .gift-foot { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-top: auto; }
   .gift-price { color: var(--gold); font-weight: 900; font-size: .9rem; }
+  .gift-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
+    margin-top: 8px;
+  }
+  .detail-btn {
+    height: 34px;
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    color: var(--text);
+    background: var(--s2);
+    font-weight: 900;
+    cursor: pointer;
+  }
   .select-btn {
     height: 34px; border: 0; border-radius: 8px; padding: 0 12px;
     color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -406,6 +459,7 @@
   }
   .hero {
     position: relative;
+    grid-template-columns: minmax(0, 1fr);
     border: 1px solid rgba(124,92,252,.22);
     border-radius: 18px;
     padding: 22px;
@@ -511,8 +565,8 @@
     }
     .hero { padding: 16px; }
     .eyebrow.logo-eyebrow img { height: 32px; }
-    .hero-logo { min-height: 132px; }
-    .hero-logo img { max-height: 108px; }
+    .catalog-grid.games-view { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .gift-actions { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -543,16 +597,12 @@
     <section class="hero">
       <div class="hero-copy">
         <div class="eyebrow logo-eyebrow"><img src="assets/logo-service-giftgp.png" alt="Gift GP Ingame"></div>
-        <h1>Gift GP <span>Ingame</span></h1>
         <p>Pilih game, pilih gamepass atau permanent fruit, lalu isi username dan display name. Data ini dipakai admin untuk mencocokkan profil sebelum gift dikirim.</p>
         <div class="hero-points">
           <span class="hero-point">Foto game real-time</span>
           <span class="hero-point">Item Roblox live</span>
           <span class="hero-point">Bayar di payment page</span>
         </div>
-      </div>
-      <div class="hero-logo">
-        <img src="assets/logo-gift-gp.png" alt="Gift GP Ingame">
       </div>
     </section>
 
@@ -564,8 +614,8 @@
         </div>
         <a class="back-link detail-only" id="back-to-games" href="giftgp.html" hidden>Kembali ke daftar game</a>
       </div>
-      <div class="catalog-tools detail-only" id="catalog-tools" hidden>
-        <input class="search-input" id="catalog-search" type="search" placeholder="Cari item, gamepass, permanent fruit..." autocomplete="off">
+      <div class="catalog-tools" id="catalog-tools">
+        <input class="search-input" id="catalog-search" type="search" placeholder="Cari game, map, item, atau gamepass..." autocomplete="off">
         <div class="category-tabs" id="category-tabs"></div>
       </div>
       <div class="catalog-grid" id="catalog-grid"></div>
@@ -593,7 +643,7 @@
             <div class="input-wrap"><input id="username" name="username" autocomplete="username" placeholder="Contoh: tama_6505" required></div>
           </div>
           <div class="field">
-            <label for="displayName">Display Name <span class="req">*</span></label>
+            <label for="displayName">Nama Tampilan <span class="req">*</span></label>
             <div class="input-wrap"><input id="displayName" name="displayName" placeholder="Contoh: Tama" required></div>
           </div>
           <div class="field full">
@@ -610,16 +660,16 @@
       </form>
 
       <aside class="preview-panel">
-        <div class="preview-title">Ringkasan Order</div>
+        <div class="preview-title">Ringkasan Pesanan</div>
         <p>Ini data yang akan masuk ke Panel Transaksi.</p>
         <pre class="format-preview" id="format-preview"></pre>
         <div class="summary-grid">
           <div class="sum-item"><span>User</span><strong id="sum-user">-</strong></div>
-          <div class="sum-item"><span>Display</span><strong id="sum-display">-</strong></div>
+          <div class="sum-item"><span>Nama Tampilan</span><strong id="sum-display">-</strong></div>
           <div class="sum-item"><span>Game</span><strong id="sum-game">-</strong></div>
           <div class="sum-item"><span>Item</span><strong id="sum-item">-</strong></div>
           <div class="sum-item"><span>Total</span><strong class="gold" id="sum-total">-</strong></div>
-          <div class="sum-item"><span>Rate</span><strong id="sum-rate">Rp 140 / R$</strong></div>
+          <div class="sum-item"><span>Kurs</span><strong id="sum-rate">Rp 140 / R$</strong></div>
           <div class="sum-item"><span>Total Bayar</span><strong class="gold" id="sum-price">Rp -</strong></div>
         </div>
       </aside>
@@ -651,80 +701,130 @@
   let PRICE_PER_ROBUX = 140;
 
   const PAGE_GAME = new URLSearchParams(location.search).get('game') || '';
+  const STORE_REGION = 'Indonesia';
+  const PLACEHOLDER_IMAGE = 'assets/placeholder-roblox.jpg';
+  const INLINE_PLACEHOLDER = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#111827"/><stop offset="1" stop-color="#312e81"/></linearGradient></defs><rect width="900" height="520" fill="url(#g)"/><rect x="50" y="50" width="800" height="420" rx="44" fill="none" stroke="#7c5cfc" stroke-width="6" opacity=".5"/><text x="450" y="250" fill="#f8fafc" font-family="Arial,sans-serif" font-size="58" font-weight="900" text-anchor="middle">KokoRBX</text><text x="450" y="315" fill="#62d8d4" font-family="Arial,sans-serif" font-size="30" font-weight="800" text-anchor="middle">Gift GP Ingame</text></svg>'
+  );
+
+  function gameImage(id) {
+    return 'assets/games/' + id + '.jpg';
+  }
+
+  function productImage(gameId, id) {
+    return 'assets/products/' + gameId + '-' + id + '.jpg';
+  }
+
+  function productCategory(type) {
+    const key = String(type || '').toLowerCase();
+    if (key.includes('gamepass')) return 'gamepass';
+    if (key.includes('permanent')) return 'permanent';
+    if (key.includes('service')) return 'service';
+    if (key.includes('event')) return 'event';
+    if (key.includes('custom')) return 'custom';
+    return 'item';
+  }
+
+  function makeProduct(gameId, id, name, type, price, description, robux) {
+    return {
+      id,
+      name,
+      type,
+      price,
+      robux: robux || 0,
+      image: productImage(gameId, id),
+      description,
+    };
+  }
+
+  function standardProducts(gameId, gameName, prices) {
+    const p = Object.assign({
+      gamepass: 35000,
+      item: 22000,
+      permanent: 95000,
+      service: 18000,
+      event: 30000,
+      custom: 25000,
+    }, prices || {});
+    return [
+      makeProduct(gameId, 'gamepass', gameName + ' Gamepass', 'Gamepass', p.gamepass, 'Pilihan gamepass populer untuk ' + gameName + '.', 250),
+      makeProduct(gameId, 'item', 'Item Pilihan ' + gameName, 'Item', p.item, 'Request item pilihan dari katalog ' + gameName + '.', 0),
+      makeProduct(gameId, 'permanent', 'Permanent / Permanen ' + gameName, 'Permanent', p.permanent, 'Produk permanent atau unlock permanen untuk ' + gameName + '.', 700),
+      makeProduct(gameId, 'service', 'Jasa Service ' + gameName, 'Service', p.service, 'Bantuan service dan kebutuhan akun untuk ' + gameName + '.', 0),
+      makeProduct(gameId, 'event', 'Paket Event ' + gameName, 'Event', p.event, 'Produk event yang sedang aktif di ' + gameName + '.', 0),
+      makeProduct(gameId, 'custom', 'Custom Request ' + gameName, 'Custom', p.custom, 'Request khusus sesuai kebutuhan kamu. Admin konfirmasi sebelum proses.', 0),
+    ];
+  }
+
   const GAMES = [
-    { id: 'blox-fruits', name: 'Blox Fruits', subtitle: 'Gamepass, permanent fruit, dan service populer.', monogram: 'BF', colors: ['#2875ff', '#ff7a2f'], tags: 'Gamepass + Perm Fruit' },
-    { id: 'grow-a-garden', name: 'Grow a Garden', subtitle: 'Gift item, pack, dan request event.', monogram: 'GG', colors: ['#22c77b', '#7c5cff'], tags: 'Pet + Pack' },
-    { id: 'blue-lock-rivals', name: 'Blue Lock: Rivals', subtitle: 'Spin, style, flow, dan pack request.', monogram: 'BL', colors: ['#2188ff', '#182a7a'], tags: 'Anime Sport' },
-    { id: 'fisch', name: 'Fisch', subtitle: 'Gamepass dan kebutuhan fishing.', monogram: 'FS', colors: ['#18b5e8', '#756cff'], tags: 'Fishing' },
-    { id: 'blade-ball', name: 'Blade Ball', subtitle: 'Bundle, wheel, dan pass populer.', monogram: 'BB', colors: ['#7d5cff', '#17c6e8'], tags: 'Battle' },
-    { id: 'pet-simulator-99', name: 'Pet Simulator 99', subtitle: 'Pass, boost, dan request item.', monogram: 'P99', colors: ['#6f8dff', '#f07aff'], tags: 'Pet' },
-    { id: 'sols-rng', name: "Sol's RNG", subtitle: 'Pass dan item event pilihan.', monogram: 'SR', colors: ['#f7b34f', '#7c5cff'], tags: 'RNG' },
-    { id: 'drag-drive-simulator', name: 'Drag Drive Simulator', subtitle: 'Gamepass dan request racing item.', monogram: 'DDS', colors: ['#ff4f6d', '#7c5cff'], tags: 'Racing' },
-    { id: 'car-driving-indonesia', name: 'Car Driving Indonesia', subtitle: 'Top up game regional Indonesia.', monogram: 'CDI', colors: ['#1fa7ff', '#62d8d4'], tags: 'Regional ID' },
-    { id: 'volleyball-legends', name: 'Volleyball Legends', subtitle: 'Spin dan pack sport populer.', monogram: 'VL', colors: ['#ff8c3a', '#2875ff'], tags: 'Sport' },
-    { id: 'basketball-zero', name: 'Basketball Zero', subtitle: 'Spin, style, dan pass sport anime.', monogram: 'BZ', colors: ['#ffb12f', '#2177ff'], tags: 'Sport' },
-    { id: 'dress-to-impress', name: 'Dress To Impress', subtitle: 'VIP, custom makeup, dan item fashion.', monogram: 'DTI', colors: ['#f06cff', '#6f8dff'], tags: 'Fashion' },
-    { id: 'anime-vanguards', name: 'Anime Vanguards', subtitle: 'Pass, bundle, dan request unit.', monogram: 'AV', colors: ['#935cff', '#ff586b'], tags: 'Anime' },
-    { id: 'king-legacy', name: 'King Legacy', subtitle: 'Gamepass dan item pilihan.', monogram: 'KL', colors: ['#2e73ff', '#f1bb4d'], tags: 'Adventure' },
-    { id: 'jujutsu-infinite', name: 'Jujutsu Infinite', subtitle: 'Spin, pass, dan kebutuhan anime.', monogram: 'JI', colors: ['#6f8dff', '#1a2f7a'], tags: 'Anime' },
-    { id: 'the-strongest-battlegrounds', name: 'The Strongest Battlegrounds', subtitle: 'Pass dan cosmetic request.', monogram: 'SB', colors: ['#ec4b64', '#7c5cff'], tags: 'Fighting' }
+    {
+      id: 'blox-fruits',
+      name: 'Blox Fruits',
+      category: 'Adventure',
+      subtitle: 'Gamepass, permanent fruit, item, dan service Blox Fruits.',
+      image: gameImage('blox-fruits'),
+      monogram: 'BF',
+      colors: ['#2875ff', '#ff7a2f'],
+      tags: 'Gamepass + Permanent',
+      products: [
+        makeProduct('blox-fruits', '2x-money', '2x Money', 'Gamepass', 85000, 'Gamepass 2x Money Blox Fruits.', 450),
+        makeProduct('blox-fruits', 'dark-blade', 'Dark Blade', 'Gamepass', 250000, 'Gamepass Dark Blade Blox Fruits.', 1200),
+        makeProduct('blox-fruits', 'fruit-storage', 'Fruit Storage', 'Item', 65000, 'Tambah slot penyimpanan fruit.', 400),
+        makeProduct('blox-fruits', 'permanent-light', 'Permanent Light', 'Permanent', 154000, 'Permanent fruit Light untuk Blox Fruits.', 1100),
+        makeProduct('blox-fruits', 'race-reroll', 'Race Reroll', 'Service', 18000, 'Bantuan race reroll Blox Fruits.', 90),
+        makeProduct('blox-fruits', 'event-bundle', 'Event Bundle Blox Fruits', 'Event', 45000, 'Request bundle event Blox Fruits.', 0),
+        makeProduct('blox-fruits', 'custom-request', 'Custom Request Blox Fruits', 'Custom', 25000, 'Request fruit, gamepass, atau item lain.', 0),
+      ],
+    },
+    { id: 'grow-a-garden', name: 'Grow a Garden', category: 'Simulation', subtitle: 'Pet, seed, pack, dan request event Grow a Garden.', image: gameImage('grow-a-garden'), monogram: 'GG', colors: ['#22c77b', '#7c5cff'], tags: 'Pet + Pack', products: standardProducts('grow-a-garden', 'Grow a Garden', { gamepass: 28000, item: 20000, permanent: 65000, service: 18000, event: 24000, custom: 22000 }) },
+    { id: 'blue-lock-rivals', name: 'Blue Lock Rivals', category: 'Anime Sport', subtitle: 'Spin, style, flow, pack, dan gamepass Blue Lock Rivals.', image: gameImage('blue-lock-rivals'), monogram: 'BL', colors: ['#2188ff', '#182a7a'], tags: 'Anime Sport', products: standardProducts('blue-lock-rivals', 'Blue Lock Rivals', { gamepass: 35000, item: 22000, permanent: 75000, service: 18000, event: 30000, custom: 25000 }) },
+    { id: 'fisch', name: 'Fisch', category: 'Fishing', subtitle: 'Gamepass, item, boat, dan kebutuhan event Fisch.', image: gameImage('fisch'), monogram: 'FS', colors: ['#18b5e8', '#756cff'], tags: 'Fishing', products: standardProducts('fisch', 'Fisch', { gamepass: 32000, item: 22000, permanent: 70000, service: 18000, event: 27000, custom: 25000 }) },
+    { id: 'blade-ball', name: 'Blade Ball', category: 'Battle', subtitle: 'Gamepass, bundle, wheel, dan item event Blade Ball.', image: gameImage('blade-ball'), monogram: 'BB', colors: ['#7d5cff', '#17c6e8'], tags: 'Battle', products: standardProducts('blade-ball', 'Blade Ball', { gamepass: 33000, item: 22000, permanent: 72000, service: 18000, event: 30000, custom: 24000 }) },
+    { id: 'pet-simulator-99', name: 'Pet Simulator 99', category: 'Pet', subtitle: 'Gamepass, pet, item, dan boost Pet Simulator 99.', image: gameImage('pet-simulator-99'), monogram: 'P99', colors: ['#6f8dff', '#f07aff'], tags: 'Pet', products: standardProducts('pet-simulator-99', 'Pet Simulator 99', { gamepass: 36000, item: 24000, permanent: 78000, service: 19000, event: 30000, custom: 26000 }) },
+    { id: 'sols-rng', name: "Sol's RNG", category: 'RNG', subtitle: 'Gamepass, aura, item event, dan request Sols RNG.', image: gameImage('sols-rng'), monogram: 'SR', colors: ['#f7b34f', '#7c5cff'], tags: 'RNG', products: standardProducts('sols-rng', "Sol's RNG", { gamepass: 32000, item: 22000, permanent: 70000, service: 18000, event: 28000, custom: 24000 }) },
+    { id: 'drag-drive-simulator', name: 'Drag Drive Simulator', category: 'Racing', subtitle: 'Gamepass racing, mobil, wheel, dan event Drag Drive Simulator.', image: gameImage('drag-drive-simulator'), monogram: 'DDS', colors: ['#ff4f6d', '#7c5cff'], tags: 'Racing', products: standardProducts('drag-drive-simulator', 'Drag Drive Simulator', { gamepass: 30000, item: 22000, permanent: 68000, service: 18000, event: 28000, custom: 25000 }) },
+    { id: 'volleyball-legends', name: 'Volleyball Legends', category: 'Sport', subtitle: 'Spin, style, gamepass, dan pack Volleyball Legends.', image: gameImage('volleyball-legends'), monogram: 'VL', colors: ['#ff8c3a', '#2875ff'], tags: 'Sport', products: standardProducts('volleyball-legends', 'Volleyball Legends', { gamepass: 33000, item: 22000, permanent: 72000, service: 18000, event: 28000, custom: 24000 }) },
+    { id: 'car-driving-indonesia', name: 'Car Driving Indonesia', category: 'Regional Indonesia', subtitle: 'Produk dan request top up Car Driving Indonesia.', image: gameImage('car-driving-indonesia'), monogram: 'CDI', colors: ['#1fa7ff', '#62d8d4'], tags: 'Regional ID', products: standardProducts('car-driving-indonesia', 'Car Driving Indonesia', { gamepass: 30000, item: 20000, permanent: 65000, service: 18000, event: 26000, custom: 23000 }) },
+    { id: 'basketball-zero', name: 'Basketball Zero', category: 'Sport', subtitle: 'Spin, style, gamepass, dan pack Basketball Zero.', image: gameImage('basketball-zero'), monogram: 'BZ', colors: ['#ffb12f', '#2177ff'], tags: 'Sport', products: standardProducts('basketball-zero', 'Basketball Zero', { gamepass: 33000, item: 22000, permanent: 72000, service: 18000, event: 28000, custom: 24000 }) },
+    { id: 'dress-to-impress', name: 'Dress To Impress', category: 'Fashion', subtitle: 'VIP, makeup, fashion item, dan request Dress To Impress.', image: gameImage('dress-to-impress'), monogram: 'DTI', colors: ['#f06cff', '#6f8dff'], tags: 'Fashion', products: standardProducts('dress-to-impress', 'Dress To Impress', { gamepass: 35000, item: 22000, permanent: 78000, service: 18000, event: 28000, custom: 25000 }) },
+    { id: 'brookhaven', name: 'Brookhaven', category: 'Roleplay', subtitle: 'Gamepass, item roleplay, dan custom request Brookhaven.', image: gameImage('brookhaven'), monogram: 'BH', colors: ['#35c7ff', '#7c5cff'], tags: 'Roleplay', products: standardProducts('brookhaven', 'Brookhaven', { gamepass: 28000, item: 19000, permanent: 62000, service: 17000, event: 24000, custom: 22000 }) },
+    { id: 'adopt-me', name: 'Adopt Me', category: 'Pet', subtitle: 'Pet, item, gamepass, dan event Adopt Me.', image: gameImage('adopt-me'), monogram: 'AM', colors: ['#ff8bbd', '#6f8dff'], tags: 'Pet', products: standardProducts('adopt-me', 'Adopt Me', { gamepass: 32000, item: 22000, permanent: 70000, service: 18000, event: 28000, custom: 25000 }) },
+    { id: 'murder-mystery-2', name: 'Murder Mystery 2', category: 'Mystery', subtitle: 'Gamepass, weapon item, event, dan custom MM2.', image: gameImage('murder-mystery-2'), monogram: 'MM2', colors: ['#ef4444', '#27272a'], tags: 'Mystery', products: standardProducts('murder-mystery-2', 'Murder Mystery 2', { gamepass: 34000, item: 23000, permanent: 72000, service: 18000, event: 30000, custom: 26000 }) },
+    { id: 'anime-vanguards', name: 'Anime Vanguards', category: 'Anime', subtitle: 'Gamepass, unit, bundle, dan event Anime Vanguards.', image: gameImage('anime-vanguards'), monogram: 'AV', colors: ['#935cff', '#ff586b'], tags: 'Anime', products: standardProducts('anime-vanguards', 'Anime Vanguards', { gamepass: 35000, item: 24000, permanent: 76000, service: 19000, event: 30000, custom: 26000 }) },
+    { id: 'anime-defenders', name: 'Anime Defenders', category: 'Anime', subtitle: 'Gamepass, unit, trait, dan event Anime Defenders.', image: gameImage('anime-defenders'), monogram: 'AD', colors: ['#7c5cff', '#22d3ee'], tags: 'Anime', products: standardProducts('anime-defenders', 'Anime Defenders', { gamepass: 35000, item: 24000, permanent: 76000, service: 19000, event: 30000, custom: 26000 }) },
+    { id: 'jailbreak', name: 'Jailbreak', category: 'Action', subtitle: 'Gamepass, vehicle item, dan custom request Jailbreak.', image: gameImage('jailbreak'), monogram: 'JB', colors: ['#f59e0b', '#2563eb'], tags: 'Action', products: standardProducts('jailbreak', 'Jailbreak', { gamepass: 32000, item: 22000, permanent: 70000, service: 18000, event: 28000, custom: 25000 }) },
+    { id: 'bedwars', name: 'BedWars', category: 'Battle', subtitle: 'Kit, battle pass, item, dan custom request BedWars.', image: gameImage('bedwars'), monogram: 'BW', colors: ['#38bdf8', '#a855f7'], tags: 'Battle', products: standardProducts('bedwars', 'BedWars', { gamepass: 33000, item: 23000, permanent: 72000, service: 18000, event: 30000, custom: 25000 }) },
+    { id: 'doors', name: 'DOORS', category: 'Horror', subtitle: 'Gamepass, revive, item, dan custom request DOORS.', image: gameImage('doors'), monogram: 'DR', colors: ['#78350f', '#111827'], tags: 'Horror', products: standardProducts('doors', 'DOORS', { gamepass: 30000, item: 20000, permanent: 65000, service: 17000, event: 26000, custom: 23000 }) },
+    { id: 'custom-request', name: 'Custom Request', category: 'Custom', subtitle: 'Request game, map, gamepass, item, atau service lain.', image: gameImage('custom-request'), monogram: 'CR', colors: ['#7c5cff', '#62d8d4'], tags: 'Custom', products: standardProducts('custom-request', 'Custom Request', { gamepass: 25000, item: 20000, permanent: 65000, service: 18000, event: 25000, custom: 20000 }) },
   ];
   const CATEGORIES = [
     { id: 'all', label: 'Semua' },
     { id: 'gamepass', label: 'Gamepass' },
-    { id: 'permanent-fruit', label: 'Permanent Fruit' },
+    { id: 'item', label: 'Item' },
+    { id: 'permanent', label: 'Permanent' },
     { id: 'service', label: 'Service' },
     { id: 'event', label: 'Event' },
     { id: 'custom', label: 'Custom' }
   ];
-  const CATALOG = [
-    { id: 'bf-fruit-storage', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Fruit Storage', robux: 400, code: 'FS', desc: 'Tambah slot penyimpanan fruit.', badge: 'Popular' },
-    { id: 'bf-2x-mastery', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: '2x Mastery', robux: 450, code: '2M', desc: 'Bantu leveling mastery lebih cepat.', badge: 'Gamepass' },
-    { id: 'bf-2x-money', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: '2x Money', robux: 450, code: '2$', desc: 'Tambah income Beli saat farming.', badge: 'Gamepass' },
-    { id: 'bf-fast-boats', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Fast Boats', robux: 350, code: 'FB', desc: 'Akses boat cepat di Blox Fruits.', badge: 'Gamepass' },
-    { id: 'bf-dark-blade', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Dark Blade', robux: 1200, code: 'DB', desc: 'Gamepass sword premium.', badge: 'Premium' },
-    { id: 'bf-fruit-notifier', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'gamepass', title: 'Fruit Notifier', robux: 2700, code: 'FN', desc: 'Notifikasi spawn fruit.', badge: 'Premium' },
-    { id: 'bf-refund-stats', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'service', title: 'Refund Stats', robux: 75, code: 'RS', desc: 'Reset point stat karakter.', badge: 'Service' },
-    { id: 'bf-race-reroll', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'service', title: 'Race Reroll', robux: 90, code: 'RR', desc: 'Reroll race karakter.', badge: 'Service' },
-    { id: 'bf-perm-light', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Light', robux: 1100, code: 'PL', desc: 'Permanent fruit Light.', badge: 'Permanent' },
-    { id: 'bf-perm-buddha', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Buddha', robux: 1650, code: 'PB', desc: 'Permanent fruit Buddha.', badge: 'Popular' },
-    { id: 'bf-perm-portal', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Portal', robux: 2000, code: 'PP', desc: 'Permanent fruit Portal.', badge: 'Permanent' },
-    { id: 'bf-perm-dough', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Dough', robux: 2400, code: 'PD', desc: 'Permanent fruit Dough.', badge: 'Permanent' },
-    { id: 'bf-perm-leopard', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Leopard', robux: 3000, code: 'LP', desc: 'Permanent fruit Leopard.', badge: 'Permanent' },
-    { id: 'bf-perm-kitsune', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Kitsune', robux: 4000, code: 'PK', desc: 'Permanent fruit Kitsune.', badge: 'Permanent' },
-    { id: 'bf-perm-dragon', gameId: 'blox-fruits', game: 'Blox Fruits', category: 'permanent-fruit', title: 'Permanent Dragon', robux: 5000, code: 'DR', desc: 'Permanent fruit Dragon.', badge: 'Permanent' },
-    { id: 'gg-custom-pack', gameId: 'grow-a-garden', game: 'Grow a Garden', category: 'custom', title: 'Gift Pack Pilihan', robux: 0, code: 'GG', desc: 'Request pack/item Grow a Garden sesuai event yang sedang tersedia.', badge: 'Manual' },
-    { id: 'gg-event-item', gameId: 'grow-a-garden', game: 'Grow a Garden', category: 'event', title: 'Event Item Request', robux: 0, code: 'EV', desc: 'Untuk item event, admin cek stok dan harga dulu.', badge: 'Event' },
-    { id: 'gg-pet-request', gameId: 'grow-a-garden', game: 'Grow a Garden', category: 'custom', title: 'Pet / Seed Request', robux: 0, code: 'PET', desc: 'Pilih kalau mau request pet, seed, atau kebutuhan garden.', badge: 'Request' },
-    { id: 'bl-spin-pack', gameId: 'blue-lock-rivals', game: 'Blue Lock: Rivals', category: 'gamepass', title: 'Spin Pack', robux: 0, code: 'SP', desc: 'Request spin/style/flow Blue Lock: Rivals.', badge: 'Popular' },
-    { id: 'bl-custom-pass', gameId: 'blue-lock-rivals', game: 'Blue Lock: Rivals', category: 'custom', title: 'Custom Pass Blue Lock', robux: 0, code: 'BL', desc: 'Pilih gamepass yang kamu mau, admin konfirmasi harga.', badge: 'Manual' },
-    { id: 'fisch-gamepass', gameId: 'fisch', game: 'Fisch', category: 'gamepass', title: 'Gamepass Fisch', robux: 0, code: 'FG', desc: 'Request gamepass Fisch yang tersedia di toko game.', badge: 'Gamepass' },
-    { id: 'fisch-event', gameId: 'fisch', game: 'Fisch', category: 'event', title: 'Event / Fishing Item', robux: 0, code: 'FI', desc: 'Untuk kebutuhan event atau item fishing tertentu.', badge: 'Event' },
-    { id: 'bb-gamepass', gameId: 'blade-ball', game: 'Blade Ball', category: 'gamepass', title: 'Blade Ball Gamepass', robux: 0, code: 'BB', desc: 'Request pass, bundle, atau wheel Blade Ball.', badge: 'Gamepass' },
-    { id: 'bb-event', gameId: 'blade-ball', game: 'Blade Ball', category: 'event', title: 'Bundle / Event Request', robux: 0, code: 'BE', desc: 'Admin cek item event yang sedang aktif.', badge: 'Event' },
-    { id: 'ps99-gamepass', gameId: 'pet-simulator-99', game: 'Pet Simulator 99', category: 'gamepass', title: 'Pet Simulator Gamepass', robux: 0, code: 'P99', desc: 'Request gamepass atau boost Pet Simulator 99.', badge: 'Gamepass' },
-    { id: 'ps99-item', gameId: 'pet-simulator-99', game: 'Pet Simulator 99', category: 'custom', title: 'Pet / Item Request', robux: 0, code: 'PI', desc: 'Request pet atau item tertentu, admin cek dulu.', badge: 'Request' },
-    { id: 'sols-gamepass', gameId: 'sols-rng', game: "Sol's RNG", category: 'gamepass', title: "Sol's RNG Gamepass", robux: 0, code: 'SR', desc: 'Request pass atau fitur pilihan Sols RNG.', badge: 'Gamepass' },
-    { id: 'sols-event', gameId: 'sols-rng', game: "Sol's RNG", category: 'event', title: 'Aura / Event Request', robux: 0, code: 'AU', desc: 'Untuk request event atau kebutuhan aura tertentu.', badge: 'Event' },
-    { id: 'dds-gamepass', gameId: 'drag-drive-simulator', game: 'Drag Drive Simulator', category: 'gamepass', title: 'Racing Gamepass', robux: 0, code: 'DDS', desc: 'Request gamepass Drag Drive Simulator.', badge: 'Racing' },
-    { id: 'dds-custom', gameId: 'drag-drive-simulator', game: 'Drag Drive Simulator', category: 'custom', title: 'Car / Event Request', robux: 0, code: 'CAR', desc: 'Request mobil, wheel, atau item event yang aktif.', badge: 'Request' },
-    { id: 'cdi-gamepass', gameId: 'car-driving-indonesia', game: 'Car Driving Indonesia', category: 'gamepass', title: 'CDID Gamepass', robux: 0, code: 'CDI', desc: 'Top up game regional Indonesia, admin konfirmasi harga.', badge: 'Regional ID' },
-    { id: 'cdi-custom', gameId: 'car-driving-indonesia', game: 'Car Driving Indonesia', category: 'custom', title: 'Custom CDI Request', robux: 0, code: 'ID', desc: 'Request item atau pass CDI yang belum ada di katalog.', badge: 'Manual' },
-    { id: 'vl-spin', gameId: 'volleyball-legends', game: 'Volleyball Legends', category: 'gamepass', title: 'Spin / Lucky Pack', robux: 0, code: 'VL', desc: 'Request spin atau pack Volleyball Legends.', badge: 'Sport' },
-    { id: 'vl-custom', gameId: 'volleyball-legends', game: 'Volleyball Legends', category: 'custom', title: 'Custom Volleyball Request', robux: 0, code: 'VC', desc: 'Untuk item atau pass lain yang perlu dicek admin.', badge: 'Manual' },
-    { id: 'bz-spin', gameId: 'basketball-zero', game: 'Basketball Zero', category: 'gamepass', title: 'Spin / Style Pack', robux: 0, code: 'BZ', desc: 'Request spin, style, atau pack Basketball Zero.', badge: 'Sport' },
-    { id: 'bz-custom', gameId: 'basketball-zero', game: 'Basketball Zero', category: 'custom', title: 'Custom Basketball Request', robux: 0, code: 'BC', desc: 'Untuk kebutuhan lain yang perlu dicek admin.', badge: 'Manual' },
-    { id: 'dti-vip', gameId: 'dress-to-impress', game: 'Dress To Impress', category: 'gamepass', title: 'VIP / Makeup Pass', robux: 0, code: 'VIP', desc: 'Request VIP, custom makeup, atau item fashion.', badge: 'Fashion' },
-    { id: 'dti-custom', gameId: 'dress-to-impress', game: 'Dress To Impress', category: 'custom', title: 'Custom Fashion Request', robux: 0, code: 'DTI', desc: 'Admin cek item yang kamu minta sebelum proses.', badge: 'Manual' },
-    { id: 'av-gamepass', gameId: 'anime-vanguards', game: 'Anime Vanguards', category: 'gamepass', title: 'Anime Vanguards Gamepass', robux: 0, code: 'AV', desc: 'Request pass atau bundle Anime Vanguards.', badge: 'Anime' },
-    { id: 'av-unit-request', gameId: 'anime-vanguards', game: 'Anime Vanguards', category: 'custom', title: 'Unit / Bundle Request', robux: 0, code: 'UR', desc: 'Admin cek kebutuhan unit, bundle, dan event.', badge: 'Request' },
-    { id: 'kl-gamepass', gameId: 'king-legacy', game: 'King Legacy', category: 'gamepass', title: 'King Legacy Gamepass', robux: 0, code: 'KL', desc: 'Request pass atau kebutuhan King Legacy.', badge: 'Gamepass' },
-    { id: 'kl-fruit-request', gameId: 'king-legacy', game: 'King Legacy', category: 'custom', title: 'Fruit / Item Request', robux: 0, code: 'FR', desc: 'Pilih kalau mau request fruit atau item tertentu.', badge: 'Request' },
-    { id: 'ji-spin', gameId: 'jujutsu-infinite', game: 'Jujutsu Infinite', category: 'gamepass', title: 'Spin / Gamepass Request', robux: 0, code: 'JI', desc: 'Request spin, pass, atau item Jujutsu Infinite.', badge: 'Anime' },
-    { id: 'ji-custom', gameId: 'jujutsu-infinite', game: 'Jujutsu Infinite', category: 'custom', title: 'Custom Jujutsu Request', robux: 0, code: 'JC', desc: 'Untuk kebutuhan lain yang harus dicek admin.', badge: 'Manual' },
-    { id: 'sb-gamepass', gameId: 'the-strongest-battlegrounds', game: 'The Strongest Battlegrounds', category: 'gamepass', title: 'Battlegrounds Gamepass', robux: 0, code: 'SB', desc: 'Request pass atau cosmetic fighting.', badge: 'Gamepass' },
-    { id: 'sb-custom', gameId: 'the-strongest-battlegrounds', game: 'The Strongest Battlegrounds', category: 'custom', title: 'Custom Battlegrounds Request', robux: 0, code: 'SC', desc: 'Untuk kebutuhan lain yang harus dicek admin.', badge: 'Manual' }
-  ];
+  const CATALOG = GAMES.flatMap(game => game.products.map(product => ({
+    id: game.id + '-' + product.id,
+    productId: product.id,
+    gameId: game.id,
+    game: game.name,
+    category: productCategory(product.type),
+    type: product.type,
+    title: product.name,
+    name: product.name,
+    price: product.price,
+    robux: product.robux || 0,
+    code: itemInitials(product.name),
+    desc: product.description,
+    description: product.description,
+    badge: product.type,
+    imageUrl: product.image,
+    gameImage: game.image,
+    region: STORE_REGION,
+  })));
 
   const form = document.getElementById('gift-form');
   const fields = {
@@ -749,6 +849,18 @@
   function displayRobux(raw) {
     const cleaned = cleanRobux(raw);
     return cleaned ? Number(cleaned).toLocaleString('id-ID') + ' R$' : 'Manual';
+  }
+
+  function itemPrice(item) {
+    if (!item) return 0;
+    const direct = Number(item.price || 0);
+    if (direct > 0) return direct;
+    return calcGiftPrice(item.robux);
+  }
+
+  function displayPrice(item) {
+    const price = itemPrice(item);
+    return price ? formatRupiah(price) : 'Menunggu admin';
   }
 
   function formatRupiah(value) {
@@ -788,6 +900,29 @@
     return url ? name + ':url("' + cleanCssUrl(url) + '");' : '';
   }
 
+  function fallbackCatalogImage(img) {
+    const fallback = img.getAttribute('data-fallback') || PLACEHOLDER_IMAGE;
+    const finalImage = img.getAttribute('data-final') || INLINE_PLACEHOLDER;
+    if (!img.dataset.fallbackUsed && fallback && img.getAttribute('src') !== fallback) {
+      img.dataset.fallbackUsed = '1';
+      img.src = fallback;
+      return;
+    }
+    img.onerror = null;
+    img.src = finalImage;
+  }
+
+  function imageAttrs(src, fallback, alt) {
+    const first = src || fallback || PLACEHOLDER_IMAGE;
+    const second = fallback || PLACEHOLDER_IMAGE;
+    return 'src="' + escapeHtml(first) + '" data-fallback="' + escapeHtml(second) + '" data-final="' + escapeHtml(INLINE_PLACEHOLDER) + '" alt="' + escapeHtml(alt) + '" loading="lazy" onerror="fallbackCatalogImage(this)"';
+  }
+
+  function typeLabel(category) {
+    const found = CATEGORIES.find(cat => cat.id === category);
+    return found ? found.label : String(category || 'Item');
+  }
+
   function liveGame(gameId) {
     return liveGiftGames[gameId] || null;
   }
@@ -814,8 +949,8 @@
     if (!activeGame) return [];
     const localItems = CATALOG.filter(item => item.gameId === activeGame);
     if (liveGiftLoadedFor !== activeGame || !liveGiftItems.length) return localItems;
-    const manualItems = localItems.filter(item => item.category !== 'gamepass');
-    return liveGiftItems.concat(manualItems);
+    const localIds = new Set(localItems.map(item => item.id));
+    return localItems.concat(liveGiftItems.filter(item => !localIds.has(item.id)));
   }
 
   function currentGame() {
@@ -828,10 +963,10 @@
     document.querySelectorAll('.detail-only').forEach(el => { el.hidden = !detailMode; });
     document.querySelectorAll('.games-only').forEach(el => { el.hidden = detailMode; });
     const game = currentGame();
-    document.getElementById('catalog-title').textContent = detailMode ? (game ? game.name + ' - Gift GP' : 'Gift GP') : 'Pilih Game Populer';
+    document.getElementById('catalog-title').textContent = detailMode ? (game ? game.name + ' - Produk Gift GP' : 'Produk Gift GP') : 'Pilih Game/Map Populer';
     document.getElementById('catalog-subtitle').textContent = detailMode
-      ? 'Pilih item untuk ' + (game ? game.name : 'game ini') + '. Username dan display name wajib diisi supaya admin bisa cocokkan profil.'
-      : 'Pilih game dulu. Setelah itu baru muncul gamepass, permanent item, atau request khusus untuk game tersebut.';
+      ? 'Region toko: ' + STORE_REGION + '. Pilih produk untuk ' + (game ? game.name : 'game ini') + ', lalu isi username dan nama tampilan.'
+      : 'Cari dan pilih game/map Roblox. Setelah itu produk gamepass, item, permanent, service, event, dan custom akan tampil.';
   }
 
   function renderTabs() {
@@ -849,22 +984,41 @@
 
   function renderGameCards() {
     const grid = document.getElementById('catalog-grid');
-    grid.innerHTML = GAMES.map(game => {
+    grid.className = 'catalog-grid games-view';
+    const query = document.getElementById('catalog-search').value.trim().toLowerCase();
+    const games = GAMES.filter(game => {
+      const categoryMatch = activeCategory === 'all' || game.products.some(product => productCategory(product.type) === activeCategory);
+      const text = [
+        game.name,
+        game.category,
+        game.subtitle,
+        game.tags,
+        game.products.map(product => product.name + ' ' + product.type + ' ' + product.description).join(' ')
+      ].join(' ').toLowerCase();
+      return categoryMatch && (!query || text.includes(query));
+    });
+    if (!games.length) {
+      grid.innerHTML = '<div class="empty-state">Game atau map tidak ditemukan.</div>';
+      return;
+    }
+    grid.innerHTML = games.map(game => {
       const live = liveGame(game.id);
-      const liveImage = live && live.imageUrl ? live.imageUrl : '';
+      const image = game.image || (live && live.imageUrl) || PLACEHOLDER_IMAGE;
       const livePlayers = live ? formatPlayers(live.playerCount) : '';
-      const cardStyle = gameCardStyle(game) + styleImageVar('--game-image', liveImage);
-      return '<a class="game-card" href="giftgp.html?game=' + encodeURIComponent(game.id) + '" style="' + cardStyle + '">' +
-        '<div class="game-cover ' + (liveImage ? 'has-live-image' : '') + '" data-monogram="' + escapeHtml(game.monogram) + '">' +
+      const cardStyle = gameCardStyle(game);
+      return '<article class="game-card" style="' + cardStyle + '" data-game-card="' + escapeHtml(game.id) + '">' +
+        '<div class="game-cover has-image" data-monogram="' + escapeHtml(game.monogram) + '">' +
+          '<img ' + imageAttrs(image, PLACEHOLDER_IMAGE, game.name) + '>' +
           '<div class="game-name-art">' + escapeHtml(game.name) + '</div>' +
-          '<span class="game-badge">' + (liveImage ? 'FOTO ROBLOX' : 'TOP UP GAME') + '</span>' +
+          '<span class="game-badge">TOP UP GAME</span>' +
         '</div>' +
         '<div class="game-body">' +
-          '<div class="game-title">' + escapeHtml((live && live.name) || game.name) + '</div>' +
+          '<div class="game-title">' + escapeHtml(game.name) + '</div>' +
           '<div class="game-desc">' + escapeHtml(game.subtitle) + '</div>' +
-          '<div class="game-meta"><span>' + escapeHtml(game.tags) + '</span><span>' + (livePlayers ? '<span class="game-live-meta">' + escapeHtml(livePlayers) + '</span>' : 'Lihat item') + '</span></div>' +
+          '<div class="game-meta"><span>' + escapeHtml(game.category) + '</span><span>' + (livePlayers ? '<span class="game-live-meta">' + escapeHtml(livePlayers) + '</span>' : 'Region ID') + '</span></div>' +
+          '<div class="game-actions"><button class="open-products" type="button" data-game="' + escapeHtml(game.id) + '">Lihat Produk</button></div>' +
         '</div>' +
-      '</a>';
+      '</article>';
     }).join('');
   }
 
@@ -875,27 +1029,32 @@
       renderGameCards();
       return;
     }
+    const game = currentGame();
     const query = document.getElementById('catalog-search').value.trim().toLowerCase();
     const items = catalogItemsForActiveGame().filter(item => {
       const gameMatch = item.gameId === activeGame;
       const categoryMatch = activeCategory === 'all' || item.category === activeCategory;
-      const text = (item.title + ' ' + item.game + ' ' + item.category + ' ' + item.desc + ' ' + item.badge).toLowerCase();
+      const text = (item.title + ' ' + item.game + ' ' + item.type + ' ' + item.category + ' ' + item.desc + ' ' + item.badge).toLowerCase();
       return gameMatch && categoryMatch && (!query || text.includes(query));
     });
     const grid = document.getElementById('catalog-grid');
+    grid.className = 'catalog-grid';
     if (!items.length) {
-      grid.innerHTML = '<div class="empty-state">Item tidak ditemukan.</div>';
+      grid.innerHTML = '<div class="empty-state">Produk tidak ditemukan.</div>';
       return;
     }
     grid.innerHTML = items.map(item => {
       const selected = item.id === selectedId;
+      const image = item.imageUrl || (game && game.image) || PLACEHOLDER_IMAGE;
+      const fallback = item.gameImage || (game && game.image) || PLACEHOLDER_IMAGE;
       return '<article class="gift-card ' + (selected ? 'selected' : '') + '" data-id="' + item.id + '" style="' + styleImageVar('--gift-image', item.imageUrl) + '">' +
-        '<div class="gift-cover ' + (item.imageUrl ? 'has-live-image' : '') + '"><div class="cover-label"><span class="cover-kicker">' + escapeHtml(item.source === 'roblox' ? 'Live Roblox' : item.game) + '</span><span class="cover-main">' + escapeHtml(item.title) + '</span></div></div>' +
+        '<div class="gift-cover has-image"><img ' + imageAttrs(image, fallback, item.title) + '><div class="cover-label"><span class="cover-kicker">' + escapeHtml(item.type || typeLabel(item.category)) + '</span><span class="cover-main">' + escapeHtml(item.title) + '</span></div></div>' +
         '<div class="gift-body">' +
-          '<div class="gift-tags"><span class="gift-tag">' + escapeHtml(item.badge) + '</span><span class="gift-tag">' + escapeHtml(item.category.replace('-', ' ')) + '</span></div>' +
+          '<div class="gift-tags"><span class="gift-tag">' + escapeHtml(item.type || typeLabel(item.category)) + '</span><span class="gift-tag">Region ' + escapeHtml(STORE_REGION) + '</span></div>' +
           '<div class="gift-name">' + escapeHtml(item.title) + '</div>' +
           '<div class="gift-desc">' + escapeHtml(item.desc) + '</div>' +
-          '<div class="gift-foot"><span class="gift-price">' + displayRobux(item.robux) + '</span><button class="select-btn" type="button" data-select="' + item.id + '">' + (selected ? 'Dipilih' : 'Pilih') + '</button></div>' +
+          '<div class="gift-foot"><span class="gift-price">' + displayPrice(item) + '</span></div>' +
+          '<div class="gift-actions"><button class="detail-btn" type="button" data-detail="' + item.id + '">Detail</button><button class="select-btn" type="button" data-select="' + item.id + '">' + (selected ? 'Dipilih' : 'Pilih') + '</button></div>' +
         '</div>' +
       '</article>';
     }).join('');
@@ -917,6 +1076,19 @@
     }
   }
 
+  function showProductDetail(id) {
+    const item = catalogItemsForActiveGame().find(entry => entry.id === id);
+    if (!item) return;
+    alert([
+      item.title,
+      'Tipe: ' + (item.type || typeLabel(item.category)),
+      'Game: ' + item.game,
+      'Harga: ' + displayPrice(item),
+      '',
+      item.desc
+    ].join('\n'));
+  }
+
   function mapLivePass(pass, game) {
     const title = pass.title || pass.name || 'Gamepass Roblox';
     return {
@@ -924,12 +1096,17 @@
       gameId: game.id,
       game: game.requestedName || game.name || 'Roblox',
       category: 'gamepass',
+      type: 'Gamepass',
       title,
+      name: title,
       robux: Number(pass.robux || pass.price || 0),
+      price: calcGiftPrice(Number(pass.robux || pass.price || 0)),
       code: itemInitials(title),
       desc: pass.desc || 'Gamepass aktif dari halaman Roblox game ini.',
+      description: pass.desc || 'Gamepass aktif dari halaman Roblox game ini.',
       badge: pass.badge || 'Live Roblox',
-      imageUrl: pass.imageUrl || '',
+      imageUrl: game.image || pass.imageUrl || '',
+      gameImage: game.image || '',
       passId: pass.passId || null,
       source: 'roblox',
     };
@@ -979,15 +1156,15 @@
   function buildFormat() {
     const item = selectedItem();
     const total = item ? item.robux : 0;
-    const price = calcGiftPrice(total);
+    const price = itemPrice(item);
     return [
       'Format Gift GP Ingame',
       'Username: ' + (value('username') || '-'),
-      'Display name: ' + (value('displayName') || '-'),
+      'Nama tampilan: ' + (value('displayName') || '-'),
       'Game: ' + (item ? item.game : '-'),
       'Item: ' + (item ? item.title : '-'),
-      'ID gamepass Roblox: ' + (item && item.passId ? item.passId : '-'),
-      'Kategori: ' + (item ? item.category.replace('-', ' ') : '-'),
+      'ID Gamepass Roblox: ' + (item && item.passId ? item.passId : '-'),
+      'Tipe produk: ' + (item ? (item.type || typeLabel(item.category)) : '-'),
       'Total robux: ' + (item && item.robux ? displayRobux(item.robux) : 'Manual - tanya admin'),
       'Total bayar: ' + (price ? formatRupiah(price) : 'Menunggu admin'),
       'Kontak/catatan: ' + (value('contact') || '-'),
@@ -997,7 +1174,7 @@
 
   function updatePreview() {
     const item = selectedItem();
-    const price = item ? calcGiftPrice(item.robux) : 0;
+    const price = itemPrice(item);
     document.getElementById('format-preview').textContent = buildFormat();
     document.getElementById('sum-user').textContent = value('username') || '-';
     document.getElementById('sum-display').textContent = value('displayName') || '-';
@@ -1024,11 +1201,12 @@
       gamepass: item ? item.title : '',
       passId: item && item.passId ? item.passId : '',
       category: item ? item.category : 'gift',
+      productType: item ? (item.type || typeLabel(item.category)) : 'Gift',
       totalRobux: total,
       robux: Number(total || 0),
       rate: PRICE_PER_ROBUX,
-      price: calcGiftPrice(total),
-      image: item && item.imageUrl ? item.imageUrl : 'assets/logo-gift-gp.png',
+      price: itemPrice(item),
+      image: item && item.imageUrl ? item.imageUrl : (item && item.gameImage ? item.gameImage : PLACEHOLDER_IMAGE),
       method: 'Gift GP Ingame',
       paymentMethod: 'QRIS',
       status: 'request',
@@ -1058,10 +1236,50 @@
       renderGrid();
       return;
     }
+    const gameBtn = event.target.closest('[data-game]');
+    if (gameBtn) {
+      activeGame = gameBtn.dataset.game;
+      activeCategory = 'all';
+      selectedId = ((CATALOG.find(item => item.gameId === activeGame) || {}).id || '');
+      history.replaceState(null, '', 'giftgp.html?game=' + encodeURIComponent(activeGame));
+      renderGrid();
+      if (selectedId) selectItem(selectedId, false);
+      loadRobloxGiftCatalog();
+      document.getElementById('catalog-title').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    const gameCard = event.target.closest('[data-game-card]');
+    if (gameCard && !event.target.closest('button')) {
+      const gameId = gameCard.getAttribute('data-game-card');
+      activeGame = gameId;
+      activeCategory = 'all';
+      selectedId = ((CATALOG.find(item => item.gameId === activeGame) || {}).id || '');
+      history.replaceState(null, '', 'giftgp.html?game=' + encodeURIComponent(activeGame));
+      renderGrid();
+      if (selectedId) selectItem(selectedId, false);
+      loadRobloxGiftCatalog();
+      return;
+    }
+    const detailBtn = event.target.closest('[data-detail]');
+    if (detailBtn) {
+      showProductDetail(detailBtn.dataset.detail);
+      return;
+    }
     const selectBtn = event.target.closest('[data-select]');
     if (selectBtn) {
       selectItem(selectBtn.dataset.select, true);
     }
+  });
+
+  document.getElementById('back-to-games').addEventListener('click', event => {
+    event.preventDefault();
+    activeGame = '';
+    activeCategory = 'all';
+    selectedId = '';
+    liveGiftItems = [];
+    liveGiftLoadedFor = '';
+    history.replaceState(null, '', 'giftgp.html');
+    renderGrid();
   });
 
   document.getElementById('catalog-search').addEventListener('input', renderGrid);
@@ -1079,14 +1297,14 @@
     const orderId = 'GGP-' + Math.floor(100000 + Math.random() * 900000);
     await saveRequest(orderId);
 
-    const price = calcGiftPrice(item.robux);
+    const price = itemPrice(item);
     const detail = buildFormat();
     if (window.KokoPanel) {
       KokoPanel.createOrder({
         id: orderId,
         product: 'Gift GP - ' + item.title,
         category: 'gift',
-        image: item.imageUrl || 'assets/logo-gift-gp.png',
+        image: item.imageUrl || item.gameImage || PLACEHOLDER_IMAGE,
         price,
         priceText: price ? formatRupiah(price) : 'Menunggu admin',
         username: value('username'),
