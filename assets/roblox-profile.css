@@ -351,7 +351,11 @@
 html.kokorbx-profile-ready #user-bar,
 html.kokorbx-profile-ready #login-bar,
 html.kokorbx-profile-ready .header-actions > a[href="rbxstore_auth.html"],
-html.kokorbx-profile-ready .header-right > a[href="rbxstore_auth.html"] {
+html.kokorbx-profile-ready .header-right > a[href="rbxstore_auth.html"],
+html.kokorbx-profile-ready .header-actions > .logout-btn,
+html.kokorbx-profile-ready .header-right > .logout-btn,
+html.kokorbx-profile-ready .header-actions > button.logout-btn,
+html.kokorbx-profile-ready .header-right > button.logout-btn {
   display: none !important;
 }
 

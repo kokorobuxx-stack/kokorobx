@@ -107,6 +107,16 @@
     holder.querySelectorAll('#user-bar, #login-bar, a[href="rbxstore_auth.html"]').forEach(function(node) {
       node.style.display = 'none';
     });
+    holder.querySelectorAll('.logout-btn, button[onclick*="logoutStore"], a[href*="rbxstore_auth.html"]').forEach(function(node) {
+      node.style.display = 'none';
+    });
+    Array.from(holder.children).forEach(function(node) {
+      if (node.classList && node.classList.contains('koko-profile-slot')) return;
+      var text = String(node.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+      if (text === 'keluar' || text === 'masuk' || /^@?tamu_\d+/.test(text)) {
+        node.style.display = 'none';
+      }
+    });
     holder.querySelectorAll('a[href="admin.html"], .btn-admin').forEach(function(link) {
       link.style.display = isAdminSession() ? '' : 'none';
     });
