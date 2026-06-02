@@ -79,13 +79,18 @@
     return String(value || '').trim();
   }
 
+  function lower(value) {
+    return String(value || '').trim().toLowerCase();
+  }
+
   function getProfile() {
     var profile = readJson(PROFILE_KEY, null);
     var session = readJson(SESSION_KEY, null);
     if (profile && (profile.username || profile.robloxUsername)) {
+      var profileRobloxId = profile.robloxUserId || profile.userId || null;
       return {
-        kokoUserId: profile.kokoUserId || profile.userId || profile.robloxUserId || null,
-        robloxUserId: profile.robloxUserId || profile.userId || null,
+        kokoUserId: profile.kokoUserId || (profileRobloxId ? 'rbx_' + profileRobloxId : null),
+        robloxUserId: profileRobloxId,
         username: profile.robloxUsername || profile.username || '',
         displayName: profile.robloxDisplayName || profile.displayName || profile.username || '',
         avatarUrl: profile.robloxAvatar || profile.headshotUrl || profile.avatarUrl || '',
@@ -94,9 +99,10 @@
       };
     }
     if (session && (session.username || session.robloxUsername)) {
+      var sessionRobloxId = session.robloxUserId || session.userId || null;
       return {
-        kokoUserId: session.kokoUserId || session.robloxUserId || null,
-        robloxUserId: session.robloxUserId || null,
+        kokoUserId: session.kokoUserId || (sessionRobloxId ? 'rbx_' + sessionRobloxId : null),
+        robloxUserId: sessionRobloxId,
         username: session.robloxUsername || session.username || '',
         displayName: session.robloxDisplayName || session.displayName || session.username || '',
         avatarUrl: session.robloxAvatar || session.avatarUrl || '',
@@ -116,6 +122,29 @@
     var profile = getProfile();
     if (!profile) return '';
     return String(profile.robloxUserId || profile.username || '').toLowerCase();
+  }
+
+  function attachBuyerIdentity(order) {
+    var profile = getProfile();
+    var cleanOrder = Object.assign({}, order || {});
+    if (!profile || !profile.username) return cleanOrder;
+
+    var originalUsername = clean(cleanOrder.username || cleanOrder.robloxUsername || cleanOrder.user || cleanOrder.buyer || '');
+    if (originalUsername && lower(originalUsername) !== lower(profile.username)) {
+      cleanOrder.recipientUsername = cleanOrder.recipientUsername || originalUsername;
+    }
+    cleanOrder.kokoUserId = cleanOrder.kokoUserId || profile.kokoUserId || (profile.robloxUserId ? 'rbx_' + profile.robloxUserId : '');
+    cleanOrder.robloxUserId = cleanOrder.robloxUserId || cleanOrder.userId || profile.robloxUserId || '';
+    cleanOrder.userId = cleanOrder.userId || cleanOrder.robloxUserId || '';
+    cleanOrder.username = profile.username;
+    cleanOrder.user = profile.username;
+    cleanOrder.robloxUsername = profile.username;
+    cleanOrder.robloxDisplayName = profile.displayName || profile.username;
+    cleanOrder.buyerUsername = profile.username;
+    cleanOrder.buyerDisplayName = profile.displayName || profile.username;
+    cleanOrder.buyer = profile.username;
+    cleanOrder.loginProvider = cleanOrder.loginProvider || profile.loginProvider || 'roblox_oauth';
+    return cleanOrder;
   }
 
   function normalizeStatus(input) {
@@ -183,16 +212,15 @@
     if (!productName) productName = 'Produk KokoRBX';
 
     var price = Number(input.totalPrice || input.price || input.amount || input.total || 0);
-    var username = clean(input.robloxUsername || input.username || input.user || input.buyer);
+    var username = clean(input.robloxUsername || input.username || input.user || input.buyer || input._storageUsername);
     var created = input.createdAt || input.created_at || input.time || input.created || Date.now();
     var updated = input.updatedAt || input.updated_at || input.sentAt || input.sent_at || created;
-    var profile = getProfile();
 
     return {
       id: id,
-      kokoUserId: input.kokoUserId || (profile && profile.kokoUserId) || '',
-      robloxUserId: input.robloxUserId || input.userId || (profile && profile.robloxUserId) || '',
-      robloxUsername: username || (profile && profile.username) || '',
+      kokoUserId: input.kokoUserId || input.koko_user_id || '',
+      robloxUserId: input.robloxUserId || input.roblox_user_id || input.userId || '',
+      robloxUsername: username,
       productId: input.productId || input.gpId || input.gp_id || '',
       productName: productName,
       productType: input.productType || categoryFromOrder(input),
@@ -227,15 +255,23 @@
     return Array.isArray(value) ? value : [];
   }
 
+  function withStorageUsername(item, username) {
+    if (!item || typeof item !== 'object') return item;
+    return Object.assign({}, item, { _storageUsername: username });
+  }
+
   function profileMatches(order, profile) {
     if (!profile) return false;
-    var username = String(order.robloxUsername || '').toLowerCase();
-    var orderUserId = String(order.robloxUserId || '').toLowerCase();
-    var profileUsername = String(profile.username || '').toLowerCase();
-    var profileId = String(profile.robloxUserId || '').toLowerCase();
+    var username = lower(order.robloxUsername);
+    var orderUserId = lower(order.robloxUserId);
+    var kokoUserId = lower(order.kokoUserId);
+    var profileUsername = lower(profile.username);
+    var profileId = lower(profile.robloxUserId);
+    var profileKokoId = lower(profile.kokoUserId);
+
     if (profileId && orderUserId && profileId === orderUserId) return true;
+    if (profileKokoId && kokoUserId && profileKokoId === kokoUserId) return true;
     if (profileUsername && username && profileUsername === username) return true;
-    if (!username && !orderUserId && order.source === 'panel') return true;
     return false;
   }
 
@@ -250,14 +286,15 @@
 
     if (profile && profile.username) {
       readArrayKey('rbx_orders_u_' + profile.username).forEach(function(item) {
-        raw.push({ item: item, source: 'robux' });
+        raw.push({ item: withStorageUsername(item, profile.username), source: 'robux' });
       });
     }
 
     for (var i = 0; i < localStorage.length; i += 1) {
       var key = localStorage.key(i);
       if (!key || !key.indexOf || key.indexOf('rbx_orders_u_') !== 0) continue;
-      readArrayKey(key).forEach(function(item) { raw.push({ item: item, source: 'robux' }); });
+      var owner = key.slice('rbx_orders_u_'.length);
+      readArrayKey(key).forEach(function(item) { raw.push({ item: withStorageUsername(item, owner), source: 'robux' }); });
     }
 
     var byId = new Map();
@@ -665,7 +702,6 @@
           '<p data-auth-message></p>' +
           '<div class="koko-auth-actions">' +
             '<a class="primary" data-auth-oauth href="#">Login dengan Roblox</a>' +
-            '<a data-auth-manual href="akun.html?login=1">Hubungkan username manual</a>' +
             '<button type="button" data-auth-close>Nanti dulu</button>' +
           '</div>' +
         '</div>';
@@ -678,7 +714,6 @@
     localStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify({ returnTo: returnTo, time: Date.now() }));
     node.querySelector('[data-auth-message]').textContent = message || 'Silakan login dengan Roblox terlebih dahulu untuk melanjutkan checkout.';
     node.querySelector('[data-auth-oauth]').href = API_BASE + '/api/auth/roblox/start?returnTo=' + encodeURIComponent(returnTo);
-    node.querySelector('[data-auth-manual]').href = 'akun.html?login=1&returnTo=' + encodeURIComponent(returnTo);
     node.classList.add('show');
   }
 
@@ -742,5 +777,7 @@
     normalizeStatus: normalizeStatus,
     statuses: STATUS,
     updateOrderStatus: updateOrderStatus,
+    getProfile: getProfile,
+    attachBuyerIdentity: attachBuyerIdentity,
   };
 })();

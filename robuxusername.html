@@ -1512,8 +1512,14 @@
   // ── ORDER STORAGE (per user + mirrored ke global untuk admin) ──
   function getCurrentUsername() {
     try {
+      if (window.KokoTransactions && window.KokoTransactions.getProfile) {
+        const p = window.KokoTransactions.getProfile();
+        if (p && p.username) return p.username;
+      }
+      const profile = JSON.parse(localStorage.getItem('kokorbx_roblox_profile') || 'null');
+      if (profile && (profile.robloxUsername || profile.username)) return profile.robloxUsername || profile.username;
       const s = JSON.parse(localStorage.getItem('rbx_session') || 'null');
-      return s ? s.username : 'guest';
+      return s ? (s.robloxUsername || s.username) : 'guest';
     } catch(e) { return 'guest'; }
   }
   function userOrderKey(uname) { return 'rbx_orders_u_' + (uname || getCurrentUsername()); }
@@ -1528,7 +1534,10 @@
   async function saveOrderForUser(order) {
     const uname = getCurrentUsername();
     const uKey = userOrderKey(uname);
-    const clean = stripProofFromOrder(order);
+    const identified = window.KokoTransactions && window.KokoTransactions.attachBuyerIdentity
+      ? window.KokoTransactions.attachBuyerIdentity(order)
+      : order;
+    const clean = stripProofFromOrder(identified);
     try {
       const uOrders = JSON.parse(localStorage.getItem(uKey) || '[]');
       if (!uOrders.find(o => o.id === clean.id)) uOrders.unshift(clean);
@@ -1541,7 +1550,7 @@
     } catch(e) { console.warn('saveOrderForUser rbx_orders gagal:', e); }
 
     // ── Simpan ke Supabase (terpusat, bisa dilihat admin) ──
-    return sbInsertOrder(order);
+    return sbInsertOrder(clean);
   }
 
   // Kompres gambar base64 supaya tidak overload localStorage (maks ~400KB)

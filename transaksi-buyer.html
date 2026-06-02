@@ -617,6 +617,52 @@
     return cleanStatus((order && order.priceText) || 'Menunggu harga');
   }
 
+  function readJsonStorage(key, fallback) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || 'null') || fallback;
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function getBuyerProfile() {
+    const profile = readJsonStorage('kokorbx_roblox_profile', null);
+    const session = readJsonStorage('rbx_session', null);
+    const source = profile && (profile.username || profile.robloxUsername) ? profile : session;
+    if (!source || !(source.username || source.robloxUsername)) return null;
+    const robloxUserId = String(source.robloxUserId || source.userId || '').trim();
+    const username = String(source.robloxUsername || source.username || '').trim();
+    return {
+      kokoUserId: source.kokoUserId || (robloxUserId ? 'rbx_' + robloxUserId : ''),
+      robloxUserId,
+      username,
+      displayName: String(source.robloxDisplayName || source.displayName || username).trim(),
+      loginProvider: source.loginProvider || source.source || 'roblox_oauth'
+    };
+  }
+
+  function attachBuyerIdentity(order) {
+    const profile = getBuyerProfile();
+    const clean = Object.assign({}, order || {});
+    if (!profile || !profile.username) return clean;
+    const originalUsername = String(clean.username || clean.robloxUsername || clean.user || clean.buyer || '').trim();
+    if (originalUsername && originalUsername.toLowerCase() !== profile.username.toLowerCase()) {
+      clean.recipientUsername = clean.recipientUsername || originalUsername;
+    }
+    clean.kokoUserId = clean.kokoUserId || profile.kokoUserId;
+    clean.robloxUserId = clean.robloxUserId || clean.userId || profile.robloxUserId;
+    clean.userId = clean.userId || clean.robloxUserId;
+    clean.username = profile.username;
+    clean.user = profile.username;
+    clean.buyer = profile.username;
+    clean.robloxUsername = profile.username;
+    clean.robloxDisplayName = profile.displayName || profile.username;
+    clean.buyerUsername = profile.username;
+    clean.buyerDisplayName = profile.displayName || profile.username;
+    clean.loginProvider = clean.loginProvider || profile.loginProvider;
+    return clean;
+  }
+
   function normalizeOrder(order) {
     const o = Object.assign({}, order || {});
     o.id = String(o.id || '');
@@ -627,6 +673,13 @@
     o.priceText = cleanStatus(o.priceText || '');
     o.status = cleanStatus(o.status || 'Menunggu admin');
     o.buyer = o.buyer || o.username || 'Buyer KokoRBX';
+    o.username = o.username || o.robloxUsername || o.buyer || '';
+    o.robloxUsername = o.robloxUsername || o.username || '';
+    o.robloxUserId = o.robloxUserId || o.userId || '';
+    o.kokoUserId = o.kokoUserId || '';
+    o.buyerUsername = o.buyerUsername || o.robloxUsername || o.username || '';
+    o.buyerDisplayName = o.buyerDisplayName || o.robloxDisplayName || o.buyerUsername || '';
+    o.recipientUsername = o.recipientUsername || '';
     o.messages = Array.isArray(o.messages) ? o.messages.map(message => ({
       role: String(message.role || 'system').toLowerCase() === 'seller' ? 'admin' : String(message.role || 'system').toLowerCase(),
       text: String(message.text || '').replace(/seller/ig, 'admin'),
@@ -644,7 +697,7 @@
     if (!params.has('new')) return null;
     const product = params.get('product') || 'Custom Request';
     const price = toNumber(params.get('price') || params.get('amount'));
-    const order = KokoPanel.createOrder({
+    const order = KokoPanel.createOrder(attachBuyerIdentity({
       prefix: String(params.get('category') || params.get('new') || 'TRX').slice(0, 3).toUpperCase(),
       product,
       category: params.get('category') || params.get('new') || 'custom',
@@ -656,7 +709,7 @@
       username: params.get('username') || '',
       buyer: params.get('buyer') || params.get('username') || 'Buyer KokoRBX',
       source: params.get('source') || 'store'
-    });
+    }));
     activeOrderId = order.id;
     roomToken = 'buyer-' + order.id;
     history.replaceState(null, '', 'transaksi-buyer.html?order=' + encodeURIComponent(order.id) + '&token=' + encodeURIComponent('buyer-' + order.id));
@@ -668,7 +721,7 @@
     if (!activeOrderId) activeOrderId = KokoPanel.getActiveId() || (orders[0] && orders[0].id) || '';
     let order = orders.find(item => item.id === activeOrderId);
     if (!order && activeOrderId) {
-      order = normalizeOrder(KokoPanel.createOrder({
+      order = normalizeOrder(KokoPanel.createOrder(attachBuyerIdentity({
         id: activeOrderId,
         product: params.get('product') || 'Order KokoRBX',
         category: params.get('category') || 'custom',
@@ -678,7 +731,7 @@
         buyer: params.get('buyer') || params.get('username') || 'Buyer KokoRBX',
         buyerMessage: 'Halo admin, aku mau tanya order ' + activeOrderId + '.',
         detail: params.get('detail') || 'Order dibuka dari link buyer room.'
-      }));
+      })));
     }
     if (order) {
       activeOrderId = order.id;

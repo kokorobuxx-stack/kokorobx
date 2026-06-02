@@ -1325,7 +1325,7 @@
   async function saveRequest(orderId) {
     const item = selectedItem();
     const total = item ? cleanRobux(item.robux) : '';
-    const request = {
+    let request = {
       id: orderId,
       type: 'giftgp',
       package: item ? item.title : 'Gift GP Ingame',
@@ -1349,6 +1349,9 @@
       time: Date.now(),
       note: 'Cek username dan display name sebelum proses gift.',
     };
+    if (window.KokoTransactions && window.KokoTransactions.attachBuyerIdentity) {
+      request = window.KokoTransactions.attachBuyerIdentity(request);
+    }
     const orders = JSON.parse(localStorage.getItem('rbx_orders') || '[]');
     orders.unshift(request);
     localStorage.setItem('rbx_orders', JSON.stringify(orders));
@@ -1436,7 +1439,8 @@
     const price = calcGiftPrice(item.robux);
     const detail = buildFormat();
     if (window.KokoPanel) {
-      KokoPanel.createOrder({
+      const panelOrder = window.KokoTransactions && window.KokoTransactions.attachBuyerIdentity
+        ? window.KokoTransactions.attachBuyerIdentity({
         id: orderId,
         product: 'Gift GP - ' + item.title,
         category: 'gift',
@@ -1448,7 +1452,21 @@
         detail,
         buyerMessage: 'Halo admin, aku mau order Gift GP.\n' + detail,
         source: 'giftgp.html'
-      });
+        })
+        : {
+          id: orderId,
+          product: 'Gift GP - ' + item.title,
+          category: 'gift',
+          image: item.imageUrl || item.gameImage || PLACEHOLDER_IMAGE,
+          price,
+          priceText: price ? formatRupiah(price) : 'Menunggu admin',
+          username: value('username'),
+          buyer: value('username'),
+          detail,
+          buyerMessage: 'Halo admin, aku mau order Gift GP.\n' + detail,
+          source: 'giftgp.html'
+        };
+      KokoPanel.createOrder(panelOrder);
     }
     document.getElementById('notice').classList.add('show');
     const params = new URLSearchParams({

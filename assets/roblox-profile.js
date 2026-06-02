@@ -47,8 +47,12 @@
   function saveProfile(profile) {
     var clean = {
       userId: Number(profile.userId),
+      robloxUserId: String(profile.userId || ''),
+      kokoUserId: profile.kokoUserId || (profile.userId ? 'rbx_' + profile.userId : ''),
       username: String(profile.username || '').trim(),
+      robloxUsername: String(profile.username || '').trim(),
       displayName: String(profile.displayName || profile.username || '').trim(),
+      robloxDisplayName: String(profile.displayName || profile.username || '').trim(),
       avatarUrl: profile.avatarUrl || profile.headshotUrl || '',
       headshotUrl: profile.headshotUrl || profile.avatarUrl || '',
       profileUrl: profile.profileUrl || '',
@@ -127,6 +131,11 @@
   }
 
   function removeProfile() {
+    fetch(API_BASE + '/api/auth/logout', {
+      method: 'POST',
+      credentials: 'include',
+      cache: 'no-store',
+    }).catch(function() {});
     localStorage.removeItem(PROFILE_KEY);
     localStorage.removeItem(SESSION_KEY);
     profileCache = null;
@@ -205,10 +214,10 @@
     slot.innerHTML =
       '<button class="koko-connect-btn" type="button">' +
         '<span class="koko-profile-avatar" aria-hidden="true">RB</span>' +
-        '<span>Hubungkan Roblox</span>' +
+        '<span>Login Roblox</span>' +
       '</button>';
     slot.querySelector('button').addEventListener('click', function() {
-      openConnectModal('');
+      location.href = oauthStartUrl();
     });
   }
 
@@ -244,7 +253,7 @@
         '<div class="koko-profile-modal-head">' +
           '<div>' +
             '<div class="koko-profile-modal-title" id="koko-profile-modal-title">Hubungkan Roblox</div>' +
-            '<div class="koko-profile-modal-sub" id="koko-profile-modal-sub">Masukkan username Roblox. KokoRBX hanya mengambil data publik: avatar, display name, username, dan user ID.</div>' +
+            '<div class="koko-profile-modal-sub" id="koko-profile-modal-sub">Login resmi dengan Roblox. KokoRBX hanya menerima data publik yang disetujui pembeli: avatar, display name, username, dan user ID.</div>' +
           '</div>' +
           '<button class="koko-profile-close" type="button" aria-label="Tutup">x</button>' +
         '</div>' +
@@ -252,8 +261,8 @@
           '<a class="koko-profile-oauth" href="' + escapeHtml(oauthStartUrl()) + '">Login resmi dengan Roblox</a>' +
           '<div class="koko-profile-oauth-note">OAuth Roblox hanya mengirim identitas publik yang disetujui pembeli. KokoRBX tidak melihat password, cookie, 2FA, atau kode backup.</div>' +
         '</div>' +
-        '<form class="koko-profile-form" id="koko-profile-form">' +
-          '<div class="koko-profile-divider"><span>atau hubungkan username manual</span></div>' +
+        '<form class="koko-profile-form" id="koko-profile-form" style="display:none">' +
+          '<div class="koko-profile-divider"><span>fallback manual nonaktif</span></div>' +
           '<div class="koko-profile-field">' +
             '<label for="koko-profile-username">Username Roblox</label>' +
             '<input id="koko-profile-username" autocomplete="username" placeholder="Contoh: tama_6505" required>' +
@@ -401,6 +410,8 @@
   function countLocalOrders(profile) {
     if (!profile) return { total: 0, robux: 0 };
     var keys = [SESSION_KEY, 'rbx_orders', 'rbx_orders_u_' + profile.username];
+    var profileUsername = String(profile.username || '').toLowerCase();
+    var profileUserId = String(profile.userId || profile.robloxUserId || '').toLowerCase();
     var seen = new Set();
     var total = 0;
     var robux = 0;
@@ -410,8 +421,15 @@
       if (!Array.isArray(rows)) return;
       rows.forEach(function(order) {
         if (!order || !order.id || seen.has(order.id)) return;
-        var user = String(order.username || '').toLowerCase();
-        if (user && user !== String(profile.username).toLowerCase()) return;
+        var orderUserId = String(order.robloxUserId || order.userId || '').toLowerCase();
+        var user = String(order.robloxUsername || order.username || '').toLowerCase();
+        if (profileUserId && orderUserId) {
+          if (profileUserId !== orderUserId) return;
+        } else if (user) {
+          if (user !== profileUsername) return;
+        } else {
+          return;
+        }
         if (!isSuccessStatus(order.status)) return;
         seen.add(order.id);
         total += 1;
@@ -433,7 +451,7 @@
       node.textContent = active ? (active.displayName || active.username) : 'Belum terhubung';
     });
     page.querySelectorAll('[data-profile-username]').forEach(function(node) {
-      node.textContent = active ? '@' + active.username : 'Hubungkan username Roblox dulu';
+      node.textContent = active ? '@' + active.username : 'Login Roblox resmi dulu';
     });
     page.querySelectorAll('[data-profile-userid]').forEach(function(node) {
       node.textContent = active ? 'User ID: ' + active.userId : 'User ID belum tersedia';
@@ -452,8 +470,8 @@
       node.textContent = counts.robux.toLocaleString('id-ID') + ' R$';
     });
     page.querySelectorAll('[data-connect-profile]').forEach(function(button) {
-      button.textContent = active ? 'Ganti Username Roblox' : 'Hubungkan Roblox';
-      button.onclick = function() { openConnectModal(active && active.username); };
+      button.textContent = active ? 'Login ulang Roblox' : 'Login dengan Roblox';
+      button.onclick = function() { location.href = oauthStartUrl(); };
     });
     page.querySelectorAll('[data-remove-profile]').forEach(function(button) {
       button.disabled = !active;
@@ -494,9 +512,9 @@
       var params = new URLSearchParams(location.search);
       var oauthError = params.get('oauth');
       if (oauthError === 'missing-env') toast('Roblox OAuth belum dikonfigurasi di Vercel.');
-      else if (oauthError) toast('Login Roblox belum berhasil. Coba lagi atau hubungkan username manual.');
+      else if (oauthError) toast('Login Roblox belum berhasil. Coba lagi.');
       if (params.get('login') === '1') {
-        setTimeout(function() { openConnectModal(profileCache && profileCache.username); }, 180);
+        setTimeout(function() { location.href = oauthStartUrl(); }, 180);
       }
     } catch (error) {}
     document.addEventListener('click', closeMenus);
@@ -512,7 +530,8 @@
 
   window.KokoRobloxProfile = {
     get: readProfile,
-    connect: openConnectModal,
+    connect: function() { location.href = oauthStartUrl(); },
+    oauthStartUrl: oauthStartUrl,
     remove: removeProfile,
     sync: syncOAuthSession,
     toast: toast,
