@@ -16,9 +16,17 @@ const GAME_CONFIG = [
   { id: 'basketball-zero', name: 'Basketball Zero', query: 'Basketball Zero', universeId: 7028566528 },
   { id: 'dress-to-impress', name: 'Dress To Impress', query: 'Dress To Impress', universeId: 5203828273 },
   { id: 'anime-vanguards', name: 'Anime Vanguards', query: 'Anime Vanguards', universeId: 5578556129 },
+  { id: 'anime-defenders', name: 'Anime Defenders', query: 'Anime Defenders' },
+  { id: 'brookhaven', name: 'Brookhaven', query: 'Brookhaven' },
+  { id: 'adopt-me', name: 'Adopt Me', query: 'Adopt Me' },
+  { id: 'murder-mystery-2', name: 'Murder Mystery 2', query: 'Murder Mystery 2' },
   { id: 'king-legacy', name: 'King Legacy', query: 'King Legacy', universeId: 1451439645 },
   { id: 'jujutsu-infinite', name: 'Jujutsu Infinite', query: 'Jujutsu Infinite', universeId: 3808223175 },
   { id: 'the-strongest-battlegrounds', name: 'The Strongest Battlegrounds', query: 'The Strongest Battlegrounds', universeId: 3808081382 },
+  { id: 'toilet-tower-defense', name: 'Toilet Tower Defense', query: 'Toilet Tower Defense' },
+  { id: 'jailbreak', name: 'Jailbreak', query: 'Jailbreak' },
+  { id: 'bedwars', name: 'BedWars', query: 'BedWars' },
+  { id: 'doors', name: 'DOORS', query: 'DOORS' },
 ];
 
 function robloxSignal() {
