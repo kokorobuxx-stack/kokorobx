@@ -41,7 +41,8 @@ module.exports = async function handler(req, res) {
       `Nama game: ${game}`,
       `Nama gamepass: ${gamepass}`,
       `ID gamepass Roblox: ${passId || '-'}`,
-      `Total robux: ${totalRobux ? totalRobux.toLocaleString('id-ID') : 'Manual - tanya admin'}`,
+      `Total robux: ${totalRobux ? totalRobux.toLocaleString('id-ID') + ' R$' : 'Manual - tanya admin'}`,
+      `Kurs: Rp ${rate.toLocaleString('id-ID')} / R$`,
       `Total bayar: ${price ? 'Rp ' + price.toLocaleString('id-ID') : 'Menunggu admin'}`,
       'Note: Pastikan format yang kamu isi sudah sesuai!',
     ].join(' | ');

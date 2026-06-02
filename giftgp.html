@@ -668,7 +668,7 @@
           <div class="sum-item"><span>Nama Tampilan</span><strong id="sum-display">-</strong></div>
           <div class="sum-item"><span>Game</span><strong id="sum-game">-</strong></div>
           <div class="sum-item"><span>Item</span><strong id="sum-item">-</strong></div>
-          <div class="sum-item"><span>Total</span><strong class="gold" id="sum-total">-</strong></div>
+          <div class="sum-item"><span>Total Robux</span><strong class="gold" id="sum-total">-</strong></div>
           <div class="sum-item"><span>Kurs</span><strong id="sum-rate">Rp 140 / R$</strong></div>
           <div class="sum-item"><span>Total Bayar</span><strong class="gold" id="sum-price">Rp -</strong></div>
         </div>
@@ -955,16 +955,13 @@
     return cleaned ? Number(cleaned).toLocaleString('id-ID') + ' R$' : 'Manual';
   }
 
-  function itemPrice(item) {
-    if (!item) return 0;
-    const direct = Number(item.price || 0);
-    if (direct > 0) return direct;
-    return calcGiftPrice(item.robux);
+  function giftRobuxValue(item) {
+    return Number(cleanRobux(item && item.robux ? item.robux : 0) || 0);
   }
 
-  function displayPrice(item) {
-    const price = itemPrice(item);
-    return price ? formatRupiah(price) : 'Menunggu admin';
+  function displayGiftCost(item) {
+    const robux = giftRobuxValue(item);
+    return robux ? displayRobux(robux) : 'Manual R$';
   }
 
   function formatRupiah(value) {
@@ -1172,7 +1169,7 @@
           '<div class="gift-tags"><span class="gift-tag">' + escapeHtml(item.type || typeLabel(item.category)) + '</span><span class="gift-tag">Region ' + escapeHtml(STORE_REGION) + '</span></div>' +
           '<div class="gift-name">' + escapeHtml(item.title) + '</div>' +
           '<div class="gift-desc">' + escapeHtml(item.desc) + '</div>' +
-          '<div class="gift-foot"><span class="gift-price">' + displayPrice(item) + '</span></div>' +
+          '<div class="gift-foot"><span class="gift-price">' + displayGiftCost(item) + '</span></div>' +
           '<div class="gift-actions"><button class="detail-btn" type="button" data-detail="' + item.id + '">Detail</button><button class="select-btn" type="button" data-select="' + item.id + '">' + (selected ? 'Dipilih' : 'Pilih') + '</button></div>' +
         '</div>' +
       '</article>';
@@ -1202,7 +1199,7 @@
       item.title,
       'Tipe: ' + (item.type || typeLabel(item.category)),
       'Game: ' + item.game,
-      'Harga: ' + displayPrice(item),
+      'Harga: ' + displayGiftCost(item),
       '',
       item.desc
     ].join('\n'));
@@ -1275,7 +1272,7 @@
   function buildFormat() {
     const item = selectedItem();
     const total = item ? item.robux : 0;
-    const price = itemPrice(item);
+    const price = item ? calcGiftPrice(item.robux) : 0;
     return [
       'Format Gift GP Ingame',
       'Username: ' + (value('username') || '-'),
@@ -1285,6 +1282,8 @@
       'ID Gamepass Roblox: ' + (item && item.passId ? item.passId : '-'),
       'Tipe produk: ' + (item ? (item.type || typeLabel(item.category)) : '-'),
       'Total robux: ' + (item && item.robux ? displayRobux(item.robux) : 'Manual - tanya admin'),
+      'Harga produk: ' + (item ? displayGiftCost(item) : '-'),
+      'Kurs: ' + formatRupiah(PRICE_PER_ROBUX) + ' / R$',
       'Total bayar: ' + (price ? formatRupiah(price) : 'Menunggu admin'),
       'Kontak/catatan: ' + (value('contact') || '-'),
       'Note: cocokkan username dan display name sebelum proses gift.'
@@ -1293,13 +1292,13 @@
 
   function updatePreview() {
     const item = selectedItem();
-    const price = itemPrice(item);
+    const price = item ? calcGiftPrice(item.robux) : 0;
     document.getElementById('format-preview').textContent = buildFormat();
     document.getElementById('sum-user').textContent = value('username') || '-';
     document.getElementById('sum-display').textContent = value('displayName') || '-';
     document.getElementById('sum-game').textContent = item ? item.game : '-';
     document.getElementById('sum-item').textContent = item ? item.title : '-';
-    document.getElementById('sum-total').textContent = item ? displayRobux(item.robux) : '-';
+    document.getElementById('sum-total').textContent = item ? displayGiftCost(item) : '-';
     document.getElementById('sum-rate').textContent = formatRupiah(PRICE_PER_ROBUX) + ' / R$';
     document.getElementById('sum-price').textContent = price ? formatRupiah(price) : 'Menunggu admin';
     const waText = encodeURIComponent('Halo KokoRBX, aku mau tanya Gift GP.\n\n' + buildFormat());
@@ -1324,7 +1323,8 @@
       totalRobux: total,
       robux: Number(total || 0),
       rate: PRICE_PER_ROBUX,
-      price: itemPrice(item),
+      price: item ? calcGiftPrice(item.robux) : 0,
+      priceText: item ? formatRupiah(calcGiftPrice(item.robux)) : 'Menunggu admin',
       image: item && item.imageUrl ? item.imageUrl : (item && item.gameImage ? item.gameImage : PLACEHOLDER_IMAGE),
       method: 'Gift GP Ingame',
       paymentMethod: 'QRIS',
@@ -1416,7 +1416,7 @@
     const orderId = 'GGP-' + Math.floor(100000 + Math.random() * 900000);
     await saveRequest(orderId);
 
-    const price = itemPrice(item);
+    const price = calcGiftPrice(item.robux);
     const detail = buildFormat();
     if (window.KokoPanel) {
       KokoPanel.createOrder({

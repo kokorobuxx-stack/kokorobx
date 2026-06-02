@@ -63,17 +63,20 @@
     if (giftPriceEl) {
       var giftRobux = parseNumber(readText('#sum-total'));
       var giftPrice = parseNumber(readText('#sum-price'));
+      var giftPriceText = cleanDash(readText('#sum-price'));
       var giftItem = cleanDash(readText('#sum-item'));
       var giftGame = cleanDash(readText('#sum-game'));
       var giftDisplay = cleanDash(readText('#sum-display'));
+      var giftPayment = cleanDash(readText('#sum-price'));
       return {
         id: Date.now() + '-' + Math.random().toString(16).slice(2),
         product: giftItem ? product + ' - ' + giftItem : product,
         packageName: giftRobux ? giftRobux.toLocaleString('id-ID') + ' R$' : '',
         robux: giftRobux,
         price: giftPrice,
+        priceText: giftPriceText,
         username: cleanDash(readText('#sum-user')),
-        detail: [giftGame, giftDisplay ? 'Display: ' + giftDisplay : '', readValue('#gamepass')].filter(Boolean).join(' / '),
+        detail: [giftGame, giftDisplay ? 'Display: ' + giftDisplay : '', giftPayment, readValue('#gamepass')].filter(Boolean).join(' / '),
         url: location.pathname.split('/').pop() || 'giftgp.html',
         time: Date.now()
       };
@@ -127,6 +130,7 @@
       listEl.innerHTML = '<div class="koko-cart-empty">Keranjang masih kosong. Pilih paket dulu, lalu tambah ke keranjang.</div>';
     } else {
       listEl.innerHTML = items.map(function(item) {
+        var priceLabel = item.priceText || (Number(item.price || 0) ? rupiah(item.price) : 'Konfirmasi admin');
         var meta = [
           item.packageName || '',
           item.username ? 'User: ' + item.username : '',
@@ -135,7 +139,7 @@
         return '<article class="koko-cart-item" data-id="' + item.id + '">' +
           '<div class="koko-cart-item-top">' +
             '<div class="koko-cart-item-title">' + escapeHtml(item.product || 'KokoRBX') + '</div>' +
-            '<div class="koko-cart-price">' + rupiah(item.price) + '</div>' +
+            '<div class="koko-cart-price">' + escapeHtml(priceLabel) + '</div>' +
           '</div>' +
           '<div class="koko-cart-meta">' + (meta || 'Detail belum lengkap') + '</div>' +
           '<div class="koko-cart-actions">' +
@@ -147,8 +151,11 @@
     }
 
     var total = items.reduce(function(sum, item) { return sum + Number(item.price || 0); }, 0);
+    var hasManualPrice = items.some(function(item) {
+      return !Number(item.price || 0) && cleanDash(item.priceText);
+    });
     var totalEl = document.querySelector('.koko-cart-total strong');
-    if (totalEl) totalEl.textContent = rupiah(total);
+    if (totalEl) totalEl.textContent = total ? rupiah(total) : (hasManualPrice ? 'Konfirmasi admin' : 'Belum ada item');
   }
 
   function escapeHtml(value) {
@@ -171,7 +178,8 @@
     item.id = item.id || (Date.now() + '-' + Math.random().toString(16).slice(2));
     item.time = item.time || Date.now();
     item.url = item.url || (location.pathname.split('/').pop() || 'index.html');
-    if (!item.price || (!item.robux && !item.packageName)) {
+    var hasPrice = Number(item.price || 0) > 0 || cleanDash(item.priceText);
+    if (!hasPrice || (!item.robux && !item.packageName)) {
       toast('Pilih paket atau isi total Robux dulu.', true);
       return false;
     }
@@ -252,7 +260,7 @@
       '</div>' +
       '<div class="koko-cart-list"></div>' +
       '<div class="koko-cart-foot">' +
-        '<div class="koko-cart-total"><span>Total estimasi</span><strong>Rp 0</strong></div>' +
+        '<div class="koko-cart-total"><span>Total estimasi</span><strong>Belum ada item</strong></div>' +
         '<button class="koko-cart-clear" type="button">Kosongkan Keranjang</button>' +
       '</div>';
 
