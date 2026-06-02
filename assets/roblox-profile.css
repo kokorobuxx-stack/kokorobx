@@ -21,6 +21,7 @@
   font: 800 12px/1 "Outfit", system-ui, sans-serif;
   cursor: pointer;
   white-space: nowrap;
+  text-decoration: none;
 }
 
 .koko-connect-btn:hover,

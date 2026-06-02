@@ -135,60 +135,13 @@
     return slot;
   }
 
-  function menuItem(href, label) {
-    return '<a href="' + escapeHtml(href) + '"><span>' + escapeHtml(label) + '</span><span aria-hidden="true">&gt;</span></a>';
-  }
-
   function renderConnected(slot, profile) {
     slot.innerHTML =
-      '<button class="koko-mini-profile" type="button" aria-haspopup="menu" aria-expanded="false">' +
+      '<a class="koko-mini-profile" href="akun.html" aria-label="Buka halaman akun Roblox">' +
         avatarMarkup(profile) +
         '<span class="koko-profile-name">' + escapeHtml(profile.displayName || profile.username) + '</span>' +
-        '<span class="koko-profile-caret" aria-hidden="true">v</span>' +
-      '</button>' +
-      '<div class="koko-profile-menu" role="menu">' +
-        '<div class="koko-profile-card">' +
-          avatarMarkup(profile) +
-          '<div>' +
-            '<div class="koko-profile-display">' + escapeHtml(profile.displayName || profile.username) + '</div>' +
-            '<div class="koko-profile-userid">@' + escapeHtml(profile.username) + ' - ID ' + escapeHtml(profile.userId) + '</div>' +
-            '<div class="koko-profile-status">Username Roblox Terhubung - Belum Terverifikasi</div>' +
-          '</div>' +
-        '</div>' +
-        '<div class="koko-profile-menu-list">' +
-          menuItem('akun.html', 'Profil Saya') +
-          menuItem('robux5hari.html#my-orders-section', 'Order Saya') +
-          menuItem('index.html#status', 'Cek Pesanan') +
-          menuItem('https://wa.me/6281996112019', 'Bantuan') +
-          '<button type="button" data-koko-change-profile><span>Ganti Username Roblox</span><span aria-hidden="true">&gt;</span></button>' +
-          '<button type="button" data-koko-verify-profile><span>Verifikasi Kepemilikan</span><span aria-hidden="true">&gt;</span></button>' +
-          '<button type="button" class="danger" data-koko-remove-profile><span>Keluar</span><span aria-hidden="true">&gt;</span></button>' +
-        '</div>' +
-        '<div class="koko-profile-note">Username ini hanya digunakan untuk avatar dan pengisian form order. Belum menjadi bukti kepemilikan akun Roblox.</div>' +
-      '</div>';
-
-    slot.querySelector('.koko-mini-profile').addEventListener('click', function(event) {
-      event.stopPropagation();
-      var open = !slot.classList.contains('is-open');
-      closeMenus();
-      slot.classList.toggle('is-open', open);
-      this.setAttribute('aria-expanded', String(open));
-    });
-    slot.querySelector('[data-koko-change-profile]').addEventListener('click', function() {
-      closeMenus();
-      openConnectModal(profile.username);
-    });
-    slot.querySelector('[data-koko-verify-profile]').addEventListener('click', function() {
-      closeMenus();
-      openInfoModal(
-        'Verifikasi kepemilikan belum aktif',
-        'Fitur verifikasi kepemilikan akun Roblox akan dipakai untuk fitur reward atau bonus di masa depan. Saat ini belum aktif dan tidak bisa dipakai untuk klaim apa pun.'
-      );
-    });
-    slot.querySelector('[data-koko-remove-profile]').addEventListener('click', function() {
-      closeMenus();
-      removeProfile();
-    });
+        '<span class="koko-profile-caret" aria-hidden="true">&gt;</span>' +
+      '</a>';
   }
 
   function renderDisconnected(slot) {
