@@ -2,6 +2,34 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/api/auth-login",
+      "destination": "/api/auth?action=login"
+    },
+    {
+      "source": "/api/auth-register",
+      "destination": "/api/auth?action=register"
+    },
+    {
+      "source": "/api/auth-check-username",
+      "destination": "/api/auth?action=check-username"
+    },
+    {
+      "source": "/api/auth/me",
+      "destination": "/api/auth?action=me"
+    },
+    {
+      "source": "/api/auth/logout",
+      "destination": "/api/auth?action=logout"
+    },
+    {
+      "source": "/api/auth/roblox/start",
+      "destination": "/api/auth?action=roblox-start"
+    },
+    {
+      "source": "/api/auth/roblox/callback",
+      "destination": "/api/auth?action=roblox-callback"
+    },
+    {
       "source": "/api/roblox-user",
       "destination": "/api/orders?action=roblox-user"
     },
