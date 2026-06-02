@@ -52,9 +52,10 @@
       avatarUrl: profile.avatarUrl || profile.headshotUrl || '',
       headshotUrl: profile.headshotUrl || profile.avatarUrl || '',
       profileUrl: profile.profileUrl || '',
-      status: 'Username Roblox Terhubung',
-      verified: false,
-      verificationLabel: 'Belum Terverifikasi',
+      status: profile.status || (profile.verified ? 'Roblox OAuth Resmi Terhubung' : 'Username Roblox Terhubung'),
+      verified: !!profile.verified,
+      verificationLabel: profile.verificationLabel || (profile.verified ? 'Terverifikasi Roblox' : 'Belum Terverifikasi'),
+      loginProvider: profile.loginProvider || (profile.verified ? 'roblox_oauth' : 'roblox-public-profile'),
       connectedAt: new Date().toISOString(),
     };
     localStorage.setItem(PROFILE_KEY, JSON.stringify(clean));
@@ -63,10 +64,66 @@
       robloxUserId: clean.userId,
       displayName: clean.displayName,
       avatarUrl: clean.headshotUrl || clean.avatarUrl,
-      source: 'roblox-public-profile',
+      source: clean.loginProvider,
+      verified: clean.verified,
+      status: clean.status,
     }));
     profileCache = clean;
     return clean;
+  }
+
+  function currentReturnTo() {
+    return (location.pathname.split('/').pop() || 'index.html') + location.search + location.hash;
+  }
+
+  function oauthStartUrl() {
+    return API_BASE + '/api/auth/roblox/start?returnTo=' + encodeURIComponent(currentReturnTo());
+  }
+
+  function saveOAuthProfile(user) {
+    if (!user) return null;
+    return saveProfile({
+      userId: user.robloxUserId,
+      username: user.robloxUsername,
+      displayName: user.robloxDisplayName || user.robloxUsername,
+      avatarUrl: user.robloxAvatar || '',
+      headshotUrl: user.robloxAvatar || '',
+      profileUrl: user.robloxUserId ? 'https://www.roblox.com/users/' + encodeURIComponent(user.robloxUserId) + '/profile' : '',
+      verified: true,
+      verificationLabel: 'Terverifikasi Roblox',
+      loginProvider: 'roblox_oauth',
+      status: user.status || 'Roblox OAuth Resmi Terhubung',
+    });
+  }
+
+  async function syncOAuthSession() {
+    try {
+      var response = await fetch(API_BASE + '/api/auth/me', {
+        credentials: 'include',
+        cache: 'no-store',
+      });
+      var data = await response.json();
+      if (!response.ok || !data.authenticated || !data.user) return null;
+      var profile = saveOAuthProfile(data.user);
+      renderAllSlots();
+      applyProfileToForms(profile);
+      hydrateAccountPage(profile);
+      window.dispatchEvent(new CustomEvent('kokorbx:roblox-profile', { detail: profile }));
+      handlePendingCheckout();
+      return profile;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function handlePendingCheckout() {
+    var pending = readJson('kokorbx_pending_checkout', null);
+    if (!pending || !pending.returnTo) return;
+    localStorage.removeItem('kokorbx_pending_checkout');
+    var target = String(pending.returnTo || '');
+    if (target && target !== currentReturnTo()) {
+      location.href = target;
+    }
   }
 
   function removeProfile() {
@@ -191,7 +248,12 @@
           '</div>' +
           '<button class="koko-profile-close" type="button" aria-label="Tutup">x</button>' +
         '</div>' +
+        '<div class="koko-profile-oauth-wrap">' +
+          '<a class="koko-profile-oauth" href="' + escapeHtml(oauthStartUrl()) + '">Login resmi dengan Roblox</a>' +
+          '<div class="koko-profile-oauth-note">OAuth Roblox hanya mengirim identitas publik yang disetujui pembeli. KokoRBX tidak melihat password, cookie, 2FA, atau kode backup.</div>' +
+        '</div>' +
         '<form class="koko-profile-form" id="koko-profile-form">' +
+          '<div class="koko-profile-divider"><span>atau hubungkan username manual</span></div>' +
           '<div class="koko-profile-field">' +
             '<label for="koko-profile-username">Username Roblox</label>' +
             '<input id="koko-profile-username" autocomplete="username" placeholder="Contoh: tama_6505" required>' +
@@ -286,6 +348,7 @@
       hydrateAccountPage(profile);
       toast('Akun Roblox berhasil dihubungkan.');
       window.dispatchEvent(new CustomEvent('kokorbx:roblox-profile', { detail: profile }));
+      handlePendingCheckout();
     } catch (err) {
       error.textContent = err.message || 'Username Roblox tidak ditemukan.';
       error.classList.add('show');
@@ -325,9 +388,14 @@
       summary.innerHTML =
         avatarMarkup(active) +
         '<div><strong>' + escapeHtml(active.displayName || active.username) + '</strong>' +
-        '<span>@' + escapeHtml(active.username) + ' - Belum Terverifikasi</span></div>';
+        '<span>@' + escapeHtml(active.username) + ' - ' + escapeHtml(active.verificationLabel || 'Belum Terverifikasi') + '</span></div>';
       panel.insertBefore(summary, panel.firstElementChild);
     });
+  }
+
+  function isSuccessStatus(status) {
+    var key = String(status || '').toLowerCase().replace(/[_-]+/g, ' ');
+    return /success|sukses|selesai|done|complete|completed|sent|terkirim|dikirim|delivered/.test(key);
   }
 
   function countLocalOrders(profile) {
@@ -344,6 +412,7 @@
         if (!order || !order.id || seen.has(order.id)) return;
         var user = String(order.username || '').toLowerCase();
         if (user && user !== String(profile.username).toLowerCase()) return;
+        if (!isSuccessStatus(order.status)) return;
         seen.add(order.id);
         total += 1;
         robux += Number(order.robux || order.totalRobux || 0) || 0;
@@ -370,10 +439,10 @@
       node.textContent = active ? 'User ID: ' + active.userId : 'User ID belum tersedia';
     });
     page.querySelectorAll('[data-profile-status]').forEach(function(node) {
-      node.textContent = active ? 'Username Roblox Terhubung' : 'Belum Terhubung';
+      node.textContent = active ? (active.status || 'Username Roblox Terhubung') : 'Belum Terhubung';
     });
     page.querySelectorAll('[data-profile-verify]').forEach(function(node) {
-      node.textContent = active ? 'Belum Terverifikasi' : 'Belum Aktif';
+      node.textContent = active ? (active.verificationLabel || 'Belum Terverifikasi') : 'Belum Aktif';
     });
     var counts = countLocalOrders(active);
     page.querySelectorAll('[data-profile-total-orders]').forEach(function(node) {
@@ -420,6 +489,16 @@
     renderAllSlots();
     applyProfileToForms(profileCache);
     hydrateAccountPage(profileCache);
+    syncOAuthSession();
+    try {
+      var params = new URLSearchParams(location.search);
+      var oauthError = params.get('oauth');
+      if (oauthError === 'missing-env') toast('Roblox OAuth belum dikonfigurasi di Vercel.');
+      else if (oauthError) toast('Login Roblox belum berhasil. Coba lagi atau hubungkan username manual.');
+      if (params.get('login') === '1') {
+        setTimeout(function() { openConnectModal(profileCache && profileCache.username); }, 180);
+      }
+    } catch (error) {}
     document.addEventListener('click', closeMenus);
     window.addEventListener('storage', function(event) {
       if (event.key === PROFILE_KEY || event.key === SESSION_KEY) {
@@ -435,6 +514,7 @@
     get: readProfile,
     connect: openConnectModal,
     remove: removeProfile,
+    sync: syncOAuthSession,
     toast: toast,
   };
 

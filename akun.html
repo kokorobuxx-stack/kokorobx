@@ -8,8 +8,10 @@
   <link rel="stylesheet" href="assets/cart-client.css?v=icon-cart-mobile-20260531">
   <link rel="stylesheet" href="assets/kokorbx-theme.css?v=contrast-theme-20260601">
   <link rel="stylesheet" href="assets/roblox-profile.css?v=roblox-profile-20260602">
+  <link rel="stylesheet" href="assets/kokorbx-transactions.css?v=market-flow-20260602">
   <script src="assets/kokorbx-theme-toggle.js?v=dark-toggle-20260601"></script>
   <script defer src="assets/roblox-profile.js?v=roblox-profile-20260602"></script>
+  <script defer src="assets/kokorbx-transactions.js?v=market-flow-20260602"></script>
   <style>
     :root {
       --soft: #f8faff;
@@ -463,7 +465,7 @@
 
     <section class="wallet-strip" aria-label="Ringkasan akun">
       <div class="wallet-item">
-        <div class="wallet-label">Total Order</div>
+        <div class="wallet-label">Total Order Sukses</div>
         <div class="wallet-value" data-profile-total-orders>0</div>
       </div>
       <div class="wallet-item">
@@ -499,22 +501,48 @@
       <article class="panel">
         <div class="panel-head">
           <span>Riwayat Aktivitas</span>
-          <a href="robux5hari.html#my-orders-section">Lihat Semua</a>
+          <a href="transaksi.html">Lihat Semua</a>
         </div>
         <div class="panel-body">
           <div class="activity-grid">
             <div class="activity-item"><span class="activity-icon">1</span><span>Menunggu Pembayaran</span></div>
             <div class="activity-item"><span class="activity-icon">2</span><span>Diproses Admin</span></div>
-            <div class="activity-item"><span class="activity-icon">3</span><span>Robux Dikirim</span></div>
+            <div class="activity-item"><span class="activity-icon">3</span><span>Sudah Terkirim</span></div>
             <div class="activity-item"><span class="activity-icon">4</span><span>Selesai</span></div>
           </div>
         </div>
       </article>
 
       <article class="panel">
+        <div class="panel-head">
+          <span>Pesanan Sedang Diproses</span>
+          <span class="verify-badge"><span data-account-processing-count>0</span> aktif</span>
+        </div>
+        <div class="panel-body">
+          <div class="koko-account-order-list" data-processing-orders></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head">
+          <span>Robux Berhasil Dibeli</span>
+          <a href="transaksi.html">Riwayat</a>
+        </div>
+        <div class="panel-body">
+          <div class="status-box" style="margin-bottom:12px">
+            <div class="status-row"><span>Total Order Sukses</span><strong data-account-success-orders>0</strong></div>
+            <div class="status-row"><span>Total Robux Sukses</span><strong data-account-success-robux>0 R$</strong></div>
+            <p>Data ini hanya menampilkan transaksi yang sudah berhasil dikirim.</p>
+          </div>
+          <div class="koko-account-order-list" data-success-orders></div>
+        </div>
+      </article>
+
+      <article class="panel">
         <div class="panel-head"><span>Bantuan</span></div>
         <div class="panel-body help-list">
-          <a class="help-link" href="index.html#status"><span>Cek Pesanan</span><span aria-hidden="true">&gt;</span></a>
+          <a class="help-link" href="cek-pesanan.html"><span>Cek Pesanan</span><span aria-hidden="true">&gt;</span></a>
+          <a class="help-link" href="transaksi.html"><span>Riwayat Transaksi</span><span aria-hidden="true">&gt;</span></a>
           <a class="help-link" href="https://wa.me/6281996112019" target="_blank" rel="noopener"><span>Bantuan WhatsApp</span><span aria-hidden="true">&gt;</span></a>
           <button class="help-link" type="button" data-verify-profile><span>Verifikasi Kepemilikan</span><span aria-hidden="true">&gt;</span></button>
         </div>
@@ -533,8 +561,8 @@
   <nav class="bottom-nav" aria-label="Navigasi akun">
     <a href="index.html"><span class="nav-dot"></span><span>Home</span></a>
     <a href="index.html#produk"><span class="nav-dot"></span><span>Produk</span></a>
-    <a href="index.html#status"><span class="nav-dot"></span><span>Cek</span></a>
-    <a href="transaksi-buyer.html"><span class="nav-dot"></span><span>Transaksi</span></a>
+    <a href="cek-pesanan.html"><span class="nav-dot"></span><span>Cek</span></a>
+    <a href="transaksi.html"><span class="nav-dot"></span><span>Transaksi</span></a>
     <a class="active" href="akun.html"><span class="nav-dot"></span><span>Akun</span></a>
   </nav>
 

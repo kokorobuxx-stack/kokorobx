@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Riwayat Transaksi - KokoRBX</title>
+  <title>Cek Pesanan - KokoRBX</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/cart-client.css?v=icon-cart-mobile-20260531">
   <link rel="stylesheet" href="assets/kokorbx-theme.css?v=contrast-theme-20260601">
@@ -14,18 +14,22 @@
   <script defer src="assets/kokorbx-transactions.js?v=market-flow-20260602"></script>
   <style>
     a { color: inherit; text-decoration: none; }
-    button, input, select { font: inherit; }
+    button, input { font: inherit; }
 
-    .history-note {
-      margin: 0 18px 16px;
+    .check-intro {
+      display: grid;
+      gap: 10px;
+      padding: 20px 18px 0;
+    }
+    .check-safe {
       padding: 12px 14px;
-      border: 1px solid rgba(111, 141, 255, .28);
+      border: 1px solid rgba(119, 221, 168, .38);
       border-radius: 16px;
-      color: var(--koko-muted);
-      background: rgba(111, 141, 255, .08);
+      color: #248461;
+      background: rgba(119, 221, 168, .13);
       font-size: 12px;
       line-height: 1.55;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .bottom-nav {
@@ -70,46 +74,36 @@
     }
   </style>
 </head>
-<body class="koko-market-page" data-koko-history-page>
+<body class="koko-market-page" data-koko-check-page>
   <main class="koko-market-shell">
     <header class="koko-market-header">
-      <a class="koko-market-back" href="akun.html" aria-label="Kembali">K</a>
+      <a class="koko-market-back" href="index.html" aria-label="Kembali">K</a>
       <div class="koko-market-title">
-        <h1>Riwayat Transaksi</h1>
-        <p>Semua pesanan KokoRBX milik akun Roblox kamu.</p>
+        <h1>Cek Pesanan</h1>
+        <p>Lihat status order dari ID pesanan atau invoice.</p>
       </div>
       <button class="koko-market-icon-btn koko-theme-toggle" type="button" aria-label="Ganti tema"></button>
     </header>
 
-    <nav class="koko-status-tabs" data-history-tabs aria-label="Filter status transaksi"></nav>
-
-    <section class="koko-history-tools">
-      <label class="koko-search-box">
-        <span aria-hidden="true">Search</span>
-        <input data-history-search type="search" placeholder="Cari nama produk" autocomplete="off">
-      </label>
-      <select class="koko-filter-select" data-history-filter aria-label="Filter kategori produk">
-        <option>Semua</option>
-        <option>Robux</option>
-        <option>Gift GP</option>
-        <option>Akun Roblox</option>
-        <option>Item Game</option>
-        <option>Jasa</option>
-      </select>
+    <section class="check-intro">
+      <div class="check-safe">Data pesanan hanya ditampilkan dari order milik akun Roblox yang sedang terhubung di browser ini.</div>
     </section>
 
-    <p class="history-note">
-      Transaksi pending dipisah dari transaksi sukses. Robux Berhasil Dibeli hanya dihitung kalau status sudah Sudah Terkirim atau Selesai.
-    </p>
-
-    <section class="koko-history-list" data-history-list></section>
+    <section class="koko-check-card">
+      <form class="koko-check-form" data-check-form>
+        <label for="koko-check-id">ID Pesanan / Invoice</label>
+        <input id="koko-check-id" data-check-input placeholder="Contoh: RBX-123456" autocomplete="off">
+        <button class="koko-primary-action" type="submit">Cek Pesanan</button>
+      </form>
+      <div data-check-result></div>
+    </section>
   </main>
 
   <nav class="bottom-nav" aria-label="Navigasi utama">
     <a href="index.html"><span class="nav-dot"></span><span>Home</span></a>
     <a href="index.html#produk"><span class="nav-dot"></span><span>Produk</span></a>
-    <a href="cek-pesanan.html"><span class="nav-dot"></span><span>Cek</span></a>
-    <a class="active" href="transaksi.html"><span class="nav-dot"></span><span>Transaksi</span></a>
+    <a class="active" href="cek-pesanan.html"><span class="nav-dot"></span><span>Cek</span></a>
+    <a href="transaksi.html"><span class="nav-dot"></span><span>Transaksi</span></a>
     <a href="akun.html"><span class="nav-dot"></span><span>Akun</span></a>
   </nav>
 

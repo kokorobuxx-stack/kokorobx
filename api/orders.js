@@ -26,16 +26,29 @@ function isActiveSale(order) {
   return status !== 'failed' && status !== 'cancelled' && status !== 'canceled';
 }
 
+function isSuccessfulSale(order) {
+  const status = String(order.status || '').toLowerCase();
+  return (
+    status === 'success' ||
+    status === 'completed' ||
+    status === 'complete' ||
+    status === 'done' ||
+    status === 'sent' ||
+    status.includes('terkirim') ||
+    status.includes('selesai')
+  );
+}
+
 async function publicStats(rows) {
   const orders = rows
     .map(rowToOrder)
     .filter(order => order.username && !isSettingsUsername(order.username));
-  const activeOrders = orders.filter(isActiveSale);
-  const totalOrders = activeOrders.length;
-  const totalRobux = activeOrders.reduce((sum, order) => sum + (Number(order.robux) || 0), 0);
+  const successfulOrders = orders.filter(order => isActiveSale(order) && isSuccessfulSale(order));
+  const totalOrders = successfulOrders.length;
+  const totalRobux = successfulOrders.reduce((sum, order) => sum + (Number(order.robux) || 0), 0);
   const leaderboardMap = new Map();
 
-  activeOrders.forEach(order => {
+  successfulOrders.forEach(order => {
     const username = order.username || 'Customer';
     const current = leaderboardMap.get(username) || {
       username,
@@ -52,7 +65,7 @@ async function publicStats(rows) {
   const leaderboard = Array.from(leaderboardMap.values())
     .sort((a, b) => (b.robux - a.robux) || (b.orders - a.orders) || (b.lastTime - a.lastTime))
     .slice(0, 5);
-  const recentOrders = activeOrders
+  const recentOrders = successfulOrders
     .slice()
     .sort((a, b) => (Number(b.time) || 0) - (Number(a.time) || 0))
     .slice(0, 5)
