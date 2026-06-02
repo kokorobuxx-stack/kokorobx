@@ -762,7 +762,7 @@
         <div class="sum-row"><span class="k">Biaya Admin</span><span class="v">Rp 0</span></div>
         <div class="sum-divider"></div>
         <div class="sum-total"><span class="k">Total Bayar</span><span class="v" id="sum-total">Rp —</span></div>
-        <button class="btn-order" id="btn-order" onclick="placeOrder()" disabled>🚀 ORDER SEKARANG</button>
+        <button class="btn-order" id="btn-order" onclick="placeOrder()" disabled>Buat Pesanan</button>
         <div class="sum-footnote">🔒 Transaksi aman & terenkripsi<br>Username Only · No Gamepass Needed</div>
       </div>
     </div>
@@ -802,7 +802,7 @@
       <div class="mob-bar-robux" id="mob-bar-robux">Pilih paket</div>
       <div class="mob-bar-price" id="mob-bar-price">Belum ada paket dipilih</div>
     </div>
-    <button class="mob-bar-btn" id="mob-bar-btn" onclick="placeOrder()" disabled>🚀 ORDER</button>
+    <button class="mob-bar-btn" id="mob-bar-btn" onclick="placeOrder()" disabled>Buat Pesanan</button>
   </div>
 </div>
 
@@ -1310,6 +1310,26 @@
     '</div>';
   }
 
+  function paymentPageUrl(oid) {
+    return 'payment.html?id=' + encodeURIComponent(oid);
+  }
+
+  async function saveOrderAndOpenPayment(oid, user, gpId, payMethod) {
+    payMethod = normalizePaymentMethod(payMethod);
+    const contact = (document.getElementById('contact')?.value || '').trim();
+    const orderData = {
+      id: oid, username: user, gpId: gpId,
+      robux: _rbx, price: _price, method: payMethod,
+      email: contact,
+      whatsapp: '',
+      status: 'pending', bukti: null, proofImage: null, buktiTime: null, time: Date.now()
+    };
+    await saveOrderForUser(orderData);
+    renderMyOrders();
+    await kirimTelegram(oid, user, gpId, payMethod);
+    window.location.href = paymentPageUrl(oid);
+  }
+
   async function placeOrder() {
     const oid = 'RBX-' + Math.floor(100000 + Math.random() * 900000);
     const user = document.getElementById('username').value.trim();
@@ -1317,27 +1337,15 @@
     _currentOrder = { oid, user, gpId };
     const btn = document.getElementById('btn-order');
     btn.disabled = true;
-    btn.textContent = '⏳ Memproses...';
+    btn.textContent = 'Membuat pesanan...';
     try {
-      const resp = await fetch(`${BACKEND_URL}/api/create-transaction`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: oid, gross_amount: _price, robux: _rbx, username: user, payment_method: _pay, item_name: `Top Up ${_rbx.toLocaleString('id')} Robux` })
-      });
-      if (!resp.ok) throw new Error('Backend error');
-      const { snap_token } = await resp.json();
-      window.snap.pay(snap_token, {
-        onSuccess: r => showOrderModal(oid, user, gpId, r.payment_type || _pay),
-        onPending: r => showOrderModal(oid, user, gpId, r.payment_type || _pay),
-        onError: r => alert('❌ Pembayaran gagal: ' + (r.status_message || 'Coba lagi.')),
-        onClose: () => showOrderModal(oid, user, gpId, _pay)
-      });
+      await saveOrderAndOpenPayment(oid, user, gpId, _pay);
     } catch(err) {
-      console.warn('[Midtrans] Fallback mode:', err.message);
-      showOrderModal(oid, user, gpId, _pay);
+      console.warn('[Order] gagal membuat pesanan:', err);
+      alert('Pesanan gagal dibuat. Coba lagi atau hubungi admin.');
     } finally {
       btn.disabled = false;
-      btn.textContent = '🚀 ORDER SEKARANG';
+      btn.textContent = 'Buat Pesanan';
     }
   }
 
@@ -1399,16 +1407,17 @@
 
     const area = document.getElementById('pay-action-area');
     const num = PAYMENT_NUMBERS[payMethod];
+    const paymentUrl = paymentPageUrl(oid);
 
     if (payMethod === 'QRIS') {
       area.innerHTML =
-        '<button onclick="bukaQRIS()" style="' +
+        '<button onclick="window.location.href=\'' + paymentUrl + '\'" style="' +
           'width:100%;background:linear-gradient(135deg,var(--accent),#5b3de8);' +
           'color:#fff;border:none;border-radius:9px;padding:13px;' +
           'font-family:\'Outfit\',sans-serif;font-weight:800;font-size:0.85rem;' +
           'cursor:pointer;margin-bottom:8px;display:flex;align-items:center;' +
           'justify-content:center;gap:8px;transition:all .2s;' +
-        '">💳 Buka QR Code untuk Bayar</button>';
+        '">Buka Halaman Pembayaran</button>';
     } else if (num) {
       area.innerHTML =
         '<div class="pay-action-box">' +
@@ -1512,7 +1521,7 @@
     return c;
   }
 
-  function saveOrderForUser(order) {
+  async function saveOrderForUser(order) {
     const uname = getCurrentUsername();
     const uKey = userOrderKey(uname);
     const clean = stripProofFromOrder(order);
@@ -1528,7 +1537,7 @@
     } catch(e) { console.warn('saveOrderForUser rbx_orders gagal:', e); }
 
     // ── Simpan ke Supabase (terpusat, bisa dilihat admin) ──
-    sbInsertOrder(order);
+    return sbInsertOrder(order);
   }
 
   // Kompres gambar base64 supaya tidak overload localStorage (maks ~400KB)

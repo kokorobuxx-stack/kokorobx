@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pembayaran Order - KokoRBX</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;800;900&family=Inter:wght@500;600;700;800&family=JetBrains+Mono:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070914;
+    --panel: #101425;
+    --panel2: #151a31;
+    --panel3: #1c2240;
+    --line: #2d345c;
+    --line2: #46508a;
+    --text: #f7f8ff;
+    --muted: #a9b4df;
+    --accent: #7c5cfc;
+    --accent2: #62d8d4;
+    --green: #39d98a;
+    --gold: #ffc857;
+    --red: #fc5c7d;
+    --shadow: 0 24px 70px rgba(0,0,0,.38);
+    --mono: "JetBrains Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { min-height: 100%; }
+  body {
+    margin: 0;
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      linear-gradient(rgba(124,92,252,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(98,216,212,.05) 1px, transparent 1px),
+      radial-gradient(circle at 12% 0%, rgba(124,92,252,.28), transparent 34%),
+      radial-gradient(circle at 92% 8%, rgba(98,216,212,.2), transparent 30%),
+      var(--bg);
+    background-size: 36px 36px, 36px 36px, auto, auto, auto;
+  }
+  a { color: inherit; text-decoration: none; }
+  button, input { font: inherit; }
+  button { cursor: pointer; }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 64px;
+    padding: 12px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    background: rgba(7,9,20,.86);
+    backdrop-filter: blur(20px);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Outfit", sans-serif;
+    font-weight: 900;
+  }
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-family: var(--mono);
+    font-size: .74rem;
+  }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .pill {
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 11px;
+    border: 1px solid rgba(57,217,138,.28);
+    border-radius: 999px;
+    color: var(--green);
+    background: rgba(57,217,138,.08);
+    font-size: .72rem;
+    font-weight: 900;
+  }
+  .pill-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: currentColor;
+  }
+
+  main {
+    width: min(1120px, calc(100% - 28px));
+    margin: 0 auto;
+    padding: 28px 0 38px;
+  }
+  .top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 16px;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(124,92,252,.34);
+    border-radius: 999px;
+    color: var(--accent2);
+    background: rgba(124,92,252,.1);
+    font-size: .68rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+  }
+  h1 {
+    margin: 10px 0 7px;
+    font-family: "Outfit", sans-serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    line-height: .92;
+    letter-spacing: 0;
+  }
+  .top p {
+    margin: 0;
+    max-width: 650px;
+    color: var(--muted);
+    font-size: .93rem;
+    line-height: 1.7;
+  }
+  .order-chip {
+    min-width: 220px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: rgba(16,20,37,.82);
+    box-shadow: var(--shadow);
+  }
+  .order-chip span {
+    display: block;
+    color: var(--muted);
+    font-size: .64rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 900;
+  }
+  .order-chip strong {
+    display: block;
+    margin-top: 5px;
+    font-family: var(--mono);
+    color: var(--accent2);
+    overflow-wrap: anywhere;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 16px;
+    align-items: start;
+  }
+  .panel {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(16,20,37,.94);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .panel + .panel { margin-top: 14px; }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,.025);
+  }
+  .panel-title {
+    font-family: "Outfit", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 900;
+  }
+  .panel-sub {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: .72rem;
+    line-height: 1.45;
+  }
+  .panel-body { padding: 16px; }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(255,200,87,.34);
+    border-radius: 999px;
+    color: var(--gold);
+    background: rgba(255,200,87,.08);
+    font-size: .68rem;
+    font-weight: 900;
+  }
+  .status.confirm {
+    color: var(--green);
+    border-color: rgba(57,217,138,.34);
+    background: rgba(57,217,138,.08);
+  }
+  .status.done {
+    color: var(--accent2);
+    border-color: rgba(98,216,212,.36);
+    background: rgba(98,216,212,.08);
+  }
+  .status.rejected {
+    color: var(--red);
+    border-color: rgba(252,92,125,.34);
+    background: rgba(252,92,125,.08);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .summary-box {
+    min-width: 0;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    background: var(--panel2);
+    padding: 12px;
+  }
+  .summary-box span {
+    display: block;
+    color: var(--muted);
+    font-size: .62rem;
+    text-transform: uppercase;
+    letter-spacing: .9px;
+    font-weight: 900;
+  }
+  .summary-box strong {
+    display: block;
+    margin-top: 5px;
+    font-size: .95rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+  .summary-box .green { color: var(--green); }
+  .summary-box .gold { color: var(--gold); }
+  .summary-box .purple { color: #a89bff; }
+
+  .pay-method {
+    border: 1px solid rgba(124,92,252,.38);
+    border-radius: 13px;
+    background: linear-gradient(180deg, rgba(124,92,252,.12), rgba(21,26,49,.94));
+    padding: 14px;
+  }
+  .pay-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .pay-head span {
+    display: block;
+    color: var(--muted);
+    font-size: .68rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .pay-head strong {
+    display: block;
+    margin-top: 4px;
+    font-family: "Outfit", sans-serif;
+    font-size: 1.25rem;
+  }
+  .pay-amount {
+    color: var(--green);
+    font-family: var(--mono);
+    font-weight: 900;
+    white-space: nowrap;
+  }
+  .qris-frame {
+    background: #fff;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+  }
+  .qris-frame img {
+    width: min(100%, 310px);
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+  }
+  .number-box {
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 12px;
+    background: var(--panel3);
+    padding: 14px;
+    text-align: center;
+  }
+  .number-label {
+    color: var(--muted);
+    font-size: .7rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .number-value {
+    margin: 8px 0 10px;
+    font-family: var(--mono);
+    font-size: clamp(1.45rem, 5vw, 2.2rem);
+    color: var(--gold);
+    overflow-wrap: anywhere;
+  }
+  .placeholder {
+    min-height: 190px;
+    display: grid;
+    place-items: center;
+    border: 2px dashed rgba(124,92,252,.34);
+    border-radius: 12px;
+    color: var(--muted);
+    text-align: center;
+    padding: 18px;
+  }
+
+  .instructions {
+    display: grid;
+    gap: 9px;
+    margin-top: 14px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 26px minmax(0, 1fr);
+    gap: 9px;
+    align-items: start;
+    color: var(--muted);
+    font-size: .78rem;
+    line-height: 1.55;
+  }
+  .step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    font-family: var(--mono);
+    font-size: .72rem;
+    font-weight: 900;
+  }
+
+  .upload-zone {
+    border: 2px dashed rgba(124,92,252,.42);
+    border-radius: 13px;
+    min-height: 180px;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    background: rgba(124,92,252,.06);
+    text-align: center;
+    transition: border-color .18s ease, background .18s ease;
+  }
+  .upload-zone.drag {
+    border-color: var(--accent2);
+    background: rgba(98,216,212,.08);
+  }
+  .upload-title {
+    font-weight: 900;
+    font-family: "Outfit", sans-serif;
+    font-size: 1rem;
+  }
+  .upload-sub {
+    color: var(--muted);
+    font-size: .76rem;
+    line-height: 1.55;
+    margin-top: 5px;
+  }
+  .preview {
+    display: none;
+    width: 100%;
+    margin-top: 12px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--panel2);
+  }
+  .preview img {
+    display: block;
+    width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    background: #080a13;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 10px;
+    padding: 0 14px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), #5f49e8);
+    font-weight: 900;
+    text-align: center;
+    transition: transform .18s ease, opacity .18s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .btn.secondary {
+    border: 1px solid var(--line2);
+    background: var(--panel2);
+    color: var(--text);
+  }
+  .btn.green {
+    background: var(--green);
+    color: #06120c;
+  }
+  .btn.full { width: 100%; }
+  .btn-stack { display: grid; gap: 10px; }
+
+  .side {
+    position: sticky;
+    top: 80px;
+  }
+  .help-box {
+    border: 1px dashed rgba(255,200,87,.32);
+    border-radius: 12px;
+    background: rgba(255,200,87,.07);
+    color: var(--gold);
+    padding: 12px;
+    font-size: .76rem;
+    line-height: 1.6;
+  }
+  .mini-list {
+    display: grid;
+    gap: 10px;
+  }
+  .mini-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--muted);
+    font-size: .78rem;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding-bottom: 9px;
+  }
+  .mini-row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .mini-row strong {
+    color: var(--text);
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%) translateY(12px);
+    border: 1px solid rgba(57,217,138,.36);
+    border-radius: 999px;
+    background: rgba(10,14,27,.96);
+    color: var(--green);
+    padding: 10px 15px;
+    font-size: .78rem;
+    font-weight: 900;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .18s ease, transform .18s ease;
+    z-index: 100;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .empty {
+    border: 1px dashed var(--line2);
+    border-radius: 14px;
+    background: rgba(16,20,37,.82);
+    padding: 24px;
+    text-align: center;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 900px) {
+    .top { grid-template-columns: 1fr; }
+    .order-chip { min-width: 0; }
+    .layout { grid-template-columns: 1fr; }
+    .side { position: static; }
+  }
+  @media (max-width: 620px) {
+    header { padding: 10px 12px; }
+    .pill { display: none; }
+    main { width: min(100% - 18px, 1120px); padding-top: 18px; }
+    h1 { font-size: 2.1rem; }
+    .summary-grid,
+    .actions { grid-template-columns: 1fr; }
+    .panel-head { align-items: flex-start; flex-direction: column; }
+    .pay-head { display: block; }
+    .pay-amount { display: block; margin-top: 8px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="index.html"><span class="brand-mark">K</span><span>KokoRBX</span></a>
+  <div class="header-actions">
+    <span class="pill"><span class="pill-dot"></span><span>Pembayaran Aman</span></span>
+    <a class="btn secondary" href="index.html">Store</a>
+  </div>
+</header>
+
+<main>
+  <section class="top">
+    <div>
+      <span class="eyebrow">Payment Center</span>
+      <h1>Bayar Order</h1>
+      <p>Detail pembayaran dipisahkan dari halaman order. Kalau tab tertutup, buka lagi link payment ini untuk melihat QRIS, nomor DANA/GoPay, dan upload bukti pembayaran.</p>
+    </div>
+    <div class="order-chip">
+      <span>Nomor Order</span>
+      <strong id="order-id-head">-</strong>
+    </div>
+  </section>
+
+  <div id="missing-order" class="empty" hidden>
+    Order tidak ditemukan di browser ini. Kembali ke halaman produk, buka Riwayat Lokal, atau hubungi admin dengan ID order kamu.
+    <div class="actions">
+      <a class="btn secondary" href="index.html">Kembali ke Store</a>
+      <a class="btn" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Chat Admin</a>
+    </div>
+  </div>
+
+  <section id="payment-app" class="layout" hidden>
+    <div>
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Detail Pesanan</div>
+            <div class="panel-sub">Pastikan username, paket, dan nominal sudah sesuai sebelum bayar.</div>
+          </div>
+          <span id="order-status" class="status">Menunggu Pembayaran</span>
+        </div>
+        <div class="panel-body">
+          <div class="summary-grid">
+            <div class="summary-box"><span>Username</span><strong id="sum-user">-</strong></div>
+            <div class="summary-box"><span>Layanan</span><strong id="sum-service">-</strong></div>
+            <div class="summary-box"><span>Robux</span><strong id="sum-robux" class="gold">-</strong></div>
+            <div class="summary-box"><span>Total Bayar</span><strong id="sum-price" class="green">-</strong></div>
+            <div class="summary-box"><span>Metode</span><strong id="sum-method" class="purple">-</strong></div>
+            <div class="summary-box"><span>Waktu Order</span><strong id="sum-time">-</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Pembayaran</div>
+            <div class="panel-sub">Bayar sesuai nominal, lalu upload bukti di bawah.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="pay-method">
+            <div class="pay-head">
+              <div><span>Metode Bayar</span><strong id="pay-title">-</strong></div>
+              <div id="pay-amount" class="pay-amount">Rp -</div>
+            </div>
+            <div id="payment-detail"></div>
+          </div>
+
+          <div class="instructions">
+            <div class="step"><span class="step-num">1</span><span>Bayar sesuai total yang tampil di halaman ini.</span></div>
+            <div class="step"><span class="step-num">2</span><span>Untuk QRIS, scan gambar QR. Untuk DANA/GoPay, salin nomor tujuan lalu transfer.</span></div>
+            <div class="step"><span class="step-num">3</span><span>Upload screenshot bukti pembayaran. Status order akan menjadi Menunggu Konfirmasi.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="proof-panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Upload Bukti Pembayaran</div>
+            <div class="panel-sub">Screenshot mutasi/transfer membantu admin memproses order lebih cepat.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div id="upload-zone" class="upload-zone">
+            <div>
+              <div class="upload-title">Pilih atau tarik foto bukti pembayaran</div>
+              <div class="upload-sub">Format gambar JPG/PNG/WebP. File akan dikompres sebelum dikirim.</div>
+              <div class="actions">
+                <button class="btn secondary" id="choose-proof" type="button">Pilih Foto</button>
+                <button class="btn" id="submit-proof" type="button" disabled>Kirim Bukti</button>
+              </div>
+            </div>
+          </div>
+          <input id="proof-input" type="file" accept="image/*" hidden>
+          <div id="preview" class="preview"><img id="preview-img" alt="Preview bukti pembayaran"></div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="side">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Aksi Cepat</div>
+            <div class="panel-sub">Gunakan jika perlu bantuan admin.</div>
+          </div>
+        </div>
+        <div class="panel-body btn-stack">
+          <button class="btn secondary full" id="copy-order" type="button">Salin ID Order</button>
+          <button class="btn secondary full" id="copy-payment" type="button">Salin Detail Bayar</button>
+          <a class="btn secondary full" id="chat-room" href="#">Kotak Pesan Transaksi</a>
+          <a class="btn full" id="wa-admin" target="_blank" rel="noopener">Chat WhatsApp Admin</a>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Ringkasan</div>
+            <div class="panel-sub">Data yang masuk ke sistem order.</div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="mini-list">
+            <div class="mini-row"><span>Order</span><strong id="side-id">-</strong></div>
+            <div class="mini-row"><span>Gamepass</span><strong id="side-gp">-</strong></div>
+            <div class="mini-row"><span>Kontak</span><strong id="side-contact">-</strong></div>
+            <div class="mini-row"><span>Bukti</span><strong id="side-proof">Belum masuk</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="help-box">
+        Jangan tutup halaman sebelum bukti terkirim. Kalau sudah tertutup, buka lagi URL payment ini atau pilih order dari Riwayat Lokal di halaman top up.
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script src="assets/marketplace/panel-store.js"></script>
+<script>
+  const PAYMENT_NUMBERS = {
+    DANA: '081996112019',
+    GoPay: '081996112019'
+  };
+  const QRIS_URL = 'https://i.imgur.com/GNkyXuY.jpg';
+  const BACKEND_URL = location.protocol === 'file:' ? 'https://koko-rbx.vercel.app' : '';
+  const WA_NUMBER = '6281996112019';
+  const params = new URLSearchParams(location.search);
+  const orderId = (params.get('id') || params.get('order') || '').trim();
+  let currentOrder = null;
+  let proofData = '';
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, ch => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[ch]));
+  }
+
+  function normalizePaymentMethod(method) {
+    const raw = String(method || '').trim();
+    const key = raw.toLowerCase().replace(/[\s_-]+/g, '');
+    if (key.includes('qris')) return 'QRIS';
+    if (key.includes('dana')) return 'DANA';
+    if (key.includes('gopay') || key.includes('gopaywallet')) return 'GoPay';
+    return raw || '-';
+  }
+
+  function formatRupiah(value) {
+    const num = Number(value || 0);
+    return num ? 'Rp ' + num.toLocaleString('id-ID') : 'Rp -';
+  }
+
+  function formatRobux(value) {
+    const num = Number(value || 0);
+    return num ? num.toLocaleString('id-ID') + ' R$' : '-';
+  }
+
+  function formatTime(value) {
+    const time = Number(value || 0);
+    if (!time) return '-';
+    return new Date(time).toLocaleString('id-ID', {
+      day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+  }
+
+  function statusInfo(order) {
+    const status = String(order && order.status || 'pending').toLowerCase();
+    const hasProof = Boolean(order && (order.bukti || order.proofImage || order.proof_url || order.hasProof));
+    if (status === 'success' || status === 'completed' || status === 'done') return { label: 'Selesai', cls: 'done' };
+    if (status === 'failed' || status === 'rejected' || status === 'cancelled' || status === 'canceled') return { label: 'Ditolak', cls: 'rejected' };
+    if (status === 'bukti_masuk' || hasProof) return { label: 'Menunggu Konfirmasi', cls: 'confirm' };
+    return { label: 'Menunggu Pembayaran', cls: '' };
+  }
+
+  function readJson(key) {
+    try {
+      const data = JSON.parse(localStorage.getItem(key) || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function collectLocalOrders() {
+    const map = new Map();
+    readJson('rbx_orders').forEach(order => { if (order && order.id) map.set(order.id, order); });
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith('rbx_orders_u_')) continue;
+      readJson(key).forEach(order => { if (order && order.id && !map.has(order.id)) map.set(order.id, order); });
+    }
+    if (window.KokoPanel) {
+      KokoPanel.readOrders().forEach(order => {
+        if (order && order.id && !map.has(order.id)) {
+          map.set(order.id, {
+            id: order.id,
+            username: order.username || order.buyer || '',
+            gpId: order.detail || order.product || '',
+            robux: 0,
+            price: Number(order.price || 0),
+            method: order.method || '-',
+            status: order.status || 'pending',
+            time: order.createdAt || Date.now()
+          });
+        }
+      });
+    }
+    return Array.from(map.values());
+  }
+
+  function findLocalOrder(id) {
+    return collectLocalOrders().find(order => String(order.id || '') === id) || null;
+  }
+
+  async function fetchBackendOrder(id) {
+    if (!id) return null;
+    try {
+      const res = await fetch(BACKEND_URL + '/api/orders?id=' + encodeURIComponent(id));
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data && data.id ? data : null;
+    } catch(e) {
+      return null;
+    }
+  }
+
+  function normalizeOrder(order) {
+    const o = Object.assign({}, order || {});
+    o.id = String(o.id || orderId || '').trim();
+    o.username = o.username || o.buyer || '-';
+    o.gpId = o.gpId || o.gamepass || o.packageLabel || o.package || 'Order KokoRBX';
+    o.robux = Number(o.robux || o.totalRobux || 0);
+    o.price = Number(o.price || 0);
+    const rawMethod = o.paymentMethod || o.payment_method || o.method || '-';
+    o.method = normalizePaymentMethod(rawMethod === 'Gift GP Ingame' ? 'QRIS' : rawMethod);
+    o.status = o.status || 'pending';
+    o.time = Number(o.time || o.createdAt || Date.now());
+    o.email = o.email || o.contact || '';
+    return o;
+  }
+
+  function saveOrderEverywhere(order) {
+    if (!order || !order.id) return;
+    const clean = Object.assign({}, order);
+    let foundUserKey = false;
+
+    function upsert(key) {
+      const orders = readJson(key);
+      const index = orders.findIndex(item => item.id === clean.id);
+      if (index >= 0) orders[index] = Object.assign({}, orders[index], clean);
+      else orders.unshift(clean);
+      localStorage.setItem(key, JSON.stringify(orders));
+    }
+
+    upsert('rbx_orders');
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith('rbx_orders_u_')) continue;
+      const orders = readJson(key);
+      if (orders.some(item => item.id === clean.id)) {
+        upsert(key);
+        foundUserKey = true;
+      }
+    }
+    if (!foundUserKey) upsert('rbx_orders_u_guest');
+  }
+
+  function paymentDetailHtml(order) {
+    const method = normalizePaymentMethod(order.method);
+    const amount = formatRupiah(order.price);
+    if (!Number(order.price || 0)) {
+      return '<div class="placeholder">Total bayar masih menunggu admin. Jangan transfer dulu sebelum nominal dikonfirmasi.</div>';
+    }
+    if (method === 'QRIS') {
+      if (!QRIS_URL) return '<div class="placeholder">QRIS belum diset. Hubungi admin untuk kirim QRIS.</div>';
+      return '<div class="qris-frame"><img src="' + escapeHtml(QRIS_URL) + '" alt="QRIS pembayaran"></div>' +
+        '<div class="actions"><a class="btn secondary" href="' + escapeHtml(QRIS_URL) + '" download="qris-kokorbx.jpg">Download QRIS</a><button class="btn secondary" type="button" data-copy="' + escapeHtml(amount) + '">Salin Nominal</button></div>';
+    }
+    const number = PAYMENT_NUMBERS[method];
+    if (number) {
+      return '<div class="number-box"><div class="number-label">Nomor ' + escapeHtml(method) + '</div><div class="number-value">' + escapeHtml(number) + '</div><button class="btn green full" type="button" data-copy="' + escapeHtml(number) + '">Salin Nomor</button></div>';
+    }
+    return '<div class="placeholder">Metode pembayaran tersimpan. Hubungi admin kalau detail bayar belum muncul.</div>';
+  }
+
+  function paymentText(order) {
+    const method = normalizePaymentMethod(order.method);
+    const number = PAYMENT_NUMBERS[method] || '';
+    return [
+      'Order: ' + order.id,
+      'Username: ' + order.username,
+      'Layanan: ' + order.gpId,
+      'Total: ' + formatRupiah(order.price),
+      'Metode: ' + method,
+      number ? 'Nomor: ' + number : '',
+      method === 'QRIS' ? 'QRIS: ' + QRIS_URL : ''
+    ].filter(Boolean).join('\\n');
+  }
+
+  function render(order) {
+    currentOrder = normalizeOrder(order);
+    const status = statusInfo(currentOrder);
+    document.getElementById('payment-app').hidden = false;
+    document.getElementById('missing-order').hidden = true;
+    document.getElementById('order-id-head').textContent = currentOrder.id;
+    document.getElementById('sum-user').textContent = currentOrder.username || '-';
+    document.getElementById('sum-service').textContent = currentOrder.gpId || '-';
+    document.getElementById('sum-robux').textContent = formatRobux(currentOrder.robux);
+    document.getElementById('sum-price').textContent = formatRupiah(currentOrder.price);
+    document.getElementById('sum-method').textContent = currentOrder.method;
+    document.getElementById('sum-time').textContent = formatTime(currentOrder.time);
+    document.getElementById('pay-title').textContent = currentOrder.method;
+    document.getElementById('pay-amount').textContent = formatRupiah(currentOrder.price);
+    document.getElementById('payment-detail').innerHTML = paymentDetailHtml(currentOrder);
+    document.getElementById('side-id').textContent = currentOrder.id;
+    document.getElementById('side-gp').textContent = currentOrder.gpId || '-';
+    document.getElementById('side-contact').textContent = currentOrder.email || '-';
+    document.getElementById('side-proof').textContent = status.cls === 'confirm' || status.cls === 'done' ? 'Sudah masuk' : 'Belum masuk';
+
+    const badge = document.getElementById('order-status');
+    badge.textContent = status.label;
+    badge.className = 'status' + (status.cls ? ' ' + status.cls : '');
+
+    const room = new URLSearchParams({
+      order: currentOrder.id,
+      token: 'buyer-' + currentOrder.id,
+      product: currentOrder.gpId || 'Order KokoRBX',
+      category: 'robux',
+      price: String(currentOrder.price || 0),
+      priceText: formatRupiah(currentOrder.price),
+      username: currentOrder.username,
+      buyer: currentOrder.username,
+      detail: paymentText(currentOrder)
+    });
+    document.getElementById('chat-room').href = 'transaksi-buyer.html?' + room.toString();
+
+    const wa = 'Halo KokoRBX, aku mau tanya pembayaran order.\\n\\n' + paymentText(currentOrder);
+    document.getElementById('wa-admin').href = 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(wa);
+
+    if (currentOrder.proofImage || currentOrder.bukti || currentOrder.proof_url) {
+      const src = currentOrder.proofImage || currentOrder.bukti || currentOrder.proof_url;
+      document.getElementById('preview-img').src = src;
+      document.getElementById('preview').style.display = 'block';
+      document.getElementById('submit-proof').textContent = 'Update Bukti';
+      document.getElementById('submit-proof').disabled = false;
+    }
+  }
+
+  function showMissing() {
+    document.getElementById('payment-app').hidden = true;
+    document.getElementById('missing-order').hidden = false;
+    document.getElementById('order-id-head').textContent = orderId || '-';
+  }
+
+  function toast(message) {
+    const el = document.getElementById('toast');
+    el.textContent = message;
+    el.classList.add('show');
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => el.classList.remove('show'), 2400);
+  }
+
+  async function copyText(text) {
+    try {
+      await navigator.clipboard.writeText(String(text || ''));
+      toast('Berhasil disalin');
+    } catch(e) {
+      toast(String(text || ''));
+    }
+  }
+
+  function processFile(file) {
+    if (!file) return;
+    if (!file.type || !file.type.startsWith('image/')) {
+      toast('File harus berupa gambar');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = event => {
+      proofData = event.target.result;
+      document.getElementById('preview-img').src = proofData;
+      document.getElementById('preview').style.display = 'block';
+      document.getElementById('submit-proof').disabled = false;
+      document.getElementById('submit-proof').textContent = 'Kirim Bukti';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function compressImage(base64, maxW, maxH, quality) {
+    return new Promise(resolve => {
+      try {
+        const img = new Image();
+        img.onload = () => {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxW || h > maxH) {
+            const ratio = Math.min(maxW / w, maxH / h);
+            w = Math.round(w * ratio);
+            h = Math.round(h * ratio);
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = () => resolve(base64);
+        img.src = base64;
+      } catch(e) {
+        resolve(base64);
+      }
+    });
+  }
+
+  async function uploadProof() {
+    if (!currentOrder || !currentOrder.id) return;
+    const source = proofData || currentOrder.proofImage || currentOrder.bukti || '';
+    if (!source) {
+      toast('Pilih foto bukti dulu');
+      return;
+    }
+    const btn = document.getElementById('submit-proof');
+    btn.disabled = true;
+    btn.textContent = 'Mengupload...';
+
+    const compressed = await compressImage(source, 900, 900, .72);
+    let publicUrl = '';
+    try {
+      const res = await fetch(BACKEND_URL + '/api/upload-proof', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: currentOrder.id, imageBase64: compressed })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      publicUrl = data.publicUrl || '';
+    } catch(e) {
+      console.warn('[Payment] upload proof gagal:', e);
+    }
+
+    currentOrder = Object.assign({}, currentOrder, {
+      bukti: compressed,
+      proofImage: compressed,
+      proof_url: publicUrl || currentOrder.proof_url || '',
+      hasProof: true,
+      buktiTime: Date.now(),
+      status: 'bukti_masuk'
+    });
+    saveOrderEverywhere(currentOrder);
+    sendProofNotification(currentOrder, compressed, publicUrl);
+    render(currentOrder);
+    btn.textContent = 'Bukti Terkirim';
+    toast('Status berubah menjadi Menunggu Konfirmasi');
+  }
+
+  function sendProofNotification(order, imageBase64, proofUrl) {
+    const caption = [
+      'BUKTI PEMBAYARAN MASUK',
+      '',
+      'Order: ' + order.id,
+      'Username: ' + order.username,
+      'Robux: ' + formatRobux(order.robux),
+      'Total: ' + formatRupiah(order.price),
+      'Metode: ' + order.method,
+      proofUrl ? 'Bukti: ' + proofUrl : '',
+      '',
+      'Status: Menunggu Konfirmasi'
+    ].filter(line => line !== '').join('\\n');
+    try {
+      fetch(BACKEND_URL + '/api/notify-proof', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64, caption })
+      }).catch(() => {});
+    } catch(e) {}
+  }
+
+  async function boot() {
+    if (!orderId) {
+      showMissing();
+      return;
+    }
+    const local = findLocalOrder(orderId);
+    if (local) {
+      render(local);
+      return;
+    }
+    const remote = await fetchBackendOrder(orderId);
+    if (remote) {
+      render(remote);
+      saveOrderEverywhere(normalizeOrder(remote));
+      return;
+    }
+    showMissing();
+  }
+
+  document.getElementById('choose-proof').addEventListener('click', () => document.getElementById('proof-input').click());
+  document.getElementById('proof-input').addEventListener('change', event => processFile(event.target.files && event.target.files[0]));
+  document.getElementById('submit-proof').addEventListener('click', uploadProof);
+  document.getElementById('copy-order').addEventListener('click', () => copyText(currentOrder && currentOrder.id));
+  document.getElementById('copy-payment').addEventListener('click', () => copyText(currentOrder ? paymentText(currentOrder) : ''));
+  document.addEventListener('click', event => {
+    const copyButton = event.target.closest('[data-copy]');
+    if (copyButton) copyText(copyButton.getAttribute('data-copy') || '');
+  });
+
+  const zone = document.getElementById('upload-zone');
+  zone.addEventListener('dragover', event => {
+    event.preventDefault();
+    zone.classList.add('drag');
+  });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag'));
+  zone.addEventListener('drop', event => {
+    event.preventDefault();
+    zone.classList.remove('drag');
+    processFile(event.dataTransfer.files && event.dataTransfer.files[0]);
+  });
+
+  boot();
+</script>
+</body>
+</html>

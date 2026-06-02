@@ -502,11 +502,11 @@
           </div>
           <div class="note-box">Pastikan username bukan display name. Admin akan cocokkan username dan display name dulu sebelum proses gift.</div>
           <div class="actions">
-            <button type="submit">Buat Transaksi Panel</button>
+            <button type="submit">Buat Pesanan</button>
             <a class="wa-link" id="wa-link" href="https://wa.me/6281996112019" target="_blank" rel="noopener">Bantuan Admin</a>
           </div>
         </div>
-        <div class="notice" id="notice">Order dibuat. Kamu akan diarahkan ke kotak pesan transaksi.</div>
+        <div class="notice" id="notice">Order dibuat. Kamu akan diarahkan ke halaman pembayaran.</div>
       </form>
 
       <aside class="preview-panel">
@@ -930,6 +930,7 @@
       price: calcGiftPrice(total),
       image: item && item.imageUrl ? item.imageUrl : 'assets/logo-gift-gp.png',
       method: 'Gift GP Ingame',
+      paymentMethod: 'QRIS',
       status: 'request',
       time: Date.now(),
       note: 'Cek username dan display name sebelum proses gift.',
@@ -997,18 +998,9 @@
     }
     document.getElementById('notice').classList.add('show');
     const params = new URLSearchParams({
-      order: orderId,
-      token: 'buyer-' + orderId,
-      product: 'Gift GP - ' + item.title,
-      category: 'gift',
-      price: String(price || 0),
-      priceText: price ? formatRupiah(price) : 'Menunggu admin',
-      image: item.imageUrl || 'assets/logo-gift-gp.png',
-      username: value('username'),
-      buyer: value('username'),
-      detail: detail
+      id: orderId
     });
-    location.href = 'transaksi-buyer.html?' + params.toString();
+    location.href = 'payment.html?' + params.toString();
   });
 
   renderTabs();

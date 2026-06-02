@@ -148,6 +148,16 @@ module.exports = async function handler(req, res) {
     }
 
     if (req.method === 'GET') {
+      const id = req.query && req.query.id;
+      if (id) {
+        const rows = await supabaseFetch(
+          '/rest/v1/orders?id=eq.' + encodeURIComponent(id) + '&limit=1'
+        );
+        const order = rows && rows[0] ? rowToOrder(rows[0]) : null;
+        if (!order) return res.status(404).json({ error: 'Order tidak ditemukan' });
+        return res.status(200).json(order);
+      }
+
       const username = req.query && req.query.username;
       if (!username) return res.status(400).json({ error: 'Username wajib diisi' });
       if (isSettingsUsername(username)) return res.status(400).json({ error: 'Username tidak valid' });
