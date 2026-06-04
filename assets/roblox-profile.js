@@ -9,6 +9,7 @@
     : '';
   var profileCache = readProfile();
   var toastTimer = null;
+  var pendingManualProfile = null;
 
   function escapeHtml(value) {
     return String(value || '').replace(/[&<>"']/g, function(char) {
@@ -217,7 +218,7 @@
         '<span>Login Roblox</span>' +
       '</button>';
     slot.querySelector('button').addEventListener('click', function() {
-      location.href = oauthStartUrl();
+      openConnectModal('');
     });
   }
 
@@ -252,30 +253,59 @@
       '<div class="koko-profile-modal" role="dialog" aria-modal="true" aria-labelledby="koko-profile-modal-title">' +
         '<div class="koko-profile-modal-head">' +
           '<div>' +
-            '<div class="koko-profile-modal-title" id="koko-profile-modal-title">Hubungkan Roblox</div>' +
-            '<div class="koko-profile-modal-sub" id="koko-profile-modal-sub">Login resmi dengan Roblox. KokoRBX hanya menerima data publik yang disetujui pembeli: avatar, display name, username, dan user ID.</div>' +
+            '<div class="koko-profile-modal-title" id="koko-profile-modal-title">Hubungkan Akun Roblox</div>' +
+            '<div class="koko-profile-modal-sub" id="koko-profile-modal-sub">Supaya pesanan bisa diproses ke akun Roblox yang benar.</div>' +
           '</div>' +
           '<button class="koko-profile-close" type="button" aria-label="Tutup">x</button>' +
         '</div>' +
-        '<div class="koko-profile-oauth-wrap">' +
-          '<a class="koko-profile-oauth" href="' + escapeHtml(oauthStartUrl()) + '">Login resmi dengan Roblox</a>' +
-          '<div class="koko-profile-oauth-note">OAuth Roblox hanya mengirim identitas publik yang disetujui pembeli. KokoRBX tidak melihat password, cookie, 2FA, atau kode backup.</div>' +
+        '<div class="koko-profile-modal-body">' +
+          '<section class="koko-profile-section koko-profile-section-primary">' +
+            '<div class="koko-profile-section-head">' +
+              '<div>' +
+                '<div class="koko-profile-section-title">Login Resmi Roblox</div>' +
+                '<div class="koko-profile-section-desc">Verifikasi akun otomatis lewat halaman resmi Roblox.</div>' +
+              '</div>' +
+              '<span class="koko-profile-badge">Direkomendasikan</span>' +
+            '</div>' +
+            '<a class="koko-profile-oauth" href="' + escapeHtml(oauthStartUrl()) + '">Masuk dengan Roblox</a>' +
+            '<div class="koko-profile-oauth-note">Lebih aman dan lebih akurat karena akun diverifikasi langsung dari Roblox.</div>' +
+            '<div class="koko-profile-mini-note">Login dilakukan di halaman resmi Roblox, bukan di KokoRBX.</div>' +
+            '<div class="koko-profile-oauth-safe">Kamu akan diarahkan ke halaman resmi Roblox. KokoRBX tidak bisa melihat password, cookie, kode 2FA, atau kode backup kamu.</div>' +
+          '</section>' +
+          '<div class="koko-profile-divider"><span>Atau</span></div>' +
+          '<form class="koko-profile-form" id="koko-profile-form">' +
+            '<section class="koko-profile-section koko-profile-section-manual">' +
+              '<div class="koko-profile-section-title">Masukkan Username Manual</div>' +
+              '<div class="koko-profile-section-desc">Gunakan kalau kamu tidak ingin login Roblox.</div>' +
+              '<div class="koko-profile-field">' +
+                '<label for="koko-profile-username">Username Roblox</label>' +
+                '<input id="koko-profile-username" autocomplete="username" placeholder="Contoh: tama_6505" required>' +
+              '</div>' +
+              '<div class="koko-profile-mini-note">Username manual tetap bisa digunakan, tapi pastikan akun yang muncul sudah benar.</div>' +
+              '<button class="koko-profile-submit" id="koko-profile-submit" type="submit">Cek Username</button>' +
+              '<div class="koko-profile-error" id="koko-profile-error"></div>' +
+              '<div class="koko-profile-preview" id="koko-profile-preview" aria-live="polite"></div>' +
+              '<div class="koko-profile-safety">Aman: kami tidak pernah meminta password, cookie, kode 2FA, atau kode backup Roblox.</div>' +
+            '</section>' +
+          '</form>' +
         '</div>' +
-        '<form class="koko-profile-form" id="koko-profile-form" style="display:none">' +
-          '<div class="koko-profile-divider"><span>fallback manual nonaktif</span></div>' +
-          '<div class="koko-profile-field">' +
-            '<label for="koko-profile-username">Username Roblox</label>' +
-            '<input id="koko-profile-username" autocomplete="username" placeholder="Contoh: tama_6505" required>' +
-          '</div>' +
-          '<div class="koko-profile-safety">KokoRBX tidak pernah meminta password, cookie, kode 2FA, atau kode backup Roblox kamu.</div>' +
-          '<div class="koko-profile-error" id="koko-profile-error"></div>' +
-          '<button class="koko-profile-submit" id="koko-profile-submit" type="submit">Cek dan Hubungkan</button>' +
-        '</form>' +
       '</div>';
     document.body.appendChild(modal);
     modal.querySelector('.koko-profile-close').addEventListener('click', closeConnectModal);
     modal.addEventListener('click', function(event) {
       if (event.target === modal) closeConnectModal();
+      var changeButton = event.target.closest && event.target.closest('[data-profile-change]');
+      if (changeButton) {
+        event.preventDefault();
+        resetManualPreview(true);
+        var input = modal.querySelector('#koko-profile-username');
+        if (input) input.focus();
+      }
+      var confirmButton = event.target.closest && event.target.closest('[data-profile-confirm]');
+      if (confirmButton) {
+        event.preventDefault();
+        confirmManualProfile();
+      }
     });
     modal.querySelector('#koko-profile-form').addEventListener('submit', submitProfile);
     return modal;
@@ -285,16 +315,83 @@
     var modal = getModal();
     var input = modal.querySelector('#koko-profile-username');
     var error = modal.querySelector('#koko-profile-error');
+    resetManualPreview(true);
     error.classList.remove('show');
     error.textContent = '';
     input.value = prefill || (profileCache && profileCache.username) || '';
     modal.classList.add('show');
-    setTimeout(function() { input.focus(); }, 30);
   }
 
   function closeConnectModal() {
     var modal = document.getElementById('koko-profile-modal');
     if (modal) modal.classList.remove('show');
+  }
+
+  function resetManualPreview(keepInputValue) {
+    pendingManualProfile = null;
+    var modal = document.getElementById('koko-profile-modal');
+    if (!modal) return;
+    var preview = modal.querySelector('#koko-profile-preview');
+    var input = modal.querySelector('#koko-profile-username');
+    var button = modal.querySelector('#koko-profile-submit');
+    var error = modal.querySelector('#koko-profile-error');
+    if (preview) {
+      preview.classList.remove('show');
+      preview.innerHTML = '';
+    }
+    if (input) {
+      input.disabled = false;
+      if (!keepInputValue) input.value = '';
+    }
+    if (button) {
+      button.hidden = false;
+      button.disabled = false;
+      button.textContent = 'Cek Username';
+    }
+    if (error) {
+      error.classList.remove('show');
+      error.textContent = '';
+    }
+  }
+
+  function renderManualPreview(profile) {
+    var modal = getModal();
+    var preview = modal.querySelector('#koko-profile-preview');
+    var input = modal.querySelector('#koko-profile-username');
+    var button = modal.querySelector('#koko-profile-submit');
+    var displayName = profile.displayName || profile.username || 'Roblox';
+    var username = profile.username || '';
+    var userId = profile.userId || profile.robloxUserId || '';
+    if (input) input.disabled = true;
+    if (button) button.hidden = true;
+    preview.innerHTML =
+      '<div class="koko-profile-preview-card">' +
+        avatarMarkup(profile, 'large') +
+        '<div class="koko-profile-preview-copy">' +
+          '<strong>' + escapeHtml(displayName) + '</strong>' +
+          '<span>@' + escapeHtml(username) + '</span>' +
+          '<small>User ID: ' + escapeHtml(userId || '-') + '</small>' +
+          '<p>Pastikan ini akun Roblox kamu sebelum dihubungkan.</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="koko-profile-preview-actions">' +
+        '<button class="koko-profile-confirm" type="button" data-profile-confirm>Ya, Hubungkan Akun Ini</button>' +
+        '<button class="koko-profile-secondary" type="button" data-profile-change>Ganti Username</button>' +
+      '</div>';
+    preview.classList.add('show');
+  }
+
+  function confirmManualProfile() {
+    if (!pendingManualProfile) return;
+    var profile = saveProfile(pendingManualProfile);
+    pendingManualProfile = null;
+    closeConnectModal();
+    renderAllSlots();
+    applyProfileToForms(profile);
+    hydrateAccountPage(profile);
+    toast('Akun Roblox berhasil dihubungkan.');
+    window.dispatchEvent(new CustomEvent('kokorbx:roblox-profile', { detail: profile }));
+    handlePendingCheckout();
   }
 
   function openInfoModal(title, message) {
@@ -340,6 +437,7 @@
       return;
     }
 
+    resetManualPreview(true);
     button.disabled = true;
     button.textContent = 'Mengecek username...';
 
@@ -350,20 +448,14 @@
         throw new Error(data.error || 'Username Roblox tidak ditemukan.');
       }
 
-      var profile = saveProfile(data.profile);
-      closeConnectModal();
-      renderAllSlots();
-      applyProfileToForms(profile);
-      hydrateAccountPage(profile);
-      toast('Akun Roblox berhasil dihubungkan.');
-      window.dispatchEvent(new CustomEvent('kokorbx:roblox-profile', { detail: profile }));
-      handlePendingCheckout();
+      pendingManualProfile = data.profile;
+      renderManualPreview(data.profile);
     } catch (err) {
       error.textContent = err.message || 'Username Roblox tidak ditemukan.';
       error.classList.add('show');
     } finally {
       button.disabled = false;
-      button.textContent = 'Cek dan Hubungkan';
+      button.textContent = 'Cek Username';
     }
   }
 
@@ -451,7 +543,7 @@
       node.textContent = active ? (active.displayName || active.username) : 'Belum terhubung';
     });
     page.querySelectorAll('[data-profile-username]').forEach(function(node) {
-      node.textContent = active ? '@' + active.username : 'Login Roblox resmi dulu';
+      node.textContent = active ? '@' + active.username : 'Hubungkan akun Roblox dulu';
     });
     page.querySelectorAll('[data-profile-userid]').forEach(function(node) {
       node.textContent = active ? 'User ID: ' + active.userId : 'User ID belum tersedia';
@@ -470,8 +562,8 @@
       node.textContent = counts.robux.toLocaleString('id-ID') + ' R$';
     });
     page.querySelectorAll('[data-connect-profile]').forEach(function(button) {
-      button.textContent = active ? 'Login ulang Roblox' : 'Login dengan Roblox';
-      button.onclick = function() { location.href = oauthStartUrl(); };
+      button.textContent = active ? 'Ganti Akun Roblox' : 'Hubungkan Akun Roblox';
+      button.onclick = function() { openConnectModal(active && active.username); };
     });
     page.querySelectorAll('[data-remove-profile]').forEach(function(button) {
       button.disabled = !active;
@@ -514,7 +606,7 @@
       if (oauthError === 'missing-env') toast('Roblox OAuth belum dikonfigurasi di Vercel.');
       else if (oauthError) toast('Login Roblox belum berhasil. Coba lagi.');
       if (params.get('login') === '1') {
-        setTimeout(function() { location.href = oauthStartUrl(); }, 180);
+        setTimeout(function() { openConnectModal(profileCache && profileCache.username); }, 180);
       }
     } catch (error) {}
     document.addEventListener('click', closeMenus);
@@ -530,7 +622,7 @@
 
   window.KokoRobloxProfile = {
     get: readProfile,
-    connect: function() { location.href = oauthStartUrl(); },
+    connect: function(prefill) { openConnectModal(prefill); },
     oauthStartUrl: oauthStartUrl,
     remove: removeProfile,
     sync: syncOAuthSession,

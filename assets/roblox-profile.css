@@ -174,8 +174,8 @@
   align-items: center;
   justify-content: center;
   padding: 18px;
-  background: rgba(9, 14, 32, .54);
-  backdrop-filter: blur(12px);
+  background: rgba(5, 8, 22, .68);
+  backdrop-filter: blur(18px);
 }
 
 .koko-profile-modal-backdrop.show {
@@ -183,13 +183,29 @@
 }
 
 .koko-profile-modal {
-  width: min(460px, 100%);
+  width: min(540px, 100%);
+  max-height: min(760px, calc(100vh - 28px));
   border-radius: 18px;
-  background: rgba(255, 255, 255, .98);
-  color: #1e2a55;
-  border: 1px solid rgba(221, 230, 248, .95);
-  box-shadow: 0 32px 88px rgba(30, 42, 85, .24);
-  overflow: hidden;
+  background:
+    radial-gradient(circle at top left, rgba(139, 124, 255, .24), transparent 34%),
+    linear-gradient(145deg, rgba(12, 18, 42, .98), rgba(18, 24, 54, .98));
+  color: #f8faff;
+  border: 1px solid rgba(111, 141, 255, .42);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, .42);
+  overflow-y: auto;
+  opacity: 0;
+  transform: translateY(10px) scale(.985);
+}
+
+.koko-profile-modal-backdrop.show .koko-profile-modal {
+  animation: kokoProfileIn .2s ease forwards;
+}
+
+@keyframes kokoProfileIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .koko-profile-modal-head {
@@ -198,13 +214,61 @@
   justify-content: space-between;
   gap: 14px;
   padding: 20px 20px 14px;
-  border-bottom: 1px solid rgba(221, 230, 248, .9);
+  border-bottom: 1px solid rgba(124, 140, 205, .32);
 }
 
-.koko-profile-oauth-wrap {
-  padding: 16px 20px 0;
+.koko-profile-modal-body {
+  padding: 14px 18px 18px;
   display: grid;
-  gap: 9px;
+  gap: 13px;
+}
+
+.koko-profile-section {
+  border: 1px solid rgba(124, 140, 205, .32);
+  border-radius: 16px;
+  background: rgba(8, 12, 30, .58);
+  padding: 14px;
+}
+
+.koko-profile-section-primary {
+  background:
+    linear-gradient(135deg, rgba(111, 141, 255, .16), rgba(139, 124, 255, .08)),
+    rgba(8, 12, 30, .64);
+}
+
+.koko-profile-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.koko-profile-section-title {
+  color: #f8faff;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1.15;
+}
+
+.koko-profile-section-desc {
+  margin-top: 5px;
+  color: #c8d4f5;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.koko-profile-badge {
+  flex: 0 0 auto;
+  border: 1px solid rgba(139, 124, 255, .52);
+  border-radius: 999px;
+  background: rgba(237, 235, 255, .16);
+  color: #d9dcff;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .koko-profile-oauth {
@@ -217,7 +281,7 @@
   color: #fff;
   text-decoration: none;
   font: 900 14px/1 "Outfit", system-ui, sans-serif;
-  background: linear-gradient(135deg, #1e2a55, #8b7cff);
+  background: linear-gradient(135deg, #62d8d4, #6f8dff 48%, #8b7cff);
   box-shadow: 0 16px 34px rgba(139, 124, 255, .26);
 }
 
@@ -227,20 +291,37 @@
 }
 
 .koko-profile-oauth-note {
-  color: #5f6f97;
+  margin-top: 9px;
+  color: #e5ebff;
   font-size: 12px;
   line-height: 1.45;
+  font-weight: 800;
+}
+
+.koko-profile-mini-note,
+.koko-profile-oauth-safe {
+  margin-top: 7px;
+  color: #aebde8;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.koko-profile-oauth-safe {
+  border-radius: 12px;
+  border: 1px solid rgba(111, 141, 255, .26);
+  background: rgba(111, 141, 255, .1);
+  padding: 10px 11px;
 }
 
 .koko-profile-divider {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #7b89aa;
+  color: #c5d3f4;
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: .06em;
+  letter-spacing: 0;
 }
 
 .koko-profile-divider::before,
@@ -248,18 +329,19 @@
   content: "";
   height: 1px;
   flex: 1;
-  background: rgba(221, 230, 248, .95);
+  background: rgba(124, 140, 205, .36);
 }
 
 .koko-profile-modal-title {
   font-size: 22px;
   font-weight: 900;
   letter-spacing: 0;
+  color: #f8faff;
 }
 
 .koko-profile-modal-sub {
   margin-top: 6px;
-  color: #6c789b;
+  color: #c5d3f4;
   font-size: 13px;
   line-height: 1.45;
 }
@@ -267,16 +349,16 @@
 .koko-profile-close {
   width: 34px;
   height: 34px;
-  border: 1px solid rgba(221, 230, 248, .9);
+  border: 1px solid rgba(124, 140, 205, .36);
   border-radius: 10px;
-  background: #f8faff;
-  color: #1e2a55;
+  background: rgba(7, 11, 25, .76);
+  color: #f8faff;
   font-weight: 900;
   cursor: pointer;
 }
 
 .koko-profile-form {
-  padding: 18px 20px 20px;
+  padding: 0;
   display: grid;
   gap: 12px;
 }
@@ -284,23 +366,27 @@
 .koko-profile-field label {
   display: block;
   margin-bottom: 7px;
-  color: #455579;
+  color: #c5d3f4;
   font-size: 11px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: .08em;
+  letter-spacing: 0;
 }
 
 .koko-profile-field input {
   width: 100%;
   height: 46px;
   border-radius: 12px;
-  border: 1px solid rgba(197, 213, 240, .95);
-  background: #f8faff;
-  color: #1e2a55;
+  border: 1px solid rgba(124, 140, 205, .38);
+  background: rgba(7, 11, 25, .78);
+  color: #f8faff;
   padding: 0 13px;
   outline: none;
   font-weight: 700;
+}
+
+.koko-profile-field input::placeholder {
+  color: rgba(197, 211, 244, .62);
 }
 
 .koko-profile-field input:focus {
@@ -308,11 +394,15 @@
   box-shadow: 0 0 0 4px rgba(139, 124, 255, .12);
 }
 
+.koko-profile-field input:disabled {
+  opacity: .72;
+}
+
 .koko-profile-safety {
   border-radius: 12px;
-  border: 1px solid rgba(119, 221, 168, .38);
-  background: rgba(119, 221, 168, .12);
-  color: #315d58;
+  border: 1px solid rgba(119, 221, 168, .44);
+  background: rgba(119, 221, 168, .1);
+  color: #c9f7de;
   padding: 11px 12px;
   font-size: 12px;
   line-height: 1.5;
@@ -323,7 +413,7 @@
   border-radius: 10px;
   background: rgba(255, 111, 145, .12);
   border: 1px solid rgba(255, 111, 145, .35);
-  color: #b83c5c;
+  color: #ffb5c8;
   padding: 10px 12px;
   font-size: 12px;
   font-weight: 800;
@@ -338,15 +428,108 @@
   border: 0;
   border-radius: 12px;
   color: #fff;
-  background: linear-gradient(135deg, #8b7cff, #6f8dff);
+  background: linear-gradient(135deg, #62d8d4, #6f8dff 48%, #8b7cff);
   font-weight: 900;
   cursor: pointer;
   box-shadow: 0 14px 28px rgba(139, 124, 255, .26);
 }
 
+.koko-profile-submit[hidden] {
+  display: none;
+}
+
 .koko-profile-submit:disabled {
   opacity: .62;
   cursor: progress;
+}
+
+.koko-profile-preview {
+  display: none;
+}
+
+.koko-profile-preview.show {
+  display: grid;
+  gap: 11px;
+}
+
+.koko-profile-preview-card {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(111, 141, 255, .32);
+  border-radius: 14px;
+  background: rgba(234, 241, 255, .08);
+  padding: 12px;
+}
+
+.koko-profile-preview-card .koko-profile-avatar {
+  width: 54px;
+  height: 54px;
+}
+
+.koko-profile-preview-copy strong,
+.koko-profile-preview-copy span,
+.koko-profile-preview-copy small {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.koko-profile-preview-copy strong {
+  color: #f8faff;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.koko-profile-preview-copy span {
+  margin-top: 3px;
+  color: #c5d3f4;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.koko-profile-preview-copy small {
+  margin-top: 3px;
+  color: #8ea5e7;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.koko-profile-preview-copy p {
+  margin: 8px 0 0;
+  color: #dbe5ff;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.koko-profile-preview-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 9px;
+}
+
+.koko-profile-confirm,
+.koko-profile-secondary {
+  min-height: 42px;
+  border-radius: 12px;
+  padding: 0 12px;
+  font: 900 12px/1 "Outfit", system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.koko-profile-confirm {
+  border: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #62d8d4, #6f8dff 48%, #8b7cff);
+  box-shadow: 0 14px 28px rgba(139, 124, 255, .24);
+}
+
+.koko-profile-secondary {
+  border: 1px solid rgba(111, 141, 255, .34);
+  color: #dbe5ff;
+  background: rgba(7, 11, 25, .62);
 }
 
 .koko-profile-toast {
@@ -423,12 +606,20 @@ html[data-koko-theme="dark"] .koko-mini-profile {
   border-color: rgba(139, 124, 255, .42);
 }
 
-html[data-koko-theme="dark"] .koko-profile-menu,
-html[data-koko-theme="dark"] .koko-profile-modal {
+html[data-koko-theme="dark"] .koko-profile-menu {
   background: rgba(16, 22, 47, .98);
   color: #f8faff;
   border-color: rgba(124, 140, 205, .36);
   box-shadow: 0 30px 80px rgba(0, 0, 0, .38);
+}
+
+html[data-koko-theme="dark"] .koko-profile-modal {
+  background:
+    radial-gradient(circle at top left, rgba(139, 124, 255, .24), transparent 34%),
+    linear-gradient(145deg, rgba(12, 18, 42, .98), rgba(18, 24, 54, .98));
+  color: #f8faff;
+  border-color: rgba(124, 140, 205, .42);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, .42);
 }
 
 html[data-koko-theme="dark"] .koko-profile-card {
@@ -501,6 +692,34 @@ html[data-koko-theme="dark"] .koko-buyer-summary {
   .koko-profile-slot.is-open .koko-profile-menu {
     transform: translate(-50%, 0);
   }
+
+  .koko-profile-modal-backdrop {
+    align-items: flex-end;
+    padding: 10px;
+  }
+
+  .koko-profile-modal {
+    width: 100%;
+    max-height: calc(100vh - 20px);
+    border-radius: 18px;
+  }
+
+  .koko-profile-modal-head {
+    padding: 16px 16px 12px;
+  }
+
+  .koko-profile-modal-body {
+    padding: 12px 14px 14px;
+  }
+
+  .koko-profile-section {
+    padding: 12px;
+  }
+
+  .koko-profile-section-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 480px) {
@@ -510,5 +729,22 @@ html[data-koko-theme="dark"] .koko-buyer-summary {
 
   .koko-profile-name {
     max-width: 82px;
+  }
+
+  .koko-profile-modal-title {
+    font-size: 19px;
+  }
+
+  .koko-profile-preview-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .koko-profile-preview-card {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .koko-profile-preview-card .koko-profile-avatar {
+    width: 48px;
+    height: 48px;
   }
 }
