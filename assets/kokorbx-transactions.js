@@ -143,7 +143,7 @@
     cleanOrder.buyerUsername = profile.username;
     cleanOrder.buyerDisplayName = profile.displayName || profile.username;
     cleanOrder.buyer = profile.username;
-    cleanOrder.loginProvider = cleanOrder.loginProvider || profile.loginProvider || 'roblox_oauth';
+    cleanOrder.loginProvider = cleanOrder.loginProvider || profile.loginProvider || 'roblox-public-profile';
     return cleanOrder;
   }
 
@@ -628,7 +628,7 @@
         return;
       }
       if (!getProfile()) {
-        result.innerHTML = emptyState('Login Roblox dulu', 'Hubungkan akun Roblox agar sistem bisa memastikan pesanan ini milik kamu.');
+        result.innerHTML = emptyState('Hubungkan username Roblox dulu', 'Masukkan username Roblox di halaman Akun agar sistem bisa memastikan pesanan ini milik kamu.');
         return;
       }
       result.innerHTML = emptyState('Mencari pesanan', 'Sistem sedang mengecek ID pesanan dan akun Roblox kamu.');
@@ -698,10 +698,10 @@
       node.className = 'koko-auth-guard';
       node.innerHTML =
         '<div class="koko-auth-box">' +
-          '<h2>Login diperlukan</h2>' +
+          '<h2>Hubungkan akun dulu</h2>' +
           '<p data-auth-message></p>' +
           '<div class="koko-auth-actions">' +
-            '<a class="primary" data-auth-oauth href="#">Login dengan Roblox</a>' +
+            '<a class="primary" data-auth-profile href="akun.html?login=1">Hubungkan Username</a>' +
             '<button type="button" data-auth-close>Nanti dulu</button>' +
           '</div>' +
         '</div>';
@@ -712,8 +712,8 @@
     }
     var returnTo = location.pathname.split('/').pop() + location.search + location.hash;
     localStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify({ returnTo: returnTo, time: Date.now() }));
-    node.querySelector('[data-auth-message]').textContent = message || 'Silakan login dengan Roblox terlebih dahulu untuk melanjutkan checkout.';
-    node.querySelector('[data-auth-oauth]').href = API_BASE + '/api/auth/roblox/start?returnTo=' + encodeURIComponent(returnTo);
+    node.querySelector('[data-auth-message]').textContent = message || 'Silakan hubungkan username Roblox terlebih dahulu untuk melanjutkan checkout.';
+    node.querySelector('[data-auth-profile]').href = 'akun.html?login=1&returnTo=' + encodeURIComponent(returnTo);
     node.classList.add('show');
   }
 
@@ -725,7 +725,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-      openAuthGuard('Silakan login dengan Roblox terlebih dahulu untuk melanjutkan checkout.');
+      openAuthGuard('Silakan hubungkan username Roblox terlebih dahulu untuk melanjutkan checkout.');
     }, true);
 
     document.addEventListener('submit', function(event) {
@@ -734,7 +734,7 @@
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
-      openAuthGuard('Silakan login dengan Roblox terlebih dahulu untuk membuat pesanan.');
+      openAuthGuard('Silakan hubungkan username Roblox terlebih dahulu untuk membuat pesanan.');
     }, true);
   }
 

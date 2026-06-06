@@ -271,46 +271,11 @@
   white-space: nowrap;
 }
 
-.koko-profile-oauth {
-  min-height: 48px;
-  border-radius: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  color: #fff;
-  text-decoration: none;
-  font: 900 14px/1 "Outfit", system-ui, sans-serif;
-  background: linear-gradient(135deg, #62d8d4, #6f8dff 48%, #8b7cff);
-  box-shadow: 0 16px 34px rgba(139, 124, 255, .26);
-}
-
-.koko-profile-oauth:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 20px 42px rgba(139, 124, 255, .34);
-}
-
-.koko-profile-oauth-note {
-  margin-top: 9px;
-  color: #e5ebff;
-  font-size: 12px;
-  line-height: 1.45;
-  font-weight: 800;
-}
-
-.koko-profile-mini-note,
-.koko-profile-oauth-safe {
+.koko-profile-mini-note {
   margin-top: 7px;
   color: #aebde8;
   font-size: 11px;
   line-height: 1.45;
-}
-
-.koko-profile-oauth-safe {
-  border-radius: 12px;
-  border: 1px solid rgba(111, 141, 255, .26);
-  background: rgba(111, 141, 255, .1);
-  padding: 10px 11px;
 }
 
 .koko-profile-divider {
@@ -636,7 +601,6 @@ html[data-koko-theme="dark"] .koko-profile-close {
 html[data-koko-theme="dark"] .koko-profile-userid,
 html[data-koko-theme="dark"] .koko-profile-note,
 html[data-koko-theme="dark"] .koko-profile-modal-sub,
-html[data-koko-theme="dark"] .koko-profile-oauth-note,
 html[data-koko-theme="dark"] .koko-profile-divider,
 html[data-koko-theme="dark"] .koko-buyer-summary span {
   color: #c5d3f4;

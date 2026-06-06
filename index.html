@@ -1022,6 +1022,54 @@
       font-size: 13px;
     }
 
+    .faq-section {
+      margin-top: 22px;
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      box-shadow: 0 8px 22px rgba(124,92,252,.08);
+    }
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .faq-item {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(248,250,255,.74);
+      overflow: hidden;
+    }
+    .faq-item summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 14px;
+      color: var(--text);
+      font-weight: 900;
+      font-size: 14px;
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-item summary::after {
+      content: "+";
+      color: var(--purple);
+      font-weight: 900;
+      font-size: 18px;
+    }
+    .faq-item[open] summary::after { content: "-"; }
+    .faq-item p {
+      margin: 0;
+      padding: 0 14px 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
     .footer {
       margin-top: 38px;
       background: #fff;
@@ -1077,6 +1125,7 @@
       .category-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
       .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .split-layout { grid-template-columns: 1fr; }
+      .faq-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 640px) {
       .top-strip-inner { justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
@@ -1333,7 +1382,7 @@
                   <span class="recent-time">12 menit yang lalu</span>
                 </div>
               </div>
-              <a class="home-panel-link" href="transaksi.html">Lihat Semua Transaksi &gt;</a>
+              <a class="home-panel-link" href="akun.html#riwayat">Lihat Semua Transaksi &gt;</a>
             </article>
           </div>
 
@@ -1429,25 +1478,30 @@
       </div>
     </section>
 
-    <section class="split-layout" id="status">
-      <div class="panel" data-category="status">
-        <h3>Cek Status Order</h3>
-        <p>Masukkan ID order seperti RBX-123456 untuk melihat status terbaru.</p>
-        <form class="status-form" id="status-form">
-          <input id="order-id-input" type="text" placeholder="RBX-123456" autocomplete="off">
-          <button type="submit">Cek Order</button>
-        </form>
-        <div class="status-result" id="status-result"></div>
-      </div>
-      <div class="panel">
-        <h3>Kenapa KokoRBX?</h3>
-        <p>Satu alur order dari produk, pembayaran, sampai kotak pesan transaksi.</p>
-        <div class="info-list">
-          <div class="info-item"><span class="info-dot"></span><span><b>Alur jelas</b>Pilih produk, isi form, bayar, lalu pantau status.</span></div>
-          <div class="info-item"><span class="info-dot blue"></span><span><b>Kotak pesan</b>Bukti bayar dan chat admin tetap di website.</span></div>
-          <div class="info-item"><span class="info-dot orange"></span><span><b>Rate fleksibel</b>Harga bisa diatur dari admin panel.</span></div>
-          <div class="info-item"><span class="info-dot purple"></span><span><b>Public rapi</b>Produk manual diparkir sampai benar-benar siap.</span></div>
+    <section class="faq-section" id="faq">
+      <div class="section-head">
+        <div>
+          <h2>FAQ KokoRBX</h2>
+          <p>Panduan singkat sebelum order.</p>
         </div>
+      </div>
+      <div class="faq-grid">
+        <details class="faq-item" open>
+          <summary>Cara order Robux?</summary>
+          <p>Pilih produk, isi data akun Roblox dan kontak WA, pilih metode pembayaran, lalu lanjut ke halaman pembayaran. Setelah bayar, pantau status lewat Akun atau Cek Order.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Cara cek status pesanan?</summary>
+          <p>Masuk ke halaman Akun untuk melihat riwayat sesuai profil Roblox yang terhubung, atau gunakan halaman Cek Order jika punya ID pesanan.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Apakah KokoRBX minta password?</summary>
+          <p>Tidak. KokoRBX tidak meminta password, cookie, kode 2FA, atau kode backup di form website. Data sensitif tidak boleh dikirim ke form publik.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Kalau Gift GP Ingame bagaimana?</summary>
+          <p>Pilih game dan item, isi username, nama game, nama gamepass, total Robux, total harga, dan nomor WA. Setelah pembayaran, admin akan bantu proses melalui WhatsApp.</p>
+        </details>
       </div>
     </section>
   </main>

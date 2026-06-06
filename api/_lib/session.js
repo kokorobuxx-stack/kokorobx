@@ -1,8 +1,6 @@
 const crypto = require('crypto');
 
 const SESSION_COOKIE = 'koko_session';
-const STATE_COOKIE = 'koko_oauth_state';
-const RETURN_COOKIE = 'koko_oauth_return';
 
 function base64url(input) {
   return Buffer.from(input)
@@ -109,9 +107,7 @@ function sessionUserFromReq(req) {
 }
 
 module.exports = {
-  RETURN_COOKIE,
   SESSION_COOKIE,
-  STATE_COOKIE,
   appendCookies,
   clearCookie,
   cookie,

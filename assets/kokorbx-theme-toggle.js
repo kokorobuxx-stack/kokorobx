@@ -66,11 +66,61 @@
     applyTheme(getTheme());
   }
 
+  function isHomePage() {
+    var file = (location.pathname.split('/').pop() || '').toLowerCase();
+    return file === '' || file === 'index.html';
+  }
+
+  function createBackButton() {
+    var link = document.createElement('a');
+    link.className = 'koko-back-button';
+    link.href = 'index.html';
+    link.setAttribute('aria-label', 'Kembali');
+    link.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">' +
+        '<path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '</svg>';
+    link.addEventListener('click', function(event) {
+      if (history.length > 1 && document.referrer) {
+        event.preventDefault();
+        history.back();
+      }
+    });
+    return link;
+  }
+
+  function mountBackButton() {
+    if (isHomePage() || document.querySelector('.koko-back-button, .koko-page-back')) return;
+
+    var holder =
+      document.querySelector('.header-inner') ||
+      document.querySelector('.header-left') ||
+      document.querySelector('.brand') ||
+      document.querySelector('header');
+
+    if (!holder) return;
+
+    var button = createBackButton();
+    var target =
+      holder.querySelector('.brand, .logo, .logo-link, .brand-wrap') ||
+      holder.firstElementChild;
+
+    if (target && target.parentNode === holder) {
+      holder.insertBefore(button, target);
+    } else {
+      holder.insertBefore(button, holder.firstChild);
+    }
+  }
+
   applyTheme(getTheme());
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountToggle);
+    document.addEventListener('DOMContentLoaded', function() {
+      mountToggle();
+      mountBackButton();
+    });
   } else {
     mountToggle();
+    mountBackButton();
   }
 })();

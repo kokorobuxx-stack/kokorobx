@@ -1,118 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Riwayat Transaksi - KokoRBX</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/cart-client.css?v=icon-cart-mobile-20260531">
-  <link rel="stylesheet" href="assets/kokorbx-theme.css?v=contrast-theme-20260601">
-  <link rel="stylesheet" href="assets/roblox-profile.css?v=roblox-profile-20260602">
-  <link rel="stylesheet" href="assets/kokorbx-transactions.css?v=market-flow-20260602">
-  <script src="assets/kokorbx-theme-toggle.js?v=dark-toggle-20260601"></script>
-  <script defer src="assets/roblox-profile.js?v=roblox-profile-20260602"></script>
-  <script defer src="assets/kokorbx-transactions.js?v=market-flow-20260602"></script>
-  <style>
-    a { color: inherit; text-decoration: none; }
-    button, input, select { font: inherit; }
-
-    .history-note {
-      margin: 0 18px 16px;
-      padding: 12px 14px;
-      border: 1px solid rgba(111, 141, 255, .28);
-      border-radius: 16px;
-      color: var(--koko-muted);
-      background: rgba(111, 141, 255, .08);
-      font-size: 12px;
-      line-height: 1.55;
-      font-weight: 700;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: min(760px, 100%);
-      min-height: 66px;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      background: rgba(255,255,255,.96);
-      border: 1px solid rgba(221, 230, 248, .9);
-      border-bottom: 0;
-      border-radius: 20px 20px 0 0;
-      box-shadow: 0 -14px 38px rgba(30, 42, 85, .12);
-      z-index: 90;
-      overflow: hidden;
-    }
-    .bottom-nav a {
-      display: grid;
-      place-items: center;
-      align-content: center;
-      gap: 4px;
-      color: #68748f;
-      font-size: 11px;
-      font-weight: 800;
-    }
-    .bottom-nav a.active { color: var(--koko-blue); }
-    .nav-dot {
-      width: 21px;
-      height: 21px;
-      border-radius: 8px;
-      display: grid;
-      place-items: center;
-      background: currentColor;
-      opacity: .88;
-    }
-    html[data-koko-theme="dark"] .bottom-nav {
-      background: rgba(14, 20, 43, .95);
-      border-color: rgba(124, 140, 205, .34);
-    }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Transaksi - KokoRBX</title>
+  <meta http-equiv="refresh" content="0;url=akun.html#riwayat">
+  <script>
+    location.replace('akun.html#riwayat');
+  </script>
 </head>
-<body class="koko-market-page" data-koko-history-page>
-  <main class="koko-market-shell">
-    <header class="koko-market-header">
-      <a class="koko-market-back" href="akun.html" aria-label="Kembali">K</a>
-      <div class="koko-market-title">
-        <h1>Riwayat Transaksi</h1>
-        <p>Semua pesanan KokoRBX milik akun Roblox kamu.</p>
-      </div>
-      <button class="koko-market-icon-btn koko-theme-toggle" type="button" aria-label="Ganti tema"></button>
-    </header>
-
-    <nav class="koko-status-tabs" data-history-tabs aria-label="Filter status transaksi"></nav>
-
-    <section class="koko-history-tools">
-      <label class="koko-search-box">
-        <span aria-hidden="true">Search</span>
-        <input data-history-search type="search" placeholder="Cari nama produk" autocomplete="off">
-      </label>
-      <select class="koko-filter-select" data-history-filter aria-label="Filter kategori produk">
-        <option>Semua</option>
-        <option>Robux</option>
-        <option>Gift GP</option>
-        <option>Akun Roblox</option>
-        <option>Item Game</option>
-        <option>Jasa</option>
-      </select>
-    </section>
-
-    <p class="history-note">
-      Transaksi pending dipisah dari transaksi sukses. Robux Berhasil Dibeli hanya dihitung kalau status sudah Sudah Terkirim atau Selesai.
-    </p>
-
-    <section class="koko-history-list" data-history-list></section>
-  </main>
-
-  <nav class="bottom-nav" aria-label="Navigasi utama">
-    <a href="index.html"><span class="nav-dot"></span><span>Home</span></a>
-    <a href="index.html#produk"><span class="nav-dot"></span><span>Produk</span></a>
-    <a href="cek-pesanan.html"><span class="nav-dot"></span><span>Cek</span></a>
-    <a class="active" href="transaksi.html"><span class="nav-dot"></span><span>Transaksi</span></a>
-    <a href="akun.html"><span class="nav-dot"></span><span>Akun</span></a>
-  </nav>
-
-  <script src="assets/cart-client.js?v=icon-cart-mobile-20260531"></script>
+<body>
+  <a href="akun.html#riwayat">Buka riwayat transaksi akun KokoRBX</a>
 </body>
 </html>

@@ -309,6 +309,13 @@
       color: var(--muted);
       font-size: 12px;
       font-weight: 800;
+      text-decoration: none;
+      transition: transform .18s ease, background .18s ease, color .18s ease;
+    }
+    .activity-item:hover {
+      transform: translateY(-1px);
+      background: rgba(139, 124, 255, .12);
+      color: var(--text);
     }
     .activity-icon {
       width: 26px;
@@ -427,6 +434,7 @@
   </style>
 </head>
 <body data-koko-account-page>
+  <a class="koko-page-back" href="index.html" aria-label="Kembali">&lt;</a>
   <header class="main-header">
     <div class="header-inner">
       <a class="brand" href="index.html" aria-label="KokoRBX">
@@ -492,7 +500,7 @@
           <div class="status-box">
             <div class="status-row"><span>Roblox</span><strong data-profile-username>Belum terhubung</strong></div>
             <div class="status-row"><span>User ID</span><strong data-profile-userid>User ID belum tersedia</strong></div>
-            <p>Login resmi Roblox atau username manual dipakai untuk mengunci riwayat, cek pesanan, dan form order ke akun pembeli yang sama.</p>
+            <p>Username Roblox dipakai untuk mengunci riwayat, cek pesanan, dan form order ke akun pembeli yang sama.</p>
             <p>KokoRBX tidak pernah meminta password, cookie, kode 2FA, atau kode backup Roblox kamu.</p>
           </div>
         </div>
@@ -501,40 +509,15 @@
       <article class="panel">
         <div class="panel-head">
           <span>Riwayat Aktivitas</span>
-          <a href="transaksi.html">Lihat Semua</a>
+          <a href="transaksi-buyer.html?status=all">Lihat Semua</a>
         </div>
         <div class="panel-body">
           <div class="activity-grid">
-            <div class="activity-item"><span class="activity-icon">1</span><span>Menunggu Pembayaran</span></div>
-            <div class="activity-item"><span class="activity-icon">2</span><span>Diproses Admin</span></div>
-            <div class="activity-item"><span class="activity-icon">3</span><span>Sudah Terkirim</span></div>
-            <div class="activity-item"><span class="activity-icon">4</span><span>Selesai</span></div>
+            <a class="activity-item" href="transaksi-buyer.html?status=pending"><span class="activity-icon">1</span><span>Menunggu Pembayaran</span></a>
+            <a class="activity-item" href="transaksi-buyer.html?status=process"><span class="activity-icon">2</span><span>Diproses Admin</span></a>
+            <a class="activity-item" href="transaksi-buyer.html?status=sent"><span class="activity-icon">3</span><span>Sudah Terkirim</span></a>
+            <a class="activity-item" href="transaksi-buyer.html?status=success"><span class="activity-icon">4</span><span>Selesai</span></a>
           </div>
-        </div>
-      </article>
-
-      <article class="panel">
-        <div class="panel-head">
-          <span>Pesanan Sedang Diproses</span>
-          <span class="verify-badge"><span data-account-processing-count>0</span> aktif</span>
-        </div>
-        <div class="panel-body">
-          <div class="koko-account-order-list" data-processing-orders></div>
-        </div>
-      </article>
-
-      <article class="panel">
-        <div class="panel-head">
-          <span>Robux Berhasil Dibeli</span>
-          <a href="transaksi.html">Riwayat</a>
-        </div>
-        <div class="panel-body">
-          <div class="status-box" style="margin-bottom:12px">
-            <div class="status-row"><span>Total Order Sukses</span><strong data-account-success-orders>0</strong></div>
-            <div class="status-row"><span>Total Robux Sukses</span><strong data-account-success-robux>0 R$</strong></div>
-            <p>Data ini hanya menampilkan transaksi yang sudah berhasil dikirim.</p>
-          </div>
-          <div class="koko-account-order-list" data-success-orders></div>
         </div>
       </article>
 
@@ -542,7 +525,7 @@
         <div class="panel-head"><span>Bantuan</span></div>
         <div class="panel-body help-list">
           <a class="help-link" href="cek-pesanan.html"><span>Cek Pesanan</span><span aria-hidden="true">&gt;</span></a>
-          <a class="help-link" href="transaksi.html"><span>Riwayat Transaksi</span><span aria-hidden="true">&gt;</span></a>
+          <a class="help-link" href="transaksi-buyer.html?status=all"><span>Riwayat Transaksi</span><span aria-hidden="true">&gt;</span></a>
           <a class="help-link" href="https://wa.me/6281996112019" target="_blank" rel="noopener"><span>Bantuan WhatsApp</span><span aria-hidden="true">&gt;</span></a>
           <button class="help-link" type="button" data-verify-profile><span>Verifikasi Kepemilikan</span><span aria-hidden="true">&gt;</span></button>
         </div>
@@ -551,7 +534,7 @@
       <article class="panel">
         <div class="panel-head"><span>Pengaturan Akun</span></div>
         <div class="panel-body help-list">
-          <button class="help-link" type="button" data-connect-profile><span>Login Ulang Roblox</span><span aria-hidden="true">&gt;</span></button>
+          <button class="help-link" type="button" data-connect-profile><span>Ganti Username Roblox</span><span aria-hidden="true">&gt;</span></button>
           <button class="help-link danger-btn" type="button" data-remove-profile><span>Hapus Akun Terhubung</span><span aria-hidden="true">&gt;</span></button>
         </div>
       </article>
@@ -562,7 +545,7 @@
     <a href="index.html"><span class="nav-dot"></span><span>Home</span></a>
     <a href="index.html#produk"><span class="nav-dot"></span><span>Produk</span></a>
     <a href="cek-pesanan.html"><span class="nav-dot"></span><span>Cek</span></a>
-    <a href="transaksi.html"><span class="nav-dot"></span><span>Transaksi</span></a>
+    <a href="transaksi-buyer.html?status=all"><span class="nav-dot"></span><span>Transaksi</span></a>
     <a class="active" href="akun.html"><span class="nav-dot"></span><span>Akun</span></a>
   </nav>
 

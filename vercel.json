@@ -22,14 +22,6 @@
       "destination": "/api/auth?action=logout"
     },
     {
-      "source": "/api/auth/roblox/start",
-      "destination": "/api/auth?action=roblox-start"
-    },
-    {
-      "source": "/api/auth/roblox/callback",
-      "destination": "/api/auth?action=roblox-callback"
-    },
-    {
       "source": "/api/roblox-user",
       "destination": "/api/orders?action=roblox-user"
     },

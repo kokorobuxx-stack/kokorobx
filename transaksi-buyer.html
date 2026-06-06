@@ -496,6 +496,7 @@
 </style>
 </head>
 <body data-theme="dark">
+  <a class="koko-page-back" href="akun.html" aria-label="Kembali">&lt;</a>
   <main class="app">
     <section class="chat-shell" aria-label="Kotak pesan transaksi">
       <header class="chat-top">
@@ -637,7 +638,7 @@
       robloxUserId,
       username,
       displayName: String(source.robloxDisplayName || source.displayName || username).trim(),
-      loginProvider: source.loginProvider || source.source || 'roblox_oauth'
+      loginProvider: source.loginProvider || source.source || 'roblox-public-profile'
     };
   }
 

@@ -255,6 +255,28 @@
   .product-status-select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 10px; outline: none; font-size: 12px; }
   .product-status-help { color: var(--muted); font-size: 11px; line-height: 1.5; }
   .product-admin-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .giftgp-admin-panel { margin-top: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .giftgp-admin-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+  .giftgp-admin-head h3 { font-size: 15px; color: var(--text); }
+  .giftgp-admin-head p { color: var(--muted); font-size: 11px; line-height: 1.5; margin-top: 4px; }
+  .giftgp-admin-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .giftgp-admin-form .full { grid-column: 1 / -1; }
+  .giftgp-admin-form label { display: block; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 5px; }
+  .giftgp-admin-form input, .giftgp-admin-form select, .giftgp-admin-form textarea {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 9px 10px; font-size: 12px; outline: none;
+  }
+  .giftgp-admin-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; margin-top: 12px; }
+  .giftgp-admin-item { display: flex; gap: 10px; align-items: center; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+  .giftgp-admin-thumb { width: 58px; height: 44px; object-fit: cover; border-radius: 8px; background: #10152a; }
+  .giftgp-admin-meta { flex: 1; min-width: 0; }
+  .giftgp-admin-meta strong { display: block; color: var(--text); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .giftgp-admin-meta span { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+  .giftgp-admin-item-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .giftgp-admin-item-actions button { border: 1px solid var(--border); background: transparent; color: var(--text); border-radius: 7px; padding: 6px 8px; font-size: 10px; cursor: pointer; }
+  @media (max-width: 760px) {
+    .giftgp-admin-form { grid-template-columns: 1fr; }
+    .giftgp-admin-head { display: block; }
+  }
 
   /* TRANSACTION PANEL V2 */
   .transaction-v2 {
@@ -942,7 +964,6 @@
     <span class="icon">&#9783;</span> Order Pending
     <span id="pending-badge" style="margin-left:auto;background:var(--yellow);color:#000;border-radius:10px;padding:1px 7px;font-size:10px;font-weight:700;"></span>
   </div>
-  <div class="nav-item" onclick="showPage('panel', this)"><span class="icon">&#9993;</span> Panel Transaksi</div>
   <div class="nav-item" onclick="showPage('stats', this)"><span class="icon">&#9660;</span> Statistik</div>
   <div class="nav-item" onclick="showPage('rates', this)"><span class="icon">Rp</span> Rate Robux</div>
   <div class="nav-item" onclick="showPage('products', this)"><span class="icon">&#9638;</span> Status Produk</div>
@@ -975,7 +996,7 @@
     </div>
     <div class="admin-flow-strip" aria-label="Alur kerja admin">
       <div class="admin-flow-step"><b>1. Cek Order</b><span>Semua order masuk dari produk utama dan buyer room.</span></div>
-      <div class="admin-flow-step"><b>2. Balas Buyer</b><span>Gunakan Panel Transaksi untuk chat dan bukti bayar.</span></div>
+      <div class="admin-flow-step"><b>2. Follow Up Buyer</b><span>Gunakan detail order dan WhatsApp jika perlu konfirmasi.</span></div>
       <div class="admin-flow-step"><b>3. Proses</b><span>Ubah status order, rate, dan stok dari admin panel.</span></div>
       <div class="admin-flow-step"><b>4. Selesai</b><span>Tandai selesai agar statistik home ikut rapi.</span></div>
     </div>
@@ -1033,88 +1054,6 @@
         <tbody id="pending-tbody"></tbody></table>
       </div>
     </div>
-  </div>
-
-  <!-- PANEL TRANSAKSI -->
-  <div class="page" id="page-panel">
-    <div class="page-header">
-      <div><h2>Panel Transaksi</h2><span>Kotak pesan buyer dan admin, tanpa iframe ganda.</span></div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <button class="btn-refresh" onclick="refreshPanelFrame()">Refresh Panel</button>
-        <a class="btn-refresh" id="tx-buyer-open" href="transaksi-buyer.html" target="_blank" rel="noopener" style="text-decoration:none;">Buka Buyer Room</a>
-      </div>
-    </div>
-    <section class="transaction-v2" id="transaction-v2" data-theme="light">
-      <div class="tx-v2-shell">
-        <div class="tx-v2-top">
-          <div class="tx-brand">
-            <span class="tx-brand-mark" aria-hidden="true"></span>
-            <div>
-              <h3>KokoRBX Transaction Room</h3>
-              <p>Semua chat, harga deal, pembayaran, dan status order tercatat di panel ini.</p>
-            </div>
-          </div>
-          <div class="tx-v2-actions">
-            <input class="tx-search" id="tx-search" type="search" placeholder="Cari ID, produk, buyer...">
-            <button class="tx-mini primary" type="button" onclick="createManualTxOrder()">Order Manual</button>
-            <button class="tx-mini" id="tx-theme-btn" type="button" onclick="toggleTxTheme()">Dark</button>
-            <a class="tx-mini tx-mini-link" href="transaksi-buyer.html" id="tx-buyer-link" target="_blank" rel="noopener">Buyer Room</a>
-          </div>
-        </div>
-        <div class="tx-v2-grid">
-          <aside class="tx-card">
-            <div class="tx-card-head">
-              <div>
-                <h4>Daftar Order</h4>
-                <span id="tx-order-count">0 order</span>
-              </div>
-            </div>
-            <div class="tx-orders-list" id="tx-orders-list"></div>
-          </aside>
-
-          <section class="tx-card">
-            <div class="tx-card-head">
-              <div>
-                <h4>Detail Transaksi</h4>
-                <span id="tx-detail-sub">Pilih order untuk melihat detail.</span>
-              </div>
-              <span class="tx-pill" id="tx-detail-status">Ready</span>
-            </div>
-            <div class="tx-detail-body" id="tx-detail-body"></div>
-          </section>
-
-          <aside class="tx-card tx-chat-card">
-            <div class="tx-card-head">
-              <div>
-                <h4>Kotak Pesan</h4>
-                <span>Admin balas buyer dari sini.</span>
-              </div>
-            </div>
-            <div class="tx-chat-log" id="tx-chat-log"></div>
-            <form class="tx-chat-form" id="tx-chat-form">
-              <div class="tx-chat-row">
-                <select class="tx-select" id="tx-chat-role">
-                  <option value="admin">Admin</option>
-                  <option value="buyer">Buyer</option>
-                  <option value="system">System</option>
-                </select>
-                <textarea class="tx-textarea" id="tx-chat-input" placeholder="Tulis pesan transaksi..."></textarea>
-              </div>
-              <button class="tx-action-btn primary" type="submit">Kirim Pesan</button>
-            </form>
-            <div class="tx-toolbox">
-              <h4>Aksi Admin</h4>
-              <input class="tx-input" id="tx-deal-price" inputmode="numeric" placeholder="Harga deal, contoh: 75000">
-              <div class="tx-tool-grid">
-                <button class="tx-action-btn" type="button" onclick="txSendPrice()">Kirim Harga</button>
-                <button class="tx-action-btn" type="button" onclick="txMarkPaid()">Pembayaran Dicek</button>
-                <button class="tx-action-btn success" type="button" onclick="txMarkDone()">Selesai</button>
-              </div>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
   </div>
 
   <!-- STATS -->
@@ -1185,6 +1124,58 @@
     </div>
     <div class="rate-status" id="product-status-message"></div>
     <div class="product-admin-grid" id="product-admin-grid"></div>
+    <section class="giftgp-admin-panel">
+      <div class="giftgp-admin-head">
+        <div>
+          <h3>Produk Gift GP Ingame</h3>
+          <p>Tambah/edit produk Gift GP tanpa ubah codingan. Data ini dibaca oleh halaman Gift GP di browser admin yang sama.</p>
+        </div>
+        <button class="btn-refresh" type="button" onclick="resetGiftgpForm()">Produk Baru</button>
+      </div>
+      <form class="giftgp-admin-form" id="giftgp-admin-form" onsubmit="saveGiftgpAdminProduct(event)">
+        <input type="hidden" id="giftgp-edit-id">
+        <div>
+          <label>Nama Game</label>
+          <input id="giftgp-game" placeholder="Blox Fruits" required>
+        </div>
+        <div>
+          <label>Nama Gamepass</label>
+          <input id="giftgp-title" placeholder="2x Money" required>
+        </div>
+        <div>
+          <label>Tipe</label>
+          <input id="giftgp-type" placeholder="Gamepass">
+        </div>
+        <div>
+          <label>Kategori</label>
+          <select id="giftgp-category">
+            <option value="gamepass">Gamepass</option>
+            <option value="item">Item</option>
+            <option value="permanent">Permanent</option>
+            <option value="service">Service</option>
+            <option value="event">Event</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div>
+          <label>Harga Robux</label>
+          <input id="giftgp-robux" type="number" min="0" step="1" placeholder="450" required>
+        </div>
+        <div>
+          <label>Thumbnail URL</label>
+          <input id="giftgp-thumbnail" placeholder="https://... atau assets/...">
+        </div>
+        <div class="full">
+          <label>Deskripsi</label>
+          <textarea id="giftgp-description" rows="3" placeholder="Deskripsi singkat produk"></textarea>
+        </div>
+        <div class="full" style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="rate-save-btn" type="submit">Simpan Produk Gift GP</button>
+          <button class="btn-refresh" type="button" onclick="resetGiftgpForm()">Batal/Edit Baru</button>
+        </div>
+      </form>
+      <div class="giftgp-admin-list" id="giftgp-admin-list"></div>
+    </section>
   </div>
 
 </div>
@@ -1226,7 +1217,7 @@
     <span>Pending</span>
     <span class="bnav-badge" id="bnav-badge" style="display:none"></span>
   </div>
-  <div class="bnav-item" id="bnav-panel" onclick="showPage('panel', document.querySelectorAll('.nav-item')[3]);mobileNavActivate('panel')">
+  <div class="bnav-item" id="bnav-panel" style="display:none" onclick="showPage('panel', document.querySelectorAll('.nav-item')[3]);mobileNavActivate('panel')">
     <span class="bnav-icon">@</span>
     <span>Panel</span>
   </div>
@@ -1459,6 +1450,112 @@
         </div>
       `;
     }).join('');
+    renderGiftgpAdmin();
+  }
+
+  const GIFTGP_CUSTOM_KEY = 'kokorbx_giftgp_custom_products';
+
+  function giftgpSlug(text) {
+    return String(text || 'giftgp').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'giftgp';
+  }
+
+  function loadGiftgpProducts() {
+    try {
+      const data = JSON.parse(localStorage.getItem(GIFTGP_CUSTOM_KEY) || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  function saveGiftgpProducts(items) {
+    localStorage.setItem(GIFTGP_CUSTOM_KEY, JSON.stringify(items || []));
+  }
+
+  function giftgpEscape(text) {
+    return String(text || '').replace(/[&<>"']/g, ch => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[ch]));
+  }
+
+  function renderGiftgpAdmin() {
+    const list = document.getElementById('giftgp-admin-list');
+    if (!list) return;
+    const items = loadGiftgpProducts();
+    if (!items.length) {
+      list.innerHTML = '<div class="product-status-help">Belum ada produk custom Gift GP. Produk default tetap tampil di halaman Gift GP.</div>';
+      return;
+    }
+    list.innerHTML = items.map(item => `
+      <div class="giftgp-admin-item">
+        <img class="giftgp-admin-thumb" src="${item.thumbnail || 'assets/placeholder-roblox.jpg'}" alt="">
+        <div class="giftgp-admin-meta">
+          <strong>${giftgpEscape(item.title || item.name || 'Gift GP')}</strong>
+          <span>${giftgpEscape(item.game || 'Custom')} - ${Number(item.robux || 0).toLocaleString('id-ID')} R$</span>
+        </div>
+        <div class="giftgp-admin-item-actions">
+          <button type="button" onclick="editGiftgpAdminProduct('${item.id}')">Edit</button>
+          <button type="button" onclick="deleteGiftgpAdminProduct('${item.id}')">Hapus</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function resetGiftgpForm() {
+    const form = document.getElementById('giftgp-admin-form');
+    if (form) form.reset();
+    const id = document.getElementById('giftgp-edit-id');
+    if (id) id.value = '';
+  }
+
+  function saveGiftgpAdminProduct(event) {
+    event.preventDefault();
+    const editId = document.getElementById('giftgp-edit-id').value;
+    const game = document.getElementById('giftgp-game').value.trim();
+    const title = document.getElementById('giftgp-title').value.trim();
+    const type = document.getElementById('giftgp-type').value.trim() || 'Gamepass';
+    const category = document.getElementById('giftgp-category').value || 'gamepass';
+    const robux = Number(document.getElementById('giftgp-robux').value || 0);
+    const thumbnail = document.getElementById('giftgp-thumbnail').value.trim();
+    const description = document.getElementById('giftgp-description').value.trim();
+    if (!game || !title || !Number.isFinite(robux)) return;
+    const items = loadGiftgpProducts();
+    const payload = {
+      id: editId || ('gift-' + Date.now()),
+      game,
+      gameId: giftgpSlug(game),
+      title,
+      name: title,
+      type,
+      category,
+      robux,
+      thumbnail,
+      description: description || 'Produk Gift GP custom dari admin KokoRBX.',
+    };
+    const next = editId ? items.map(item => item.id === editId ? payload : item) : [payload].concat(items);
+    saveGiftgpProducts(next);
+    resetGiftgpForm();
+    renderGiftgpAdmin();
+    setProductStatusMessage('Produk Gift GP tersimpan. Refresh halaman Gift GP kalau sudah terbuka.', 'ok');
+  }
+
+  function editGiftgpAdminProduct(id) {
+    const item = loadGiftgpProducts().find(entry => entry.id === id);
+    if (!item) return;
+    document.getElementById('giftgp-edit-id').value = item.id;
+    document.getElementById('giftgp-game').value = item.game || '';
+    document.getElementById('giftgp-title').value = item.title || item.name || '';
+    document.getElementById('giftgp-type').value = item.type || '';
+    document.getElementById('giftgp-category').value = item.category || 'gamepass';
+    document.getElementById('giftgp-robux').value = item.robux || 0;
+    document.getElementById('giftgp-thumbnail').value = item.thumbnail || '';
+    document.getElementById('giftgp-description').value = item.description || '';
+    document.getElementById('giftgp-admin-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  function deleteGiftgpAdminProduct(id) {
+    if (!confirm('Hapus produk Gift GP ini?')) return;
+    saveGiftgpProducts(loadGiftgpProducts().filter(item => item.id !== id));
+    renderGiftgpAdmin();
+    setProductStatusMessage('Produk Gift GP dihapus.', 'ok');
   }
 
   function updateProductStatusSetting(id, value) {
@@ -1661,8 +1758,6 @@
   // ── MERGE semua order dari rbx_orders_u_* ke rbx_orders ─────────
   const ORDER_MASTER_KEY = 'rbx_orders';
   const ORDER_USER_PREFIX = 'rbx_orders_u_';
-  const PANEL_ORDER_KEY = 'kokorbx_panel_orders_v1';
-  const PANEL_ACTIVE_KEY = 'kokorbx_panel_active_order';
 
   function readOrderArray(key) {
     try {
@@ -1805,75 +1900,10 @@
     });
   }
 
-  function readPanelOrders() {
-    try {
-      const data = JSON.parse(localStorage.getItem(PANEL_ORDER_KEY) || '[]');
-      return Array.isArray(data) ? data : [];
-    } catch(e) {
-      return [];
-    }
-  }
-
   function adminOrderProduct(o) {
     if (o.product) return o.product;
     if (o.robux) return o.robux.toLocaleString('id') + ' Robux';
     return 'Order KokoRBX';
-  }
-
-  function panelOrderFromAdmin(o) {
-    const createdAt = o.time || Date.now();
-    return {
-      id: o.id,
-      product: adminOrderProduct(o),
-      category: o.category || 'robux',
-      image: o.image || 'assets/marketplace/custom-request.png',
-      price: o.price || 0,
-      priceText: o.price ? 'Rp ' + o.price.toLocaleString('id') : 'Menunggu admin',
-      status: o.status === 'success' ? 'Selesai' : o.status === 'failed' ? 'Dibatalkan' : 'Menunggu admin',
-      buyer: o.username || 'Buyer KokoRBX',
-      username: o.username || '',
-      detail: 'Chat khusus untuk order ' + o.id + '. Semua komunikasi tetap di website.',
-      source: 'admin.html',
-      adminOrderId: o.id,
-      createdAt,
-      updatedAt: Date.now(),
-      messages: [
-        {
-          role: 'system',
-          text: 'Chat order dibuat dari Admin Panel KokoRBX. Admin bisa balas buyer di sini.',
-          time: createdAt,
-        },
-        {
-          role: 'buyer',
-          text: 'Halo admin, aku mau tanya order ' + o.id + '.',
-          time: createdAt + 1,
-        },
-      ],
-      timeline: [
-        { label: 'Order dibuat', time: createdAt, done: true },
-        { label: 'Diskusi admin', time: null, done: false },
-        { label: 'Pembayaran', time: o.hasProof ? Date.now() : null, done: !!o.hasProof },
-        { label: 'Selesai', time: o.sentAt || null, done: o.status === 'success' },
-      ],
-    };
-  }
-
-  function syncPanelOrderFromAdmin(o) {
-    const panelOrder = panelOrderFromAdmin(o);
-    const panelOrders = readPanelOrders();
-    const index = panelOrders.findIndex(item => item.id === panelOrder.id);
-    if (index >= 0) {
-      panelOrders[index] = Object.assign({}, panelOrders[index], panelOrder, {
-        messages: Array.isArray(panelOrders[index].messages) ? panelOrders[index].messages : panelOrder.messages,
-        timeline: Array.isArray(panelOrders[index].timeline) ? panelOrders[index].timeline : panelOrder.timeline,
-        updatedAt: Date.now(),
-      });
-    } else {
-      panelOrders.unshift(panelOrder);
-    }
-    localStorage.setItem(PANEL_ORDER_KEY, JSON.stringify(panelOrders));
-    localStorage.setItem(PANEL_ACTIVE_KEY, panelOrder.id);
-    return panelOrder;
   }
 
   function openPanelChatFromAdmin(id) {
@@ -1882,19 +1912,25 @@
       showToast('Order tidak ditemukan.', 'error');
       return;
     }
-    const panelOrder = syncPanelOrderFromAdmin(order);
-    closeModal();
-    showPage('panel', document.querySelectorAll('.nav-item')[3]);
-    renderTransactionV2();
-    showToast('Chat order dibuka di Panel Transaksi.', 'success');
-  }
-
-  function writePanelOrders(panelOrders) {
-    try {
-      localStorage.setItem(PANEL_ORDER_KEY, JSON.stringify(panelOrders || []));
-    } catch(e) {
-      console.warn('[KokoRBX] Gagal simpan panel transaksi:', e);
+    const rawWa = String(order.whatsapp || order.wa || order.contact || order.noWa || '').trim();
+    const waDigits = rawWa.replace(/[^\d]/g, '');
+    const product = adminOrderProduct(order);
+    const text = encodeURIComponent(
+      'Halo kak, ini admin KokoRBX.\n\n' +
+      'Order ID: ' + order.id + '\n' +
+      'Produk: ' + product + '\n' +
+      'Username: ' + (order.username || '-') + '\n\n' +
+      'Aku mau konfirmasi order kamu.'
+    );
+    if (waDigits.length >= 9) {
+      const intl = waDigits.startsWith('0') ? '62' + waDigits.slice(1) : waDigits;
+      window.open('https://wa.me/' + intl + '?text=' + text, '_blank', 'noopener');
+      showToast('WhatsApp buyer dibuka.', 'success');
+      return;
     }
+    if (document.getElementById('detail-modal')?.classList.contains('show')) closeModal();
+    showPage('orders', document.querySelector('[onclick*=\"orders\"]'));
+    showToast('Nomor WhatsApp belum ada di order ini. Buka detail order untuk cek kontak lain.', 'error');
   }
 
   let txPanelBound = false;
@@ -2232,77 +2268,6 @@
     renderTransactionV2();
   }
 
-  function txSendPrice() {
-    if (!txPanelActiveId) return;
-    const input = document.getElementById('tx-deal-price');
-    const price = toNumber(input && input.value);
-    const priceText = price ? 'Rp ' + price.toLocaleString('id-ID') : 'Manual';
-    txUpdateOrder(txPanelActiveId, order => {
-      const messages = Array.isArray(order.messages) ? order.messages.slice() : [];
-      messages.push({
-        role: 'admin',
-        text: price ? 'Harga deal untuk order ini ' + priceText + '. Silakan lanjut pembayaran lewat website.' : 'Harga deal akan dikonfirmasi manual oleh admin.',
-        time: Date.now()
-      });
-      const timeline = (order.timeline || []).map((step, index) =>
-        index <= 1 ? Object.assign({}, step, { done: true, time: step.time || Date.now() }) : step
-      );
-      return Object.assign({}, order, { price, priceText, messages, timeline, status: 'Menunggu pembayaran' });
-    });
-    if (input) input.value = '';
-    renderTransactionV2();
-    showToast('Harga dikirim ke buyer room.', 'success');
-  }
-
-  function txMarkPaid() {
-    if (!txPanelActiveId) return;
-    txUpdateOrder(txPanelActiveId, order => {
-      const messages = Array.isArray(order.messages) ? order.messages.slice() : [];
-      messages.push({ role: 'admin', text: 'Pembayaran sedang dicek admin. Mohon tunggu sebentar ya.', time: Date.now() });
-      const timeline = (order.timeline || []).map((step, index) =>
-        index <= 2 ? Object.assign({}, step, { done: true, time: step.time || Date.now() }) : step
-      );
-      return Object.assign({}, order, { messages, timeline, status: 'Pembayaran dicek' });
-    });
-    renderTransactionV2();
-    showToast('Status pembayaran diperbarui.', 'success');
-  }
-
-  function txMarkDone() {
-    if (!txPanelActiveId) return;
-    txUpdateOrder(txPanelActiveId, order => {
-      const messages = Array.isArray(order.messages) ? order.messages.slice() : [];
-      messages.push({ role: 'admin', text: 'Transaksi selesai. Terima kasih sudah order di KokoRBX.', time: Date.now() });
-      const timeline = (order.timeline || []).map(step => Object.assign({}, step, { done: true, time: step.time || Date.now() }));
-      return Object.assign({}, order, { messages, timeline, status: 'Selesai' });
-    });
-    renderTransactionV2();
-    showToast('Transaksi ditandai selesai.', 'success');
-  }
-
-  function createManualTxOrder() {
-    const createdAt = Date.now();
-    const order = txNormalizePanelOrder({
-      id: 'CS-' + Math.floor(100000 + Math.random() * 900000),
-      product: 'Custom Request',
-      category: 'custom',
-      image: 'assets/marketplace/custom-request.png',
-      priceText: 'Manual',
-      status: 'Menunggu admin',
-      buyer: 'Buyer KokoRBX',
-      detail: 'Order manual dari admin panel. Gunakan chat untuk detail produk, harga, dan pembayaran.',
-      createdAt,
-      updatedAt: createdAt,
-      messages: [
-        { role: 'system', text: 'Order manual dibuat admin. Semua komunikasi tetap di Kotak Pesan KokoRBX.', time: createdAt },
-        { role: 'admin', text: 'Halo kak, silakan kirim detail kebutuhan Roblox kamu di sini.', time: createdAt + 1 }
-      ]
-    });
-    txSaveOrder(order);
-    renderTransactionV2();
-    showToast('Order manual dibuat.', 'success');
-  }
-
   function toggleTxTheme() {
     txPanelTheme = txPanelTheme === 'dark' ? 'light' : 'dark';
     localStorage.setItem('kokorbx_tx_theme', txPanelTheme);
@@ -2408,10 +2373,10 @@
           ${hasProof ? `<button class="btn-proof" onclick="openLightbox('${o.id}')">🖼</button>` : ''}
         `;
       } else {
-        actionBtns = `<button class="btn-process" onclick="openDetail('${o.id}')">Detail</button><button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>`;
+        actionBtns = `<button class="btn-process" onclick="openDetail('${o.id}')">Detail</button><button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat WA</button>`;
       }
       if (!actionBtns.includes('openPanelChatFromAdmin')) {
-        actionBtns += `<button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>`;
+        actionBtns += `<button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat WA</button>`;
       }
 
       return `
@@ -2522,7 +2487,7 @@
 
     renderAll();
     if (location.hash === '#panel') {
-      showPage('panel', document.querySelectorAll('.nav-item')[3]);
+      showPage('orders', document.querySelector('[onclick*=\"orders\"]'));
     }
     setupRealtimeListener();
     startSupabasePolling(); // polling Supabase tiap 4 detik
@@ -2535,6 +2500,10 @@
   }
 
   function showPage(name, el) {
+    if (name === 'panel') {
+      name = 'orders';
+      el = document.querySelector('[onclick*="orders"]');
+    }
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('page-' + name).classList.add('active');
@@ -2543,13 +2512,7 @@
     mobileNavActivate(name);
     if (name === 'rates') renderRatePreview();
     if (name === 'products') renderProductAdmin();
-    if (name === 'panel') renderTransactionV2();
     renderAll();
-  }
-
-  function refreshPanelFrame(showMessage = true) {
-    renderTransactionV2();
-    if (showMessage) showToast('Panel transaksi dimuat ulang.', 'success');
   }
 
   function renderAll() {
@@ -2559,8 +2522,6 @@
     renderPendingOrders();
     renderCharts();
     updatePendingBadge();
-    const panelPage = document.getElementById('page-panel');
-    if (panelPage && panelPage.classList.contains('active')) renderTransactionV2();
   }
 
   function renderStats() {
@@ -2618,7 +2579,7 @@
         ${o.status === 'success' ? `<span style="color:var(--green);font-size:10px;font-weight:600;">&#10003; Selesai</span>` : ''}
         ${o.status === 'failed' ? `<span style="color:var(--red);font-size:10px;font-weight:600;">&#10007; Ditolak</span>` : ''}
         <button class="btn-process" onclick="openDetail('${o.id}')">Detail</button>
-        <button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>
+        <button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat WA</button>
         <button class="btn-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
       </div></td>
     </tr>`;
@@ -2641,7 +2602,7 @@
       <td><div class="action-btns">
         <button class="btn-confirm" onclick="openDetail('${o.id}')">&#10003; Konfirmasi</button>
         <button class="btn-reject" onclick="rejectOrder('${o.id}')">&#10007; Tolak</button>
-        <button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat</button>
+        <button class="btn-process" onclick="openPanelChatFromAdmin('${o.id}')">Chat WA</button>
         <button class="btn-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
       </div></td>
     </tr>`;
@@ -3058,13 +3019,13 @@
           ✅ Selesai &amp; Kirim Robux
         </button>
         <button class="btn-modal-reject" onclick="rejectOrder('${o.id}')">&#10007; Tolak</button>
-        <button class="btn-modal-chat" onclick="openPanelChatFromAdmin('${o.id}')">Chat Order</button>
+        <button class="btn-modal-chat" onclick="openPanelChatFromAdmin('${o.id}')">Chat WA Buyer</button>
         <button class="btn-modal-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus</button>
         <button class="btn-modal-close" onclick="closeModal()">Tutup</button>
       `;
     } else {
       actions.innerHTML = `
-        <button class="btn-modal-chat" onclick="openPanelChatFromAdmin('${o.id}')">Chat Order</button>
+        <button class="btn-modal-chat" onclick="openPanelChatFromAdmin('${o.id}')">Chat WA Buyer</button>
         <button class="btn-modal-delete" onclick="deleteOrder('${o.id}')">&#128465; Hapus Order</button>
         <button class="btn-modal-close" style="flex:1" onclick="closeModal()">Tutup</button>
       `;

@@ -577,6 +577,7 @@
 <body>
 <div class="bg-fx"></div>
 <div class="grid-fx"></div>
+<a class="koko-page-back" href="index.html#produk" aria-label="Kembali">&lt;</a>
 <div class="wrapper">
   <header>
     <a class="logo" href="index.html">
@@ -651,8 +652,8 @@
             <div class="input-wrap"><input id="displayName" name="displayName" placeholder="Contoh: Tama" required></div>
           </div>
           <div class="field full">
-            <label for="contact">Kontak opsional</label>
-            <div class="input-wrap"><input id="contact" name="contact" placeholder="Nomor WA atau catatan singkat kalau perlu"></div>
+            <label for="contact">No WhatsApp <span class="req">*</span></label>
+            <div class="input-wrap"><input id="contact" name="contact" type="tel" placeholder="08xxxxxxxxxx" required></div>
           </div>
           <div class="note-box">Pastikan username bukan display name. Admin akan cocokkan username dan display name dulu sebelum proses gift.</div>
           <div class="actions">
@@ -665,7 +666,7 @@
 
       <aside class="preview-panel">
         <div class="preview-title">Ringkasan Pesanan</div>
-        <p>Ini data yang akan masuk ke Panel Transaksi.</p>
+        <p>Ini format yang akan dikirim ke admin setelah pembayaran.</p>
         <pre class="format-preview" id="format-preview"></pre>
         <div class="summary-grid">
           <div class="sum-item"><span>User</span><strong id="sum-user">-</strong></div>
@@ -900,7 +901,42 @@
     { id: 'event', label: 'Event' },
     { id: 'custom', label: 'Custom' }
   ];
-  const CATALOG = GAMES.flatMap(game => game.products.map(product => ({
+  const GIFTGP_CUSTOM_KEY = 'kokorbx_giftgp_custom_products';
+  function giftgpSlug(text) {
+    return String(text || 'custom')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'custom';
+  }
+
+  function loadCustomGiftProducts() {
+    try {
+      const data = JSON.parse(localStorage.getItem(GIFTGP_CUSTOM_KEY) || '[]');
+      return Array.isArray(data) ? data : [];
+    } catch(e) {
+      return [];
+    }
+  }
+
+  const CUSTOM_PRODUCTS = loadCustomGiftProducts();
+  CUSTOM_PRODUCTS.forEach(product => {
+    const gameId = product.gameId || giftgpSlug(product.game || 'custom-request');
+    if (!gameId || GAMES.some(game => game.id === gameId)) return;
+    const gameName = product.game || 'Custom Request';
+    GAMES.push({
+      id: gameId,
+      name: gameName,
+      category: 'Custom',
+      subtitle: 'Produk custom dari admin KokoRBX.',
+      image: product.thumbnail || product.gameImage || product.imageUrl || PLACEHOLDER_IMAGE,
+      monogram: itemInitials(gameName).slice(0, 3),
+      colors: ['#7c5cff', '#62d8d4'],
+      tags: 'Custom',
+      products: [],
+    });
+  });
+
+  const BASE_CATALOG = GAMES.flatMap(game => game.products.map(product => ({
     id: game.id + '-' + product.id,
     productId: product.id,
     gameId: game.id,
@@ -919,6 +955,31 @@
     gameImage: game.image,
     region: STORE_REGION,
   })));
+  const CATALOG = BASE_CATALOG.concat(CUSTOM_PRODUCTS.map(product => {
+    const title = product.title || product.name || 'Gift GP Custom';
+    const gameName = product.game || 'Custom Request';
+    const gameId = product.gameId || giftgpSlug(gameName);
+    return {
+      id: product.id || ('custom-' + Date.now()),
+      productId: product.productId || product.id || '',
+      gameId,
+      game: gameName,
+      category: product.category || 'custom',
+      type: product.type || 'Custom',
+      title,
+      name: title,
+      price: 0,
+      robux: Number(product.robux || 0),
+      code: product.code || itemInitials(title),
+      desc: product.description || product.desc || 'Produk custom dari admin KokoRBX.',
+      description: product.description || product.desc || 'Produk custom dari admin KokoRBX.',
+      badge: product.type || 'Custom',
+      imageUrl: product.thumbnail || product.imageUrl || product.image || PLACEHOLDER_IMAGE,
+      gameImage: product.gameImage || product.thumbnail || product.imageUrl || PLACEHOLDER_IMAGE,
+      region: STORE_REGION,
+      customAdmin: true,
+    };
+  }));
 
   const form = document.getElementById('gift-form');
   const fields = {
@@ -1288,22 +1349,16 @@
 
   function buildFormat() {
     const item = selectedItem();
-    const total = item ? item.robux : 0;
     const price = item ? calcGiftPrice(item.robux) : 0;
     return [
       'Format Gift GP Ingame',
       'Username: ' + (value('username') || '-'),
-      'Nama tampilan: ' + (value('displayName') || '-'),
-      'Game: ' + (item ? item.game : '-'),
-      'Item: ' + (item ? item.title : '-'),
-      'ID Gamepass Roblox: ' + (item && item.passId ? item.passId : '-'),
-      'Tipe produk: ' + (item ? (item.type || typeLabel(item.category)) : '-'),
+      'Nama game: ' + (item ? item.game : '-'),
+      'Nama gamepass: ' + (item ? item.title : '-'),
       'Total robux: ' + (item && item.robux ? displayRobux(item.robux) : 'Manual - tanya admin'),
-      'Harga produk: ' + (item ? displayGiftCost(item) : '-'),
-      'Kurs: ' + formatRupiah(PRICE_PER_ROBUX) + ' / R$',
-      'Total bayar: ' + (price ? formatRupiah(price) : 'Menunggu admin'),
-      'Kontak/catatan: ' + (value('contact') || '-'),
-      'Note: cocokkan username dan display name sebelum proses gift.'
+      'Total Harga: ' + (price ? formatRupiah(price) : 'Menunggu admin'),
+      'No WA: ' + (value('contact') || '-'),
+      'Note: Pastikan format yang kamu isi sudah sesuai!'
     ].join('\n');
   }
 
@@ -1332,6 +1387,7 @@
       username: value('username'),
       displayName: value('displayName'),
       contact: value('contact'),
+      whatsapp: value('contact'),
       game: item ? item.game : '',
       gamepass: item ? item.title : '',
       passId: item && item.passId ? item.passId : '',
@@ -1348,6 +1404,7 @@
       status: 'request',
       time: Date.now(),
       note: 'Cek username dan display name sebelum proses gift.',
+      buyerMessage: buildFormat(),
     };
     if (window.KokoTransactions && window.KokoTransactions.attachBuyerIdentity) {
       request = window.KokoTransactions.attachBuyerIdentity(request);
@@ -1432,6 +1489,12 @@
       return;
     }
     if (!form.reportValidity()) return;
+    const waDigits = value('contact').replace(/[^\d]/g, '');
+    if (waDigits.length < 9) {
+      alert('Nomor WhatsApp wajib diisi minimal 9 digit.');
+      fields.contact.focus();
+      return;
+    }
 
     const orderId = 'GGP-' + Math.floor(100000 + Math.random() * 900000);
     await saveRequest(orderId);
@@ -1449,6 +1512,7 @@
         priceText: price ? formatRupiah(price) : 'Menunggu admin',
         username: value('username'),
         buyer: value('username'),
+        whatsapp: value('contact'),
         detail,
         buyerMessage: 'Halo admin, aku mau order Gift GP.\n' + detail,
         source: 'giftgp.html'
@@ -1462,6 +1526,7 @@
           priceText: price ? formatRupiah(price) : 'Menunggu admin',
           username: value('username'),
           buyer: value('username'),
+          whatsapp: value('contact'),
           detail,
           buyerMessage: 'Halo admin, aku mau order Gift GP.\n' + detail,
           source: 'giftgp.html'

@@ -93,6 +93,7 @@ h3,
 
 .logo-text em,
 .brand em,
+.faq-item summary::after,
 .price,
 .pkg-price,
 .pkg-bonus,
@@ -139,10 +140,6 @@ p,
   color: var(--muted) !important;
 }
 
-.logo-gem,
-.brand-mark,
-.logo-svg-box,
-.brand-mark,
 .cat-token,
 .product-token,
 .card-head-icon,
@@ -160,6 +157,8 @@ p,
 
 .card,
 .summary,
+.faq-section,
+.faq-item,
 .form-card,
 .preview-panel,
 .how-step,
@@ -503,7 +502,9 @@ button:not(.koko-cart-button):not(.koko-cart-close):not(.koko-cart-clear):not(.k
     inset 0 1px 0 rgba(255, 255, 255, .14) !important;
 }
 
-.brand-mark::before {
+.brand-mark::before,
+.logo-gem::before,
+.logo-svg-box::before {
   content: "" !important;
   width: 16px !important;
   height: 16px !important;
@@ -514,11 +515,15 @@ button:not(.koko-cart-button):not(.koko-cart-close):not(.koko-cart-clear):not(.k
   color: transparent !important;
 }
 
-.brand-mark {
+.brand-mark,
+.logo-gem,
+.logo-svg-box {
   position: relative !important;
 }
 
-.brand-mark::after {
+.brand-mark::after,
+.logo-gem::after,
+.logo-svg-box::after {
   content: "" !important;
   position: absolute !important;
   width: 5px !important;
@@ -533,6 +538,58 @@ button:not(.koko-cart-button):not(.koko-cart-close):not(.koko-cart-clear):not(.k
 .logo-svg-box svg rect,
 .brand-mark svg rect {
   stroke: #fff !important;
+}
+
+.logo-gem svg,
+.brand-mark svg,
+.logo-svg-box svg {
+  opacity: 0 !important;
+}
+
+.koko-back-button,
+.koko-page-back {
+  width: 38px !important;
+  height: 38px !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--border) !important;
+  background: rgba(255, 255, 255, .78) !important;
+  color: var(--text) !important;
+  box-shadow: 0 12px 26px rgba(111, 141, 255, .12) !important;
+  text-decoration: none !important;
+  transition: transform .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.koko-back-button:hover,
+.koko-page-back:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent) !important;
+}
+
+.koko-page-back {
+  position: fixed !important;
+  left: 16px !important;
+  top: 86px !important;
+  z-index: 80 !important;
+  font: 900 18px/1 "Outfit", system-ui, sans-serif !important;
+}
+
+@media (max-width: 720px) {
+  .koko-page-back {
+    left: 12px !important;
+    top: 74px !important;
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
+    font-size: 16px !important;
+  }
+}
+
+.koko-back-button svg {
+  width: 18px !important;
+  height: 18px !important;
 }
 
 .logo-text,
@@ -727,6 +784,8 @@ html[data-koko-theme="dark"] .brand-mark {
 
 html[data-koko-theme="dark"] .card,
 html[data-koko-theme="dark"] .summary,
+html[data-koko-theme="dark"] .faq-section,
+html[data-koko-theme="dark"] .faq-item,
 html[data-koko-theme="dark"] .form-card,
 html[data-koko-theme="dark"] .preview-panel,
 html[data-koko-theme="dark"] .how-step,
@@ -861,6 +920,8 @@ html[data-koko-theme="light"] .site-footer {
 html[data-koko-theme="light"] :where(
   .card,
   .summary,
+  .faq-section,
+  .faq-item,
   .form-card,
   .preview-panel,
   .how-step,
@@ -905,6 +966,8 @@ html[data-koko-theme="light"] :where(
   .pkg-emoji,
   .pay-name,
   .card-head-title,
+  .faq-section h2,
+  .faq-item summary,
   .sum-head,
   .sum-row .v,
   .sum-total .k,
@@ -933,6 +996,8 @@ html[data-koko-theme="light"] :where(
   p,
   .muted,
   .card-head-sub,
+  .faq-section .section-head p,
+  .faq-item p,
   .field label,
   .sum-row .k,
   .product-desc,
@@ -957,6 +1022,8 @@ html[data-koko-theme="light"] :where(
 html[data-koko-theme="dark"] :where(
   .card,
   .summary,
+  .faq-section,
+  .faq-item,
   .form-card,
   .preview-panel,
   .how-step,
@@ -1001,6 +1068,8 @@ html[data-koko-theme="dark"] :where(
   .pkg-emoji,
   .pay-name,
   .card-head-title,
+  .faq-section h2,
+  .faq-item summary,
   .sum-head,
   .sum-row .v,
   .sum-total .k,
@@ -1029,6 +1098,8 @@ html[data-koko-theme="dark"] :where(
   p,
   .muted,
   .card-head-sub,
+  .faq-section .section-head p,
+  .faq-item p,
   .field label,
   .sum-row .k,
   .product-desc,

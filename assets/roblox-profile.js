@@ -57,10 +57,10 @@
       avatarUrl: profile.avatarUrl || profile.headshotUrl || '',
       headshotUrl: profile.headshotUrl || profile.avatarUrl || '',
       profileUrl: profile.profileUrl || '',
-      status: profile.status || (profile.verified ? 'Roblox OAuth Resmi Terhubung' : 'Username Roblox Terhubung'),
-      verified: !!profile.verified,
-      verificationLabel: profile.verificationLabel || (profile.verified ? 'Terverifikasi Roblox' : 'Belum Terverifikasi'),
-      loginProvider: profile.loginProvider || (profile.verified ? 'roblox_oauth' : 'roblox-public-profile'),
+      status: profile.status || 'Username Roblox Terhubung',
+      verified: false,
+      verificationLabel: profile.verificationLabel || 'Profil Publik Roblox',
+      loginProvider: profile.loginProvider || 'roblox-public-profile',
       connectedAt: new Date().toISOString(),
     };
     localStorage.setItem(PROFILE_KEY, JSON.stringify(clean));
@@ -79,46 +79,6 @@
 
   function currentReturnTo() {
     return (location.pathname.split('/').pop() || 'index.html') + location.search + location.hash;
-  }
-
-  function oauthStartUrl() {
-    return API_BASE + '/api/auth/roblox/start?returnTo=' + encodeURIComponent(currentReturnTo());
-  }
-
-  function saveOAuthProfile(user) {
-    if (!user) return null;
-    return saveProfile({
-      userId: user.robloxUserId,
-      username: user.robloxUsername,
-      displayName: user.robloxDisplayName || user.robloxUsername,
-      avatarUrl: user.robloxAvatar || '',
-      headshotUrl: user.robloxAvatar || '',
-      profileUrl: user.robloxUserId ? 'https://www.roblox.com/users/' + encodeURIComponent(user.robloxUserId) + '/profile' : '',
-      verified: true,
-      verificationLabel: 'Terverifikasi Roblox',
-      loginProvider: 'roblox_oauth',
-      status: user.status || 'Roblox OAuth Resmi Terhubung',
-    });
-  }
-
-  async function syncOAuthSession() {
-    try {
-      var response = await fetch(API_BASE + '/api/auth/me', {
-        credentials: 'include',
-        cache: 'no-store',
-      });
-      var data = await response.json();
-      if (!response.ok || !data.authenticated || !data.user) return null;
-      var profile = saveOAuthProfile(data.user);
-      renderAllSlots();
-      applyProfileToForms(profile);
-      hydrateAccountPage(profile);
-      window.dispatchEvent(new CustomEvent('kokorbx:roblox-profile', { detail: profile }));
-      handlePendingCheckout();
-      return profile;
-    } catch (error) {
-      return null;
-    }
   }
 
   function handlePendingCheckout() {
@@ -215,7 +175,7 @@
     slot.innerHTML =
       '<button class="koko-connect-btn" type="button">' +
         '<span class="koko-profile-avatar" aria-hidden="true">RB</span>' +
-        '<span>Login Roblox</span>' +
+        '<span>Hubungkan Roblox</span>' +
       '</button>';
     slot.querySelector('button').addEventListener('click', function() {
       openConnectModal('');
@@ -259,29 +219,15 @@
           '<button class="koko-profile-close" type="button" aria-label="Tutup">x</button>' +
         '</div>' +
         '<div class="koko-profile-modal-body">' +
-          '<section class="koko-profile-section koko-profile-section-primary">' +
-            '<div class="koko-profile-section-head">' +
-              '<div>' +
-                '<div class="koko-profile-section-title">Login Resmi Roblox</div>' +
-                '<div class="koko-profile-section-desc">Verifikasi akun otomatis lewat halaman resmi Roblox.</div>' +
-              '</div>' +
-              '<span class="koko-profile-badge">Direkomendasikan</span>' +
-            '</div>' +
-            '<a class="koko-profile-oauth" href="' + escapeHtml(oauthStartUrl()) + '">Masuk dengan Roblox</a>' +
-            '<div class="koko-profile-oauth-note">Lebih aman dan lebih akurat karena akun diverifikasi langsung dari Roblox.</div>' +
-            '<div class="koko-profile-mini-note">Login dilakukan di halaman resmi Roblox, bukan di KokoRBX.</div>' +
-            '<div class="koko-profile-oauth-safe">Kamu akan diarahkan ke halaman resmi Roblox. KokoRBX tidak bisa melihat password, cookie, kode 2FA, atau kode backup kamu.</div>' +
-          '</section>' +
-          '<div class="koko-profile-divider"><span>Atau</span></div>' +
           '<form class="koko-profile-form" id="koko-profile-form">' +
             '<section class="koko-profile-section koko-profile-section-manual">' +
-              '<div class="koko-profile-section-title">Masukkan Username Manual</div>' +
-              '<div class="koko-profile-section-desc">Gunakan kalau kamu tidak ingin login Roblox.</div>' +
+              '<div class="koko-profile-section-title">Masukkan Username Roblox</div>' +
+              '<div class="koko-profile-section-desc">KokoRBX hanya mengecek data publik Roblox: avatar, display name, username, dan User ID.</div>' +
               '<div class="koko-profile-field">' +
                 '<label for="koko-profile-username">Username Roblox</label>' +
                 '<input id="koko-profile-username" autocomplete="username" placeholder="Contoh: tama_6505" required>' +
               '</div>' +
-              '<div class="koko-profile-mini-note">Username manual tetap bisa digunakan, tapi pastikan akun yang muncul sudah benar.</div>' +
+              '<div class="koko-profile-mini-note">Pastikan akun yang muncul sudah benar sebelum dihubungkan.</div>' +
               '<button class="koko-profile-submit" id="koko-profile-submit" type="submit">Cek Username</button>' +
               '<div class="koko-profile-error" id="koko-profile-error"></div>' +
               '<div class="koko-profile-preview" id="koko-profile-preview" aria-live="polite"></div>' +
@@ -599,12 +545,8 @@
     renderAllSlots();
     applyProfileToForms(profileCache);
     hydrateAccountPage(profileCache);
-    syncOAuthSession();
     try {
       var params = new URLSearchParams(location.search);
-      var oauthError = params.get('oauth');
-      if (oauthError === 'missing-env') toast('Roblox OAuth belum dikonfigurasi di Vercel.');
-      else if (oauthError) toast('Login Roblox belum berhasil. Coba lagi.');
       if (params.get('login') === '1') {
         setTimeout(function() { openConnectModal(profileCache && profileCache.username); }, 180);
       }
@@ -623,9 +565,7 @@
   window.KokoRobloxProfile = {
     get: readProfile,
     connect: function(prefill) { openConnectModal(prefill); },
-    oauthStartUrl: oauthStartUrl,
     remove: removeProfile,
-    sync: syncOAuthSession,
     toast: toast,
   };
 
