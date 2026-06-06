@@ -690,28 +690,82 @@
     </div>
   </div>
 
-  <div class="main">
-    <div>
-      <div class="card">
-        <div class="card-head">
-          <div class="card-head-icon">i</div>
-          <div class="card-head-text">
-            <div class="card-head-title">Cara bikin code backup</div>
-            <div class="card-head-sub">Buka panduan resmi KokoRBX sebelum checkout</div>
-          </div>
-        </div>
-        <div class="tutorial-grid">
-          <a class="tutorial-box" href="https://www.tiktok.com/" target="_blank" rel="noopener">
-            <div class="tutorial-box-title">Tutorial Robux VILOG</div>
-            <div class="input-hint">Lihat panduan singkat di TikTok/IG KokoRBX.</div>
-          </a>
-          <a class="tutorial-box" href="https://www.instagram.com/" target="_blank" rel="noopener">
-            <div class="tutorial-box-title">Ketentuan akun</div>
-            <div class="input-hint">Cek syarat proses VILOG dan estimasi antrian.</div>
-          </a>
-        </div>
-        <div class="input-hint">KokoRBX Tempat topup robux via login aman dan terpercaya.</div>
+  <div class="card">
+  <div class="card-head">
+    <div class="card-head-icon">🔐</div>
+    <div class="card-head-text">
+      <div class="card-head-title">Cara Bikin Kode Backup</div>
+      <div class="card-head-sub">Baca panduan ini sebelum checkout di KokoRBX</div>
+    </div>
+  </div>
+
+  <button type="button" class="btn-order" onclick="toggleBackupGuide()" style="margin-top:5px;">
+    Lihat Cara Bikin Kode Backup
+  </button>
+
+  <div id="backupGuide" class="gamepass-guide" hidden style="margin-top:12px;">
+    <div class="gp-guide-title">
+      🔐 Langkah bikin kode backup Roblox
+    </div>
+
+    <div class="gp-steps">
+      <div class="gp-step">
+        <div class="gp-step-num">1</div>
+        <div>Login ke akun Roblox kamu.</div>
       </div>
+
+      <div class="gp-step">
+        <div class="gp-step-num">2</div>
+        <div>Masuk ke <b>Settings / Pengaturan</b>.</div>
+      </div>
+
+      <div class="gp-step">
+        <div class="gp-step-num">3</div>
+        <div>Pilih menu <b>Security / Keamanan</b>.</div>
+      </div>
+
+      <div class="gp-step">
+        <div class="gp-step-num">4</div>
+        <div>Pastikan email akun sudah aktif dan aman.</div>
+      </div>
+
+      <div class="gp-step">
+        <div class="gp-step-num">5</div>
+        <div>Scroll ke bagian <b>Recovery Codes / Kode Pemulihan</b>.</div>
+      </div>
+
+      <div class="gp-step">
+        <div class="gp-step-num">6</div>
+        <div>Klik <b>Generate / Buat</b>.</div>
+      </div>
+
+      <div class="gp-step">
+        <div class="gp-step-num">7</div>
+        <div>Masukkan Code backup minnimal 3 code di catatan.</div>
+      </div>
+  </div>
+
+  <div class="input-hint">
+    Panduan ini hanya untuk membantu pengguna membuat dan menyimpan kode backup dengan aman.
+  </div>
+</div>
+
+<script>
+  function toggleBackupGuide() {
+    const guide = document.getElementById("backupGuide");
+
+    if (!guide) return;
+
+    guide.hidden = !guide.hidden;
+
+    if (!guide.hidden) {
+      guide.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
+      });
+    }
+  }
+</script>
 
       <div class="card">
         <div class="card-head">
@@ -768,7 +822,7 @@
         <div class="field">
           <label>Catatan[jangan isi password di catatan] <span class="req">*</span></label>
           <div class="input-wrap">
-            <input type="text" id="Notes" placeholder="Masukkan username tambahan/catatan kamu..." oninput="updateSummary()">
+            <input type="text" id="Notes" placeholder="username tambahan/catatan kamu..." oninput="updateSummary()">
           </div>
           <div class="input-hint">Pastikan catatan kamu sudah benar.</div>
         </div>
@@ -790,7 +844,7 @@
           <div class="input-wrap">
             <input type="tel" id="whatsapp" placeholder="08xxxxxxxxxx" oninput="updateSummary()">
           </div>
-          <div class="input-hint">WA dipakai admin kalau perlu konfirmasi order. Jangan kirim password, cookie, 2FA, atau backup code di form website. Kalau ada detail sensitif yang benar-benar dibutuhkan untuk proses VILOG, admin akan konfirmasi lewat jalur pribadi setelah pembayaran.</div>
+          <div class="input-hint">WA dipakai admin kalau perlu konfirmasi order. Apabila pembeli salah mengisi data yg benar.</div>
         </div>
         <div class="safe-box">
           <strong>Catatan keamanan VILOG</strong>
